@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="PayrollProject/tests" tests="2" failures="0" skipped="0" hostname="XCD_92WLKP2" time="243.75" timestamp="Thu Apr 04 15:30:41 IST 2019">
+	<properties>
+		<property name="excludeCallableTestCases" value="true"/>
+		<property name="testEnvironment" value=""/>
+		<property name="pluginOutputLevel" value="WARNING"/>
+		<property name="projectPath" value=".."/>
+		<property name="salesforceMetadataCache" value="Reuse"/>
+		<property name="resultsPathDisposition" value="Increment"/>
+		<property name="testOutputLevel" value="WARNING"/>
+		<property name="webBrowserType" value="Google Chrome"/>
+		<property name="resultsPath" value="../ANT/Results"/>
+		<property name="webBrowserConfiguration" value="Full Screen"/>
+		<property name="projectCachePath" value="C:\Users\AzizMugdal\Desktop\Latest provar zip file\PayrollProject\ANT\..\..\.provarCaches"/>
+	</properties>
+	<testcase classname="tests/Payroll HMRC Student loan Project 2019-20\1_HmrcStudentLoanPlanOneWeeklyPayPeriod.testcase" name="1_HmrcStudentLoanPlanOneWeeklyPayPeriod.testcase" time="117.613">
+	</testcase>
+	<testcase classname="tests/Payroll HMRC Student loan Project 2019-20\2_HmrcStudentLoanPlanTwoWeeklyPayPeriod.testcase" name="2_HmrcStudentLoanPlanTwoWeeklyPayPeriod.testcase" time="116.481">
+	</testcase>
+</testsuite>
