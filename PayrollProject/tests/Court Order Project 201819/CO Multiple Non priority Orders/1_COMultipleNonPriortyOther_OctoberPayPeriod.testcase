@@ -164,7 +164,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData2" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/CourtOrderOneMultiplePriorityOneOtherInputSheet.xlsx;1554554581991</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/CourtOrderNonPriorityMultipleOrdersInputSheet.xlsx;1554642972577</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="EmpName"/>
@@ -176,7 +176,7 @@
                     <apiParam name="FirstReportNameInApplication"/>
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                    <workbookPath class="value" valueClass="string">templates/CourtOrderOneMultiplePriorityOneOtherInputSheet.xlsx</workbookPath>
+                    <workbookPath class="value" valueClass="string">templates/CourtOrderNonPriorityMultipleOrdersInputSheet.xlsx</workbookPath>
                     <worksheetName class="value" valueClass="string">October2018PayPeriod</worksheetName>
                     <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
                   </sourceValue>
@@ -899,7 +899,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/CourtOrderOneMultiplePriorityOneOtherInputSheet.xlsx;1554554581991</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/CourtOrderNonPriorityMultipleOrdersInputSheet.xlsx;1554642972577</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="EmpName"/>
@@ -911,7 +911,7 @@
                     <apiParam name="FirstReportNameInApplication"/>
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                    <workbookPath class="value" valueClass="string">templates/CourtOrderOneMultiplePriorityOneOtherInputSheet.xlsx</workbookPath>
+                    <workbookPath class="value" valueClass="string">templates/CourtOrderNonPriorityMultipleOrdersInputSheet.xlsx</workbookPath>
                     <worksheetName class="value" valueClass="string">October2018PayPeriod</worksheetName>
                     <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
                   </sourceValue>
@@ -1182,7 +1182,7 @@
       </arguments>
       <parameterValueSources>
         <parameterValueSource variableName="ReportData" variableScope="Test">
-          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554609594305</cacheToken>
+          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554643700768</cacheToken>
           <cachedParameters>
             <apiParam name="RowNumber"/>
             <apiParam name="PayrunOctober2018"/>
@@ -1196,6 +1196,7 @@
             <apiParam name="InitialDeductionAmount2"/>
             <apiParam name="AttachableEarnings3"/>
             <apiParam name="ProtectedEarnings2"/>
+            <apiParam name="DeductionTableUsed"/>
             <apiParam name="BenefitAward1"/>
             <apiParam name="BenefitAward2"/>
             <apiParam name="TypeCODeductionAmount1"/>
@@ -1206,8 +1207,8 @@
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
-            <valuesRange class="value" valueClass="string">A1:R2</valuesRange>
+            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
+            <valuesRange class="value" valueClass="string">A1:S2</valuesRange>
           </sourceValue>
         </parameterValueSource>
       </parameterValueSources>
@@ -1350,7 +1351,7 @@
                         </apiParam>
                       </generatedParameters>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DO NOT Multple1Priorty Oct">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DO NOT NPO Oct">
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=searchAllReports&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1359,7 +1360,7 @@
                           <value class="uiInteraction" uri="ui:interaction?name=set"/>
                         </argument>
                         <argument id="value">
-                          <value class="value" valueClass="string">DO NOT Multple1Priorty Oct</value>
+                          <value class="value" valueClass="string">DO NOT NPO Oct</value>
                         </argument>
                         <argument id="blur">
                           <value class="value" valueClass="boolean">false</value>
@@ -1380,7 +1381,7 @@
                           <value class="uiWait" uri="default"/>
                         </argument>
                         <argument id="interactionDescription">
-                          <value class="value" valueClass="string">Set the Search All Reports to DO NOT Multple1Priorty Oct</value>
+                          <value class="value" valueClass="string">Set the Search All Reports to DO NOT NPO Oct</value>
                         </argument>
                         <argument id="autoRetry"/>
                       </arguments>
@@ -2150,13 +2151,13 @@
                   <value class="value" valueClass="string">Admin</value>
                 </argument>
                 <argument id="target">
-                  <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                  <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                 </argument>
                 <argument id="navigate">
                   <value class="value" valueClass="string">Dont</value>
                 </argument>
                 <argument id="targetDescription">
-                  <value class="value" valueClass="string">On Court Order One Multiple Priority One Other page</value>
+                  <value class="value" valueClass="string">On Court Order Non Multiple Priority Order page</value>
                 </argument>
                 <argument id="windowSelection">
                   <value class="value" valueClass="string">Default</value>
@@ -2272,7 +2273,7 @@
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
                                                     <uiFieldAssertion resultName="courtOrder">
-                                                      <fieldLocator uri="ui:pageobject:field?field=courtOrder&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                                      <fieldLocator uri="ui:pageobject:field?field=courtOrder&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -2309,7 +2310,7 @@
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
                                                     <uiFieldAssertion resultName="attachableEarnings1">
-                                                      <fieldLocator uri="ui:pageobject:field?field=attachableEarnings1&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                                      <fieldLocator uri="ui:pageobject:field?field=attachableEarnings1&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -2346,7 +2347,7 @@
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
                                                     <uiFieldAssertion resultName="netPay">
-                                                      <fieldLocator uri="ui:pageobject:field?field=netPay&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                                      <fieldLocator uri="ui:pageobject:field?field=netPay&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -2383,7 +2384,7 @@
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
                                                     <uiFieldAssertion resultName="initialDeductionAmount1">
-                                                      <fieldLocator uri="ui:pageobject:field?field=initialDeductionAmount1&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                                      <fieldLocator uri="ui:pageobject:field?field=initialDeductionAmount1&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -2420,7 +2421,7 @@
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
                                                     <uiFieldAssertion resultName="attachableEarnings2">
-                                                      <fieldLocator uri="ui:pageobject:field?field=attachableEarnings2&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                                      <fieldLocator uri="ui:pageobject:field?field=attachableEarnings2&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -2457,7 +2458,7 @@
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
                                                     <uiFieldAssertion resultName="protectedEarnings1">
-                                                      <fieldLocator uri="ui:pageobject:field?field=protectedEarnings1&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                                      <fieldLocator uri="ui:pageobject:field?field=protectedEarnings1&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -2488,13 +2489,50 @@
                                                 <argument id="autoRetry"/>
                                               </arguments>
                                             </apiCall>
+                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="3068" title="Read DeductionTable Value">
+                                              <tags/>
+                                              <arguments>
+                                                <argument id="fieldAssertions">
+                                                  <value class="valueList" mutable="Mutable">
+                                                    <uiFieldAssertion resultName="deductionTableUsed">
+                                                      <fieldLocator uri="ui:pageobject:field?field=deductionTableUsed&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
+                                                      <attributeAssertions>
+                                                        <uiAttributeAssertion attributeName="value" comparisonType="None">
+                                                          <value class="variable">
+                                                            <path element="rep"/>
+                                                            <path element="ThisPeriod"/>
+                                                          </value>
+                                                        </uiAttributeAssertion>
+                                                      </attributeAssertions>
+                                                    </uiFieldAssertion>
+                                                  </value>
+                                                </argument>
+                                                <argument id="columnAssertions">
+                                                  <value class="valueList" mutable="Mutable"/>
+                                                </argument>
+                                                <argument id="pageAssertions">
+                                                  <value class="valueList" mutable="Mutable"/>
+                                                </argument>
+                                                <argument id="resultName">
+                                                  <value class="value" valueClass="string">deductionTableValue</value>
+                                                </argument>
+                                                <argument id="resultScope">
+                                                  <value class="value" valueClass="string">Test</value>
+                                                </argument>
+                                                <argument id="captureAfter">
+                                                  <value class="value" valueClass="string">true</value>
+                                                </argument>
+                                                <argument id="beforeWait"/>
+                                                <argument id="autoRetry"/>
+                                              </arguments>
+                                            </apiCall>
                                             <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="1613" title="Read Actual BenefitAwardOne Value">
                                               <tags/>
                                               <arguments>
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
                                                     <uiFieldAssertion resultName="benefit">
-                                                      <fieldLocator uri="ui:pageobject:field?field=benefit&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                                      <fieldLocator uri="ui:pageobject:field?field=benefit&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -2710,6 +2748,31 @@
                                                 </argument>
                                               </arguments>
                                             </apiCall>
+                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="3069" title="Set Values: O.DeductionTableUsed">
+                                              <tags/>
+                                              <arguments>
+                                                <argument id="values">
+                                                  <value class="valueList" mutable="Mutable">
+                                                    <namedValues mutable="Mutable">
+                                                      <namedValue name="valuePath">
+                                                        <value class="value" valueClass="string">O.DeductionTableUsed</value>
+                                                      </namedValue>
+                                                      <namedValue name="value">
+                                                        <value class="variable">
+                                                          <path element="deductionTableValue"/>
+                                                          <path element="fields"/>
+                                                          <path element="deductionTableUsed"/>
+                                                          <path element="value"/>
+                                                        </value>
+                                                      </namedValue>
+                                                      <namedValue name="valueScope">
+                                                        <value class="value" valueClass="string">Test</value>
+                                                      </namedValue>
+                                                    </namedValues>
+                                                  </value>
+                                                </argument>
+                                              </arguments>
+                                            </apiCall>
                                             <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="1624" title="Set Values: O.BenefitAward1">
                                               <tags/>
                                               <arguments>
@@ -2749,7 +2812,7 @@
                                         <argument id="dataUrl">
                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                           </value>
                                         </argument>
                                         <argument id="targetDescription">
@@ -2813,7 +2876,7 @@
                                       </arguments>
                                       <parameterValueSources>
                                         <parameterValueSource variableName="ExcelDataExpectedVal" variableScope="Test">
-                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554609594305</cacheToken>
+                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554643700768</cacheToken>
                                           <cachedParameters>
                                             <apiParam name="RowNumber"/>
                                             <apiParam name="PayrunOctober2018"/>
@@ -2827,6 +2890,7 @@
                                             <apiParam name="InitialDeductionAmount2"/>
                                             <apiParam name="AttachableEarnings3"/>
                                             <apiParam name="ProtectedEarnings2"/>
+                                            <apiParam name="DeductionTableUsed"/>
                                             <apiParam name="BenefitAward1"/>
                                             <apiParam name="BenefitAward2"/>
                                             <apiParam name="TypeCODeductionAmount1"/>
@@ -2837,8 +2901,8 @@
                                           </cachedParameters>
                                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
-                                            <valuesRange class="value" valueClass="string">A1:R2</valuesRange>
+                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
+                                            <valuesRange class="value" valueClass="string">A1:S2</valuesRange>
                                           </sourceValue>
                                         </parameterValueSource>
                                       </parameterValueSources>
@@ -3256,6 +3320,73 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3072" title="If: {ExcelDataExpectedVal.DeductionTableUsed = deductionTableValue.fields.deductionTableUsed.value}">
+                                                      <tags/>
+                                                      <arguments>
+                                                        <argument id="condition">
+                                                          <value class="eq">
+                                                            <lhs class="variable">
+                                                              <path element="ExcelDataExpectedVal"/>
+                                                              <path element="DeductionTableUsed"/>
+                                                            </lhs>
+                                                            <rhs class="variable">
+                                                              <path element="deductionTableValue"/>
+                                                              <path element="fields"/>
+                                                              <path element="deductionTableUsed"/>
+                                                              <path element="value"/>
+                                                            </rhs>
+                                                          </value>
+                                                        </argument>
+                                                      </arguments>
+                                                      <clauses>
+                                                        <clause name="then" testItemId="935">
+                                                          <steps>
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="936" title="Set Values: O.DeductionTableUsed">
+                                                              <arguments>
+                                                                <argument id="values">
+                                                                  <value class="valueList" mutable="Mutable">
+                                                                    <namedValues mutable="Mutable">
+                                                                      <namedValue name="valuePath">
+                                                                        <value class="value" valueClass="string">O.DeductionTableUsed</value>
+                                                                      </namedValue>
+                                                                      <namedValue name="value">
+                                                                        <value class="value" valueClass="string">True</value>
+                                                                      </namedValue>
+                                                                      <namedValue name="valueScope">
+                                                                        <value class="value" valueClass="string">Test</value>
+                                                                      </namedValue>
+                                                                    </namedValues>
+                                                                  </value>
+                                                                </argument>
+                                                              </arguments>
+                                                            </apiCall>
+                                                          </steps>
+                                                        </clause>
+                                                        <clause name="else" testItemId="937">
+                                                          <steps>
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="938" title="Set Values: O.DeductionTableUsed">
+                                                              <arguments>
+                                                                <argument id="values">
+                                                                  <value class="valueList" mutable="Mutable">
+                                                                    <namedValues mutable="Mutable">
+                                                                      <namedValue name="valuePath">
+                                                                        <value class="value" valueClass="string">O.DeductionTableUsed</value>
+                                                                      </namedValue>
+                                                                      <namedValue name="value">
+                                                                        <value class="value" valueClass="string">False</value>
+                                                                      </namedValue>
+                                                                      <namedValue name="valueScope">
+                                                                        <value class="value" valueClass="string">Test</value>
+                                                                      </namedValue>
+                                                                    </namedValues>
+                                                                  </value>
+                                                                </argument>
+                                                              </arguments>
+                                                            </apiCall>
+                                                          </steps>
+                                                        </clause>
+                                                      </clauses>
+                                                    </apiCall>
                                                     <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1625" title="If: {ExcelDataExpectedVal.BenefitAward1 = benefitOneValue.fields.benefit.value}">
                                                       <tags/>
                                                       <arguments>
@@ -3334,7 +3465,7 @@
                                                         <argument id="dataUrl">
                                                           <value class="excelTarget" sheetWriteMode="Update">
                                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                           </value>
                                                         </argument>
                                                         <argument id="targetDescription">
@@ -3776,7 +3907,7 @@
                                         <argument id="dataUrl">
                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                           </value>
                                         </argument>
                                         <argument id="targetDescription">
@@ -3840,7 +3971,7 @@
                                       </arguments>
                                       <parameterValueSources>
                                         <parameterValueSource variableName="ExcelDataExpectedVal" variableScope="Test">
-                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554612592238</cacheToken>
+                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554643700768</cacheToken>
                                           <cachedParameters>
                                             <apiParam name="RowNumber"/>
                                             <apiParam name="PayrunOctober2018"/>
@@ -3854,6 +3985,7 @@
                                             <apiParam name="InitialDeductionAmount2"/>
                                             <apiParam name="AttachableEarnings3"/>
                                             <apiParam name="ProtectedEarnings2"/>
+                                            <apiParam name="DeductionTableUsed"/>
                                             <apiParam name="BenefitAward1"/>
                                             <apiParam name="BenefitAward2"/>
                                             <apiParam name="TypeCODeductionAmount1"/>
@@ -3864,8 +3996,8 @@
                                           </cachedParameters>
                                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
-                                            <valuesRange class="value" valueClass="string">A1:R2</valuesRange>
+                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
+                                            <valuesRange class="value" valueClass="string">A1:S2</valuesRange>
                                           </sourceValue>
                                         </parameterValueSource>
                                       </parameterValueSources>
@@ -4159,7 +4291,7 @@
                                                         <argument id="dataUrl">
                                                           <value class="excelTarget" sheetWriteMode="Update">
                                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                           </value>
                                                         </argument>
                                                         <argument id="targetDescription">
@@ -4260,13 +4392,13 @@
           <value class="value" valueClass="string">Admin</value>
         </argument>
         <argument id="target">
-          <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+          <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
         </argument>
         <argument id="navigate">
           <value class="value" valueClass="string">Dont</value>
         </argument>
         <argument id="targetDescription">
-          <value class="value" valueClass="string">On Court Order One Multiple Priority One Other page</value>
+          <value class="value" valueClass="string">On Court Order Non Multiple Priority Order page</value>
         </argument>
         <argument id="windowSelection">
           <value class="value" valueClass="string">Default</value>
@@ -4296,13 +4428,13 @@
                 <argument id="columnAssertions">
                   <value class="valueList" mutable="Mutable">
                     <uiColumnAssertion resultName="employeeName">
-                      <fieldLocator uri="ui:pageobject:field?field=frame1%2FDoNotTouchPayrollReport%2FemployeeName&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                      <fieldLocator uri="ui:pageobject:field?field=frame1%2FDoNotTouchPayrollReport%2FemployeeName&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                       <attributeAssertions>
                         <uiAttributeAssertion attributeName="columnValues" comparisonType="None"/>
                       </attributeAssertions>
                     </uiColumnAssertion>
                     <uiColumnAssertion resultName="amount1">
-                      <fieldLocator uri="ui:pageobject:field?field=frame1%2FDoNotTouchPayrollReport%2Famount1&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                      <fieldLocator uri="ui:pageobject:field?field=frame1%2FDoNotTouchPayrollReport%2Famount1&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                       <attributeAssertions>
                         <uiAttributeAssertion attributeName="columnValues" comparisonType="None"/>
                       </attributeAssertions>
@@ -4366,7 +4498,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554613647982</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554643700768</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="PayrunOctober2018"/>
@@ -4380,6 +4512,7 @@
                     <apiParam name="InitialDeductionAmount2"/>
                     <apiParam name="AttachableEarnings3"/>
                     <apiParam name="ProtectedEarnings2"/>
+                    <apiParam name="DeductionTableUsed"/>
                     <apiParam name="BenefitAward1"/>
                     <apiParam name="BenefitAward2"/>
                     <apiParam name="TypeCODeductionAmount1"/>
@@ -4390,8 +4523,8 @@
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:R2</valuesRange>
+                    <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:S2</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
@@ -4462,20 +4595,20 @@
                               <arguments>
                                 <argument id="fieldAssertions">
                                   <value class="valueList" mutable="Mutable">
-                                    <uiFieldAssertion resultName="type">
-                                      <fieldLocator uri="ui:pageobject:field?field=type&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                    <uiFieldAssertion resultName="employeeName">
+                                      <fieldLocator uri="ui:pageobject:field?field=employeeName&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                       <attributeAssertions>
                                         <uiAttributeAssertion attributeName="value" comparisonType="None"/>
                                       </attributeAssertions>
                                     </uiFieldAssertion>
-                                    <uiFieldAssertion resultName="employeeName">
-                                      <fieldLocator uri="ui:pageobject:field?field=employeeName&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                    <uiFieldAssertion resultName="type">
+                                      <fieldLocator uri="ui:pageobject:field?field=type&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                       <attributeAssertions>
                                         <uiAttributeAssertion attributeName="value" comparisonType="None"/>
                                       </attributeAssertions>
                                     </uiFieldAssertion>
                                     <uiFieldAssertion resultName="benefit">
-                                      <fieldLocator uri="ui:pageobject:field?field=benefit&amp;pageId=pageobjects.CourtOrderOneMultiplePriorityOneOther"/>
+                                      <fieldLocator uri="ui:pageobject:field?field=benefit&amp;pageId=pageobjects.CourtOrderNonMultiplePriorityOrder"/>
                                       <attributeAssertions>
                                         <uiAttributeAssertion attributeName="value" comparisonType="None"/>
                                       </attributeAssertions>
@@ -4563,7 +4696,7 @@
                                       <clauses>
                                         <clause name="hidden" testItemId="2281">
                                           <steps>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="2644" title="If: {colValues.fields.benefit.value = &quot;Ben-373&quot;}">
+                                            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="2644" title="If: {colValues.fields.benefit.value = &quot;Ben-377&quot;}">
                                               <arguments>
                                                 <argument id="condition">
                                                   <value class="eq">
@@ -4573,7 +4706,7 @@
                                                       <path element="benefit"/>
                                                       <path element="value"/>
                                                     </lhs>
-                                                    <rhs class="value" valueClass="string">Ben-373</rhs>
+                                                    <rhs class="value" valueClass="string">Ben-377</rhs>
                                                   </value>
                                                 </argument>
                                               </arguments>
@@ -4696,7 +4829,7 @@
                                                         <argument id="dataUrl">
                                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                           </value>
                                                         </argument>
                                                         <argument id="targetDescription">
@@ -4760,7 +4893,7 @@
                                                       </arguments>
                                                       <parameterValueSources>
                                                         <parameterValueSource variableName="ExcelDataExpectedVal" variableScope="Test">
-                                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554613647982</cacheToken>
+                                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554643700768</cacheToken>
                                                           <cachedParameters>
                                                             <apiParam name="RowNumber"/>
                                                             <apiParam name="PayrunOctober2018"/>
@@ -4774,6 +4907,7 @@
                                                             <apiParam name="InitialDeductionAmount2"/>
                                                             <apiParam name="AttachableEarnings3"/>
                                                             <apiParam name="ProtectedEarnings2"/>
+                                                            <apiParam name="DeductionTableUsed"/>
                                                             <apiParam name="BenefitAward1"/>
                                                             <apiParam name="BenefitAward2"/>
                                                             <apiParam name="TypeCODeductionAmount1"/>
@@ -4784,8 +4918,8 @@
                                                           </cachedParameters>
                                                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
-                                                            <valuesRange class="value" valueClass="string">A1:R2</valuesRange>
+                                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
+                                                            <valuesRange class="value" valueClass="string">A1:S2</valuesRange>
                                                           </sourceValue>
                                                         </parameterValueSource>
                                                       </parameterValueSources>
@@ -4875,7 +5009,7 @@
                                                                                 <argument id="dataUrl">
                                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                                                                     <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                                                    <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                                                    <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                                                   </value>
                                                                                 </argument>
                                                                                 <argument id="targetDescription">
@@ -4964,7 +5098,7 @@
                                                                                 <argument id="dataUrl">
                                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                                                                     <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                                                    <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                                                    <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                                                   </value>
                                                                                 </argument>
                                                                                 <argument id="targetDescription">
@@ -5100,7 +5234,7 @@
                                                                                 <argument id="dataUrl">
                                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                                                                     <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                                                    <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                                                    <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                                                   </value>
                                                                                 </argument>
                                                                                 <argument id="targetDescription">
@@ -5190,7 +5324,7 @@
                                                                                 <argument id="dataUrl">
                                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                                                                     <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                                                    <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                                                    <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                                                   </value>
                                                                                 </argument>
                                                                                 <argument id="targetDescription">
@@ -5325,7 +5459,7 @@
                                                         <argument id="dataUrl">
                                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                           </value>
                                                         </argument>
                                                         <argument id="targetDescription">
@@ -5389,7 +5523,7 @@
                                                       </arguments>
                                                       <parameterValueSources>
                                                         <parameterValueSource variableName="ExcelDataExpectedVal" variableScope="Test">
-                                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554613647982</cacheToken>
+                                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Court order Scenarios Test result 201819.xlsx;1554643700768</cacheToken>
                                                           <cachedParameters>
                                                             <apiParam name="RowNumber"/>
                                                             <apiParam name="PayrunOctober2018"/>
@@ -5403,6 +5537,7 @@
                                                             <apiParam name="InitialDeductionAmount2"/>
                                                             <apiParam name="AttachableEarnings3"/>
                                                             <apiParam name="ProtectedEarnings2"/>
+                                                            <apiParam name="DeductionTableUsed"/>
                                                             <apiParam name="BenefitAward1"/>
                                                             <apiParam name="BenefitAward2"/>
                                                             <apiParam name="TypeCODeductionAmount1"/>
@@ -5413,8 +5548,8 @@
                                                           </cachedParameters>
                                                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                                                             <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                            <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
-                                                            <valuesRange class="value" valueClass="string">A1:R2</valuesRange>
+                                                            <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
+                                                            <valuesRange class="value" valueClass="string">A1:S2</valuesRange>
                                                           </sourceValue>
                                                         </parameterValueSource>
                                                       </parameterValueSources>
@@ -5431,7 +5566,7 @@
                                                       <clauses>
                                                         <clause name="hidden" testItemId="2312">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3068" title="If: {colValues.fields.type.value = &quot;Court order deduction&quot;}">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3073" title="If: {colValues.fields.type.value = &quot;Court order deduction&quot;}">
                                                               <tags/>
                                                               <arguments>
                                                                 <argument id="condition">
@@ -5504,7 +5639,7 @@
                                                                                 <argument id="dataUrl">
                                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                                                                     <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                                                    <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                                                    <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                                                   </value>
                                                                                 </argument>
                                                                                 <argument id="targetDescription">
@@ -5594,7 +5729,7 @@
                                                                                 <argument id="dataUrl">
                                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                                                                     <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
-                                                                                    <worksheetName class="value" valueClass="string">OneMultiplePriorityOneOther</worksheetName>
+                                                                                    <worksheetName class="value" valueClass="string">TwoMultipleNonPriorityOrders</worksheetName>
                                                                                   </value>
                                                                                 </argument>
                                                                                 <argument id="targetDescription">
