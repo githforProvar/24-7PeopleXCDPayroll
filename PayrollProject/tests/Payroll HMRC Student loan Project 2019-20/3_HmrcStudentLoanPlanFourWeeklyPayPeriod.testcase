@@ -164,7 +164,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData2" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/templates/HMRCStudentLoanInputSheet.xlsx;1554298861100</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/HMRCStudentLoanInputSheet.xlsx;1554378810911</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="EmpName"/>
@@ -177,8 +177,8 @@
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">templates/HMRCStudentLoanInputSheet.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">PlanAndPGLTwoWeeklyPayPeriod</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:G22</valuesRange>
+                    <worksheetName class="value" valueClass="string">PlanAndPGLFourWeeklyPayPeriod</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
@@ -897,7 +897,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/templates/HMRCStudentLoanInputSheet.xlsx;1554298861100</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/HMRCStudentLoanInputSheet.xlsx;1554378810911</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="EmpName"/>
@@ -910,8 +910,8 @@
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">templates/HMRCStudentLoanInputSheet.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">PlanAndPGLTwoWeeklyPayPeriod</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:G22</valuesRange>
+                    <worksheetName class="value" valueClass="string">PlanAndPGLFourWeeklyPayPeriod</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
@@ -1180,7 +1180,7 @@
       </arguments>
       <parameterValueSources>
         <parameterValueSource variableName="ReportData" variableScope="Test">
-          <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554358403071</cacheToken>
+          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554699387773</cacheToken>
           <cachedParameters>
             <apiParam name="RowNumber"/>
             <apiParam name="EmployeeName"/>
@@ -1193,8 +1193,8 @@
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
             <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-            <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan2Weekly</worksheetName>
-            <valuesRange class="value" valueClass="string">A1:G22</valuesRange>
+            <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan4Weekly</worksheetName>
+            <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
           </sourceValue>
         </parameterValueSource>
       </parameterValueSources>
@@ -1342,7 +1342,7 @@
                         </apiParam>
                       </generatedParameters>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="1576" title="Set the Search All Reports to SLPandPGLTwoWeekly_Report">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="1576" title="Set the Search All Reports to SLPandPGLFourWeekly_Report">
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=searchAllReports&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1351,7 +1351,7 @@
                           <value class="uiInteraction" uri="ui:interaction?name=set"/>
                         </argument>
                         <argument id="value">
-                          <value class="value" valueClass="string">SLPandPGLTwoWeekly_Report</value>
+                          <value class="value" valueClass="string">SLPandPGLFourWeekly_Report</value>
                         </argument>
                         <argument id="blur">
                           <value class="value" valueClass="boolean">false</value>
@@ -1372,7 +1372,7 @@
                           <value class="uiWait" uri="default"/>
                         </argument>
                         <argument id="interactionDescription">
-                          <value class="value" valueClass="string">Set the Search All Reports to SLPandPGLTwoWeekly_Report</value>
+                          <value class="value" valueClass="string">Set the Search All Reports to SLPandPGLFourWeekly_Report</value>
                         </argument>
                         <argument id="autoRetry"/>
                       </arguments>
@@ -1716,7 +1716,7 @@
                                         <argument id="dataUrl">
                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                             <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan2Weekly</worksheetName>
+                                            <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan4Weekly</worksheetName>
                                           </value>
                                         </argument>
                                         <argument id="targetDescription">
@@ -1817,7 +1817,7 @@
       </arguments>
       <parameterValueSources>
         <parameterValueSource variableName="ExcelData" variableScope="Test">
-          <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554358403071</cacheToken>
+          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554699387773</cacheToken>
           <cachedParameters>
             <apiParam name="RowNumber"/>
             <apiParam name="EmployeeName"/>
@@ -1830,8 +1830,8 @@
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
             <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-            <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan2Weekly</worksheetName>
-            <valuesRange class="value" valueClass="string">A1:G22</valuesRange>
+            <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan4Weekly</worksheetName>
+            <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
           </sourceValue>
         </parameterValueSource>
       </parameterValueSources>
@@ -1903,7 +1903,7 @@
                                 <argument id="dataUrl">
                                   <value class="excelTarget" sheetWriteMode="Update">
                                     <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan2Weekly</worksheetName>
+                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan4Weekly</worksheetName>
                                   </value>
                                 </argument>
                                 <argument id="targetDescription">
@@ -1994,7 +1994,7 @@
                                 <argument id="dataUrl">
                                   <value class="excelTarget" sheetWriteMode="Update">
                                     <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan2Weekly</worksheetName>
+                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan4Weekly</worksheetName>
                                   </value>
                                 </argument>
                                 <argument id="targetDescription">
@@ -2103,7 +2103,7 @@
                                 <argument id="dataUrl">
                                   <value class="excelTarget" sheetWriteMode="Update">
                                     <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan2Weekly</worksheetName>
+                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan4Weekly</worksheetName>
                                   </value>
                                 </argument>
                                 <argument id="targetDescription">
@@ -2194,7 +2194,7 @@
                                 <argument id="dataUrl">
                                   <value class="excelTarget" sheetWriteMode="Update">
                                     <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan2Weekly</worksheetName>
+                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoan4Weekly</worksheetName>
                                   </value>
                                 </argument>
                                 <argument id="targetDescription">
