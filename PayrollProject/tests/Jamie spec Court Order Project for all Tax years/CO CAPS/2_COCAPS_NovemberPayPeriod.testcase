@@ -44,9 +44,7 @@
       </arguments>
     </apiCall>
     <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" name="StepGroup" testItemId="270" title="Click On Payroll Link">
-      <tags>
-        <string>disabled</string>
-      </tags>
+      <tags/>
       <arguments>
         <argument id="description">
           <value class="value" valueClass="string">Click On Payroll Link</value>
@@ -525,9 +523,7 @@
       </clauses>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="541" title="On SF xcdhcm__PayrollDetailView page with pageobject Xcdhcm__ Payroll Detail View">
-      <tags>
-        <string>disabled</string>
-      </tags>
+      <tags/>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
@@ -651,9 +647,7 @@
       </clauses>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="587" title="On SF Payroll (UK Net Payroll) Pay Runs related list">
-      <tags>
-        <string>disabled</string>
-      </tags>
+      <tags/>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
@@ -797,9 +791,7 @@
       </generatedParameters>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="275" title="On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period">
-      <tags>
-        <string>disabled</string>
-      </tags>
+      <tags/>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
@@ -1473,9 +1465,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="327" title="Click the Trigger 1">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=Framenew.trigger1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1527,9 +1517,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="328" title="Click the Edit Salesforce Classic 1">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=Framenew.editSalesforceClassic1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1581,9 +1569,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="329" title="Click the Edit">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2Fedit&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1635,9 +1621,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="330" title="Set the Payroll Value to CAPS_Payroll">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FPayrollValue&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1697,9 +1681,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="331" title="Click the O K">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FoK&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1751,9 +1733,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="332" title="Click the Edit 1">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2Fedit1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1805,9 +1785,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="333" title="Set the Pay Frequency to Monthly">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FPayFrequency&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1867,9 +1845,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="334" title="Click the O K 1">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FoK1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1921,9 +1897,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="335" title="Click the Edit 2">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2Fedit2&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1975,9 +1949,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="336" title="Set the Pay Run to November-2018">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FPayRun&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -2037,9 +2009,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="337" title="Click the O K 1">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FoK1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -2091,9 +2061,7 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="338" title="Click the Run Report">
-                      <tags>
-                        <string>disabled</string>
-                      </tags>
+                      <tags/>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FrunReport&amp;pageId=pageobjects.MyPageObjectReportPage"/>
