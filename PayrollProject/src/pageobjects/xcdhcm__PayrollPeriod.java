@@ -57,6 +57,11 @@ public class xcdhcm__PayrollPeriod {
 		@BooleanType()
 		@FindBy(xpath = ".//td[1]/input")
 		public WebElement employeeNamechk;
+		
+		@LinkType()
+		@FindBy(xpath = "//th[3]/a/i")
+		public WebElement sortemployeeName;
+		////table[1]/thead/tr/th[3]/a/i
 
 	
 		@BooleanType()
