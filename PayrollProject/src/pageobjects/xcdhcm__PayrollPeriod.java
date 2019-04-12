@@ -93,6 +93,8 @@ public class xcdhcm__PayrollPeriod {
 	 @TextType
      @FindBy(xpath = "((//form[contains(@id,'j_id0:theForm')]/div)[1]//span)[2]")
      public WebElement draftStatus;
+     
+     
 
 	@ButtonType()
 	@VisualforceBy(componentXPath = "apex:outputPanel[not(@id)][2]/apex:commandButton[@action='{!fetchFPSData}']")
