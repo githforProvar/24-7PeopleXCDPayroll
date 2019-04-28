@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testCase failureBehaviour="Continue" id="9">
+<testCase failureBehaviour="Continue" id="4">
   <summary/>
   <steps>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.testapis.ApexConnect" name="ApexConnect" testItemId="1" title="Salesforce Connect: Admin (Test)">
@@ -44,7 +44,9 @@
       </arguments>
     </apiCall>
     <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" name="StepGroup" testItemId="270" title="Click On Payroll Link">
-      <tags/>
+      <tags>
+        <string>disabled</string>
+      </tags>
       <arguments>
         <argument id="description">
           <value class="value" valueClass="string">Click On Payroll Link</value>
@@ -513,7 +515,9 @@
       </clauses>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="541" title="On SF xcdhcm__PayrollDetailView page with pageobject Xcdhcm__ Payroll Detail View">
-      <tags/>
+      <tags>
+        <string>disabled</string>
+      </tags>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
@@ -627,7 +631,9 @@
       </clauses>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="587" title="On SF Payroll (UK Net Payroll) Pay Runs related list">
-      <tags/>
+      <tags>
+        <string>disabled</string>
+      </tags>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
@@ -771,7 +777,9 @@
       </generatedParameters>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="275" title="On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period">
-      <tags/>
+      <tags>
+        <string>disabled</string>
+      </tags>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
@@ -1190,7 +1198,7 @@
             <apiParam name="TypeCODeductionAmount"/>
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
             <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
             <valuesRange class="value" valueClass="string">A19:O20</valuesRange>
           </sourceValue>
@@ -1335,7 +1343,7 @@
                         </apiParam>
                       </generatedParameters>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DONT AUTMN PAEO1971Fine 2ndReprt">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DO NOT TOUCH PAEOFineDec">
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=searchAllReports&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1344,7 +1352,7 @@
                           <value class="uiInteraction" uri="ui:interaction?name=set"/>
                         </argument>
                         <argument id="value">
-                          <value class="value" valueClass="string">DONT AUTMN PAEO1971Fine 2ndReprt</value>
+                          <value class="value" valueClass="string">DO NOT TOUCH PAEOFineDec</value>
                         </argument>
                         <argument id="blur">
                           <value class="value" valueClass="boolean">false</value>
@@ -1365,7 +1373,7 @@
                           <value class="uiWait" uri="ui:wait:timed?seconds=10"/>
                         </argument>
                         <argument id="interactionDescription">
-                          <value class="value" valueClass="string">Set the Search All Reports to DONT AUTMN PAEO1971Fine 2ndReprt</value>
+                          <value class="value" valueClass="string">Set the Search All Reports to DO NOT TOUCH PAEOFineDec</value>
                         </argument>
                         <argument id="autoRetry"/>
                       </arguments>
@@ -1446,6 +1454,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="327" title="Click the Trigger 1">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=Framenew.trigger1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1497,6 +1508,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="328" title="Click the Edit Salesforce Classic 1">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=Framenew.editSalesforceClassic1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1548,6 +1562,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="329" title="Click the Edit">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2Fedit&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1599,6 +1616,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="330" title="Set the Payroll Value to PAEO1971fine_Payroll">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FPayrollValue&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1658,6 +1678,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="331" title="Click the O K">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FoK&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1709,6 +1732,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="332" title="Click the Edit 1">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2Fedit1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1760,6 +1786,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="333" title="Set the Pay Frequency to Monthly">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FPayFrequency&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1819,6 +1848,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="334" title="Click the O K 1">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FoK1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1870,6 +1902,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="335" title="Click the Edit 2">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2Fedit2&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1921,6 +1956,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="336" title="Set the Pay Run to December-2018">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FPayRun&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -1980,6 +2018,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="337" title="Click the O K 1">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FoK1&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -2031,6 +2072,9 @@
                       </generatedParameters>
                     </apiCall>
                     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="338" title="Click the Run Report">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=frame%2FrunReport&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -2093,9 +2137,7 @@
               </generatedParameters>
             </apiCall>
             <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" isTitleUpdated="true" name="UiWithScreen" testItemId="371" title="On Report View Screen">
-              <tags>
-                <string>disabled</string>
-              </tags>
+              <tags/>
               <arguments>
                 <argument id="uiConnectionName">
                   <value class="value" valueClass="string">Admin</value>
@@ -2874,12 +2916,12 @@
                                         </argument>
                                         <argument id="dataUrl">
                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
                                             <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
                                           </value>
                                         </argument>
                                         <argument id="targetDescription">
-                                          <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</value>
+                                          <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</value>
                                         </argument>
                                         <argument id="updateValueRange"/>
                                         <argument id="updateColumnNames">
@@ -2956,7 +2998,7 @@
                                             <apiParam name="TypeCODeductionAmount"/>
                                           </cachedParameters>
                                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
                                             <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
                                             <valuesRange class="value" valueClass="string">A19:O20</valuesRange>
                                           </sourceValue>
@@ -3653,12 +3695,12 @@
                                                         </argument>
                                                         <argument id="dataUrl">
                                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
                                                             <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
                                                           </value>
                                                         </argument>
                                                         <argument id="targetDescription">
-                                                          <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</value>
+                                                          <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</value>
                                                         </argument>
                                                         <argument id="updateValueRange"/>
                                                         <argument id="updateColumnNames">
@@ -3775,7 +3817,7 @@
             <apiParam name="TypeCODeductionAmount"/>
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
             <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
             <valuesRange class="value" valueClass="string">A19:O20</valuesRange>
           </sourceValue>
@@ -3920,7 +3962,7 @@
                             <apiParam name="TypeCODeductionAmount"/>
                           </cachedParameters>
                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+                            <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
                             <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
                             <valuesRange class="value" valueClass="string">A19:O20</valuesRange>
                           </sourceValue>
@@ -4149,12 +4191,12 @@
                                                 </argument>
                                                 <argument id="dataUrl">
                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
                                                     <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
                                                   </value>
                                                 </argument>
                                                 <argument id="targetDescription">
-                                                  <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</value>
+                                                  <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</value>
                                                 </argument>
                                                 <argument id="updateValueRange"/>
                                                 <argument id="updateColumnNames">
@@ -4231,7 +4273,7 @@
                                                     <apiParam name="TypeCODeductionAmount"/>
                                                   </cachedParameters>
                                                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
                                                     <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
                                                     <valuesRange class="value" valueClass="string">A19:O20</valuesRange>
                                                   </sourceValue>
@@ -4305,12 +4347,12 @@
                                                                 </argument>
                                                                 <argument id="dataUrl">
                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+                                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
                                                                     <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
                                                                   </value>
                                                                 </argument>
                                                                 <argument id="targetDescription">
-                                                                  <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</value>
+                                                                  <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</value>
                                                                 </argument>
                                                                 <argument id="updateValueRange"/>
                                                                 <argument id="updateColumnNames">
@@ -4395,12 +4437,12 @@
                                                                 </argument>
                                                                 <argument id="dataUrl">
                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</workbookPath>
+                                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</workbookPath>
                                                                     <worksheetName class="value" valueClass="string">PAEO1971Fine</worksheetName>
                                                                   </value>
                                                                 </argument>
                                                                 <argument id="targetDescription">
-                                                                  <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result 201819.xlsx</value>
+                                                                  <value class="value" valueClass="string">OutPutTestResult/Court order Scenarios Test result.xlsx</value>
                                                                 </argument>
                                                                 <argument id="updateValueRange"/>
                                                                 <argument id="updateColumnNames">

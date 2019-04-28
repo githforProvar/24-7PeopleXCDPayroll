@@ -59,19 +59,17 @@ public class PAEO1971FineForDecemberPayPeriod {
 		@FindBy(xpath = ".//td[10]//div[@class='wave-table-cell-text']")
 		public WebElement benefitShortFallCarryForward;
 		
-		@FindBy(xpath = ".//td[6]//div[@class='wave-table-cell-text']")
+		@FindBy(xpath = ".//td[11]//div[@class='wave-table-cell-text']")
 		public WebElement protectedEarningsCariedForward;
 		
 		
 		@FindBy(xpath = ".//td[last()-1]/div/div")
+		//@FindBy(xpath = ".//td[last()-1]/div[1]/div/span[1]/span")
 		public WebElement type;
 		
-		@FindBy(xpath = ".//td[last()]/div/div")
+		@FindBy(xpath = ".//td[last()]/div[1]/div/div")
 		public WebElement Am;
 		
-		
-		//@FindBy(xpath = ".//td[11]/div[@class='data-grid-table-cell lightning-table-numeric-cell data-grid-table-cell-odd']")
-		//public WebElement amount;
 		
 	
 	}
