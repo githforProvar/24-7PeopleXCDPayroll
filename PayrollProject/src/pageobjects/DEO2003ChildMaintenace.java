@@ -52,7 +52,7 @@ public class DEO2003ChildMaintenace {
 		@FindBy(xpath = ".//td[10]//div/div[@class='wave-table-cell-text']")
 		public WebElement benefitShortFallCarryForward;
 		
-		@FindBy(xpath = ".//td[9]//div/div[@class='wave-table-cell-text']")
+		@FindBy(xpath = ".//td[11]//div/div[@class='wave-table-cell-text']")
 		public WebElement bprotectedEarningsCarryForward;
 		
 		
