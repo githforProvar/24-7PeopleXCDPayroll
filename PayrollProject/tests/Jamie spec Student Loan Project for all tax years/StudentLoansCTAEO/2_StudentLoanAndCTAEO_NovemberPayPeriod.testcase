@@ -1190,7 +1190,7 @@
             <apiParam name="ProtectedEarnings"/>
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
             <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
             <valuesRange class="value" valueClass="string">A10:M11</valuesRange>
           </sourceValue>
@@ -2049,12 +2049,12 @@
                                         </argument>
                                         <argument id="dataUrl">
                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
                                             <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
                                           </value>
                                         </argument>
                                         <argument id="targetDescription">
-                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</value>
+                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
                                         </argument>
                                         <argument id="updateValueRange"/>
                                         <argument id="updateColumnNames">
@@ -2131,7 +2131,7 @@
                                             <apiParam name="ProtectedEarnings"/>
                                           </cachedParameters>
                                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
                                             <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
                                             <valuesRange class="value" valueClass="string">A10:M11</valuesRange>
                                           </sourceValue>
@@ -2417,75 +2417,6 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1575" title="If: {ExcelDataExpectedVal.DeductionTableUsed = deductionTableValue.fields.deductionTableUsed.value}">
-                                                      <tags>
-                                                        <string>disabled</string>
-                                                      </tags>
-                                                      <arguments>
-                                                        <argument id="condition">
-                                                          <value class="eq">
-                                                            <lhs class="variable">
-                                                              <path element="ExcelDataExpectedVal"/>
-                                                              <path element="DeductionTableUsed"/>
-                                                            </lhs>
-                                                            <rhs class="variable">
-                                                              <path element="deductionTableValue"/>
-                                                              <path element="fields"/>
-                                                              <path element="deductionTableUsed"/>
-                                                              <path element="value"/>
-                                                            </rhs>
-                                                          </value>
-                                                        </argument>
-                                                      </arguments>
-                                                      <clauses>
-                                                        <clause name="then" testItemId="935">
-                                                          <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="936" title="Set Values: O.DeductionTableUsed">
-                                                              <arguments>
-                                                                <argument id="values">
-                                                                  <value class="valueList" mutable="Mutable">
-                                                                    <namedValues mutable="Mutable">
-                                                                      <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.DeductionTableUsed</value>
-                                                                      </namedValue>
-                                                                      <namedValue name="value">
-                                                                        <value class="value" valueClass="string">True</value>
-                                                                      </namedValue>
-                                                                      <namedValue name="valueScope">
-                                                                        <value class="value" valueClass="string">Test</value>
-                                                                      </namedValue>
-                                                                    </namedValues>
-                                                                  </value>
-                                                                </argument>
-                                                              </arguments>
-                                                            </apiCall>
-                                                          </steps>
-                                                        </clause>
-                                                        <clause name="else" testItemId="937">
-                                                          <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="938" title="Set Values: O.DeductionTableUsed">
-                                                              <arguments>
-                                                                <argument id="values">
-                                                                  <value class="valueList" mutable="Mutable">
-                                                                    <namedValues mutable="Mutable">
-                                                                      <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.DeductionTableUsed</value>
-                                                                      </namedValue>
-                                                                      <namedValue name="value">
-                                                                        <value class="value" valueClass="string">False</value>
-                                                                      </namedValue>
-                                                                      <namedValue name="valueScope">
-                                                                        <value class="value" valueClass="string">Test</value>
-                                                                      </namedValue>
-                                                                    </namedValues>
-                                                                  </value>
-                                                                </argument>
-                                                              </arguments>
-                                                            </apiCall>
-                                                          </steps>
-                                                        </clause>
-                                                      </clauses>
-                                                    </apiCall>
                                                     <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="944" title="If: {ExcelDataExpectedVal.InitialDeductionAmount = InitialDeductionValue.fields.intitialDeduction.value}">
                                                       <tags/>
                                                       <arguments>
@@ -2696,12 +2627,12 @@
                                                         </argument>
                                                         <argument id="dataUrl">
                                                           <value class="excelTarget" sheetWriteMode="Update">
-                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
                                                             <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
                                                           </value>
                                                         </argument>
                                                         <argument id="targetDescription">
-                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</value>
+                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
                                                         </argument>
                                                         <argument id="updateValueRange"/>
                                                         <argument id="updateColumnNames">
@@ -2818,7 +2749,7 @@
             <apiParam name="ProtectedEarnings"/>
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
             <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
             <valuesRange class="value" valueClass="string">A10:M11</valuesRange>
           </sourceValue>
@@ -2957,7 +2888,7 @@
                             <apiParam name="ProtectedEarnings"/>
                           </cachedParameters>
                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
                             <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
                             <valuesRange class="value" valueClass="string">A10:M11</valuesRange>
                           </sourceValue>
@@ -3219,12 +3150,12 @@
                                                                 </argument>
                                                                 <argument id="dataUrl">
                                                                   <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+                                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
                                                                     <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
                                                                   </value>
                                                                 </argument>
                                                                 <argument id="targetDescription">
-                                                                  <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</value>
+                                                                  <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
                                                                 </argument>
                                                                 <argument id="updateValueRange"/>
                                                                 <argument id="updateColumnNames">
@@ -3301,7 +3232,7 @@
                                                                     <apiParam name="ProtectedEarnings"/>
                                                                   </cachedParameters>
                                                                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+                                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
                                                                     <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
                                                                     <valuesRange class="value" valueClass="string">A10:M11</valuesRange>
                                                                   </sourceValue>
@@ -3392,12 +3323,12 @@
                                                                                         </argument>
                                                                                         <argument id="dataUrl">
                                                                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+                                                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
                                                                                             <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
                                                                                           </value>
                                                                                         </argument>
                                                                                         <argument id="targetDescription">
-                                                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</value>
+                                                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
                                                                                         </argument>
                                                                                         <argument id="updateValueRange"/>
                                                                                         <argument id="updateColumnNames">
@@ -3481,12 +3412,12 @@
                                                                                         </argument>
                                                                                         <argument id="dataUrl">
                                                                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</workbookPath>
+                                                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
                                                                                             <worksheetName class="value" valueClass="string">StudentLoansCTAEO</worksheetName>
                                                                                           </value>
                                                                                         </argument>
                                                                                         <argument id="targetDescription">
-                                                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx</value>
+                                                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
                                                                                         </argument>
                                                                                         <argument id="updateValueRange"/>
                                                                                         <argument id="updateColumnNames">
