@@ -1,0 +1,63 @@
+<apex:page controller="xcdhcm.ErrorHandlingController" >
+ <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteJoinerFirst.css')}" /> 
+<style type="text/css">
+         .popupBg
+        {
+        //background-color:#FFFFFF;
+        opacity: 1.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 50%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 40%;
+        width: 500px;
+        margin-left: -250px;
+        text-decoration: none;
+        font-weight: bold;
+        
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;
+        
+   
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+</style>
+
+<apex:form id="frm">
+<apex:pageMessages id="pgMsgs"/>
+	<apex:outputPanel id="op1" styleClass="popupBg" rendered="{!showPopup}">
+	    <apex:outputPanel id="op2" styleClass="customPopup" layout="block" rendered="{!showPopup}">
+	        <center>  
+	            <apex:outputtext id="oText1" value="This request involves payments to the employee. Note that if any payments have been made these will be reversed in the next pay run." rendered="{!showCancelConfirm}"/>
+	            <apex:outputtext id="oText3" value="You cannot cancel this request. Please contact an HR Admin" rendered="{!showOtherMsg}"/>
+	            <apex:outputtext id="oText4" value="You cannot cancel this request as it has already started or ended.  Please contact an Administrator" rendered="{!showCannotCancelEmp}"/>
+	            <apex:outputtext id="oText5" value="You cannot cancel this request as it is already cancelled" rendered="{!showCannotCancelAlreadyCancelled}"/>
+	            <!-- START 14/11/2018 ::  NPPD-1810 Cancelling leave message to come from custom label modified by Geetha-->
+	            <apex:outputtext id="oText6" value="{!$Label.xcdhcm__employeeleaveleaverequestcancel}" rendered="{!showRUSure}"/>
+	            <!-- END 14/11/2018 ::  NPPD-1810 Cancelling leave message to come from custom label modified by Geetha-->
+	            <br/>
+	            <br/>
+	            <!-- START :: 10/12/2018 NPPD-1808 Leave cancellation from employee page doesn't work correctly modified by Kumbresh -->
+	       		<apex:commandButton id="b2" value="Ok" action="{!cancelAndReturnToLR}" styleclass="slds-button slds-button--neutral" rerender="frm" rendered="{!AND(showCannotCancelAlreadyCancelled = false,showCannotCancelEmp = false,showOtherMsg = false)}"/>
+	       		<apex:commandButton id="b3" value="Back" action="{!returnToLR}"  styleclass="slds-button slds-button--neutral" rerender="frm" rendered="{!OR(showCannotCancelAlreadyCancelled,showCannotCancelEmp,showOtherMsg = true)}"/>
+	       		<!-- END :: 10/12/2018 NPPD-1808 Leave cancellation from employee page doesn't work correctly modified by Kumbresh -->
+	       		<apex:commandButton id="b1" value="Cancel" action="{!returnToLR}"  styleclass="slds-button slds-button--neutral" rendered="{!AND(showCannotCancelAlreadyCancelled = false,showCannotCancelEmp = false,showOtherMsg = false)}"/>
+	        </center>
+	    </apex:outputPanel>
+	</apex:outputPanel>
+</apex:form>
+</apex:page>

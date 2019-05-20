@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>This will on/off Schedule maintenance message/image</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>xcdhcm__End_Date_Text__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Should be this format &quot;Tuesday January 28, 03:00 AM GMT&quot;</inlineHelpText>
+        <label>End Date Text</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__IsActive__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>IsActive</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ShowContinue__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Hide/Show continue link in schedule maintenance message</description>
+        <externalId>false</externalId>
+        <label>xShowContinue</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Show_Continue_Permission_Sets__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Permission set which needs to view the continue link</description>
+        <externalId>false</externalId>
+        <label>Show Continue - Permission Sets</label>
+        <length>254</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Show_Continue_Profiles__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Profile which needs to view the continue link</description>
+        <externalId>false</externalId>
+        <label>Show Continue - Profiles</label>
+        <length>254</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Start_Date_Text__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Should be this format &quot;Tuesday January 28, 03:00 AM GMT&quot;</inlineHelpText>
+        <label>Start Date Text</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Schedule_Maintance_Message</label>
+    <visibility>Public</visibility>
+</CustomObject>

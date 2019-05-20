@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Settings for Government RTI Gateway and for payroll batch sizes</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>xcdhcm__Authentication_method__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Please set Clear text for Test Server and MD5 for Live server.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please set Clear text for Test Server and MD5 for Live server.</inlineHelpText>
+        <label>Authentication method</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Benefit_type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Benefit type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Developers_name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>xDevelopers name</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Dps_auth_url__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Dps auth url</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Dps_retrive_url__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Dps retrive url</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Endpoint_url__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Endpoint url</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Heroku_url__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Heroku url</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__IsActive__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>IsActive</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Paperpayslip_batch_size__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Paperpayslip_batch_size</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Password__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>xPassword</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Payroll_run_batch_size__c</fullName>
+        <defaultValue>200</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter the number of employees to be included in a batch.</inlineHelpText>
+        <label>Pay run batch size</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Product_name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Product name</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__RTI_batch_size__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Enter no of employee to be included in batch for generating XML file.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter no of employee to be included in batch for generating XML file.</inlineHelpText>
+        <label>RTI batch size</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Vendor_id__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Vendor id</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Version__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Version</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__gatewayTestMode__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This is used for RTI .</description>
+        <externalId>false</externalId>
+        <label>gatewayTestMode</label>
+        <length>5</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Payroll Control Panel</label>
+    <visibility>Public</visibility>
+</CustomObject>

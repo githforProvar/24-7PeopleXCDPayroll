@@ -1,0 +1,86 @@
+<apex:page standardController="xcdhcm__HR_Request__c" extensions="xcdhcm.HRrequestController" sidebar="false" showHeader="true" wizard="false" > 
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />  
+    <style>
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        font-weight: 300;
+        font-size: 1.25rem;
+        line-height: 1.25; 
+        }  
+        .bEditBlock .pbHeader>table, .apexp .bPageBlock.apexDefaultPageBlock .pbHeader>table, #ep.bLayoutBlock .pbHeader>table 
+        {
+		    border-bottom: none!important;
+		}
+		 
+		 body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+	        font-weight:400!important; 
+		    font-size: 1.25rem;
+		    line-height: 1.25;
+		    color: #16325c; 
+        }
+        select 
+        {
+    	width: 30% !important;
+        }
+    </style>   
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope"> 
+            <apex:form id="frm" >    
+            	<div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelHRrequest}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 66%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHHR_RecTypePage}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            
+                <apex:pageBlock id="out">
+                    <apex:pageMessage id="alert"  summary="Select record type...!" severity="Error" strength="3" rendered="{!RTypeAlert==true}"  />    
+                    
+                    <apex:pageBlockSection > 
+                        <apex:outputpanel >
+                            <apex:outputText value="Request type" styleclass="slds-form-element__label"/><br/>
+                            <apex:actionRegion >
+                                <apex:selectList value="{!selectedHRrecdtype}" multiselect="false" size="1" required="true"> 
+                                    <apex:selectOptions value="{!HRrecdtype}"/>
+                                    <apex:actionSupport event="onchange" action="{!HRrecdtypeID}" reRender="frm,alert" status="status" />        
+                                </apex:selectList>
+                                <apex:outputpanel style="margin-left:10px!important;margin-top:5px!important;" >	            
+                                    <apex:actionStatus id="status" > 
+                                        <apex:facet name="start">	
+                                            <div class="slds-spinner_container slds-show slds-is-fixed" style="top:30%; bottom:30%">
+                                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div> 
+                                            </div>                    
+                                        </apex:facet> 
+                                    </apex:actionStatus>  
+                                </apex:outputpanel>             	              
+                            </apex:actionRegion>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection>
+                </apex:pageblock>
+               <!--  <div Class="line"></div> -->
+                <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                             <apex:outputPanel >
+                                 <apex:commandButton value="{!$Label.xcdhcm__hr_rectypepagebcancel}" action="{!cancelHRrequest}" reRender="frm" styleclass="slds-button slds-button--neutral" />
+                 				<apex:commandLink target="_parent" value="{!$Label.xcdhcm__hr_rectypepagebcontinue}" action="{!HRcontinue}" styleclass="slds-button slds-button--brand" />
+                             </apex:outputPanel>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>   
+        </body>
+    </html>
+</apex:page>

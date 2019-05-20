@@ -1,0 +1,1345 @@
+<!-- START :: 22/01/2015 NPPD-634 Payroll on weekly basis Added by Praveen-->
+<!-- START :: 08/06/2015 NPAY-28 Improve Payroll run process Modified by Praveen -->
+<apex:page standardController="xcdhcm__Pay_Period__c" sidebar="false"
+     action="{!getEligibleEmployees}" extensions="xcdhcm.GenerateEmployeePayRollController">
+<!-- START :: 10/07/2017 NPAY-338 Payroll6 Issue List Modified by Jamil -->  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- END :: 10/07/2017 NPAY-338 Payroll6 Issue List Modified by Jamil -->   
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+ <!-- START :: 10/07/2017 NPAY-338 Payroll6 Issue List Modified by Jamil -->      
+    <script>
+       jQuery(window).on("load", function()
+       {
+     //START 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action modified by Jamil   
+      /*$('html, body').animate({
+         scrollTop: $('#fixposition').offset().top
+        
+      }, 'fast');
+      */
+     $(window).scrollTop(0);
+});
+    
+function stopRKey(evt) 
+{ 
+    var evt = (evt) ? evt : ((event) ? event : null); 
+    var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+    if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+}
+ 
+document.onkeypress = stopRKey;    
+$('#test').bind('keydown', function(e) 
+{
+	if (e.keyCode == 13) 
+	{
+		e.preventDefault();
+	}
+});
+//END 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action modified by Jamil
+
+//START :: 30/07/2018 NPAY-573 Financial Reporting - Draft/Redraft added by Farhan
+function onButtonClick(idval)
+{
+	idval.disabled = true;
+    idval.style.color='#336699';
+    idval.value='Processing';
+}
+//END :: 30/07/2018 NPAY-573 Financial Reporting - Draft/Redraft added by Farhan
+   
+  </script>
+ <!-- START :: 10/07/2017 NPAY-338 Payroll6 Issue List Modified by Jamil -->  
+    <script>
+        function checkAll(cb)
+        {
+            var inputElem = document.getElementsByTagName("input");
+            for(var i=0; i<inputElem.length; i++)
+            {
+                if(inputElem[i].id.indexOf("checkedone")!=-1)
+                inputElem[i].checked = cb.checked;
+            }
+        }  
+    </script>
+   <!--Start: PopUp window to display the user Records -->
+    <style type="text/css">
+        .popupBg
+       {
+            opacity: 4.0;
+            filter: alpha(opacity = 60);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+       }
+       .customPopup
+       {
+            line-height: 25px;
+            position: absolute;
+            left: 50%;
+            padding:10px;
+            z-index: 9999;
+            text-align: center;
+            top: 150px;
+            width: 800px;
+            margin-left: -450px;
+            text-decoration: none;
+            font-weight: bold;
+            
+            background: #ffffff !important;
+            border: 1px solid #ccc !important;
+            
+            -moz-box-shadow: 4px 5px 10px #99ccff;
+            -webkit-box-shadow: 4px 5px 10px #99ccff;
+            box-shadow: 4px 5px 10px #99ccff;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            color:#336699;
+        }
+        
+.custPopup {
+    background-color: white;
+    border-width: 2px;
+    border-style: inset;
+    z-index: 9999;
+    left: 50%;
+    padding: 10px;
+    position: absolute;
+    width: 650px;
+    margin-left: -250px;
+    top: 100px;
+}
+
+.popupBackground {
+    background-color: black;
+    opacity: 0.20;
+    filter: alpha(opacity =           20);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+}
+
+body .pbBody table.list tr.headerRow th:first-child,body .pbBody table.list tr.dataRow td:first-child
+    {
+    border-left-width: 0;
+    width: 0.1% !important;
+}
+
+.bPageTitle .ptBody .content {
+    display: none;
+}
+body .bPageBlock .pbTitle h2
+{
+
+    display: none;
+
+}
+body .bRelatedList table.list tr.headerRow th.noRowsHeader {
+visibility : hidden;
+}
+
+.customnotabTab .tertiaryPalette,.individualPalette .customnotabBlock .tertiaryPalette,.layoutEdit .individualPalette .customnotabBlock .tertiaryPalette
+    {
+    background-color: #FFFFFF;
+    border-color: #63a4c5 !important;
+    border-top: 2px solid #63a4c5 !important;
+}
+
+body .bPageBlock .pbBody .pbSubheader .hideListButton {
+    display: none;
+}
+
+.triangle
+{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 20px;
+    border-color: transparent transparent transparent #4a86e8;
+
+}
+
+.pagination ul
+{
+box-shadow: none !important;
+}
+
+<!-- START:: NPAY-2 Payroll issues added by Farhan  -->
+.ng-cloak 
+{
+    display: none !important;
+}
+body .bPageBlock .pbBody .pbSubheader.first{    
+    border: none!important;
+}
+body .bPageBlock .pbBody .pbSubheader .hideListButton {
+    display: none!important;
+}
+
+.bPageBlock .detailList {
+      margin-top: -10px!important;
+}
+.listHoverLinks .linklet .listTitle{
+visibility : hidden;
+}
+.listHoverLinks .linklet{
+visibility : hidden;
+}
+.listHoverLinks .pipe{
+visibility : hidden;
+}
+	/* START :: 07/12/2018 NPAY-658 Pension reporting(added display:none to remove extra gap between buttons and layout) modified by Farhan */
+	.listHoverLinks
+	{
+		display : none;
+	}
+	/* END :: 07/12/2018 NPAY-658 Pension reporting(added display:none to remove extra gap between buttons and layout) modified by Farhan */
+ <!-- START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  --> 
+.select1 
+    {
+     width: 50px!important; 
+    }
+  <!--  END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->     
+<!-- END:: NPAY-2 Payroll issues added by Farhan  -->
+/* START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan */
+.onHover:hover {
+    text-decoration: underline;
+    cursor: pointer; cursor: hand;
+}
+/* END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan */
+</style>
+    <!--End: PopUp window to display the user Records -->
+<!--START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva --> 
+<!-- START :: 10/07/2017 Issue list payroll6 Modified by Jamil --> 
+<div id="fixposition">
+  </div>
+<!-- END :: 10/07/2017 Issue list payroll6 Modified by Jamil -->
+<!--START :: 19/02/2018 Regression issue list payroll7 patch2 Row2 modified by Shiva -->      
+<apex:outputPanel rendered="{!OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Final',SubmitForApproval==true)}">
+<style>
+input[title = 'Submit for Approval'] {visibility: hidden;}
+</style>
+</apex:outputPanel>
+<apex:outputPanel >
+<style>
+input[title = 'Recall Approval Request'] {visibility: hidden;}
+input[title = 'Unlock Record'] {visibility: hidden;}
+img[title = 'Locked'] {visibility: hidden;}
+</style>
+</apex:outputPanel>
+<!--END :: 19/02/2018 Regression issue list payroll7 patch2 Row2 modified by Shiva --> 
+<!--END :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+    <apex:form id="theForm">
+    <br/> 
+        <!--START :: 04/01/2017 NPAY-71 Year end process modified by Tutu -->
+        <apex:PageMessages id="errId" escape="false"/>
+        <!--END :: 04/01/2017 NPAY-71 Year end process modified by Tutu -->
+        <div style = "float:right;margin-top:10px;margin-bottom:10px;">
+        <apex:outputText value="New" rendered="{!IF(OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Additional'),true,false)}" style="background:#0070c0;color:#fff;padding:10px;margin-right:10px;" />
+        <apex:outputText value="" rendered="{!IF(AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c != 'New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c != 'Additional'),true,false)}" style="margin-right:10px;">New</apex:outputText>
+        <apex:outputText value="Draft" rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft'}" style="background:#0070c0;color:#fff;padding:10px;margin-right:10px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/></apex:outputText> 
+        <apex:outputText value="" rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c != 'Draft'}" style="margin-right:10px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/>Draft</apex:outputText>
+        <!--START :: 04/01/2017 NPAY-71 Year end process modified by Farhan -->
+        <apex:outputText value="Final" rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null,Approve,showSubmitforApproval==false)}" style="background:#0070c0;color:#fff;padding:10px;margin-right:9px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/></apex:outputText>
+        <apex:outputText value="Final" rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null,Approve==false,showSubmitforApproval==true)}" style="background:#0070c0;color:#fff;padding:10px;margin-right:9px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/></apex:outputText>
+        <apex:outputText value="" rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Final',Approve,showSubmitforApproval,xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null)}" style="margin-right:10px;" ><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/>Final</apex:outputText> 
+        <apex:outputText value="" rendered="{!OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c != 'Final',xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c != null)}" style="margin-right:10px;" ><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/>Final</apex:outputText>
+        <!--START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+        <apex:outputText value="Approved" rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',Approve,xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null)}" style="background:#0070c0;color:#fff;padding:10px;margin-right:9px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/></apex:outputText>
+        <apex:outputText value="" rendered="{!OR(Approve == false,xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c!='Final',xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c != null)}" style="margin-right:10px;" ><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/>Approved</apex:outputText>
+        <!--START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+        
+        <apex:outputText value="FPS" rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net' ,xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c != null,IF(CONTAINS(xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c, 'ACCEPTED'),False, True))}" style="background:#0070c0;color:#fff;padding:10px;margin-right:9px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/></apex:outputText> 
+    <!--START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+        <apex:outputText value="" rendered="{!AND(Approve,xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net' , OR(xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null,IF(CONTAINS(xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c, 'ACCEPTED'),True, False)))}" style="margin-right:10px;" ><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/>FPS</apex:outputText>
+        
+        <apex:outputText value="Accepted" rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net' ,IF(CONTAINS(xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c, 'ACCEPTED'),True, False))}" style="background:#0070c0;color:#fff;padding:10px;margin-right:9px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/></apex:outputText>
+        <apex:outputText value="" rendered="{!AND(Approve,xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net' ,IF(CONTAINS(xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c, 'ACCEPTED'),False, True))}" style="margin-right:10px;" ><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;"/>Accepted</apex:outputText> 
+    <!--END :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+        <!--END :: 04/01/2017 NPAY-71 Year end process modified by Farhan -->
+        
+        </div>
+        
+        <apex:outputText value="New pay run" rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'New'}" style="color:#0070c0;font-size:12pt !important;font-weight:bold;margin-right:10px;"/>
+        <apex:outputText value="Draft pay run" rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft'}" style="color:#0070c0;font-size:12pt !important;font-weight:bold;margin-right:10px;"/>
+        <apex:outputText value="Final pay run" rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Final'}" style="color:#0070c0;font-size:12pt !important;font-weight:bold;margin-right:10px;"/>
+        
+        <!--START::NPAY2 payroll issues added by Farhan -->
+        <div ng-controller="ctrlRead">
+        <div>
+        <br/>
+        <!--  START ::28/06/2017 NPAY-320 Hide payroll buttons for bureau clients added by Jamil -->
+        <apex:outputPanel rendered="{!OR(BureauClientsAdminViewButton == true,BureauClientsManagerViewButton == true)}"> 
+        <!--  END ::28/06/2017 NPAY-320 Hide payroll buttons for bureau clients added by Jamil --> 
+            <center style="padding-left: 100px;">
+                        <!--START:: 13/03/2015 NPPD-747 Enhancement on Additional Payroll Run Modify by Sabir -->                           
+                        <apex:commandButton rendered="{!OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Draft',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Additional')}" style="display:none;">
+                            <input type="button" ng-click="generatedraftPayrol()" value="{!$Label.PayrollPeriodBGeneratedraftpayroll}" class="btn"/>
+                        </apex:commandButton>
+                       <!-- START :: 14/07/2016 NPAY-123 Complete and Lock Pay Run Added by Shiva-->
+                            <apex:actionFunction name="saveMethod" action="{!generateDraftPayRoll}" reRender="errId,popup,pg" oncomplete="" >
+                        <!-- END NPAY-154 Once Draft / Final calculate is complete - Auto refresh pay run to show detail Jamil Added 12/05/2016 --> 
+                            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                        </apex:actionFunction>
+                        <!-- START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modified by Farhan -->
+                        <apex:actionFunction name="generateFinal" action="{!generateFinalPayRoll}" reRender="errId,popup,pg" oncomplete="" >
+                            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                        </apex:actionFunction>
+                         <!-- END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modified by Farhan -->
+                         
+                       
+                         <!-- START:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                         
+                         <!-- START :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                         <!-- START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modifed by Farhan -->
+                          <apex:commandButton rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Draft'}" style="display:none;">
+                            <input type="button" ng-click="generateFinalPayrol()" value="{!$Label.PayrollPeriodBGeneratefinalpayroll}" class="btn"/>
+                        </apex:commandButton>
+            <!-- END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modified by Farhan -->
+                          <!-- END :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                          <!-- END :: 14/07/2016 NPAY-123 Complete and Lock Pay Run Added by Shiva-->
+                          <!-- END :: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->            
+                            
+                        <!-- END NPAY-154 Once Draft / Final calculate is complete - Auto refresh pay run to show detail Jamil Added 12/05/2016 -->   
+                        
+                       <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbedit}" action="{!Edit}"
+                            rendered="{!OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Draft',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Additional')}" />
+                        <!--START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->    
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbchangetodraft}"
+                            action="{!changeStatusToDraft}"
+                            rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',buttonsVisibility,xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null)}" />
+                            
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbback}" action="{!backToPayroll}" />
+                        <!--START :: 30/07/2018 NPAY-573 Financial Reporting - Draft/Redraft added by Farhan -->
+                        <!--The button is used to initiate the Financial report creation batch. This button will not be displayed on new payrun. -->
+                        <apex:commandButton id="financialReportBtn" value="{!$Label.xcdhcm__payrollperiodbprepareledgerreport}" action="{!initiateFinancialReportCreationBatch}" 
+                        rendered="{!OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Draft', xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final')}" onClick="onButtonClick(this)" reRender="errId,financialReportBtn"/>
+                        <!--END :: 30/07/2018 NPAY-573 Financial Reporting - Draft/Redraft added by Farhan -->
+                        <!--START :: 13/11/2018 NPAY-658 Pensions Reporting added by Farhan -->
+                        <!--The button is used to initiate the Pension reporting batch. This button will not be displayed on new payrun. -->
+                        <apex:commandButton id="pensionReportBtn" value="{!$Label.xcdhcm__payrollperiodbcreatepensionreport}"  action="{!initiatePensionReportingBatch}"
+                        rendered="{!AND(PensionReportButton ,OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Draft', xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final'))}" onClick="onButtonClick(this)" reRender="errId,pensionReportBtn"/>
+                        <!--END :: 13/11/2018 NPAY-658 Pensions Reporting added by Farhan -->
+                            
+                        <!--END:: 13/03/2015 NPPD-747 Enhancement on Additional Payroll Run Modify by Sabir -->
+                        <!-- START ::28/04/2016 NPAY-156  <Change to Draft> <Back> <Generate BACS File> <Create FPS> modify by Jamil -->
+                        <!--  START 12/12/2017 regression issue added by jamil -->
+                        <!--  <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbgeneratebacsfile}"  onClick="window.open('/apex/xcdhcm__BACSFile?periodId={!periodId}&sfdc.override=1');  --> 
+                        <!-- START::10/08/2018 NPAY-556 Upload file for HSBCNet added by Jamil -->
+                         <!-- <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbgeneratebacsfile}"  onClick="window.open('/apex/BACSFile?periodId={!periodId}&sfdc.override=1'); return false;" 
+                         rendered="{!AND(Pay_Period__c.Payroll_status__c=='Final', Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.Payroll_approach__c == 'UK Net',Approve)}" /> -->
+                         <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbgeneratebacsfile}"  onClick="window.open('/apex/xcdhcm__BACSFile?periodId={!periodId}&sfdc.override=1'); return false;" 
+                         rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__BACS_Service_User_Number_SUN__c != 'HSBC' ,xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net',Approve)}" />
+                        <!-- END::10/08/2018 NPAY-556 Upload file for HSBCNet added by Jamil -->
+                         <!--  END 12/12/2017 regression issue added by jamil -->
+                        <!----END :: 28/04/2016 NPAY-156  <Change to Draft> <Back> <Generate BACS File> <Create FPS> modify by Jamil  -->
+                        <!-- START::10/08/2018 NPAY-556 Upload file for HSBCNet added by Jamil -->
+                        <apex:commandButton value="HSBC Net"  onClick="window.open('/apex/xcdhcm__HSBCBACSFile?periodId={!periodId}&bacs=hsbc&sfdc.override=1'); return false;" 
+                         rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__BACS_Service_User_Number_SUN__c == 'HSBC',hsbcNetAdminViewButton==true,hsbcNetManagerViewButton==true, xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net',Approve)}" />
+                         <!-- END::10/08/2018 NPAY-556 Upload file for HSBCNet added by Jamil -->
+                        <!-- START ::16/11/2017 NPAY-374 added by Shiva -->
+                        <apex:commandButton value="Submit for Approval" action="{!sumbitForApprovalButton}"
+                        rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final', xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null,showRecall==false,showSubmitforApproval==true,Approve==false)}"/>
+                        <!-- END ::16/11/2017 NPAY-374 added by Shiva -->
+                        <apex:commandButton value="Recall" onclick="return confirm('Are you sure want to recall the approval process?');" action="{!recallApproval}"
+                        rendered="{!showRecall}"/>
+                        
+                        <!-- START :: 17/04/2015 NPAY-27 Change for creating FPS button Added by Jamil-->
+                        <!-- START :: 07/11/2016 NPAY-71 Year end process modified by Farhan-->
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcreatefps}" action="{!createFinalFPSpopup}" 
+                            rendered="{!AND(finalFPSpayrunButton==true,xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final', xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net',Approve,xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null)}" />                       
+                         
+                         <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcreatefps}" action="{!fetchFPSData}" 
+                            rendered="{!AND(finalFPSpayrunButton==false,xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final', xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net',Approve,xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c == null)}" />                       
+                        <!-- END :: 07/11/2016 NPAY-71 Year end process modified by Farhan-->
+                        <!--END :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+                        
+                        <!-- END :: 17/04/2015 NPAY-27 Change for creating FPS button Added by Jamil-->
+                        
+                        <!--START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+                        <apex:commandButton style="display:none;" rendered="{!AND(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Final',Approve==true,OR(IF(contains($Profile.Name, 'Admin'), true, false),IF(contains($Profile.Name, 'Payroll'), true, false)))}"> 
+                            <input type="button" ng-click="editNotes()" value="Add/Edit note" class="btn"/>
+                        </apex:commandButton>
+                        <!-- START :: 16/08/2018 NPAY-555 Late Processed Leaver not included in RTI/FPS Added by Tutu -->
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodblateleaverfps}" action="{!openRtiLateLeaverFps}" rendered="{!AND(lateLeaverExist == true, xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Final', xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net', IF(CONTAINS(xcdhcm__Pay_Period__c.xcdhcm__FPS_status_system__c, 'ACCEPTED'),True, False))}" />
+                        <!-- END :: 16/08/2018 NPAY-555 Late Processed Leaver not included in RTI/FPS Added by Tutu -->
+                        <br/>  <br/>
+                        <div id="adminNotesSection" style="display:none;">
+                            Payroll administrator notes:
+                            <textarea id="t1" ng-model="adminNotes" rows="3" cols="50" maxlength="5000"> </textarea>
+                             <br/>
+                            <input type="button" id= "saveButton" ng-click="saveNotes()" value="Save" class="btn"/>
+                            <input type="button" ng-click="closeNotes()" value="Cancel" class="btn"/>
+                        </div>
+                        
+                        <apex:actionFunction name="saveAdminNotes" action="{!updateAdminNotes}" reRender="errId" oncomplete="" > 
+                            <apex:param assignTo="{!payrollAdminNotes}" name="payrollAdminNotes" value="x"/>
+                        </apex:actionFunction>
+                        <!--END :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+                         
+                       
+                </center>
+              <!--  START ::28/06/2017 NPAY-320 Hide payroll buttons for bureau clients added by Jamil -->   
+              </apex:outputPanel>
+               <!--  END ::28/06/2017 NPAY-320 Hide payroll buttons for bureau clients added by Jamil -->  
+        </div>
+	        <!-- START :: 07/12/2018 NPAY-658 Pension reporting commented by Farhan (this break gives too many gap between buttons and layout)-->
+	        <!-- 
+	        <br/>   
+	         
+	        <br/>
+	        -->
+	        <!-- END :: 07/12/2018 NPAY-658 Pension reporting commented by Farhan (this break gives too many gap between buttons and layout)-->
+            <apex:outputPanel id="popup">
+            <apex:outputpanel id="popupSub1" styleClass="popupBg" rendered="{!displayPopupforPayDayMsg}"/>
+            <apex:outputPanel id="popup1" styleClass="customPopup" layout="block" rendered="{!displayPopupforPayDayMsg}">
+               <center>  
+                   <apex:outputtext id="oText2" value="{!adminWarningMsg}" rendered="{!displayPopupforPayDayMsg}"/>
+                     <br/>
+                   <!-- START :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                  <apex:commandButton id="okButton1" value="{!$Label.xcdhcm__payrollperiodbok}" action="{!redirectFromPopup}" style="width: 100px;" rerender="popup,errId,pg" styleClass="butt">
+                   <!-- END :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                   <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                   <apex:param assignTo="{!generateDraftorFinal}" name="generateDraftorFinal" value="Draft"/>
+                   </apex:commandButton>
+                   <!-- START :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                  <apex:commandButton id="cancelButton1" value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancel}" style="width: 100px;" rerender="theForm" styleClass="butt"/>
+                    <!-- END :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+               </center>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        
+        <apex:outputPanel id="popup2">
+            <apex:outputpanel id="popupSub2" styleClass="popupBg" rendered="{!displayPopupforPayDayMsg}"/>
+            <apex:outputPanel id="popup22" styleClass="customPopup" layout="block" rendered="{!displayPopupforPayDayMsg}">
+               <center>  
+                   <apex:outputtext id="oText22" value="{!adminWarningMsg}" rendered="{!displayPopupforPayDayMsg}"/>
+                     <br/>
+                   <!-- START :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                   <apex:commandButton id="okButton2" value="{!$Label.xcdhcm__payrollperiodbok}" action="{!redirectFromPopup}" style="width: 100px;" rerender="popup2,errId,pg" styleClass="butt">
+                   <!-- END :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                   <apex:param assignTo="{!generateDraftorFinal}" name="generateDraftorFinal" value="Final"/>
+                   </apex:commandButton>
+                   <!-- START :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                   <apex:commandButton id="cancelButton2" value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancel}" style="width: 100px;" rerender="theForm" styleClass="butt"/>
+                    <!-- END :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+               </center>
+            </apex:outputPanel>
+        </apex:outputPanel>
+         <!-- END :: 14/07/2016 NPAY-123 Complete and Lock Pay Run Added by Shiva--> 
+         
+         <!-- START :: 03/11/2016 NPAY-71 Year end process added by Farhan-->
+         <apex:outputPanel id="popup3">
+            <apex:outputpanel styleClass="popupBg" rendered="{!displayFPSpopup}" style="opacity: 0.2;background-color: black;"/>
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayFPSpopup}">
+               <center>  
+                   <apex:outputtext value="{!finalFPSTaxYearMsg}" rendered="{!displayFPSpopup}"/>
+                     <br/><br/>
+                    <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!fetchFPSData}" style="width: 100px;" onClick="disableButton(this);" rerender="popup3,errId" styleClass="butt"/>
+                    <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelFPS}" style="width: 100px;" onClick="disableButton(this);" rerender="popup3,errId" styleClass="butt"/>
+               </center>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <!-- END :: 03/11/2016 NPAY-71 Year end process added by Farhan-->
+        
+        
+         <!-- START NPAY-154 Once Draft / Final calculate is complete - Auto refresh pay run to show detail Jamil Added 12/05/2016 -->  
+         <apex:pageBlock id="pg">
+            <apex:pageBlockSection rendered="{!batchStatusBool }">           
+            <!--START :: 31/10/2017 NPAY-364 Highlight message on failed pay run modified by Shiva -->           
+                <apex:actionPoller interval="5" action="{!payrollPeriodPage}" enabled="{!pollerBool}" reRender="pg,errId"/>    
+            <!--END :: 31/10/2017 NPAY-364 Highlight message on failed pay run modified by Shiva -->       
+                <font color="red">
+                 <apex:outputLabel value="{!Message}"  id="msg"  style="text-wight:bold;" /> 
+                </font> 
+               
+               <!-- <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/loading52.gif')}" align="middle" width="100" height="150px"/> -->
+               <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/loading52.gif')}" align="middle" height="50" width="50"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+      <!-- END NPAY-154 Once Draft / Final calculate is complete - Auto refresh pay run to show detail Jamil Added 12/05/2016 -->    
+        <!--END::NPAY2 payroll issues added by Farhan -->
+        <!--START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+        <apex:detail relatedList="true" title="true" />
+    <!--END :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->
+        <apex:pageBlock id="pgBlk">
+            <!--Begin: PopUp window to display the pay summaries records  -->
+            <apex:pageBlockSection >
+            </apex:pageBlockSection>
+            <!--End: PopUp window to display the pay summaries records -->
+            
+            <apex:pageBlockSection title="Pay run employees"/>
+                <center>
+                    <!-- START:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                    <!-- START :: 18/01/2016 NPAY-61 Payroll 2 list added by Tutu -->
+                    <!-- START :: 05/08/2016 NPAY-186 Payroll UI Issues modified by Farhan -->
+                    <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbreviewautoenrolment}" action="{!OpenPayrollAutoEnrollment}" rendered="{!AND(ReviewAutoEnrolmentButton == true,xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Draft',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Bermuda')}"/>
+                    <!-- END :: 05/08/2016 NPAY-186 Payroll UI Issues modified by Farhan -->
+                    <!-- END :: 18/01/2016 NPAY-61 Payroll 2 list added by Tutu -->
+                    <!-- START :: 14/09/2017 NPAY-343 Variable pension rates/ Local Government Pension Scheme added by Tutu -->
+                    <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbreviewlgps}" action="{!openPayrollLGPS}" rendered="{!AND(ReviewLGPSButton == true,xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Draft',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Bermuda')}"/>
+                    <!-- END :: 14/09/2017 NPAY-343 Variable pension rates/ Local Government Pension Scheme added by Tutu -->
+                    <!-- START :: 21/08/2018 NPAY-581 LGPS and Assumed Pensionable Pay added by Tutu -->
+                    <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbreviewassumedlgps}" action="{!openPayrollAssumedLGPS}" rendered="{!AND(ReviewAssumedLGPSButton == true,xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c=='Draft',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Absence_basis_employer_pensions__c == 'Assumed')}"/>
+                    <!-- END :: 21/08/2018 NPAY-581 LGPS and Assumed Pensionable Pay added by Tutu -->
+                    <!-- START :: 28/01/2016 NPPD-1072 Payroll 2 issue list added by Shiva -->
+                    <!-- START :: 05/08/2016 NPAY-186 Payroll UI Issues modified by Farhan -->
+                    <!--START :: 22/08/2016 NPAY-193 for tagging Payroll4 issues list added by Jamil -->
+                    <!-- START 18/04/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by Jamil-->
+                    <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbreviewovertime}" action="{!OpenReviewOvertime}" rendered="{!AND(ReviewOvertimeButton == true,AND(ReviewOvertimeButtonDisplay==true,OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Additional',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft')))}"/>
+                    <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbreviewtimesheet}" action="{!OpenReviewTimesheet}" rendered="{!AND(ReviewTimesheetButton == true,xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Bermuda',AND(ReviewTimesheetButtonDisplay==true, OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Additional',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft')))}"/>
+                     <!--END :: 22/08/2016 NPAY-193 for tagging Payroll4 issues list added by Jamil -->
+                    <!-- END :: 05/08/2016 NPAY-186 Payroll UI Issues modified by Farhan -->
+                    <!-- END :: 28/01/2016 NPPD-1072 Payroll 2 issue list added by Shiva -->        
+                    <!-- END:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  --> 
+                     <!--  START ::  18/04/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by Jamil--> 
+                    <!-- START ::27/06/2017 Review expense button UI Issues added by Jamil -->
+                    <apex:commandButton value="Review expenses" action="{!OpenReviewExpenses}" rendered="{!AND(ReviewExpenseButton == true,xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Bermuda',AND(ReviewExpensesButtonDisplay==true, OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Additional',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft')))}"/>
+                     <!-- END ::27/06/2017 Review expense button UI Issues added by Jamil -->
+                    <!-- END  18/04/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by Jamil--> 
+                </center>
+            <html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+                <head>
+                    <meta charset="utf-8"/>
+                    <!-- START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modified by Farhan -->
+                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                    <!-- END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modified by Farhan -->
+                    
+                    <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet"/>
+                    <script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+     
+     <!--Jamil for up and down icon -->
+     <!-- START:: NPAY-116 Payroll issue list added by Jamil-->
+                   <!--  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil --> 
+            <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>             
+             <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                     <!-- END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil -->
+     <!-- end Jamil for up and down icon -->
+      <!-- END:: NPAY-116 Payroll issue list added by Jamil-->
+                    
+                    
+                    
+                </head>
+                
+                <!--- Javascript -->
+                <script type="text/javascript">
+                    <!-- Name your application -->
+                    var myapp = angular.module('hello', []);
+                    //var sortingOrder = 'employee.Name';
+                    var payrollStatus = '{!payRollPeriod.Payroll_status__c}';
+                    var payrollnotes = '{!payRollPeriod.Payroll_administrator_notes__c}';
+                    var sortingOrder ;
+                    if(payrollStatus == 'New' || payrollStatus == 'Additional')
+                    {
+                         sortingOrder = 'employee.Name';
+                    }
+                    else
+                    {   
+                        sortingOrder = 'paySummary.Employee__r.Name';
+                    }
+                    <!-- Define Controller  -->
+                    var contrl=myapp.controller('ctrlRead', function ($scope, $filter) {
+                        <!--- Initialize Scope Variables --->
+                        $scope.sortingOrder = sortingOrder;
+                        $scope.reverse = false;
+                        $scope.filteredItems = [];
+                        $scope.groupedItems = [];
+                        $scope.itemsPerPage = 40;
+                        $scope.pagedItems = [];
+                        $scope.currentPage = 0;
+                        $scope.selectedAll = true;
+                        $scope.items = [];
+                        //START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva
+                        $scope.adminNotes='';
+                        //END :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva
+                        //$scope.items ={!paySummaryWrapperListAJS};
+                        
+                        // START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->
+                        $scope.show ='';
+                        $scope.criteria={
+                            searchtext:'',
+                            page: 1,
+                            pagesize: 40,
+                            sort: '',
+                            desc : false 
+                          };
+                        $scope.paging ={
+                            total : 0,
+                            totalpages: 0,
+                            showing: 0,
+                            pagearray: [],
+                            
+                            filteredList : 0,
+                            pagingOptions: [10,20,30,40,50],
+                            allItem: []
+                          }
+                        //START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  
+                        // START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan
+                        var customers;
+            // END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan
+                        if(payrollStatus == 'New' || payrollStatus == 'Additional')
+                        {
+                            // START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modified by Farhan
+                            // START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  
+                            customers = {!payrollEmployeeWrapperListAJS};
+                            //END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->   
+                            // END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modified by Farhan
+                        }
+                        else
+                        {   
+                            // START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan
+                             $scope.items ={!paySummaryWrapperListAJS};
+                             //  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil 
+                             customers = {!paySummaryWrapperListAJS};
+                             //  END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil   
+                             var i = $scope.items.length
+                            while (i--) 
+                            {
+                                if($scope.items[i].paySummary != null)
+                                {
+                                    //console.log('employee with no paysummary - '+$scope.items[i].employee.Name+' and counter is '+i);
+                                    $scope.items.splice(i, 1);
+                                }
+                                if(customers[i].paySummary == null)
+                                {
+                                    customers.splice(i, 1);
+                                }
+                            }
+                     // END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan
+                        }
+                       
+                        var searchMatch = function (haystack, needle) {
+                            if (!needle) {
+                                return true;
+                            }
+                            return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+                        };
+                        
+                        //Initialize the Search Filters 
+                        $scope.search = function () {
+                        //  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->
+                           $scope.customers = $filter('filter')(customers, function (item) {
+                           // END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->
+                           
+                            //START :: 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action  added by jamil
+                           /*
+                                for (var attr in item) {
+                                    //if (searchMatch(item[attr], $scope.query))
+                                    if(payrollStatus == 'New' || payrollStatus == 'Additional')
+                                    {
+                                        //  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  
+                                        if (searchMatch(item.employee.Name, $scope.criteria.searchtext))
+                                        //  END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil 
+                                            return true;                                        
+                                    }
+                                    else
+                                    {
+                                        //  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil 
+                                        if (searchMatch(item.paySummary.xcdhcm__Employee__r.Name, $scope.criteria.searchtext))//Changed by Ranjeet
+                                         //  END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil 
+                                        return true;
+                                    }
+                                }
+                                return false;
+                             */
+                            
+                               return searchUtil(item, $scope.criteria.searchtext); 
+                               //END :: 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action  added by jamil   
+                            });
+                            // Define Sorting Order
+                            if ($scope.sortingOrder !== '') {
+                                $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+                            }
+                            $scope.currentPage = 0;
+                            
+                            // Group by pages
+                            $scope.groupToPages();
+                     //  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil               
+                     // Define Sorting Order
+                    if ($scope.sortingOrder !== '') {
+                        $scope.customers = $filter('orderBy')($scope.customers , $scope.sortingOrder, $scope.reverse);
+                    };
+                     $scope.paging.total = $scope.customers.length;    
+                     var a = ($scope.criteria.page - 1) * $scope.criteria.pagesize;
+                     var b = $scope.criteria.page  * $scope.criteria.pagesize;
+                    
+                     $scope.customers = $scope.customers.slice( a, b );   
+                     $scope.paging.showing = $scope.customers.length;
+                     
+                     
+                     paging($scope.criteria.page, $scope.criteria.pagesize,$scope.paging.total);
+                      
+                  };
+                  function paging(current, pagesize, total)
+                  {
+                    var totalpages = Math.ceil(total/pagesize);
+                    $scope.paging.totalpages = totalpages;
+                    // clear it before playing
+                    $scope.paging.pagearray = [];
+                    if(totalpages <=1) 
+                    { 
+                       return;
+                    }
+                    if(totalpages >=1) 
+                    {
+                        $scope.paging.pagearray.push('Prev');
+                        $scope.paging.pagearray.push('Next');
+                    } 
+                  }  
+                   $scope.$watch('criteria', function(newValue, oldValue){
+                   
+                    if(!angular.equals(newValue, oldValue)){
+                        $scope.search();
+                       
+                    }
+                  }, true);
+                   $scope.Prev = function(){
+                    if($scope.criteria.page > 1)      
+                      $scope.criteria.page--;
+                    else if($scope.criteria.page == 1)
+                    {
+                        $scope.criteria.page=1;
+                    } 
+                     
+                  }
+                  
+                  $scope.Next = function(){
+                    if($scope.criteria.page < $scope.paging.totalpages)
+                    {      
+                      $scope.criteria.page++;
+                    }else
+                    {
+                      scope.criteria.page = $scope.paging.totalpages
+                    }   
+                  }
+                  
+                  $scope.Last= function(){
+                    
+                      $scope.criteria.page = $scope.paging.totalpages;
+                      
+                  }
+                   $scope.First= function(){
+                    
+                   $scope.criteria.page = 1;
+                      
+                  }
+                  // END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil 
+                 //START :: 20/2/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil       
+                 var input = document.getElementById('myInput');
+		         input.onkeydown = function() 
+		         {
+			         var key = event.keyCode || event.charCode;
+			
+					    if( key == 8 || key == 46 )
+					    {
+					        $scope.criteria.page =1;
+					        return true;
+					    }    
+				}; 
+				input.onkeydown = function()
+				{
+        			$scope.criteria.page =1;
+		        	return true;
+     			};        	 
+		      //END :: 20/2/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil               
+                        
+                       
+                   //Getting code from static resource
+                   //  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil   
+                    {!scriptcode}
+                    $scope.checkAll = function () 
+                    {
+                        if ($scope.selectedAll) 
+                        {
+                            $scope.selectedAll = true;
+                        } 
+                        else 
+                        {
+                            $scope.selectedAll = false;
+                        }
+                        angular.forEach(customers , function (item) 
+                        {
+                            item.selected = $scope.selectedAll;
+                        });
+                        $scope.filteredItems = $filter('filter')(customers , function (item) {
+                            for (var attr in item) {
+                                 item.selected = $scope.selectedAll;  
+                            }
+                        });
+                       
+                    };
+                    //  END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil   
+                        // START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan
+                        $scope.generatedraftPayrol = function()
+                        {
+                            // START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil   
+                           var allEmployeesData;
+                           if($scope.items.length > 0)
+                           {
+                                allEmployeesData = JSON.stringify($scope.items).substr(1).slice(0, -1);
+                                if(customers.length > 0)
+                                {
+                                    allEmployeesData = allEmployeesData+','+JSON.stringify(customers).substr(1).slice(0, -1);
+                                }
+                                allEmployeesData = '['+allEmployeesData+']';
+                                saveMethod(allEmployeesData);
+                           }
+                           else if(customers.length > 0)
+                           {
+                                saveMethod(JSON.stringify(customers));
+                           }
+                           
+                           //  END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil   
+                        };
+                        $scope.generateFinalPayrol = function()
+                        {
+                           var allEmployeesData;
+                           if($scope.items.length > 0)
+                           {
+                                allEmployeesData = JSON.stringify($scope.items).substr(1).slice(0, -1);
+                                if(customers.length > 0)
+                                {
+                                    allEmployeesData = allEmployeesData+','+JSON.stringify(customers).substr(1).slice(0, -1);
+                                }
+                                allEmployeesData = '['+allEmployeesData+']';
+                                generateFinal(allEmployeesData);
+                           }
+                           else if(customers.length > 0)
+                           {
+                                generateFinal(JSON.stringify(customers));
+                           }
+                        };
+                        // END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan
+                        
+                        //START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva
+                        $scope.editNotes = function()
+                        {
+                            document.getElementById('adminNotesSection').style.display = "inline";
+                            $scope.adminNotes = payrollnotes;
+                        };
+                        $scope.closeNotes = function()
+                        {
+                            console.log('close notes');
+                            document.getElementById('adminNotesSection').style.display = "none";
+                        };
+                        $scope.saveNotes = function()
+                        {
+                            console.log('entered notes -'+$scope.adminNotes);
+                            saveAdminNotes($scope.adminNotes);
+                            document.getElementById('saveButton').setAttribute("value", "Processing..."); 
+                        };
+                        //END :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva  
+                        // START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan
+                        $scope.openModal = function()
+                        {
+                            window.scrollTo(0, 0);
+                        };
+                        
+                        //Sorting functionality on include popup.
+                        $scope.sortColumn = 'employee.Name';
+                        $scope.reverseSort = false;
+                        $scope.sortData = function(column)
+                        {
+                            console.log('column to sort - '+column);
+                            $scope.reverseSort = ( $scope.sortColumn == column ) ? !$scope.reverseSort : false;
+                            $scope.sortColumn = column;
+                        }
+                        
+                        //Select all functionality in popup
+                        $scope.selectAllExcludedEmployees = false;
+                        $scope.selectDeselectAllExcludedEmployees = function () 
+                        {
+                            angular.forEach($scope.items , function (item) 
+                            {
+                                item.selected = $scope.selectAllExcludedEmployees;
+                            });
+                        };
+                  
+                    });
+                // END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan
+                
+                contrl.$inject = ['$scope', '$filter'];
+                
+                //START::07/11/2016 NPAY-71 Year End Process added by Farhan
+                function disableButton(objBtn) 
+                {
+                    objBtn.disabled = true;
+                    objBtn.style.color='#336699';
+                    objBtn.value='Processing...';
+                }
+                //END::07/11/2016 NPAY-71 Year End Process added by Farhan
+                
+                //START :: 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action  added by jamil 
+               function searchUtil(item, toSearch) 
+		       {
+			   
+			    return (item.employee.Name.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 
+		        || item.employee.xcdhcm__Payroll_no__c.toLowerCase().indexOf(toSearch.toLowerCase()) > -1)? true : false;
+		      
+		      }
+		      //END :: 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action  added by jamil  
+
+                </script>
+                <body>     
+                    <!-- =========== Binding Controller to Body of Page ============= -->
+                <div >
+                <!-- START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan -->
+                <!-- Modal -->
+                <div class="modal" id="turtle-info" role="dialog">
+                     <div class="modal-dialog">
+                         <div class="modal-content">
+                             <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 <h1 style="font-size: 1.2em; color: #336699 !important; float:left; padding-right: 20%;">Pay run employees</h1> &nbsp;
+                                  <!--  START :: 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action added by Jamil -->
+                                 <!-- <input type="text" ng-model="searchEmployee.employee.Name" placeholder="Search" style = "width: 250px !important;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC);
+                                                                                                                        display:inherit; background-repeat: no-repeat;background-position: 235px 8px;"/> -->                                                                                  
+                             <input type="text" ng-model="searchEmployee" placeholder="Search" style = "width: 250px !important;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC);
+                                                                                                                        display:inherit; background-repeat: no-repeat;background-position: 235px 8px;"/> 
+                             <!-- END :: 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action added by Jamil-->                                                                                                                        
+                                                                                                                                                         
+                             </div>
+                             <div class="modal-body" style="height:360px; overflow-y: auto;">
+                                <table align="left" ng-show="items.length == 0 ">
+                                    <tr> <td> No records to display </td></tr>
+                                </table>
+                                <table align="left" ng-show="items.length > 0 ">
+                                    <thead>
+                                        <th> <input type="checkbox" name ="checkbox" ng-model="selectAllExcludedEmployees" ng-click="selectDeselectAllExcludedEmployees()"/> &nbsp;</th>
+                                        <th class="employee.Name" ng-click="sortData('employee.Name')">{!$ObjectType.Pay_Summary__c.Fields.Employee__c.Label}&nbsp;<i class="icon-sort"></i></th>
+                                         <!-- START 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action added by Jamil -->
+							            <th class="employee.xcdhcm__Payroll_no__c" ng-click="sortData('employee.xcdhcm__Payroll_no__c')">{!$ObjectType.Pay_Summary__c.Fields.Payroll_no__c.Label}&nbsp;<i class="icon-sort"></i></th>
+							            <!-- END 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action added by Jamil -->
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in items | filter:searchEmployee | orderBy:sortColumn:reverseSort " class="ng-cloak" style="border-spacing: 10px;"> 
+                                            <td><input type="checkbox" value="{{item.selected}}"  name="item.selected"  ng-model="item.selected"/></td>
+                                            <td style="text-align:left;padding-bottom: 3px;">
+                                            <!-- START::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning commented by wasim -->
+                                                <!--  <apex:outputLink value="/{{item.employee.Id}}" target="_blank">
+                                                   <apex:outputText value="{{item.employee.Name}}" />
+                                                </apex:outputLink>-->
+                                                <!-- END::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning commented by wasim -->
+                                                 <!-- START::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning addded by wasim -->
+                                                   <a href="/one/one.app#/alohaRedirect/{{item.employee.Id}}" target="_blank">{{item.employee.Name}}</a>
+                                                  <!-- END::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning addded by wasim -->
+                                            </td>
+                                             <!-- START 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action added by Jamil -->
+		                                    <td>
+		                                        <apex:outputText value="{{item.employee.xcdhcm__Payroll_no__c}}" />
+		                                    </td>
+		                                    <!-- END 25/05/2018 NPAY-441 Pay run page - Employee number search / Return action added by Jamil -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                              </div>
+                              <br/>
+                              <div class="modal-footer">
+                                  <center> 
+                                    <apex:commandButton style="display:none;"> 
+                                        <input type="button" data-dismiss="modal" value="{!$Label.PayrollPeriodBSave}" class="btn"/>
+                                    </apex:commandButton>
+                                  </center>
+                              </div>
+                         </div>
+                     </div>
+                 </div>
+            <!-- Modal end -->
+        <!-- END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan --> 
+                  
+        <!-- START :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link commented by Farhan -->         
+                             
+                 <apex:outputText rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft'}">           
+                    <span class="onHover" style="font-size: 1.2em; color: #336699 !important; float:left;" data-toggle="modal" data-target="#turtle-info" data-backdrop="static" ng-click="openModal()">
+                        Excluded Employees
+                    </span>
+                </apex:outputText>
+                <!-- END :: 13/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link modified by Farhan -->
+        <br/>
+                
+                
+                <!--  =========== Binding Controller to Body of Page ============= -->  
+                
+                
+                <table style="margin-top:10px;">
+                    <tr>
+                        <td>
+                            <apex:outputLabel value="Employee views" style="margin-right:10px;"/>
+                        </td>
+                        <td>
+                            <apex:actionRegion >  
+                                <apex:SelectList size="1" value="{!selectedEmpView}"  style="margin-right:150px;"> 
+                                    <apex:actionSupport event="onchange" action="{!empViewOnChange}" status="recordStatus" rerender=""/>
+                                    <apex:selectOptions value="{!empviewsList}" /> 
+                                    <apex:actionStatus startText="Loading 
+                                    ..." id="recordStatus"/>  
+                                </apex:SelectList>
+                            </apex:actionRegion> 
+                        </td>
+                        <td>
+                            <apex:outputLabel value="Search employee" style="margin-right:10px;"/>
+                        </td>
+                        <td>
+                        <!--START :: 20/2/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil -->
+                            <input id= "myInput" type="text" ng-model="criteria.searchtext" ng-change="search()" placeholder="Search" style = "width: 250px !important;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC);
+                                                                                                                         background-repeat: no-repeat;background-position: 235px 8px;"/>
+                       <!--END :: 20/2/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil -->
+                        </td>
+                    </tr>
+                </table>
+                
+                    
+                    <!-- =====================================New/Additional : Begin========================================== -->
+                    <apex:outputPanel rendered="{!IF(OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'New',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Additional'),true,false)}" id="newOutputPanel">
+                    
+                        <table class="table  table-hover" >
+                            <thead>
+                                <tr>
+                                    <th class="paySummary.selected">
+                                        <input type="checkbox" ng-model="selectedAll" ng-click="checkAll()" />
+                                    </th>
+                                    <th class="employee.Name">{!$ObjectType.Pay_Summary__c.Fields.Employee__c.Label}&nbsp;<a ng-click="sort_by('employee.Name')"><i class="icon-sort"></i></a></th>
+                                    <th class="employee.Payroll_no__c">Payroll no&nbsp;<a ng-click="sort_by('employee.xcdhcm__Payroll_no__c')"><i class="icon-sort"></i></a></th>
+                                    <th class="employee.Companies__c">Company&nbsp;<a ng-click="sort_by('employee.xcdhcm__Companies__c')"><i class="icon-sort"></i></a></th>
+                                    <th class="employee.Payroll_start_date__c">Payroll start date&nbsp;<a ng-click="sort_by('employee.xcdhcm__Payroll_start_date__c')"><i class="icon-sort"></i></a></th>
+                                    <th class="employee.Payroll_end_date__c">Leaving date for payroll&nbsp;<a ng-click="sort_by('employee.xcdhcm__Payroll_end_date__c')"><i class="icon-sort"></i></a></th>
+                                   <!-- Jamil Added colum dated 08/02/2016 --->
+                                   <th class="employee.Payroll_set_up__c">Payroll set up&nbsp;<a ng-click="sort_by('employee.Payroll_set_up__c')"><i class="icon-sort"></i></a></th>
+                                   <!-- end of Jamil Added colum dated 08/02/2016  -->
+                                </tr>
+                            </thead>                            
+                            <tbody>           
+                                <!-- START:: NPAY-2 class ng-cloak added by Farhan  -->         
+                                 <!--  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->        
+                                 <!-- <tr ng-repeat="item in customers  | filter:criteria.searchtext" class="ng-cloak">  -->
+                                 <tr ng-repeat="item in customers  | filter:criteria.searchtext track by $index" class="ng-cloak">
+                                 <!--  START::13/11/2018 NPAY-657 Employee Search - Fix  modified by Jamil -->       
+                                 <!-- END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->
+                                <!-- END:: NPAY-2 class ng-cloak added by Farhan  -->
+                                     <td style="text-align:left;">                                       
+                                        <input type="checkbox" value="{{item.selected}}"  name="item.selected"  ng-model="item.selected"/>
+                                     </td>
+                                     <td style="text-align:left;">
+                                      <!-- START::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning commented by wasim -->
+                                        <!--  <apex:outputLink value="/{{item.employee.Id}}" target="_blank">
+                                           <apex:outputText value="{{item.employee.Name}}" />
+                                        </apex:outputLink>-->
+                                         <!-- END::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning commented by wasim -->
+                                        <!-- START::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning addded by wasim -->
+                                        <a href="/one/one.app#/alohaRedirect/{{item.employee.Id}}" target="_blank">{{item.employee.Name}}</a>
+                                        <!-- END::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning addded by wasim -->
+                                     </td>
+                                     <td style="text-align:left;">
+                                        {{item.employee.xcdhcm__Payroll_no__c}}                                     
+                                     </td>
+                                     <td style="text-align:left;">
+                                        {{item.employee.xcdhcm__Companies__c}}
+                                     </td>
+                                     <td style="text-align:left;">
+                                        {{item.employee.xcdhcm__Payroll_start_date__c | date:'dd-MM-yyyy'}}
+                                     </td>
+                                     <td style="text-align:left;">
+                                        {{item.employee.xcdhcm__Payroll_end_date__c  | date:'dd-MM-yyyy'}}
+                                     </td>
+                                     <!-- Jamil Added colum dated 08/02/2016 --->
+                                     <td style="text-align:left;">
+                                         <div ng-if="item.employee.xcdhcm__Payroll_set_up__c==true">
+                                           <!-- <span class="glyphicon glyphicon-ok"></span> -->
+                                           <apex:image id="theImage" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/true_tick.jpg')}" width="23" height="29"/>
+                                           </div>   
+                                           <div ng-if="item.employee.xcdhcm__Payroll_set_up__c==false">
+                                           <apex:image id="theImage1" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/false_tick.jpg')}" width="16" height="22"/>
+                                          </div>    
+                                     </td> 
+                                     <!-- end of Jamil Added colum dated 08/02/2016 --->
+                                </tr>
+                            </tbody>
+                            
+                            <!--  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->
+                         
+                       </table>
+                      <table  style="width:99% !important"> 
+                            <tr> 
+                                <td width="50%">
+                                   
+                                        <span class="ng-cloak" ng-if="criteria.page > 0"> {{(criteria.page -1) * criteria.pagesize + 1}} - 
+                                                 {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}} of {{paging.total}} records.</span>
+                                                  Select page size. <select class="select1" ng-model="criteria.pagesize"              
+                                                       ng-options="obj as obj for obj in paging.pagingOptions" />                                                              
+                              
+                                  </td>
+                                  <td  width="25%"> 
+                                
+                                        <ul class="pagination" > 
+                                            <li ng-class="{active:0}"><a href="#" ng-click="First()"><span class="glyphicon glyphicon-step-backward"></span></a>
+                                            </li>   
+                                            <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+                                               <!-- 
+                                                <a class="topic" ng-if="item == 'Prev'" ng-click="Prev()">Previous</a>
+                                                <a class="topic" ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                                               --> 
+                                                <a class="topic" href="#" ng-if="item == 'Prev'" ng-click="Prev()" style="font-size: 10px; text-decoration: none">Previous</a>
+                                                <a class="topic" href="#" ng-if="item == 'Next'" ng-click="Next()" style="font-size: 10px; text-decoration: none">Next</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" ng-click="Last()"><span class="glyphicon glyphicon-step-forward"></span></a>
+                                             </li>
+                                        </ul>
+                                 </td>
+                                 <td width="15%"></td>
+                  
+                                   <td width="20%">
+                                         <!-- START :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil -->  
+                                            <span class="ng-cloak" ng-if="customers.length > 0 ">
+                                            
+                                           <!-- END :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil-->  
+                                                Page <input class="ng-cloak" type='number' name="input" id="test"
+                                                     ng-model='criteria.page'
+                                                     min="1"
+                                                     max="{{paging.totalpages}}"
+                                                         style='width:60px;'  />                       
+                                                    of {{paging.totalpages}}
+                                                    <span  ng-if="criteria.page =='undefined'" ng-click="MaxPage()"> </span> 
+                                            </span>
+                                   </td>
+                            </tr>
+                    </table>        
+                       <!--  END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->
+                    </apex:outputPanel>
+                    <!-- =====================================New : End========================================== -->
+                    
+                    <!-- =====================================Draft & Final : Begin Modified by Tutu========================================== -->
+                    <!-- START:: 1/4/2018 NPAY-467 Issues on Payments page Jamil  -->
+                    <apex:outputPanel rendered="{!OR(xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Final',xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Test')}" >
+                     <!-- - END ::  1/4/2018 NPAY-467 Issues on Payments page Jamil  -->
+                        <!-- START:: 12/10/2015 NPAY-2 class ng-cloak added by Farhan  -->
+                        <table class="table table-hover,ng-cloak ">
+                        <!-- END:: 12/10/2015 NPAY-2 class ng-cloak added by Farhan  -->
+                            <thead>
+                                <tr>
+                                    <!-- START :: 10/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan  -->
+                                    <apex:outputText rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft'}">
+                                        <th class="paySummary.selected">
+                                            <input type="checkbox" name ="checkbox" ng-model="selectedAll" ng-click="checkAll()" />
+                                        </th>
+                                    </apex:outputText>
+                                    <!-- END :: 10/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan -->
+                                    <th class="paySummary.Employee__r.Name">{!$ObjectType.Pay_Summary__c.Fields.Employee__c.Label}&nbsp;<a ng-click="sort_by('paySummary.Employee__r.Name')"><i class="icon-sort"></i></a></th>
+                                    <th class="paySummary.Id">{!$ObjectType.Pay_Summary__c.Fields.Name.Label}&nbsp;<a ng-click="sort_by('paySummary.Id')"><i class="icon-sort"></i></a></th>
+                                    <th class="paySummary.Employee__r.Payroll_no__c">Payroll no&nbsp;<a ng-click="sort_by('paySummary.xcdhcm__Employee__r.xcdhcm__Payroll_no__c')"><i class="icon-sort"></i></a></th>
+                                    <th class="paySummary.Additions__c">{!$ObjectType.Pay_Summary__c.Fields.Additions__c.Label}&nbsp;<a ng-click="sort_by('paySummary.xcdhcm__Additions__c')"><i class="icon-sort"></i></a></th>
+                                    <!-- START:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                    <!-- START :: 05/08/2016 NPAY-186 Payroll UI Issues added by Farhan  -->
+                                    <apex:outputText rendered="{!AND(xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Bermuda',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Gross')}">
+                                    <th class="paySummary.Statutory_pay__c">{!$ObjectType.Pay_Summary__c.Fields.Statutory_pay__c.Label}&nbsp;<a ng-click="sort_by('paySummary.Statutory_pay__c')"><i class="icon-sort"></i></a></th>
+                                    </apex:outputText>
+                                    <!-- END :: 05/08/2016 NPAY-186 Payroll UI Issues added by Farhan  -->
+                                    <!-- END:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                    <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'}">
+	                                    <!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+	                                    <th class="paySummary.Student_PG_loan__c">{!$ObjectType.Pay_Summary__c.Fields.Student_PG_loan__c.Label}&nbsp;<a ng-click="sort_by('paySummary.Student_PG_loan__c')"><i class="icon-sort"></i></a></th>
+	                                    <!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+                                    </apex:outputText>
+                                    <!-- START :: 05/08/2016 NPAY-186 Payroll UI Issues added by Farhan  -->
+                                    <apex:outputText rendered="{!AND(xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Bermuda',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Gross')}">
+                                    <th class="paySummary.Court_order__c">{!$ObjectType.Pay_Summary__c.Fields.Court_order__c.Label}&nbsp;<a ng-click="sort_by('paySummary.Court_order__c')"><i class="icon-sort"></i></a></th>
+                                    </apex:outputText>
+                                    <!-- END :: 05/08/2016 NPAY-186 Payroll UI Issues added by Farhan  -->
+                                    <th class="paySummary.Deductions__c">{!$ObjectType.Pay_Summary__c.Fields.Deductions__c.Label}&nbsp;<a ng-click="sort_by('paySummary.Deductions__c')"><i class="icon-sort"></i></a></th>
+                                    <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'}">
+                                    <th class="paySummary.Tax__c">{!$ObjectType.Pay_Summary__c.Fields.Tax__c.Label}&nbsp;<a ng-click="sort_by('paySummary.xcdhcm__Tax__c')"><i class="icon-sort"></i></a></th>
+                                    </apex:outputText>
+                                    <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'}">
+                                    <th class="paySummary.Employee_NI_sum__c">{!$ObjectType.Pay_Summary__c.Fields.Employee_NI_sum__c.Label}&nbsp;<a ng-click="sort_by('paySummary.xcdhcm__Employee_NI_sum__c')"><i class="icon-sort"></i></a></th>
+                                    </apex:outputText>
+                                   
+                                    <!-- START:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                    <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'Bermuda'}">
+                                    <th class="paySummary.Payroll_tax_employee__c">{!$ObjectType.Pay_Summary__c.Fields.Payroll_tax_employee__c.Label}&nbsp;<a ng-click="sort_by('paySummary.Payroll_tax_employee__c')"><i class="icon-sort"></i></a></th>
+                                    </apex:outputText>                                    
+                                    <!-- END:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                    <th class="paySummary.Net_pay__c">{!$ObjectType.Pay_Summary__c.Fields.Net_pay__c.Label}&nbsp;<a ng-click="sort_by('paySummary.Net_pay__c')"><i class="icon-sort"></i></a></th>
+                                    <!-- START:: 09/06/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                    <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'Bermuda'}">
+                                    <th class="paySummary.Payroll_tax_employer__c">{!$ObjectType.Pay_Summary__c.Fields.Payroll_tax_employer__c.Label}&nbsp;<a ng-click="sort_by('paySummary.Payroll_tax_employer__c')"><i class="icon-sort"></i></a></th>
+                                    </apex:outputText>
+                                    <!-- END:: 09/06/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                    <th >Payslip&nbsp;</th>                                 
+                                </tr>
+                            </thead>
+                           
+                            <tbody>                    
+                                <!-- START:: 12/10/2015 NPAY-2(included ng-cloak) modified by Farhan  -->           
+                              <!--  <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse | filter:query" class="ng-cloak"> -->
+                              <!--  START::13/11/2018 NPAY-657 Employee Search - Fix  modified by Jamil -->
+                               <!-- <tr ng-repeat="item in customers  | filter:criteria.searchtext" class="ng-cloak"> --> 
+                               <tr ng-repeat="item in customers  | filter:criteria.searchtext track by $index" class="ng-cloak">
+                               <!-- END::13/11/2018 NPAY-657 Employee Search - Fix  modified by Jamil -->
+                                <!-- END:: 12/10/2015 NPAY-2 modified by Farhan  --> 
+                                     <!-- START :: 10/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan  -->
+                                     <apex:outputText rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft'}">
+                                        <td> <input type="checkbox" value="{{item.selected}}"  name="item.selected"  ng-model="item.selected"/> </td>
+                                     </apex:outputText>
+                                     <!-- END :: 10/10/2017 NPAY-369 Load testing Issue on Exclude/include employee link added by Farhan  -->
+                                     <td>
+                                      <!-- START::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning commented by wasim -->
+                                        <!-- <apex:outputLink value="/{{item.paySummary.Employee__r.Id}}" target="_blank">
+                                            <apex:outputText value="{{item.paySummary.Employee__r.Name}}" /> 
+                                        </apex:outputLink> -->
+                                        <!-- END::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning commented by wasim -->
+                                        <!-- START::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning added by wasim -->
+                                        <a href="/one/one.app#/alohaRedirect/{{item.paySummary.xcdhcm__Employee__r.Id}}" target="_blank">{{item.paySummary.xcdhcm__Employee__r.Name}}</a>
+                                        <!-- END::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning added by wasim -->
+                                     </td>
+                                      <td>
+                                       <!-- START::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning commented by wasim -->
+                                       <!--   <apex:outputLink value="/{{item.paySummary.Id}}" target="_blank">
+                                            <apex:outputText value="{{item.paySummary.Name}}" /> 
+                                        </apex:outputLink>-->
+                                        <!-- END::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning commented by wasim -->
+                                         <!-- START::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning added by wasim -->
+                                        <a href="/one/one.app#/alohaRedirect/{{item.paySummary.Id}}" target="_blank">{{item.paySummary.Name}}</a>
+                                        <!-- END::15/12/2017 NPAY-366 Rework Payroll Pages for Lightning added by wasim -->
+                                     </td>
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Employee__r.xcdhcm__Payroll_no__c}}
+                                     </td>
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Additions__c | currency: "{!curr} "}}
+                                     </td>
+                                     <!-- START:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                     <!-- START :: 05/08/2016 NPAY-186 Payroll UI Issues added by Farhan  -->
+                                     <apex:outputText rendered="{!AND(xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Bermuda',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Gross')}">
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Statutory_pay__c | currency: "{!curr} "}}
+                                     </td>
+                                     </apex:outputText>
+                                     <!-- END :: 05/08/2016 NPAY-186 Payroll UI Issues added by Farhan  -->
+                                     <!-- END:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                     <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'}">
+                                     <td>
+	                                     <!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+	                                        {{item.paySummary.xcdhcm__Student_PG_loan__c | currency: "{!curr} "}}
+	                                     <!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->   
+                                     </td>
+                                     </apex:outputText>
+                                     <!-- START :: 05/08/2016 NPAY-186 Payroll UI Issues added by Farhan  -->
+                                     <apex:outputText rendered="{!AND(xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Bermuda',xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c != 'Gross')}">
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Court_order__c | currency: "{!curr} "}}
+                                     </td>
+                                     </apex:outputText>
+                                     <!-- END :: 05/08/2016 NPAY-186 Payroll UI Issues added by Farhan  -->
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Deductions__c | currency: "{!curr} "}}
+                                     </td>
+                                     <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'}">
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Tax__c | currency: "{!curr} "}}
+                                     </td>
+                                     </apex:outputText>
+                                     <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'}">
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Employee_NI_sum__c | currency: "{!curr} "}}
+                                     </td>
+                                     </apex:outputText>
+                                     <!-- START:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                     <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'Bermuda'}">
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Payroll_tax_employee__c | currency: "{!curr} "}}
+                                     </td>
+                                     </apex:outputText>
+                                     <!-- END:: 24/05/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Net_pay__c | currency: "{!curr} "}}
+                                     </td>
+                                     <!-- START:: 09/06/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                     <apex:outputText rendered="{!xcdhcm__Pay_Period__c.XCD_PAY_Payroll__r.Employer__r.xcdhcm__Payroll_approach__c == 'Bermuda'}">
+                                     <td>
+                                        {{item.paySummary.xcdhcm__Payroll_tax_employer__c | currency: "{!curr} "}}
+                                     </td>
+                                     </apex:outputText>
+                                     <!-- END:: 09/06/2016 NPAY-121 Bermuda Payroll modified by Farhan  -->
+                                     <td>
+                                     <!--  START :: 13/08/2018 NPAY-461 Payslips - Bugs and Usability added by jamil -->
+                                      <!--   <a ng-href = "/apex/PaySlips?id={{item.paySummary.Id}}" target="_blank"> -->
+                                      <a ng-href = "/apex/xcdhcm__AllPaySlipPdf?employeeid={{item.paySummary.Id}}&type=e" target="_blank">
+                                     
+                                      <!--  END :: 13/08/2018 NPAY-461 Payslips - Bugs and Usability added by jamil -->
+                                        <!-- START :: 22/06/2016 NPAY-163 Payroll UI issues modified by Farhan-->
+                                        <apex:outputText value="View draft" rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Draft'}"/>
+                                        <apex:outputText value="View " rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Final'}"/>
+                                         <!-- END :: 22/06/2016 NPAY-163 Payroll UI issues modified by Farhan-->
+                                         <!-- START:: 1/4/2018 NPAY-467 Issues on Payments page Jamil  -->
+                                         <apex:outputText value="View " rendered="{!xcdhcm__Pay_Period__c.xcdhcm__Payroll_status__c == 'Test'}"/>
+                                         <!-- END:: 1/4/2018 NPAY-467 Issues on Payments page Jamil  -->
+                                        </a>
+                                     </td>
+                                </tr>
+                            </tbody>
+                            <!--  START 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->
+                        </table>
+                        <table  style="width:99% !important"> 
+                            <tr> 
+                                <td width="50%">
+                                   
+                                        <span class="ng-cloak" ng-if="criteria.page > 0"> {{(criteria.page -1) * criteria.pagesize + 1}} - 
+                                                 {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}} of {{paging.total}} records.</span>
+                                                  Select page size. <select class="select1" ng-model="criteria.pagesize"              
+                                                       ng-options="obj as obj for obj in paging.pagingOptions" />                    
+                                                                   
+                              
+                                  </td>
+                                  <td  width="25%"> 
+                                
+                                        <ul class="pagination" > 
+                                            <li ng-class="{active:0}"><a href="#" ng-click="First()"><span class="glyphicon glyphicon-step-backward"></span></a>
+                                            </li>   
+                                            <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+                                                <a class="topic" href="#" ng-if="item == 'Prev'" ng-click="Prev()" style="font-size: 10px; text-decoration: none">Previous</a>
+                                                <a class="topic" href="#" ng-if="item == 'Next'" ng-click="Next()" style="font-size: 10px; text-decoration: none">Next</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" ng-click="Last()"><span class="glyphicon glyphicon-step-forward"></span></a>
+                                             </li>
+                                        </ul>
+                                 </td>
+                                 <td width="15%"></td>
+                                  
+                                   <td width="20%">
+                                             <!-- START :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil -->  
+                                            <span class="ng-cloak" ng-if="customers.length > 0 ">
+                                            
+                                           <!-- END :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil -->
+                                                Page <input class="ng-cloak" type='number' name="input" id="test"
+                                                     ng-model='criteria.page'
+                                                     min="1"
+                                                     max="{{paging.totalpages}}"
+                                                         style='width:60px;'  />                       
+                                                    of {{paging.totalpages}}
+                                             </span>
+                                   </td>
+                            </tr>
+                    </table>  
+                    <!--  END 19/09/2017 NPAY-256 Payroll pagination  added by Jamil  -->      
+                    </apex:outputPanel>
+                    <!-- =====================================Draft & Final : End Modified by Tutu========================================== -->
+                    <div style="border-bottom: 2px solid #63a4c5 !important;"></div>
+                    </div>
+                </body>
+            </html>
+            
+        </apex:pageBlock>                       
+        </div>                       
+    </apex:form>
+
+</apex:page>
+<!-- END :: 08/06/2015 NPAY-28 Improve Payroll run process Modified by Praveen -->
+<!-- END :: 22/01/2015 NPPD-634 Payroll on weekly basis Added by Praveen-->

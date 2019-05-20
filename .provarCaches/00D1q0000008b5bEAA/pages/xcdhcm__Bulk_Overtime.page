@@ -1,0 +1,574 @@
+<apex:page controller="xcdhcm.BulkOvertimeController" sidebar="false" showHeader="true"  >
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />  
+    <style>
+        .dateInput  
+        {
+        white-space: nowrap;
+        } 
+        .dateOnlyInput input 
+        {
+        width: 10em !important; 
+        }
+        .lookupIcon 
+        {
+        position: inherit;
+        }
+        #actionColumn
+        {
+        color: white;
+        }
+        .slds-scope img 
+        {
+        max-width: 250%;
+        height: auto;
+        }
+        .ThisPageHelpText span 
+        {
+        display: none;
+        }
+        .ThisPageHelpText:hover span 
+        {
+        display: block !important;
+        width: 300px;
+        background-color: #16325c!important;   
+        border: 1px solid #16325c!important;
+        padding: 4px;
+        color: white;
+        position: absolute;
+        z-index: 1;
+        top:100%;
+        right:15%;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;  
+        border-radius: 4px!important;      
+        text-transform: none;   
+        }
+        .LiteHelpText:hover span 
+        {
+        text-transform: none;
+        } 
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        color: #54698d !important;
+        font-weight: 300;
+        font-size: 1.25rem !important;
+        line-height: 1.25 !important;
+        }  
+        /* #id_compen td
+        {
+        border-top:white !important;
+        } */
+        /* #id_compen .slds-scope .slds-table--bordered tbody td,#id_compen .slds-scope .slds-table--bordered tbody th,#id_compen .slds-scope .slds-table_bordered tbody td,#id_compen .slds-scope .slds-table_bordered tbody th
+        {
+        border-top:white !important;
+        } */
+        .slds-scope .slds-table--bordered tbody td, .slds-scope .slds-table--bordered tbody th, .slds-scope .slds-table_bordered tbody td, .slds-scope .slds-table_bordered tbody th 
+        {
+        border-top: white;
+        } 
+        .bPageBlock 
+        {
+        border-top: white;
+        }
+        .bPageBlock .pbHeader
+        {
+        background: #fafaf9 !important;  
+        }
+        .slds-cell-edit
+        {
+        background: #ffffff;
+        }
+    </style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head> 
+        <body class="slds-scope">   
+            <apex:form id="formid"> 
+                <apex:pageBlock id="block" title="{!$Label.xcdhcm__phbulk_overtime}">
+                    <apex:pageMessages id="errorId"/> 
+                    <apex:variable value="{!0}" var="rowNum" /> 
+                    <!-- <apex:outputpanel id="rows">
+<table class="slds-table slds-table--bordered slds-table--cell-buffer " style="width:100%"> 
+<thead>
+<tr class="slds-text-title--caps"> 
+<th scope="col" >
+<apex:outputpanel rendered="{!BulkOTlist.size >1}">
+<div class="slds-truncate"></div>
+</apex:outputpanel>
+</th>
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+<abbr class="slds-required" title="required">*</abbr>
+{!$ObjectType.Overtime__c.Fields.Employee_Details__c.Label}
+</div>
+</th>
+<th scope="col" class="columnWidth" >
+<div class="slds-truncate">
+<abbr class="slds-required" title="required">*</abbr>
+{!$ObjectType.Overtime__c.Fields.Rate_of_pay__c.Label}
+</div>
+</th>
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+<abbr class="slds-required" title="required">*</abbr>
+{!$ObjectType.Overtime__c.Fields.Date__c.Label}
+</div>
+</th>
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+<abbr class="slds-required" title="required">*</abbr>
+{!$ObjectType.Overtime__c.Fields.Time_in_hours__c.Label}
+</div>
+</th>
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+<abbr class="slds-required" title="required">*</abbr>
+{!$ObjectType.Overtime__c.Fields.Time_in_mins__c.Label}
+</div>
+</th>
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+<abbr class="slds-required" title="required">*</abbr>
+{!$ObjectType.Overtime__c.Fields.Time_out_hours__c.Label}
+</div>
+</th>
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+<abbr class="slds-required" title="required">*</abbr>
+{!$ObjectType.Overtime__c.Fields.Time_out_mins__c.Label}
+</div>
+</th>
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+<abbr class="slds-required" title="required">*</abbr>
+{!$ObjectType.Overtime__c.Fields.Overtime_Category__c.Label}
+</div>
+</th>
+</tr> 
+</thead>
+<tbody>
+<apex:repeat value="{!BulkOTlist}" var="c">
+<tr> 
+<th scope="row" >
+<apex:outputpanel rendered="{!BulkOTlist.size >1}">
+<div class="slds-truncate" >
+<apex:commandlink action="{!deleteOvertime}"  immediate="true">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!$Resource.Remove_Cross_Symbol}" alt="Remove"/>
+</apex:commandlink> 
+</div>
+</apex:outputpanel>
+</th>
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:actionRegion >                                                                       
+<apex:inputField value="{!c.overtime.xcdhcm__Employee_Details__c}" >
+<apex:actionSupport event="onchange"  action="{!EmpCompensation}" rerender="formid">
+<apex:param name="rownum1" value="{!rowNum}" assignTo="{!emp_row}"/> 
+</apex:actionSupport>
+</apex:inputField>                                                               
+</apex:actionRegion>
+<apex:variable var="rowNum" value="{!rowNum+ 1}"/> 
+</div>
+</th>
+<th scope="row" class="columnWidth" >
+<div class="slds-truncate" >
+<div>
+<apex:outputPanel rendered="{!c.CompenLookup=false}">	
+<apex:outputText value="{!c.EmployeeCompensation}" />
+</apex:outputPanel>
+
+<apex:outputpanel rendered="{!c.CompenLookup}">
+<apex:actionRegion >
+<apex:panelGrid columns="2" >
+<apex:outputPanel >	                                                   
+<apex:inputText value="{!c.CompenName}"  />     
+<apex:commandLink action="{!ShowCompenListPopup}"  type="image/png" rerender="errorId,tstpopup" style="text-decoration:none" tabindex="1">
+<apex:param name="rownum2" value="{!rowNum - 1}" assignTo="{!compen_row}"/> 
+<img src="{!URLFOR($Resource.Css,'Lite/lookup.png')}" class="ClookupIcon" title="Compensation Lookup (New Window)"/>
+</apex:commandlink>
+</apex:outputPanel>
+</apex:panelGrid>
+</apex:actionRegion>  
+</apex:outputpanel>
+</div>
+</div>
+</th>
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:inputfield value="{!c.overtime.xcdhcm__Date__c}"  />
+</div>
+</th>
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:InputField value="{!c.overtime.xcdhcm__Time_in_hours__c}" required="true" />
+</div>
+</th>
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:InputField value="{!c.overtime.xcdhcm__Time_in_mins__c}" required="true"   />
+</div>
+</th>
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:inputField value="{!c.overtime.xcdhcm__Time_out_hours__c}" required="true"  />
+</div>
+</th>
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:inputfield value="{!c.overtime.xcdhcm__Time_out_mins__c}" required="true"   />
+</div>
+</th>
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:actionRegion >      
+<apex:inputField value="{!c.overtime.xcdhcm__Overtime_Category__c}" required="true" />   
+</apex:actionRegion>
+</div>
+</th>
+</tr> 
+</apex:repeat>
+</tbody>
+</table>
+</apex:outputpanel> -->
+                    
+                    <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="PbTable">
+                        <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                        <apex:outputpanel rendered="{!BulkOTlist.size >1}">
+                                            <span id="actionColumn" >
+                                                Action
+                                            </span>
+                                        </apex:outputpanel>
+                                    </th>
+                                    
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Overtime__c.Fields.Employee_Details__c.Label}">
+                                                {!$ObjectType.Overtime__c.Fields.Employee_Details__c.Label}
+                                            </span>
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Employee_Details__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Overtime__c.Fields.Employee_Details__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Overtime__c.Fields.Rate_of_pay__c.Label}">
+                                                {!$ObjectType.Overtime__c.Fields.Rate_of_pay__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Rate_of_pay__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Overtime__c.Fields.Rate_of_pay__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Overtime__c.Fields.Date__c.Label}">
+                                                {!$ObjectType.Overtime__c.Fields.Date__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Date__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Overtime__c.Fields.Date__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Overtime__c.Fields.Time_in_hours__c.Label}">
+                                                {!$ObjectType.Overtime__c.Fields.Time_in_hours__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Time_in_hours__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Overtime__c.Fields.Time_in_hours__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Overtime__c.Fields.Time_in_mins__c.Label}">
+                                                {!$ObjectType.Overtime__c.Fields.Time_in_mins__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Time_in_mins__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Overtime__c.Fields.Time_in_mins__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Overtime__c.Fields.Time_out_hours__c.Label}">
+                                                {!$ObjectType.Overtime__c.Fields.Time_out_hours__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Time_out_hours__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Overtime__c.Fields.Time_out_hours__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Overtime__c.Fields.Time_out_mins__c.Label}">
+                                                {!$ObjectType.Overtime__c.Fields.Time_out_mins__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Time_out_mins__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Overtime__c.Fields.Time_out_mins__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Overtime__c.Fields.Overtime_Category__c.Label}">
+                                                {!$ObjectType.Overtime__c.Fields.Overtime_Category__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Overtime_Category__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Overtime__c.Fields.Overtime_Category__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <apex:repeat value="{!BulkOTlist}" var="c">
+                                    <tr class="slds-hint-parent">
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <apex:outputpanel rendered="{!BulkOTlist.size > 1}">
+                                                <apex:commandlink action="{!deleteOvertime}"  immediate="true">
+                                                    <apex:param name="rownumber" value="{!rowNum}"/>
+                                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                </apex:commandlink> 
+                                            </apex:outputpanel>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:actionRegion >                                                                       
+                                                    <apex:inputField value="{!c.overtime.xcdhcm__Employee_Details__c}" >
+                                                        <!--START :: 16-07-2018 Summer P1  T482974 Booked bulk overtime request through company Modified by Rahul S -->
+                                                        <apex:actionSupport event="onchange"  action="{!EmpCompensation}" rerender="PbTable">
+                                                        <!--END :: 16-07-2018 Summer P1  T482974 Booked bulk overtime request through company Modified by Rahul S -->
+                                                            <apex:param name="rownum1" value="{!rowNum}" assignTo="{!emp_row}"/> 
+                                                        </apex:actionSupport>
+                                                    </apex:inputField>                                                               
+                                                </apex:actionRegion>
+                                                <apex:variable var="rowNum" value="{!rowNum+ 1}"/> 
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:outputPanel rendered="{!c.CompenLookup=false}">	
+                                                    <apex:outputText value="{!c.EmployeeCompensation}" />
+                                                </apex:outputPanel>
+                                                
+                                                <apex:outputpanel id="id_compen" rendered="{!c.CompenLookup}">
+                                                    <apex:actionRegion >
+                                                        <apex:panelGrid columns="2" >
+                                                            <apex:outputPanel >	                                                   
+                                                                <apex:inputText value="{!c.CompenName}"  />     
+                                                                <apex:commandLink action="{!ShowCompenListPopup}"  type="image/png" rerender="errorId,tstpopup" style="text-decoration:none" tabindex="1">
+                                                                    <apex:param name="rownum2" value="{!rowNum - 1}" assignTo="{!compen_row}"/> 
+                                                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/lookup.png')}" class="ClookupIcon" title="Compensation Lookup (New Window)"/>
+                                                                </apex:commandlink>
+                                                            </apex:outputPanel>
+                                                        </apex:panelGrid>
+                                                    </apex:actionRegion>  
+                                                </apex:outputpanel>
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:inputfield value="{!c.overtime.xcdhcm__Date__c}"  />
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:InputField value="{!c.overtime.xcdhcm__Time_in_hours__c}" required="true" />
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:InputField value="{!c.overtime.xcdhcm__Time_in_mins__c}" required="true"   />
+                                            </span>
+                                        </td>
+                                        
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:inputField value="{!c.overtime.xcdhcm__Time_out_hours__c}" required="true"  />
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:inputfield value="{!c.overtime.xcdhcm__Time_out_mins__c}" required="true"   />
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:inputField value="{!c.overtime.xcdhcm__Overtime_Category__c}" required="true" />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <apex:outputPanel id="tstpopup" > 
+                        <apex:outputPanel rendered="{!displayCompenListPopup}">
+                            <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                                <div class="slds-modal__container">
+                                    <div class="slds-modal__header">
+                                        <apex:commandLink action="{!CloseCompenListPopup}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                            <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                                        </apex:commandLink>
+                                        <h2 id="header43" class="slds-text-heading--medium"></h2>
+                                    </div>
+                                    <div class="slds-modal__content slds-p-around--medium"> 
+                                        <div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" /><h1 style="font-size: 1.8em;color: #333435;">Lookup</h1></div>
+                                        <br/>  <br/>   
+                                        <div style="height:360px;overflow:auto;">
+                                            <h1 style="font-size: 1.2em;color: #333435;">Active Compensations</h1>  <br/> 
+                                            <!-- 
+<apex:outputpanel >
+<table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+<thead>
+<tr class="slds-text-title--caps"> 
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+{!$ObjectType.Compensation__c.Fields.Name.Label}
+</div>
+</th>
+<apex:repeat var="v1" value="{!$ObjectType.xcdhcm__Compensation__c.fieldSets.xcdhcm__Compensation_popup_summary_columns}" >
+<th scope="col" class="columnWidth">
+<div class="slds-truncate">
+{!$ObjectType.Compensation__c.Fields[v1].label}
+</div>
+</th> 
+</apex:repeat>
+</tr> 
+</thead>
+<tbody>
+<apex:repeat value="{!Compenlist}" var="compen">
+<tr> 
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:commandLink immediate="true" value="{!compen.Name}" action="{!CompenSelected}" reRender="formid,errorId"> 
+<apex:param name="CompenSelId" value="{!compen.id}" />
+<apex:param name="CompenSelName" value="{!compen.name}" />
+</apex:commandLink> 
+</div>
+</th>
+<apex:repeat var="v1" value="{!$ObjectType.xcdhcm__Compensation__c.fieldSets.xcdhcm__Compensation_popup_summary_columns}" >
+<th scope="row" class="columnWidth">
+<div class="slds-truncate" >
+<apex:outputField value="{!compen[v1]}" /> 
+</div>
+</th> 
+</apex:repeat> 
+</tr> 
+</apex:repeat>
+</tbody>
+</table>
+</apex:outputpanel> -->
+                                            <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="PbTable">
+                                                <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                                                    <thead>
+                                                        <tr class="slds-line-height_reset">
+                                                            
+                                                            <th class="slds-text-title_caps" scope="col" >
+                                                                <div class="slds-th__action slds-text-link_reset">
+                                                                    <span class="slds-truncate" title="{!$ObjectType.Compensation__c.Fields.Name.Label}">
+                                                                        {!$ObjectType.Compensation__c.Fields.Name.Label}
+                                                                    </span>
+                                                                </div>
+                                                            </th>
+                                                            <apex:repeat var="v1" value="{!$ObjectType.xcdhcm__Compensation__c.fieldSets.xcdhcm__Compensation_popup_summary_columns}" >
+                                                                <th class="slds-text-title_caps" scope="col" >
+                                                                    <div class="slds-th__action slds-text-link_reset">
+                                                                        <span class="slds-truncate" title="{!$ObjectType.Compensation__c.Fields[v1].Label}">
+                                                                            {!$ObjectType.Compensation__c.Fields[v1].label}
+                                                                        </span>
+                                                                        <span class="ThisPageHelpText">
+                                                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.Fields[v1].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                            <span >{!$ObjectType.Compensation__c.Fields[v1].inlineHelpText}</span>
+                                                                        </span>
+                                                                    </div>
+                                                                </th>
+                                                            </apex:repeat>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody >
+                                                        <apex:repeat value="{!Compenlist}" var="compen">
+                                                            <tr class="slds-hint-parent">
+                                                                <td role="gridcell" class="slds-cell-edit">
+                                                                    <apex:commandLink immediate="true" value="{!compen.Name}" action="{!CompenSelected}" reRender="formid,errorId"> 
+                                                                        <apex:param name="CompenSelId" value="{!compen.id}" />
+                                                                        <apex:param name="CompenSelName" value="{!compen.name}" />
+                                                                    </apex:commandLink> 
+                                                                </td>
+                                                                <apex:repeat var="v1" value="{!$ObjectType.xcdhcm__Compensation__c.fieldSets.xcdhcm__Compensation_popup_summary_columns}" >
+                                                                    <td role="gridcell" class="slds-cell-edit">
+                                                                        <span class="slds-grid slds-grid_align-spread">
+                                                                            <apex:outputField value="{!compen[v1]}" /> 
+                                                                        </span>
+                                                                    </td>
+                                                                </apex:repeat>
+                                                            </tr>
+                                                        </apex:repeat>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div> <br/>
+                                    </div>
+                                    <div class="slds-modal__footer">
+                                        <apex:commandButton immediate="true" value="{!$Label.xcdhcm__bulk_overtimebclose}" action="{!CloseCompenListPopup}" rerender="tstpopup" styleclass="slds-button slds-button--neutral"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-backdrop slds-backdrop--open"></div>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    
+                    <apex:pageblockButtons location="Bottom" style="text-align: right!important;">    
+                        <apex:actionStatus id="saveStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputPanel >
+                                    <!-- START :: 08-06-2018 P1 Summer2018  NPPD-1533 Lightning Issues/Actions modified by Rahul S-->
+                                    <apex:commandButton value="{!$Label.xcdhcm__bulk_overtimebaddrow}" immediate="true" action="{!addRow}" rerender="formid" styleclass="slds-button slds-button--neutral" />
+                                    <!-- END :: 08-06-2018 P1 Summer2018  NPPD-1533 Lightning Issues/Actions modified by Rahul S-->
+                                    <apex:commandButton value="{!$Label.xcdhcm__bulk_overtimebclearall}" action="{!clearAll}" immediate="true" styleclass="slds-button slds-button--neutral"/>
+                                    &nbsp;
+                                    <apex:commandButton value="{!$Label.xcdhcm__bulk_overtimebcancel}" action="{!cancel}" immediate="true" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                    <apex:commandButton value="{!$Label.xcdhcm__bulk_overtimebsubmit}" action="{!saveOvertimeRecord}" styleclass="slds-button slds-button--brand" status="saveStatus" id="id_saveBtn" rerender="id_saveBtn,errorId"/> 
+                                </apex:outputPanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageblockButtons>
+                </apex:pageblock>
+            </apex:form>
+        </body>
+    </html> 
+</apex:page>

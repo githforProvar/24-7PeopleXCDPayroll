@@ -1,0 +1,93 @@
+<apex:page standardController="xcdhcm__HR_Request__c" extensions="xcdhcm.HRrequestController" sidebar="false" showHeader="true" wizard="false" >
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> 
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lite_HR_Request.css')}" /> 
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />
+    <apex:includeLightning />  
+     
+    <style>
+        select{
+        width:10%!important;
+        }
+        .x-grid3-header-offset {   
+            background: #f9f9f8;
+        } 
+        .x-grid3-header-inner {    
+            background: #f9f9f8;
+        }
+        
+        .x-grid3-td-ACTION_COLUMN
+        {
+             display: none!important;
+        } 
+        .listViewport .x-grid3-header, .errorConsole .x-grid3-header {
+           background: #f9f9f8!important;
+        }
+         body .listViewport .topNav .filterLinks, .slds-scope .listViewport .topNav .filterLinks {   
+		    display: none;
+		}
+		.listViewport .paginator {
+		    margin-bottom: 20px;
+		} 
+		.listViewportWrapper .listViewport .topNav h2.title {    
+		    display: none;
+		}   
+    </style>   
+
+     <script>
+        $Lightning.use
+          ( 
+              "xcdhcm:XCDLightning", function() 
+              {
+                  $Lightning.createComponent
+                  (
+                      "xcdhcm:New_request",
+                      {                                  
+                      },
+                      "lightning",
+                      function(cmp) 
+                      {
+                      }
+                  );
+              }
+          );         
+               
+      </script>  
+    
+        <head>
+            <apex:slds />
+        </head> 
+          <body class="slds-scope"> 
+                    
+             <apex:pageBlock > <br/> 
+                    <table  style="width: 250px;margin-left:20px;">
+                        <tr> 
+                          <td>
+                             <div style=" background: #007fcc; width: 2rem;height: 2rem; border-radius: 2px;background-image: url('{!URLFOR($Resource.XCD_static_resources,'Css/Lite/HR_request.svg')}');" />
+                          </td>
+                          <td style="padding-left:5px;">
+                            <h2 style="font-weight:400!important;font-size: 1.25rem;line-height: 1.25; color: #16325c;    text-transform: uppercase; ">{!$Label.PHHRListPage}</h2>
+                          </td>
+                          </tr>
+                      </table>                                       
+                      <apex:form style="float:right;margin-right:20px;" >                           
+                           <div id="lightning" ></div>      
+                      </apex:form> <br/> 
+                      
+                   <apex:form style="margin-left:20px;">                       
+                    <apex:selectList value="{!myRequestFilterID}" size="1" id="values">
+                       <apex:actionSupport event="onchange" reRender="newvalue"  />  
+		              <apex:selectOptions value="{!items}"/>		               
+		               <apex:param name="myRequestFilterID" value="{!myRequestFilterID}"/>		               
+		            </apex:selectList>    
+                   </apex:form>      
+                     
+                   <apex:outputpanel id="newvalue" rendered="{!myRequestFilterID != null}" >                    
+                      <apex:enhancedList type="HR_Request__c" rowsPerPage="10" height="525" listId="{!myRequestFilterID}"/>  
+                   </apex:outputpanel>   
+                   
+                   <apex:outputText rendered="{!myRequestFilterID == null}" value="Could not find requewed ListView Please contact your administrator."/>
+                    
+              </apex:pageBlock>          
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata"
+   >
+ <fullName>xcdhcm__Performance_VF_view</fullName>
+  <flexiPageRegions>
+    <componentInstances>
+   <componentInstanceProperties>
+    <name>collapsed</name>
+        <value>false</value>
+   </componentInstanceProperties>
+   <componentInstanceProperties>
+    <name>numVisibleActions</name>
+        <value>0</value>
+   </componentInstanceProperties>
+   <componentName>force:highlightsPanel</componentName>
+     </componentInstances>
+  <componentInstances>
+   <componentInstanceProperties>
+    <name>height</name>
+        <value>900</value>
+   </componentInstanceProperties>
+   <componentInstanceProperties>
+    <name>pageName</name>
+        <value>xcdhcm__ReviewView</value>
+   </componentInstanceProperties>
+   <componentName>flexipage:visualforcePage</componentName>
+     </componentInstances>
+    <name>right</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <masterLabel>Performance VF view</masterLabel>
+    <sobjectType>xcdhcm__Employee_Review__c</sobjectType>
+ <template>
+  <name>xcdhcm:VisualForce_Template</name>
+ </template>
+ <type>RecordPage</type>
+</FlexiPage>

@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Used to record Health and Safety incidents</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <fieldSets>
+        <fullName>xcdhcm__Health_and_Safety_Set</fullName>
+        <availableFields>
+            <field>CreatedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CurrencyIsoCode</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employee_leaving_date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Id</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Insurance_Claim__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>IsDeleted</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastActivityDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Leaver_before_data_retention_period__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Name</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SystemModstamp</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <description>On the New Health and Safety page</description>
+        <displayedFields>
+            <field>xcdhcm__Employee_Detail__c</field>
+            <isFieldManaged>true</isFieldManaged>
+            <isRequired>true</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Reported_To__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Job_Related__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Date__c</field>
+            <isFieldManaged>true</isFieldManaged>
+            <isRequired>true</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Near_Miss__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Category__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Description__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Company_location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>Health and Safety Set</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>xcdhcm__Health_and_Safety_Summary_Columns</fullName>
+        <availableFields>
+            <field>xcdhcm__Category__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CurrencyIsoCode</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Description__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employee_Detail__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employee_leaving_date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Id</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Insurance_Claim__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>IsDeleted</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastActivityDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Leaver_before_data_retention_period__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Near_Miss__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reported_To__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SystemModstamp</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <description>Used in employee page, confidential tab. Records are not ordered</description>
+        <displayedFields>
+            <field>Name</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Type__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Job_Related__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Company_location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>Health and Safety Summary Columns</label>
+    </fieldSets>
+    <fields>
+        <fullName>xcdhcm__Category__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Category</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Break/Fracture</fullName>
+                    <default>false</default>
+                    <label>Break/Fracture</label>
+                </value>
+                <value>
+                    <fullName>Bruise</fullName>
+                    <default>false</default>
+                    <label>Bruise</label>
+                </value>
+                <value>
+                    <fullName>Burn/scald</fullName>
+                    <default>false</default>
+                    <label>Burn/scald</label>
+                </value>
+                <value>
+                    <fullName>Cut/ Bruise/ Graze to Head/ Eye</fullName>
+                    <default>false</default>
+                    <label>Cut/ Bruise/ Graze to Head/ Eye</label>
+                </value>
+                <value>
+                    <fullName>Death</fullName>
+                    <default>false</default>
+                    <label>Death</label>
+                </value>
+                <value>
+                    <fullName>Driver Fault</fullName>
+                    <default>false</default>
+                    <label>Driver Fault</label>
+                </value>
+                <value>
+                    <fullName>Electric Shock</fullName>
+                    <default>false</default>
+                    <label>Electric Shock</label>
+                </value>
+                <value>
+                    <fullName>Eye Right</fullName>
+                    <default>false</default>
+                    <label>Eye Right</label>
+                </value>
+                <value>
+                    <fullName>Fine/ Police Notification</fullName>
+                    <default>false</default>
+                    <label>Fine/ Police Notification</label>
+                </value>
+                <value>
+                    <fullName>Fire/ Heat Burn</fullName>
+                    <default>false</default>
+                    <label>Fire/ Heat Burn</label>
+                </value>
+                <value>
+                    <fullName>Fragment/ Scratch/Chemical in/to eye</fullName>
+                    <default>false</default>
+                    <label>Fragment/ Scratch/Chemical in/to eye</label>
+                </value>
+                <value>
+                    <fullName>Insurance Claim</fullName>
+                    <default>false</default>
+                    <label>Insurance Claim</label>
+                </value>
+                <value>
+                    <fullName>Laceration</fullName>
+                    <default>false</default>
+                    <label>Laceration</label>
+                </value>
+                <value>
+                    <fullName>Liquid/Chemical Scold/Burn</fullName>
+                    <default>false</default>
+                    <label>Liquid/Chemical Scold/Burn</label>
+                </value>
+                <value>
+                    <fullName>Muscle Damage</fullName>
+                    <default>false</default>
+                    <label>Muscle Damage</label>
+                </value>
+                <value>
+                    <fullName>Near Miss</fullName>
+                    <default>false</default>
+                    <label>Near Miss</label>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                    <label>Other</label>
+                </value>
+                <value>
+                    <fullName>Slips/Trips/Falls</fullName>
+                    <default>false</default>
+                    <label>Slips/Trips/Falls</label>
+                </value>
+                <value>
+                    <fullName>Third Party Fault</fullName>
+                    <default>false</default>
+                    <label>Third Party Fault</label>
+                </value>
+                <value>
+                    <fullName>Twist/Sprain/Jar</fullName>
+                    <default>false</default>
+                    <label>Twist/Sprain/Jar</label>
+                </value>
+                <value>
+                    <fullName>Write Off</fullName>
+                    <default>false</default>
+                    <label>Write Off</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Company_location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>If the incident took place on a Company site select the site here</inlineHelpText>
+        <label>Company location</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>xcdhcm__Location__c.xcdhcm__No_longer_in_use__c</field>
+                <operation>equals</operation>
+                <value>False</value>
+            </filterItems>
+            <infoMessage>Click Show all results to display also Company locations which are no longer in use</infoMessage>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>xcdhcm__Location__c</referenceTo>
+        <relationshipLabel>Health and Safety</relationshipLabel>
+        <relationshipName>Health_and_Safety</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Description__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_Detail__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee</label>
+        <referenceTo>xcdhcm__Employee_Detail__c</referenceTo>
+        <relationshipLabel>Health and Safety</relationshipLabel>
+        <relationshipName>Health_and_Safety</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_leaving_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Employee_Detail__r.xcdhcm__Leaving_Date__c</formula>
+        <label>Employee leaving date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Insurance_Claim__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Insurance claim</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Job_Related__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Job related</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leaver_before_data_retention_period__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If( 
+not(isblank( xcdhcm__Employee_Detail__r.xcdhcm__Company__r.xcdhcm__GDPR_data_retention_threshold__c )), 
+xcdhcm__Employee_leaving_date__c &lt; xcdhcm__Employee_Detail__r.xcdhcm__Company__r.xcdhcm__GDPR_data_retention_threshold__c , 
+xcdhcm__Employee_leaving_date__c &lt;  xcdhcm__Employee_Detail__r.xcdhcm__Company__r.xcdhcm__HMRC_data_retention_threshold__c  
+)</formula>
+        <label>Leaver before data retention period</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Where incident occurred</label>
+        <length>25</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Near_Miss__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Near miss</label>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reported_To__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reported to</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Health_and_Safety</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Type</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>First Aid Required</fullName>
+                    <default>false</default>
+                    <label>First Aid Required</label>
+                </value>
+                <value>
+                    <fullName>Major Injury</fullName>
+                    <default>false</default>
+                    <label>Major Injury</label>
+                </value>
+                <value>
+                    <fullName>Minor injury</fullName>
+                    <default>false</default>
+                    <label>Minor injury</label>
+                </value>
+                <value>
+                    <fullName>Injury</fullName>
+                    <default>false</default>
+                    <label>Injury</label>
+                </value>
+                <value>
+                    <fullName>Hospitalisation</fullName>
+                    <default>false</default>
+                    <label>Hospitalisation</label>
+                </value>
+                <value>
+                    <fullName>Surgery Visit Required</fullName>
+                    <default>false</default>
+                    <label>Surgery Visit Required</label>
+                </value>
+                <value>
+                    <fullName>Respiratory Condition</fullName>
+                    <default>false</default>
+                    <label>Respiratory Condition</label>
+                </value>
+                <value>
+                    <fullName>Hearing Loss</fullName>
+                    <default>false</default>
+                    <label>Hearing Loss</label>
+                </value>
+                <value>
+                    <fullName>Skin Disorder</fullName>
+                    <default>false</default>
+                    <label>Skin Disorder</label>
+                </value>
+                <value>
+                    <fullName>Poisoning</fullName>
+                    <default>false</default>
+                    <label>Poisoning</label>
+                </value>
+                <value>
+                    <fullName>All other illnesses</fullName>
+                    <default>false</default>
+                    <label>All other illnesses</label>
+                </value>
+                <value>
+                    <fullName>No Injury</fullName>
+                    <default>false</default>
+                    <label>No Injury</label>
+                </value>
+                <value>
+                    <fullName>Near Miss</fullName>
+                    <default>false</default>
+                    <label>Near Miss</label>
+                </value>
+                <value>
+                    <fullName>Speeding</fullName>
+                    <default>false</default>
+                    <label>Speeding</label>
+                </value>
+                <value>
+                    <fullName>Congestion Charge</fullName>
+                    <default>false</default>
+                    <label>Congestion Charge</label>
+                </value>
+                <value>
+                    <fullName>Parking</fullName>
+                    <default>false</default>
+                    <label>Parking</label>
+                </value>
+                <value>
+                    <fullName>Allegation of Damage</fullName>
+                    <default>false</default>
+                    <label>Allegation of Damage</label>
+                </value>
+                <value>
+                    <fullName>Allegation of Theft</fullName>
+                    <default>false</default>
+                    <label>Allegation of Theft</label>
+                </value>
+                <value>
+                    <fullName>RIDDOR 3 Day</fullName>
+                    <default>false</default>
+                    <label>RIDDOR 3 Day</label>
+                </value>
+                <value>
+                    <fullName>RIDDOR Major</fullName>
+                    <default>false</default>
+                    <label>RIDDOR Major</label>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                    <label>Other</label>
+                </value>
+                <value>
+                    <fullName>N/A</fullName>
+                    <default>false</default>
+                    <label>N/A</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <label>Health and Safety</label>
+    <nameField>
+        <displayFormat>HS-{0000}</displayFormat>
+        <label>Record</label>
+        <trackHistory>true</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Health and Safety</pluralLabel>
+    <searchLayouts>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <lookupDialogsAdditionalFields>xcdhcm__Employee_Detail__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>xcdhcm__Category__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>xcdhcm__Type__c</lookupDialogsAdditionalFields>
+        <lookupFilterFields>NAME</lookupFilterFields>
+        <lookupFilterFields>xcdhcm__Employee_Detail__c</lookupFilterFields>
+        <lookupFilterFields>xcdhcm__Category__c</lookupFilterFields>
+        <lookupFilterFields>xcdhcm__Type__c</lookupFilterFields>
+        <lookupPhoneDialogsAdditionalFields>xcdhcm__Employee_Detail__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>xcdhcm__Category__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>xcdhcm__Type__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>xcdhcm__Employee_Detail__c</searchFilterFields>
+        <searchFilterFields>xcdhcm__Category__c</searchFilterFields>
+        <searchFilterFields>xcdhcm__Type__c</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <visibility>Public</visibility>
+    <webLinks>
+        <fullName>xcdhcm__Back</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>xBack</masterLabel>
+        <openType>noSidebar</openType>
+        <protected>false</protected>
+        <url>/apex/xcdhcm__EmployeeLinkRedirectPage?id={!xcdhcm__Health_and_Safety__c.xcdhcm__Employee_DetailId__c}&amp;tab=Health</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__Custom_Delete</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Delete</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>if(confirm(&apos;Are you sure?&apos;)){ 
+
+{!REQUIRESCRIPT(&quot;/soap/ajax/15.0/connection.js&quot;)} 
+
+updateOpp = sforce.connection.deleteIds([&apos;{!xcdhcm__Health_and_Safety__c.Id}&apos;]); 
+
+window.location.href =&quot;{!$Site.BaseUrl}/apex/xcdhcm__EmployeeLinkRedirectPage?id={!xcdhcm__Health_and_Safety__c.xcdhcm__Employee_DetailId__c }&amp;tab=Health&quot;; 
+
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__Custom_Edit</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Edit</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>{!URLFOR($Action.xcdhcm__Health_and_Safety__c.Edit,xcdhcm__Health_and_Safety__c.Id)}&amp;retURL=/apex/xcdhcm__EmployeeLinkRedirectPage?id={!xcdhcm__Health_and_Safety__c.xcdhcm__Employee_DetailId__c }%26tab%3DHealth</url>
+    </webLinks>
+</CustomObject>

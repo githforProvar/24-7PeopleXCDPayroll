@@ -1,0 +1,34 @@
+<apex:page standardController="xcdhcm__Applicant__c" extensions="xcdhcm.ApplicationViewController" showHeader="true" sidebar="false" wizard="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'RecruitmentAppCSS/Recruitmentsub.css')}" />
+<style>
+ .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette {
+    background-color: #FFFFFF;
+    border-top: 2px solid #63a4c5!important;
+}
+</style>
+ <apex:form >
+    <apex:pageBlock title="{!$Label.xcdhcm__phnewreference}">
+        <apex:pageBlockButtons location="Both">   
+              <apex:commandButton value="{!$Label.xcdhcm__newreferencebsave}" action="{!saveReference}" styleclass="formbutton" style="display:inline!important" />
+              <apex:commandButton value="{!$Label.xcdhcm__newreferencebcancel}" action="{!RCancle}" immediate="true" styleclass="formbutton" style="display:inline!important" />                                   
+         </apex:pageBlockButtons>
+                        
+        <apex:pageBlockSection title="{!$Label.xcdhcm__newreferenceinformation}" columns="2"> 
+            <apex:repeat value="{!$ObjectType.xcdhcm__Reference__c.Fieldsets.xcdhcm__Information}" var="i">
+                <apex:inputField value="{!ReferenceIns[i]}" required="{!i.required}"/>                                                                                                                                               
+             </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="{!$Label.xcdhcm__newreferencerefereedetails}" columns="2">
+            <apex:repeat value="{!$ObjectType.xcdhcm__Reference__c.Fieldsets.xcdhcm__Reference_details}" var="i">
+                <apex:inputField value="{!ReferenceIns[i]}" required="{!i.required}"/>                                                                                                                                               
+             </apex:repeat>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="{!$Label.xcdhcm__newreferencereferencenotes}" columns="2">
+            <apex:repeat value="{!$ObjectType.xcdhcm__Reference__c.Fieldsets.xcdhcm__Reference_notes}" var="i">
+                <apex:inputField value="{!ReferenceIns[i]}" required="{!i.required}"/>                                                                                                                                               
+             </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+   <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+ </apex:form>
+</apex:page>

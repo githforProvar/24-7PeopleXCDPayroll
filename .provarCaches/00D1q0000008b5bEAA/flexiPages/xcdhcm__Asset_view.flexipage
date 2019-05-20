@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata"
+   >
+ <fullName>xcdhcm__Asset_view</fullName>
+  <flexiPageRegions>
+      <name>header</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <flexiPageRegions>
+      <name>main</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <flexiPageRegions>
+      <name>sidebar</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <masterLabel>Asset view</masterLabel>
+    <sobjectType>Asset</sobjectType>
+ <template>
+  <name>flexipage:recordHomeTemplateDesktop</name>
+ </template>
+ <type>RecordPage</type>
+</FlexiPage>

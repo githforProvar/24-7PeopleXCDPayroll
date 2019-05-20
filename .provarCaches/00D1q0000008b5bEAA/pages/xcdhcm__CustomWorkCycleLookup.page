@@ -1,0 +1,161 @@
+<apex:page controller="xcdhcm.CustomWorkCycleLookupController" title="Search"  showHeader="false" sideBar="false" tabStyle="xcdhcm__Work_Cycle__c" id="pg">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head> 
+            <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteJoinerFirst.css')}" />
+            <apex:slds />
+            <style>
+                .bPageBlock, .brandSecondaryBrd, .bEditBlock, .secondaryPalette
+                {
+                	border:none; 
+                }
+                
+                .slds-scope .slds-modal__content:last-child 
+                {
+                	box-shadow: none;
+                }
+                
+                .pageTitleIcon 
+                {
+                    background-image: url(/img/sprites/master.png) !important;
+                    background-position: 0 -1202px !important;
+                }
+                
+                /* Pop over */
+                .tooltip 
+                {
+                    position: relative;
+                    display: table-cell;
+                }
+                
+                .tooltip .tooltiptext 
+                {
+                    pointer-events: auto;
+                    visibility: hidden;  
+                    min-width: 520px;
+                    max-width: 800px;
+                    background-color: #FFFFFF;
+                    color: black;
+                    text-align: center;
+                    border-radius: 6px;
+                    
+                    margin-left: -520px;
+                    margin-top: -250px;
+                    border: 1px solid #d8dde6;
+                    
+                    /* Position the tooltip */
+                    position: absolute;
+                    z-index: 1;
+                }
+                
+                .tooltip:hover .tooltiptext 
+                {
+                	visibility: visible;
+                }	
+                
+                div.scrollmenu 
+                {
+                    overflow: auto;
+                    white-space: nowrap;
+                }
+                /* Pop over */	
+                
+                tspan
+                {
+                    font-family: 'Salesforce Sans',Arial,sans-serif;
+                    color: #4E7EB2;
+                }
+                
+                img
+                {
+                    width: 24px !important;
+                    height: 24px !important;
+                }
+            </style>
+        </head>
+        
+        <body class="slds-scope">
+            <apex:form >
+                <apex:pageBlock id="page"  mode="edit">
+                    <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large" style="overflow:auto;">
+                        <!-- SEARCH TAB -->
+                        <apex:actionRegion >
+                            <apex:pageBlockSection columns="1"> 
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputPanel id="top" layout="block">
+                                        <div class="slds-modal__content slds-p-around--medium">
+                                            <div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" /><h1 style="font-size: 1.8em;color: #333435;">Lookup</h1></div>
+                                            <p> Enter search text and click Go </p>
+                                            
+                                            <div style="padding-top:30px; padding-bottom:10px;">
+	                                            <apex:outputPanel id="infoMsg">
+		                                            <apex:outputPanel rendered="{!searchResultCount > 100}">
+		                                            	<p style="color:red;">Your search returned {!searchResultCount} work cycles. Only first 100 are displayed. Please narrow search result by typing in the work cycle name or cycle length.</p>
+													</apex:outputPanel>
+												</apex:outputPanel>
+                                                <apex:inputText id="txtSearch" value="{!searchString}" />
+                                            </div>
+                                            
+                                            <div>
+                                                <apex:commandButton id="btnGo" value="Go" action="{!search}" rerender="searchResults, infoMsg" styleclass="slds-button slds-button--neutral"></apex:commandButton>
+                                                <apex:commandButton id="btnShowAll" value="Show all" action="{!showAll}" rerender="txtSearch, searchResults, infoMsg" styleclass="slds-button slds-button--neutral"></apex:commandButton>
+                                            </div> 
+                                            
+			                               	<p> {!$Label.xcdhcm__customworkcyclelookupinfomsg}</p> 
+                                            <br/> 
+                                            
+                                            <div style="text-align:center;">
+                                                <apex:commandLink action="{!URLFOR('/lightning/o/Work_Cycle__c/new')}" value="New work cycle" target="_blank" id="theCommandLink" styleclass="slds-button slds-button--neutral"/>
+                                            </div>
+                                            <br/>
+                                            <apex:outputPanel id="searchResults">
+                                                <div style="max-height:400px;"> 
+                                                    <h1 style="font-size: 1.2em;color: #333435;">Searched result</h1>
+                                                    <apex:pageBlockTable value="{!results}" var="a" id="tblResults">
+                                                        <apex:column >
+                                                            <apex:facet name="header">
+                                                                <apex:outputPanel >Name</apex:outputPanel>
+                                                            </apex:facet>
+                                                            <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!a.Id}','{!a.Name}', false)" rendered="{!NOT(ISNULL(a.Id))}">{!a.Name}</apex:outputLink>
+                                                        </apex:column>
+                                                        
+                                                        <apex:repeat value="{!$ObjectType.xcdhcm__Work_Cycle__c.FieldSets.xcdhcm__Work_cycle_lookup_dialog}" var="f">
+                                                            <apex:column rendered="{!IF(AND(f != 'Id', f != 'Name'), TRUE, FALSE)}">
+                                                                <apex:facet name="header">
+                                                                    <apex:outputPanel >{!f.label}</apex:outputPanel>
+                                                                </apex:facet>
+                                                                <apex:outputPanel rendered="{!results.size > 0}">
+	                                                                <apex:outputField value="{!a[f]}" rendered="{!NOT(CONTAINS(f, 'Cycle_pattern__c'))}"/>   
+	                                                                <apex:outputPanel rendered="{!CONTAINS(f, 'Cycle_pattern__c')}">
+	                                                                    <!-- START:: Cycle pattern graph -->
+	                                                                    <div class="tooltip">
+	                                                                        <apex:outputField value="{!a[f]}"/>
+	                                                                        
+	                                                                        <div id="tooltip" class="tooltiptext slds-popover scrollmenu" role="tooltip">
+	                                                                            <div class="slds-popover__body">
+	                                                                                <apex:iframe src="{!'https://'+hostURL+'/apex/xcdhcm__WorkCycleStackedBarChart?workCycleId='+a['Id']}" width="500px;" height="245px;" scrolling="true" id="theIframe"/>
+	                                                                            </div>
+	                                                                        </div>
+	                                                                        
+	                                                                    </div>
+	                                                                    <!-- END:: Cycle pattern graph -->
+	                                                                </apex:outputPanel>
+                                                            	</apex:outputPanel>
+                                                            </apex:column>
+                                                        </apex:repeat>
+                                                    </apex:pageBlockTable>
+                                                   	<apex:outputPanel rendered="{!results.size = 0}">
+                                                   		<div style="padding-top:10px;">No result found</div>
+                                                   	</apex:outputPanel>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                            </apex:pageBlockSection>
+                        </apex:actionRegion>
+                    </div>
+                </apex:pageBlock>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,260 @@
+<!--  
+<apex:page controller="ReviewController"  sidebar="false" showHeader="true"  tabstyle="Employee_Detail__c"  wizard="false" >
+<apex:stylesheet value="{!URLFOR($Resource.CompanyPageCss)}"/>
+<br/>
+   <style type="text/css">
+    
+    .links{display: none;}
+
+ </style>
+   <style type="text/css">
+       .customPopup{
+            background-color:skyblue;
+            border-radius: 6px 6px 6px 6px;
+            border-style: hidden;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            width: 500px;
+            margin-left: -250px;
+            top:70px;
+        }
+    </style>
+    <apex:outputPanel id="popup">
+            <apex:form >
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+           <center>First create current jobrole for this employee then try again
+             <br/>
+             <apex:commandButton value="ok" action="{!closePopup}" rerender="popup" /></center>
+         </apex:outputPanel>
+         </apex:form>
+    </apex:outputPanel>
+
+ <table width="100%" border="0">
+        
+        <tr>
+            <td valign="Top" width="15%" style="height: 300px;">
+                     <apex:sectionHeader title="{!empDetail.Name}" subtitle=""/>
+                      <apex:outputpanel styleClass="pic" id="image" layout="block">
+                     <apex:image value="{!empDetail.Image__c}"  height="120px" width="120px"/>
+                
+                 <apex:form >
+                     <br/>
+                      <apex:commandButton title="Click on this button to see Employee details" action="{!EmployeeDetails}" value="My Exceed" style="width: 100px; background-color :#D1EEF8;background-image:none;"/>
+                      </apex:form>
+                   
+                   </apex:outputpanel>
+            </td>
+             <td valign="Top" width="90%" height="100%">  
+   
+                   <apex:tabPanel value="{!SelectedTab}" switchType="client" id="ReviewTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" width="90%" headerAlignment="center" headerSpacing="2px">
+                   
+                          <apex:tab label="Performance Review" name="Performance" id="per"  ontabenter="refreshPerformanceTab()" rendered="{!perfTabView==true}">
+                          
+                           <apex:form >
+                                <apex:actionFunction name="refreshPerformanceTab" action="{!setPerfReviewRenderFlag}" rerender="PerformanceBlock" status="PerfReviewStatus"/>
+                            </apex:form>                                                    
+                                                 
+                            <apex:actionStatus id="PerfReviewStatus">
+                                <apex:facet name="start">
+                                    <apex:image url="{!$Resource.Loading}" />                               
+                                </apex:facet>
+                            <apex:facet name="stop"> 
+                          
+                          <apex:pageBlock title="Performance Review" id="PerformanceBlock"> 
+                               
+                              <apex:pageBlockButtons location="top">
+                                            <apex:form >
+                                        <apex:commandButton action="{!newperformancereview}" value="New Performance Review" rendered="{!PerBtnView==true}" />
+                                    </apex:form>
+                                                                
+                                </apex:pageBlockButtons>
+                               
+                               
+                                 <apex:pageblockTable value="{!perfRevList}" var="perf" width="100%">
+                                        <apex:column headervalue="Employee Review Name" >
+                                            <apex:outputLink value="/{!perf.Id}" > {!perf.Name}</apex:outputLink> 
+                                        </apex:column>
+                                        
+                                        <apex:repeat var="f" value="{!$ObjectType.Employee_Review__c.FieldSets.Performance_Review_Summary_Columns}">
+                                            <apex:column value="{!perf[f]}"/>
+                                        </apex:repeat>
+                                        <!--
+                                         <apex:column headervalue="Review Year" > 
+                                            <apex:outputText value="{!perf.Performance_Review_Year__c}"/>
+                                        </apex:column>
+                                        <apex:column headervalue="Review Period" > 
+                                            <apex:outputText value="{!perf.Review_Period__c}"/>
+                                        </apex:column>
+                                        <apex:column headervalue="Review Status" > 
+                                            <apex:outputText value="{!perf.Performance_Review_Status__c}"/>
+                                        </apex:column>
+                                        <apex:column headervalue="Review Rating" > 
+                                            <apex:outputText value="{!perf.Average_Rating__c}"/>
+                                        </apex:column>
+                                 </apex:pageblockTable> 
+                                </apex:pageBlock>
+                                 
+                                 </apex:facet>
+                
+                        </apex:actionStatus>
+                          
+                          </apex:tab>
+                   
+                           <apex:tab label="One to One Review" name="onetone" id="rev"  ontabenter="refreshonetooneTab()" rendered="{!ProTabView==true}">
+                          
+                           <apex:form >
+                                <apex:actionFunction name="refreshonetooneTab" action="{!setOneReviewRenderFlag}" rerender="onetoneBlock" status="oneReviewStatus"/>
+                            </apex:form>                                                    
+                                                 
+                            <apex:actionStatus id="oneReviewStatus">
+                                <apex:facet name="start">
+                                    <apex:image url="{!$Resource.Loading}" />                               
+                                </apex:facet> 
+                            <apex:facet name="stop"> 
+                                                        
+                          
+                          <apex:pageBlock title="One to One Review" id="onetoneBlock"> 
+                       
+                             <apex:pageBlockButtons location="top" >
+                                    <apex:form >
+                                        <apex:commandButton action="{!newonetoonereview}" value="New One to One Review" rendered="{!OneBtnView==true}" />
+                                    </apex:form>
+                                                                              
+                                </apex:pageBlockButtons>
+                               
+                              
+                                 <apex:pageblockTable value="{!OnetoOnerevList}" var="onerev" width="100%">
+                                                                             
+                                        <apex:column headervalue="Employee Review Number" >
+                                        <apex:outputLink value="/{!onerev.Id}" > {!onerev.Name}</apex:outputLink> 
+                                         </apex:column>
+                                         
+                                        <apex:repeat var="f" value="{!$ObjectType.Employee_Review__c.FieldSets.OnetoOne_Review_Summary_Columns}">
+                                            <apex:column value="{!onerev[f]}"/>
+                                        </apex:repeat>
+                                        <!-- 
+                                         <apex:column headervalue="Review Type" > 
+                                            <apex:outputText value="{!onerev.One_Type_Of_Review__c}"/>
+                                        </apex:column>
+                                        
+                                       
+                                          <apex:column headervalue="Name Of Manager" >
+                                                 <apex:outputText value="{!onerev.Manager__r.name}"/>
+                                          </apex:column>
+                                        <apex:column headervalue="Date of 1 to 1" >
+                                        
+                                         <apex:outputText value="{0, date,d MMMM yyyy}">
+                                                <apex:param value="{!onerev.Date_of_1_to_1__c}"/>
+                                            </apex:outputText> 
+                                           
+                                        </apex:column>
+                                        
+                                        <apex:column headervalue="Review Status" > 
+                                            <apex:outputText value="{!onerev.status__c}"/>
+                                        </apex:column>
+                                 </apex:pageblockTable>
+                                </apex:pageBlock>
+                                 
+                                 </apex:facet>
+                
+                        </apex:actionStatus>
+                          
+                          </apex:tab>
+                          
+                           
+                      <apex:tab label="Probationary Review" name="Probation" id="pro"  ontabenter="refreshProbationaryTab()" rendered="{!PerfTabView==true}">
+                      
+                            <apex:pageBlock title="Probationary Review" id="ProbationaryBlock"  rendered="{!Probationreview==null}">         
+                             <apex:pageBlockButtons location="top">
+                                      <apex:form >
+                                        <apex:commandButton action="{!newprobationaryreview}" value="New Probationary Review" rendered="{!AND((empDetail.Probation_Period__c==true),(ProbationaryBtnView==true))}"/>
+                                    </apex:form>
+                                                                  
+                                </apex:pageBlockButtons>
+                             </apex:pageBlock>
+                          
+                                 <apex:form >
+                                <apex:actionFunction name="refreshProbationaryTab" action="{!setProReviewRenderFlag}" rerender="ProbationaryBlock1" status="ProReviewStatus1"/>
+                            </apex:form>                                                    
+                                                 
+                            <apex:actionStatus id="ProReviewStatus1" rendered="{!Probationreview!=null}" >
+                                <apex:facet name="start">
+                                    <apex:image url="{!$Resource.Loading}" />                               
+                                </apex:facet>
+                            <apex:facet name="stop">                 
+                                                 
+                                                                    
+                            <apex:detail id="ProbationaryBlock1" subject="{!Probationreview}" relatedlist="true" relatedListHover="false" title="false" rendered="{!Probationreview!=null}"/>
+                        </apex:facet>
+                
+                        </apex:actionStatus>
+                        </apex:tab>
+                        
+                          <apex:tab label="ER Confidential Review" name="ER" id="ER"  ontabenter="refreshERconfidentialTab()" rendered="{!ErTabView==true}">
+                          
+                          <apex:form >
+                                <apex:actionFunction name="refreshERconfidentialTab" action="{!setERConfReviewRenderFlag}" rerender="ERConfidentialBlock" status="ERConfReviewStatus"/>
+                            </apex:form>                                                    
+                                                 
+                            <apex:actionStatus id="ERConfReviewStatus">
+                                <apex:facet name="start">
+                                    <apex:image url="{!$Resource.Loading}" />                               
+                                </apex:facet>
+                            <apex:facet name="stop"> 
+                            
+                          <apex:pageBlock title="ER Confidential Review" id="ERConfidentialBlock"> 
+                                <apex:pageBlockButtons location="top">
+                                           <apex:form >
+                                        <apex:commandButton action="{!newERreview}" value="New ER Confidential Review" rendered="{!ErView==true}"/>
+                                    </apex:form>
+                                                           
+                                </apex:pageBlockButtons>
+                               
+                             
+                                 <apex:pageblockTable value="{!erRevList}" var="erev" width="100%">
+                                       <apex:column headervalue="Employee Review Name" > 
+                                          <apex:outputLink value="/{!erev.Id}" > {!erev.Name}</apex:outputLink>
+                                       </apex:column>
+                                          
+                                        <apex:repeat var="f" value="{!$ObjectType.Employee_Review__c.FieldSets.Confidential_Review_Summary_Columns}">
+                                            <apex:column value="{!erev[f]}"/>
+                                        </apex:repeat>
+                                        <!--
+                                        <apex:column headervalue="Type of Review" > 
+                                            <apex:outputText value="{!erev.Type_of_Review__c}"/>
+                                        </apex:column>
+                                        
+                                        <apex:column headervalue="Review Stage" > 
+                                            <apex:outputText value="{!erev.Stage__c}"/>
+                                        </apex:column>
+                                        
+                                        <apex:column headervalue="Review Status" > 
+                                            <apex:outputText value="{!erev.status__c}"/>
+                                        </apex:column>
+                                        
+                                        <apex:column headervalue="Review Expiry Date" > 
+                                        <apex:outputText value="{0, date,d MMMM yyyy}">
+                                            <apex:param value="{!erev.ERconf_Expiry_Date__c}"/>
+                                        </apex:outputText> 
+                                        </apex:column>
+                                 </apex:pageblockTable>
+                                </apex:pageBlock>
+                                 </apex:facet>
+                
+                        </apex:actionStatus>
+                          
+                          </apex:tab>
+                          
+                         </apex:tabPanel>
+                         
+                          </td> 
+       </tr>
+       </table>   
+                         
+                   
+</apex:page>
+-->
+<apex:page ></apex:page>

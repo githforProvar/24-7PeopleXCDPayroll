@@ -1,0 +1,390 @@
+<apex:page controller="xcdhcm.TeamChartController" sidebar="false" showHeader="true"  wizard="false"  readOnly="true" tabStyle="TeamChart__tab" >
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/OrgChartCSS.css')}"/>
+ <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeDetails.css')}" />  
+ <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet"/>  
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">  
+    <style>
+    [data-letters]:before 
+    {
+        content:attr(data-letters);
+        display:inline-block;
+        font-size:16px;
+        margin:5px;
+        max-width:50px;
+        width:50px; 
+        height:50px;
+        line-height:50px;
+        text-align:center;
+        border-radius:50%;
+        background:plum;
+        vertical-align:middle;
+        color:white;
+        z-index:1;
+    } 
+	.upIcon 
+	{ 
+		width:20px;
+		height:20px;
+		background-image: url('{!URLFOR($Resource.XCD_static_resources, 'Css/OrgChartUpArrow.png')}');
+		background-repeat: no-repeat;
+	}
+	
+	.downIcon
+	 { 
+		width:20px;
+		height:20px;             
+		 background-image: url('{!URLFOR($Resource.XCD_static_resources, 'Css/OrgChartDownArrow.png')}');  
+		background-repeat: no-repeat;
+	} 
+	.chartCellIcon 
+	{
+		float: left;
+		width: 50px;
+		height: 50px;
+		border: none;
+		margin: 5px;
+        border-radius: 50%;
+		border: 1px solid #999999;
+	}
+	 
+	.cellTitle
+	 {
+		padding: 0px;
+		font-size: 1.4em;
+		font-weight: bold;
+		float: left;
+		width: 150px;
+		margin-left: 10px;
+        font-family:'Dosis', sans-serif;
+		/*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
+	}
+	
+	.chartCellBody 
+	{
+		padding: 0px;
+		font-size: 1.1em;
+		line-height: 100%;
+		margin: 0px;
+		float: right;
+		width: 75px;
+		padding:0px !important;
+		padding-bottom: 1px !important;
+		color: #999999;
+		margin-left: 10px !important;
+		margin-top:5px !important;
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	
+	}
+	  
+	.nodeChartCell 
+	{
+		width: 150px !important;
+		text-align: left;
+		vertical-align: top;
+		font-family: arial,helvetica;
+		cursor: default;
+		border: 1px solid #999999 !important; 
+		-moz-border-radius: 0px;
+		-webkit-border-radius: 0px;
+		background-color: #fff !important;
+		background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#fff));
+		border: 1px solid #d9d9d9;
+		color: #999999;
+		background-image: none;
+		-moz-box-shadow: 2px 1px 8px #a6d6ff;
+		-webkit-box-shadow: 2px 1px 8px #a6d6ff;
+		box-shadow: 2px 1px 8px #a6d6ff;
+	}
+	
+	 .nodeChartCellSelect
+	 {
+		border: 2px solid #e3ca4b;
+		background-color: #fff7ae;
+		background: -webkit-gradient(linear, left top, left bottom, from(#fff7ae), to(#eee79e)) !important;
+	}
+	
+	.google-visualization-orgchart-linebottom
+	{
+		border-bottom: 2px solid #ff0000 !important;
+	}
+	
+	.google-visualization-orgchart-lineleft
+	{
+	border-left: 2px solid #ff0000 !important;
+	
+	}
+	
+	.google-visualization-orgchart-lineright
+	{
+	border-right: 2px solid #ff0000 !important;
+	
+	} 
+	
+	<!--Start: PopUp window to display the user Records -->
+	 .custPopup
+	{
+		background: #fff url(/img/alohaSkin/lookup_bg.png) repeat-x;
+	    border-width: 2px;
+	    border-style:inset;
+	    z-index: 9999;
+	    left: 720px;
+	    padding:10px;
+	    position: absolute;
+	    /* These are the 3 css properties you will need to change so the popup 
+	    displays in the center of the screen. First set the width. Then set 
+	    margin-left to negative half of what the width is. You can add 
+	    the height property for a fixed size pop up if you want.*/
+	    width: 650px;  
+	    margin-left: -250px;
+	    top:100px;
+	}
+	.popupBackground
+	{
+	    background-color:black;
+	    opacity: 0.20;
+	    filter: alpha(opacity = 20);
+	    position: absolute;
+	    width: 100%;
+	    height: 100%;
+	    top: 0;
+	    left: 0;
+	    z-index: 9998;
+	}
+	<!--End: PopUp window to display the user Records -->
+	
+	.pageTitleIcon
+	{
+	background-image: url(/img/sprites/master.png);
+	background-position: 0 -1202px;
+	width: 32px;
+	height: 32px;
+	}
+	
+	body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+	{
+        font-family:Salesforce Sans,sans-serif!important;
+		font-size: 1.25rem;
+		color: #16325c;
+        margin-left: 2.5rem;
+        text-transform: uppercase;
+    }
+    
+    body input.btn, body input.btnDisabled, body input.btnCancel {
+        border: 1px solid #d9d9d9;
+        color: #999999;
+        background-color: #fff;
+        background-image: none;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid rgb(221, 219, 218);
+        -webkit-transition: border .15s linear;
+        transition: border .15s linear;
+        border-color: rgb(221, 219, 218);
+        background-color: rgb(255, 255, 255);
+        color: rgb(0, 112, 210);
+        line-height: 1.875rem;
+        font-size: 0.85rem;
+        font-weight: normal;
+    }
+    
+    body .bEditBlock .pbHeader, body .bLayoutBlock .pbHeader, body .apexp .bPageBlock.apexDefaultPageBlock .pbHeader
+     {
+        border-bottom: 1px solid #fff;
+        padding: 0;
+        background: #f7f9fb;
+        margin-top: -9px;
+        height: 80px;
+        margin-left: -15px;
+        margin-right: -16px;
+    }
+    .chartCellIcon 
+    {
+    	border: none;
+	}
+	.cellTitle 
+	{
+    	margin-top: 1rem;
+	}
+	.pbTitle h2
+	{
+	    margin-left: 3rem !important;
+	}
+    </style >
+
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+		<apex:form >
+			<apex:message id="errorId"/>
+			<apex:actionFunction name="loadMore" action="{!loadMore}" rerender="errorPanel,chartPanel,info" status="status" oncomplete="drawChart();">
+		          <apex:param name="firstParam" value="" assignTo="{!empIdval}"/>
+		   	</apex:actionFunction>
+		          
+			<apex:actionFunction name="loadManager" action="{!loadManager}" rerender="errorPanel,chartPanel,info" status="status" oncomplete="drawChart();">
+		          <apex:param name="firstParam" value="" assignTo="{!managerId}"/> 
+			</apex:actionFunction>
+		</apex:form>
+
+<!--         <img src="{!$Resource.Org_Structure_Symbol}" height="2%" width="2%" style="margin-top: .60rem;margin-bottom: -2.5rem;"/> -->
+        
+        <div style="margin-left: -10px;position: fixed;width: 100%;top: 0px;">
+	        <div>
+	        	<img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/My_Team.png')}" style="height:34px;margin-left:5px;margin-top: .60rem;margin-bottom: -2.5rem;"/>
+	        </div>
+	        <apex:pageBlock id="googlevirtualization1"  title="{!$Label.xcdhcm__teamchartstorgchart}"> 
+	        
+	            <apex:form id="info1" style="position:sticky;">     
+		            <div style="margin-top: -4rem;float: right;">    
+		               <apex:commandButton action="{!displayOrgChart}" value="{!$Label.xcdhcm__teamchartstorgchartbvieworganisation}" rendered="{!AND(viewOrgChart=true,viewOrgBtn==true)}"/>
+		               <apex:commandButton action="{!myTeamChart}" value="{!$Label.xcdhcm__teamchartstorgchartbviewmyteam}"  rendered="{!AND(viewMyTeam=true,MyTeamBtn==true)}"/>
+		               <apex:commandButton action="{!ShowUserListPopup}" value="{!$Label.xcdhcm__teamchartstorgchartbsearchformanager}"   reRender="tstpopup" rendered="{!SearchforManagerbtn==true}"/>   
+		            </div>
+	            </apex:form>
+	        </apex:pageBlock>
+        </div>    
+        <div style="overflow-x:scroll;min-height:500px;overflow-y:hidden;margin-top:30px;">
+            <apex:pageBlock id="googlevirtualization" >
+                <apex:form id="info">     
+                    <!--Start: PopUp window to display the user Records -->
+                    <apex:outputPanel id="tstpopup">
+                        <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayUserListPopup}"/>
+                        <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayUserListPopup}">
+                            <apex:commandLink action="{!CloseUserListPopup}"  type="image/png" rerender="tstpopup" style="float:right;text-decoration:none">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="test"/>
+                            </apex:commandlink>
+                            <div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" /><h1 style="font-size: 1.8em;color: #333435;">Lookup</h1></div>
+                            <p> Enter search text and click Go </p><br/>
+                            <apex:inputText value="{!query}" id="query" style="width:250px"/> 
+                            <apex:commandButton value="{!$Label.xcdhcm__teamchartstorgchartbgo}" action="{!runQuery}" style="margin-left:20px" reRender="tstpopup"/><br/> <br/>                   
+							<apex:selectRadio value="{!selectedFilter}" > 
+								<apex:outputLabel value="Search" style="font-weight:bold;margin-top:5px;"/>                   
+				                <apex:selectOption itemValue="Name" itemLabel="{!$ObjectType.User.Fields.Name.Label}" />
+				                <apex:selectOption itemValue="Company" itemLabel="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Companies__c.Label}"/>
+				                <apex:selectOption itemValue="Department" itemLabel="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_Name__c.Label}"/>					
+					        </apex:selectRadio> 							
+							<br/>
+							<!-- START :: 19/09/2018 NPPD-1719 Team Chart and Sharing Modified by Anil -->
+							<div style="height:360px;overflow:auto;">
+								<h1 style="font-size: 1.2em;color: #333435;">Recently Viewed Managers</h1>
+								<!-- <apex:pageBlockTable value="{!emplist}" var="emp" >  
+								<apex:column headerValue="{!$ObjectType.User.Fields.Name.Label}">
+									<apex:commandLink value="{!emp.Name}" action="{!userSelected}" reRender="info,errorId">  
+										<apex:param name="EmpUsrID" value="{!emp.Id}" />
+									</apex:commandLink>
+								</apex:column>
+								
+								<apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Companies__c.Label}" >									
+									<apex:outputText value="{!emp.CompanyName}" /> 										
+								</apex:column>
+								
+								<apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_Name__c.Label}" >									
+									<apex:outputText value="{!emp.Department}" /> 			 							
+								</apex:column>								
+								</apex:pageBlockTable> -->
+								<table id="searchManager" class="slds-table slds-table--bordered slds-table_resizable-cols slds-table_fixed-layout" style="border: none;" role="grid">
+									<thead>
+										<tr class="slds-text-title--caps" style="text-transform: capitalize;">
+											<th scope="col">
+												{!$ObjectType.User.Fields.Name.Label}
+											</th>
+											<th scope="col">
+												{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Companies__c.Label}
+											</th>
+											<th scope="col">
+												{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_Name__c.Label}
+											</th>
+										</tr>	
+									</thead>
+									<tbody>
+										<apex:repeat value="{!emplist}" var="emp">
+											<tr class="slds-text-title--caps" style="text-transform: capitalize;">
+												<td scope="col">
+													<a onclick="sendToUrl('/one/one.app#/alohaRedirect/apex/xcdhcm__TeamChart?EmpUsrIDD={!emp.Id}');" target="_top">
+														<span title="{!emp.Name}" style="color: rgb(0, 112, 210);transition: color .1s linear;">{!emp.Name}</span>
+													</a>
+												</td>
+												<td scope="col">
+													<span>{!emp.CompanyName}</span>
+												</td>
+												<td scope="col">
+													<span>{!emp.Department}</span>
+												</td>
+											</tr>
+										</apex:repeat>
+									</tbody>
+								</table>   
+							</div> <br/>
+							<!-- END :: 19/09/2018 NPPD-1719 Team Chart and Sharing Modified by Anil -->
+                           <center><apex:commandButton value="{!$Label.xcdhcm__teamchartstorgchartbclose}" action="{!CloseUserListPopup}" rerender="tstpopup"/></center>
+						</apex:outputPanel>
+				</apex:outputPanel>
+			<!--End: PopUp window to display the user Records --> 
+            
+            </apex:form>
+            <br/>
+               	<div id="teamm" style="height:100%;">  
+                <apex:outputPanel id="chartPanel" layout="block">  
+		            <script type='text/javascript'> 
+		            	google.load('visualization', '1.0', {packages:['orgchart']});
+		              	google.setOnLoadCallback(drawChart);
+			            function drawChart() {
+			            	var data = new google.visualization.DataTable();
+			                data.addColumn('string', 'Name');
+			                data.addColumn('string', 'Manager');
+			           
+                             <apex:repeat value="{!empsTeamChart}" var="u" id="chart" >
+                                data.addRow([{v:'{!JSENCODE(u.Name)}'
+                                    , f:'{!JSENCODE(u.rolebody)}'}
+                                    , '{!JSENCODE(u.ManagerName)}']);  
+                            </apex:repeat>
+			        
+			               var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+			               chart.draw(data, {allowHtml:true, allowCollapse:true, size:'medium',is3D : true, nodeClass:'nodeChartCell', selectedNodeClass:'nodeChartCellSelect'});
+			                
+		                }  
+		            </script>
+		            <apex:actionStatus id="status">
+						<apex:facet name="start">
+							<apex:image url="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Loading.png')}" />                               
+						</apex:facet>
+		            
+						<apex:facet name="stop">  
+							<div class="chartFrame" id='chart_div'></div> 
+						</apex:facet>
+		            </apex:actionStatus>  
+				</apex:outputPanel>
+   
+				<apex:outputPanel id="errorPanel" layout="block" >
+   
+                    <apex:pageBlock mode="maindetail" rendered="{!empsTeamChartSize==0}">
+                        <center><blink><h2 style=" font-family: Arial;font-size:18px; line-height:normal !important; height:250px; background:transparent; color:#1797C0; " >Running user does not have an Employee record. Contact HR to set you up as an Employee</h2></blink>
+                        </center>
+                    </apex:pageBlock>
+                </apex:outputPanel>  
+            </div>   
+ 
+		    <apex:form >
+		      	<script>      
+		    		function printing(divName)
+		        	{
+		            	var x = confirm('Click OK to Print, Else Click Cancel');
+		            	if(x)
+		            	{
+		                	var printContents = document.getElementById(divName).innerHTML;
+		                	var originalContents = document.body.innerHTML;
+		                    document.body.innerHTML = printContents;
+		                	window.print();
+		                    document.body.innerHTML = originalContents; 
+		            	}
+		        	}
+		        	function sendToUrl(url)
+				   	{
+				   		sforce.one.navigateToURL(url);
+				       	//window.top.location.href=url;
+				   	} 
+		    	</script>
+		    </apex:form>
+	 	</apex:pageBlock>
+ 	</div>
+ 	</html>
+</apex:page>

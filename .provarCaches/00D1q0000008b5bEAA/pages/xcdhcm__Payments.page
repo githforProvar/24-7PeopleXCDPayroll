@@ -1,0 +1,867 @@
+<!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan-->
+<apex:page standardController="xcdhcm__Pay_Period__c" extensions="xcdhcm.PayrollController" action="{!getPayRollPaymentDetail}" sidebar="false" tabStyle="Payments__tab">
+<!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan-->
+   <!--  <apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+    <meta charset="utf-8"/>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet"/>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet"/>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"/>
+    <style type="text/css">
+    /* START :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window */ 
+     .popup
+        {
+            background-color: white;
+            border-width: 2px;
+            border-style: solid;
+            z-index: 9999;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            width: 250px;
+           
+            margin-left: -250px;
+            top:80px;
+        }
+
+        .popupBg
+        {
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 70);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+        
+        #hlpbtn:hover .titlepopup
+    	{
+        display: block !important;
+        background: #FEFDB9;
+        padding: 4px;
+        color: #000;
+        position: absolute;
+        z-index: 1;
+        border: 1px solid #FFA603;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;
+    
+    	}
+        /* END :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window */
+        .fontColor {
+            color:#0070c0;
+            font-size:10pt !important;
+        }
+        body .pbBody table.list tr.headerRow th 
+        {
+            border-bottom: 2px solid #cde2f5 !important;
+        }
+        .ng-cloak 
+        {
+            display: none !important;
+        }
+        .btnDisplay
+        {
+            font-weight: bold;
+            font-size: .9em;
+        }
+        /* START :: 06/03/2017 payroll5 workshop changes - payments column in other section alignment added by Farhan */
+        .periodCol  {	width : 12% !important;  }
+        .employerCol{ 	width : 20% !important;  }
+        .paydayCol  {  	width : 12% !important;  }
+        .emplrcontriCol{width : 15% !important;  }
+        .emplcontriCol{ width : 15% !important;  }
+        .totalpayCol{	width : 12% !important;  }
+        .reportCol{		width : 15% !important;  }
+         /* END :: 06/03/2017 payroll5 workshop changes - payments column in other section alignment added by Farhan */
+          /* START :: 04/07/2017 NPAY-338 Payroll6 Issuelist row 14 added by Farhan */
+        select.ui-datepicker-month {width: 45% !important;}
+        select.ui-datepicker-year {width: 45% !important;}
+         /* END :: 04/07/2017 NPAY-338 Payroll6 Issuelist row 14 added by Farhan */
+         <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+         a {
+		     color: #000000 !important;
+		   }
+		 <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+    </style>
+    <apex:form id="theForm">
+    
+    <!-- START :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window -->
+     <apex:outputPanel id="popup">
+     <apex:pageBlock >
+     <apex:pageBlockSection >
+        <apex:outputPanel styleClass="popupBg" layout="block" rendered="{!displayPopUp}"/>
+            <apex:outputPanel styleClass="popup" layout="block" rendered="{!displayPopUp}">
+          
+            
+            <apex:pageBlockSectionItem >
+            
+                  <apex:actionRegion >      
+                       <apex:selectList value="{!printPaySlip}" size="1">
+                                <apex:selectOptions value="{!items}"/>
+                                <apex:actionSupport event="onchange" rerender="myFields"/>
+                        </apex:selectList>
+                       
+                        <span id="hlpbtn">
+				      <!--  <img src="{!$Resource.Help_icon}" style=""/> -->
+				      <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+				       <span style="display: none; width: 320px; left:170px; " class="titlepopup">
+				           <p> Paper payslips, selects all employees with this selected on their records </p>
+				           <p> All, will print everyone </p>
+				           <p>List of Department, will print everyone within the selected department(s) </p>
+				          
+				       </span>
+				   </span>
+              
+                 </apex:actionRegion>                         
+          </apex:pageBlockSectionItem>
+
+          <apex:pageBlockSectionItem >
+                  <apex:outputlabel value="Department:"/>   
+                  <apex:outputPanel id="myFields">   
+                    <apex:actionRegion >  
+                       <apex:selectList value="{!printDepartmentPaySlip}" multiselect="true" size="10" styleClass="convstatus">
+                            <apex:selectOptions value="{!Departments}"/>
+                        </apex:selectList>
+                    </apex:actionRegion>      
+                 </apex:outputPanel>
+          </apex:pageBlockSectionItem>
+
+           
+           
+                 <apex:commandButton value="Print for selected employees" action="{!pdAllPayslips}"  oncomplete="funcTest()" rerender="popup" />
+                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popup"/>
+            </apex:outputPanel>
+            </apex:pageBlockSection>
+            </apex:pageBlock>
+             </apex:outputPanel>
+            
+             
+        
+  
+    <!-- END  :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window -->
+     <!-- START :: 05/01/2016 NPPD-1139 UserGuide Link Added by Namrata-->
+         <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;"
+                                target="_blank" action="{!helpLinkPaymentsAdmin}" value="Help"
+                                id="theCommandLink1" rendered="{!HelpPaymentsAdmin}" />
+       <!-- END :: 05/01/2016 NPPD-1139 UserGuide Link Added by Namrata-->
+   
+    <br/> 
+        <apex:PageMessages id="errId" />
+        <apex:outputText value="Payments" style="color:#0070c0;font-size:12pt !important;font-weight:bold;margin-right:10px;"/>
+        <br/><br/>
+        
+        <html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+        <head>
+        <meta charset="utf-8"/>
+        <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet"/>
+        <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet"/>
+        <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"/>
+	<!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan-->
+        <script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+  <link rel="stylesheet" href="/resources/demos/style.css"/>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan-->
+        </head>
+     <script>
+        function funcTest(){
+           
+                alert('Your payslip .pdf job has been requested. You will receive an email as soon as it is complete.');
+   
+        }
+        </script>
+                <!--- Javascript -->
+                <script type="text/javascript">
+                   <!-- Name your application -->
+            var myapp = angular.module('hello', []);
+            var sortingOrder = 'xcdhcm__Pay_day__c';
+            <!-- Define Controller  -->
+            var contrl=myapp.controller('ctrlRead', function ($scope, $filter) {
+                <!--- Initialize Scope Variables --->
+		    		//START :: 06/02/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients commneted by Farhan
+                    //$scope.sortingOrder = sortingOrder;
+	    		    //END :: 06/02/2017 Presentation for Payments and for Gross Payroll Clients NPAY-204 commneted by Farhan
+                    $scope.reverse = true;
+                    $scope.employeePaymentsItems ={!conListJSON1 };
+                    $scope.hmrcPaymentsItems ={!conListJSON2 };
+                    $scope.pensionBenefitPaymentsItems ={!conListJSON3 };
+		    // START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan
+                    $scope.payrunId;
+                    $scope.selectedDate;
+		    // END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan
+                    $scope.PayslipUpdate = function(id) 
+                    {
+                        passperiodId(id);
+                    };
+                    
+                    $scope.P45Update = function(id) 
+                    {
+                        p45periodId(id);
+                    };
+		    		//START :: 06/02/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients added by Farhan
+                    $scope.isLeaverInPayrun = JSON.parse('{!LeaversInPayrun}');
+		    		//END :: 06/02/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients added by Farhan
+                   <!-- START :: 27/07/2016 NPAY-157 Print payslips and P45s for payroll leavers as a single output file added by Jamil -->
+                     //START :: 21/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan
+		    		 $scope.pdfP45Form = function(id,payPeriodStartdate,payPeriodEnddate,payPeriodName) 
+                    {
+                    	//START :: 03/02/2017 Payroll5/winter16 regression (optimised code) modified by farhan
+                    	var concatstring =  id+','+payPeriodStartdate+','+payPeriodEnddate+','+payPeriodName;
+                    	//END :: 03/02/2017 Payroll5/winter16 regression (optimised code) modified by farhan
+                    	console.log('id- '+id+'payPeriodStartdate -'+payPeriodStartdate+',payPeriodEnddate- '+payPeriodEnddate);
+                        p45periodP45Id(concatstring);
+			//END :: 21/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan
+                    };
+                    $scope.pdfpayslip = function(id) 
+                    {
+                        payslipId(id);
+                    };
+		    <!-- END :: 27/07/2016 NPAY-157 Print payslips and P45s for payroll leavers as a single output file added by Jamil --> 
+                    // START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan
+    	            $scope.greaterThan = function(prop1, prop2, type)
+                    {
+				    	return function(item)
+				    	{
+				    		var sum;
+				    		if(type == 'Pensions')
+				    		{
+				    			//console.log('1 - '+item.payPeriod[prop1]+'2 - '+item.payPeriod[prop2]);
+				    			sum = item.payPeriod[prop1]+item.payPeriod[prop2];
+				    		}
+				    		else if(type == 'Benefits')
+				    		{
+				    			//console.log('1 - '+item[prop1]+', 2- '+item[prop2]);
+				    			sum = item[prop1] + item[prop2];
+				    		}
+				    		else if(type == 'Court Orders')
+				    		{
+				    			//console.log('1-'+prop1+', 2- '+item.payPeriod[prop2]);
+				    			sum = prop1 + item.payPeriod[prop2];
+				    		}
+				    		//console.log('type - '+type+', sum - '+sum);
+				      		return sum != 0;
+				    	}
+					}
+					//START :: 04/07/2017 NPAY-338 Payroll6 Issuelist row 14 modified by Farhan
+					$scope.rowId;
+                    $scope.showCalendar = function(event,payRunid)
+                    {
+                    $scope.rowId = event.target.id
+                    $scope.payrunId = payRunid;
+		    		//END :: 04/07/2017 NPAY-338 Payroll6 Issuelist row 14 modified by Farhan
+                    	//popUpCalendar();
+                    };
+                    
+                    $(document).ready(function()
+                    {
+		    			//START :: 04/07/2017 NPAY-338 Payroll6 Issuelist row 14 modified by Farhan
+						//$("[id$='datepicker']").click().datepicker(
+						$('.datepicker').click().datepicker(
+						{
+							changeMonth: true,
+      						changeYear: true,
+      						//END :: 04/07/2017 NPAY-338 Payroll6 Issuelist row 14 modified by Farhan
+    						dateFormat: 'yy-dd-mm',
+   							onSelect: function() 
+   							{
+   								var date =  $(this).datepicker('getDate');
+   								var day = date.getDate();
+   								var month = date.getMonth() + 1;
+   								var year =  date.getFullYear(); 
+   								$scope.selectedDate = day+'/'+month+'/'+year;
+   								console.log('selected date is '+day + '-' + month  + '-' + year);
+   								console.log('payrun id-'+$scope.payrunId);
+   								//START :: 04/07/2017 NPAY-338 Payroll6 Issuelist row 14 modified by Farhan
+								$("[id$="+$scope.rowId+"]").val('Processing');
+								$(":button").prop("disabled",true);
+								//END :: 04/07/2017 NPAY-338 Payroll6 Issuelist row 14 modified by Farhan
+   								popUpCalendar($scope.payrunId,$scope.selectedDate);
+   							}
+  						});
+					});   
+                //START :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window    
+                //showPopup(item.Id)
+                $scope.showPopup = function(id) 
+                    {
+                        popUpId(id);
+                    };
+                //END :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window       
+            // END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan                   
+            });
+        
+        contrl.$inject = ['$scope', '$filter'];
+     
+		</script>
+        <body>
+        <!-- Jamil 02/05/2016 NPAY-137 Payroll - Payments - bugs and fixes -->
+        <table>
+        <tr>
+            
+            <td style="margin-right:150px;">
+               View
+            </td>
+            <td>&nbsp;&nbsp;</td>
+            <td>
+                <apex:actionRegion >  
+			<!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan-->
+                    <apex:SelectList size="1" value="{!selectedFilter}"  style="margin-right:150px;"> 
+                        <apex:actionSupport event="onchange" action="{!getPayRollPaymentDetail}" status="actStatusId"/>
+			<!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan-->
+                        <apex:selectOptions value="{!openPayRollPaymentOptions}" /> 
+                        <apex:actionStatus startText="Loading detail..." id="actStatusId"/>  
+                    </apex:SelectList>
+                </apex:actionRegion> 
+                <!-- START::  1/4/2018 NPAY-467 Issues on Payments page Jamil  -->
+                <apex:actionRegion >
+                <apex:outputText value="Tax year"
+                    style="color:#999;font-weight: bold;font-size: 10pt!important;" /> &nbsp;&nbsp;&nbsp;
+                    <apex:selectList value="{!selectedYear}" size="1"
+                    styleclass="datepick">
+                    <apex:selectOptions value="{!TaxYears}" />
+		           
+                    <apex:actionSupport event="onchange" action="{!getPayRollPaymentDetail}"  status="actStatusId" />
+                          
+		</apex:selectList>
+                <apex:actionStatus id="counter" startText="Please wait..." />
+            </apex:actionRegion>
+               <!-- - END ::  1/4/2018 NPAY-467 Issues on Payments page Jamil  -->
+            </td>
+        </tr>                      
+        </table>                        
+        <!-- Jamil 02/05/2016  NPAY-137 Payroll - Payments - bugs and fixes-->
+        <apex:actionFunction name="passperiodId" action="{!updatePayslipStatus}" reRender="errId," oncomplete="" > 
+            <apex:param assignTo="{!PayrollPeriodId}" name="periodId" value="x"/>
+        </apex:actionFunction>
+        <apex:actionFunction name="p45periodId" action="{!updateP45Status}" reRender="errId," oncomplete="" > 
+            <apex:param assignTo="{!P45PeriodId}" name="periodId" value="x"/>
+        </apex:actionFunction>
+       <!-- START :: 27/07/2016 NPAY-157 Print payslips and P45s for payroll leavers as a single output file added by Jamil -->
+        <apex:actionFunction name="p45periodP45Id" action="{!pdfLeaverPayslips}" reRender="errId" oncomplete="" > 
+            <apex:param assignTo="{!p45periodP45Id}" name="p45periodP45Id" value="x"/>
+        </apex:actionFunction>
+        <apex:actionFunction name="payslipId" action="{!pdfLeaverforPayslips}" reRender="errId," oncomplete="" > 
+            <apex:param assignTo="{!payslipId}" name="payslipId" value="x"/>
+        </apex:actionFunction>
+        <!--  START :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window -->
+        <apex:actionFunction name="popUpId" action="{!showPopup}" reRender="popup," oncomplete="" > 
+            <apex:param assignTo="{!popUpId}" name="popUpId" value="x"/>
+        </apex:actionFunction>
+        <!--  END :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window -->
+        <!--END :: 27/07/2016 NPAY-157 Print payslips and P45s for payroll leavers as a single output file added by Jamil -->
+	<!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan--> 
+        <apex:actionFunction name="popUpCalendar" action="{!updateEmployeePaymentDate}" oncomplete="" > 
+        <apex:param assignTo="{!payRunId}" name="payrunId" value="x"/>
+        <apex:param assignTo="{!datevalue}" name="SelectedDate" value="x"/>
+        </apex:actionFunction>
+	<!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan-->
+            <!-- =========== Binding Controller to Body of Page ============= -->
+        <div ng-controller="ctrlRead">
+        <apex:outputText value="Employee payments" style="color:#0070c0;font-weight:bold;margin-right:10px;"/>
+        <!-- START :: 22/06/2016 NPAY-163 Payroll UI issues modified by Farhan-->
+        <br/>
+        <!-- END :: 22/06/2016 NPAY-163 Payroll UI issues modified by Farhan-->
+        <table class="table  table-hover " >
+            <thead>
+                <tr class=" fontColor ">
+                <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients commented by Farhan
+                    <th> Payments </th>
+                    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients commented by Farhan -->
+                    <th> Period </th>
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Payroll </th>
+                    <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <!-- START :: 07/10/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                    <th> Employer </th>
+                    <!-- END :: 07/10/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                    <th> Pay day </th>
+                    <th> Type </th>
+                    <th> Frequency </th>                                 
+                    <th> Total net pay </th> 
+		    <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan-->
+                    <apex:outputText rendered="{!isUKNetPayRuns == true}">
+                     <th> BACS </th>
+                     </apex:outputText>
+                    <th> Payslips </th> 
+                    <th> Leaver Payslips </th>
+                    <apex:outputText rendered="{!isUKNetPayRuns == true}">
+                    <th> Leaver P45 </th>
+                    </apex:outputText>
+                    <th> 
+                    	Date paid
+                    	<span id="hlpbtn"> 
+                       		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Pay_Period__c.Fields.Employee_payments_date__c.inlineHelpText}"
+                               style="{!IF($ObjectType.Pay_Period__c.Fields.Employee_payments_date__c.inlineHelpText == null, 'display:none','')}" />
+                       	</span> 
+                    </th> 
+                    <th> Payments </th>
+                    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                </tr>
+            </thead>                            
+            <tbody>   
+                <!-- START :: 22/06/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                <!-- Please note if any column is added colspan has to be incremented for the alignment-->
+                <apex:outputText rendered="{! PayrollEmployeePaymentList.size == 0}">
+                    <tr>
+                        <td colspan="12"> 
+                        <center>
+                            <apex:outputText Value="No records to display" style="font-size:14px;"/>
+                        </center>
+                        </td>
+                    </tr>
+                </apex:outputText>
+                <!-- END :: 22/06/2016 NPAY-163 Payroll UI issues added by Farhan-->
+				<!-- START :: 05/07/2017 NPAY-338 Payroll6 issue list row 14 by Farhan-->
+                <tr ng-repeat="item in employeePaymentsItems | orderBy:sortingOrder:reverse " class="ng-cloak" ng-init="current = $parent.start; $parent.start=$parent.start;">
+                <!-- END :: 05/07/2017 NPAY-338 Payroll6 issue list row 14 by Farhan-->
+                <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients commented by Farhan-->
+                   <!-- <td> <a href="/apex/PayRunReports?id={{item.Id}}&sfdc.override=1">Link to Report</a>  </td> -->
+                    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients commented by Farhan-->
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <td>
+                    <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->
+	                  <!-- <apex:outputLink value="/{{item.Id}}" target="_blank">
+	                     <apex:outputText value="{{item.Name}}" />
+	                  </apex:outputLink> -->
+	                  <a href="/one/one.app#/alohaRedirect/{{item.Id}}" >{{item.Name}}</a>
+	                  <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+	                </td>                    
+                    <td>
+                    <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->
+	                 <!--  <apex:outputLink value="/{{item.XCD_PAY_Payroll__r.Id}}" target="_blank">
+	                     <apex:outputText value="{{item.XCD_PAY_Payroll__r.Payroll__c}}" />
+	                  </apex:outputLink> -->
+	                 <a href="/one/one.app#/alohaRedirect/{{item.xcdhcm__XCD_PAY_Payroll__r.Id}}" >{{item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c}}</a> 
+	                <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->  
+	                </td>
+	                <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <!-- START :: 07/10/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                    <td> {{item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name}}</td>
+                    <!-- END :: 07/10/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                    <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                    <td> {{item.xcdhcm__Pay_day__c | date:'dd/MM/yyyy'}} </td>
+                    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                    <td> {{ item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c }}    </td>
+                    <td> {{ item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c }} </td>
+                    <td> {{ item.xcdhcm__Total_employee_pay__c | currency:  item.CurrencyIsoCode }} </td>
+                     <!-- START ::Jamil 02/05/2016 NPAY-137 Payroll - Payments - bugs and fixes --->
+                     <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+		     <apex:outputText rendered="{!isUKNetPayRuns == true}">
+                     <td> 
+                     <div ng-show="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'">
+                     <a href="/apex/xcdhcm__BACSFile?periodId={{item.Id}}&sfdc.override=1">{{item.xcdhcm__BACS_file_payment_value__c | currency:  item.CurrencyIsoCode}}</a>  
+                     </div>
+                     </td>
+                     </apex:outputText>
+		     <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                     <!-- END ::Jamil 02/05/2016 NPAY-137 Payroll - Payments - bugs and fixes --->
+                    <td>  
+                   <!-- START ::Jamil 02/05/2016 NPAY-137 Payroll - Payments - bugs and fixes --->
+                    <div>  
+		    <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                    <input type="button" ng-show="item.xcdhcm__Payslip_status__c == null || item.xcdhcm__Payslip_status__c == 'Publish'" ng-click="PayslipUpdate(item.Id);" value="{!$Label.PaymentsBPublish}" class="btn-default btnDisplay"/>
+                    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+		    <!-- <input type="button" ng-show="item.Payslip_status__c == 'Published'" value="{{item.Payslip_status__c}}" class="btn-default btnDisplay"/> -->
+                    </div> 
+                     <!--  START :: 08/09/2017 NPAY-353 Paper payslips added by Jamil--> 
+                    <!-- <div ng-show="item.Payslip_status__c != 'Publish'"> -->
+                    <div ng-show="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Paper_payslip_required__c == false && item.xcdhcm__Payslip_status__c == 'Published'">
+                     <!--  END :: 08/09/2017 NPAY-353 Paper payslips added by Jamil-->
+                    {{item.xcdhcm__Payslip_status__c}}
+                    </div>
+                    <!--  START :: 08/09/2017 NPAY-353 Paper payslips added by Jamil-->
+                    <div ng-show="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Paper_payslip_required__c == true && item.xcdhcm__Payslip_status__c == 'Published'">
+                           <input type="button"  value="{!$Label.PaymentsBPrint}" ng-click="showPopup(item.Id);" class="btn-default btnDisplay"/> 
+                    </div>
+                    <!--  END :: 08/09/2017 NPAY-353 Paper payslips added by Jamil-->
+                    
+                    </td>
+           		    <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                    <td> 
+                    	<div ng-show="isLeaverInPayrun[item.Id]">
+                    		<input type="button"  value="{!$Label.PaymentsBPrint}" ng-click="pdfpayslip (item.Id);" class="btn-default btnDisplay"/>
+                    	</div>
+                    </td>
+                   <!-- <td> <input type="button"  value=" Create " class="btn-default btnDisplay "/> </td> -->
+                    <apex:outputText rendered="{!isUKNetPayRuns == true}">
+                    <td>
+                    <div ng-show="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'UK Net' && isLeaverInPayrun[item.Id] ">  
+                    <input type="button" ng-show="item.xcdhcm__P45_status__c == null || item.xcdhcm__P45_status__c == 'Publish'" ng-click="P45Update(item.Id);" value="{!$Label.PaymentsBPublish}" class="btn-default btnDisplay"/>
+                    <!-- <input type="button" ng-show="item.P45_status__c == 'Published'" value="{{item.P45_status__c}}" class="btn-default btnDisplay"/> -->
+                    </div>
+                    <div ng-show="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'UK Net' && isLeaverInPayrun[item.Id]">
+                    <input type="button"  value="{!$Label.PaymentsBPrint}" ng-click="pdfP45Form (item.Id,item.xcdhcm__Effective_from__c,item.xcdhcm__Effective_to__c,item.Name);" class="btn-default btnDisplay" ng-show="item.xcdhcm__P45_status__c != 'Publish' && item.xcdhcm__P45_status__c != null"/>
+                    </div>
+                    </td>
+                    </apex:outputText>
+                    <!--  END ::Jamil 02/05/2016 NPAY-137 Payroll - Payments - bugs and fixes  -->
+                    <td> 
+		    		<!-- START :: 05/07/2017 NPAY-338 Payroll6 issue list row 14 by Farhan-->
+                    <input type="button" id="datepicker{{current + $index}}" value="{!$Label.PaymentsBPay}" ng-show="item.xcdhcm__Employee_payments_date__c == null" ng-click="showCalendar($event,item.Id)" class="datepicker btn-default btnDisplay"/>
+                    <!-- END :: 05/07/2017 NPAY-338 Payroll6 issue list row 14 by Farhan-->
+                    <div ng-show="item.xcdhcm__Employee_payments_date__c != null ">
+                    	{{item.xcdhcm__Employee_payments_date__c | date:'dd/MM/yyyy'}}
+                    </div>
+                    </td>
+                    <!-- START :: 27/07/2016 NPAY-157 Print payslips and P45s for payroll leavers as a single output file added by Jamil 
+                    <div> 
+                    <td> <input type="button"  value="PDF leaver P45s" ng-click="pdfP45Form (item.Id)" class="btn-default btnDisplay"/></td>
+                    </div> 
+                    <div> 
+                    <td> <input type="button"  value="PDF leaver payslip" ng-click="pdfpayslip (item.Id)" class="btn-default btnDisplay"/></td>
+                    </div> 
+                    -->
+                    <td> <apex:commandLink action="{!generatePayRunReports}" value="Employee Payments" styleclass="rowleftalign" target="_blank">
+                <apex:param name="contIdParam" value="Employee_Payments" assignTo="{!reportnames}"/>
+                <apex:param name="payrollPeriod" value="{{item.Id}}" assignTo="{!payrollPeriod}"/>
+		            	</apex:commandLink>
+	            	</td>
+                    <!-- END :: 27/07/2016 NPAY-157 Print payslips and P45s for payroll leavers as a single output file added by Jamil -->
+                 <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                </tr>  
+            </tbody> 
+        </table>
+        
+        
+        <!-- START :: 22/06/2016 NPAY-163 Payroll UI issues commented by Farhan
+        <center>
+            <apex:outputText Value="No records to display" rendered="{! PayrollEmployeePaymentList.size == 0}" style="font-size:14px;"/>
+        </center>
+             END :: 22/06/2016 NPAY-163 Payroll UI issues commented by Farhan-->
+        <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+        <apex:outputText rendered="{!isUKNetPayRuns == true}">
+        <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+        <apex:outputText value="HMRC payments and attachments" style="color:#0070c0;font-weight:bold;margin-right:10px;"/>
+        <!-- START :: 22/06/2016 NPAY-163 Payroll UI issues modified by Farhan-->
+        <br/>
+        <!-- END :: 22/06/2016 NPAY-163 Payroll UI issues modified by Farhan-->
+        <!-- START :: 01/12/2016 NPAY-208 Lavy calculation Added by Tutu -->
+        <table class="table  table-hover" >
+            <thead>
+                <tr class="fontColor">
+                    <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients commented by Farhan
+                    <th> Payments </th>
+                    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients commented by Farhan -->
+                    <th> Month </th>
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Payroll </th>
+                    <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Employer </th>
+                    <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                    <th> Employment allowance </th>
+                    <th> Apprenticeship levy </th>  
+                    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->        
+                    <th> Tax </th>
+                    <th> Employer NI </th> 
+                    <th> Employee NI </th> 
+                    <th> Statutory recovery</th>
+                    <th> Student loans </th>
+                    <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                    <!--<th> Court orders </th> -->
+                    <th> Total </th>
+                   <!-- <th> Date paid </th>
+                     <th> BACS </th> -->
+                    <th> Payments </th>
+                    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                </tr>
+            </thead>                            
+            <tbody>   
+                <!-- START :: 22/06/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                <!-- Please note if any column is added colspan has to be incremented for the alignment-->
+                <apex:outputText rendered="{! PayrollHMRCPaymentList.size == 0}">
+                    <tr>
+                        <td colspan="14"> 
+                        <center>
+                            <apex:outputText Value="No records to display" style="font-size:14px;"/>
+                        </center>
+                        </td>
+                    </tr>
+                </apex:outputText>
+                <!-- END :: 22/06/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                
+                <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+                <tr ng-repeat="item in hmrcPaymentsItems | orderBy:sortingOrder:reverse | filter:'UK Net':strict " class="ng-cloak">
+                   <!-- <td> <a href="/apex/PayRunReports?id={{item.Id}}&sfdc.override=1">Link to Report</a>  </td> -->
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <td>
+                    <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                    <!-- 
+	                  <apex:outputLink value="/{{item.Id}}" target="_blank">
+	                     <apex:outputText value="{{item.Name}}" />
+	                  </apex:outputLink>
+	                  -->
+	                   <a href="/one/one.app#/alohaRedirect/{{item.Id}}" >{{item.Name}}</a>
+	                  <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil --> 
+	                </td>
+                    <td>
+                    <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                    <!-- 
+	                  <apex:outputLink value="/{{item.XCD_PAY_Payroll__r.Id}}" target="_blank">
+	                     <apex:outputText value="{{item.XCD_PAY_Payroll__r.Payroll__c}}" />
+	                  </apex:outputLink> -->
+	                  <a href="/one/one.app#/alohaRedirect/{{item.xcdhcm__XCD_PAY_Payroll__r.Id}}" >{{item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c}}</a>
+	                  <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->  
+	                </td>
+	                <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <td>  {{ item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name }} </td>
+                    <td>  {{ item.xcdhcm__Employment_allowance_this_period__c  | currency: item.CurrencyIsoCode }}</td>
+                    <!-- START :: 05/06/2017 NPAY-317 Apprentice Levy and Multiple Payrolls added by Tutu -->
+                    <td>  {{ item.xcdhcm__Estimated_levy_this_period__c | currency: item.CurrencyIsoCode }}</td>
+                    <!-- END :: 05/06/2017 NPAY-317 Apprentice Levy and Multiple Payrolls added by Tutu -->
+                    <td>  {{ item.xcdhcm__Total_tax__c | currency: item.CurrencyIsoCode }}  </td>
+                    <td>  {{ item.xcdhcm__Total_employer_NI__c | currency: item.CurrencyIsoCode }}    </td>
+                    <td>  {{ item.xcdhcm__Total_employee_NI__c | currency: item.CurrencyIsoCode }}    </td>
+                    <td>  {{ item.xcdhcm__Statutory_recovery__c | currency: item.CurrencyIsoCode }}   </td>
+                    <td>  {{ item.xcdhcm__Total_student_loans__c | currency: item.CurrencyIsoCode }}    </td>
+                    <!--  <td>  {{ item.xcdhcm__Total_attachments__c | currency: item.CurrencyIsoCode }}  </td> -->
+                    <td>  {{ item.xcdhcm__Total_HMRC_payments_with_levy__c | currency: item.CurrencyIsoCode }}    </td>
+                    <!-- <td>  <input type="button"  value="Pay" class="btn-default btnDisplay"/>    </td>
+                    <td>  {{ item.BACS_file_payment_value__c | currency: item.CurrencyIsoCode}}    </td> --> 
+                    <td> <apex:commandLink action="{!generatePayRunReports}" value="HMRC Payments" styleclass="rowleftalign" target="_blank">
+		                <apex:param name="contIdParam" value="HMRC_Payments" assignTo="{!reportnames}"/>
+		                <apex:param name="payrollPeriod" value="{{item.Id}}" assignTo="{!payrollPeriod}"/>
+		                </apex:commandLink>
+		           </td>
+                </tr> 
+            </tbody> 
+        </table>
+        </apex:outputText>
+        <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+        <!-- END :: 01/12/2016 NPAY-208 Lavy calculation Added by Tutu -->
+        <!-- START :: 22/06/2016 NPAY-163 Payroll UI issues commented by Farhan
+        <center>
+            <apex:outputText Value="No records to display" rendered="{! PayrollHMRCPaymentList.size == 0}" style="font-size:14px;"/>
+        </center>
+              END :: 22/06/2016 NPAY-163 Payroll UI issues commented by Farhan-->
+        
+       <!-- START :: 10/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Jamil--> 
+       <apex:outputText value="Other payments" style="color:#0070c0;font-weight:bold;margin-right:10px;"/> 
+        <!-- END :: 10/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Jamil-->  
+        <!-- START :: 22/06/2016 NPAY-163 Payroll UI issues modified by Farhan-->
+        <br/>
+        <!-- END :: 22/06/2016 NPAY-163 Payroll UI issues modified by Farhan-->
+        <!-- START :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+	<apex:outputText rendered="{!PayrollPensionBenefitPaymentList.size == 0}">
+	<!-- START :: 03/03/2017 payroll5 regression optimisation commented by Farhan
+        <apex:outputText value="Pensions" style="color:#0070c0;font-weight:bold;margin-right:10px;"/> 
+        END :: :: 03/03/2017 payroll5 regression optimisation commented by Farhan -->
+        <table class="table  table-hover" >
+            <thead  >
+                <tr class=" fontColor ">
+                   
+                    <th> Period </th>
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Payroll </th>
+                    <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <!-- START :: 07/10/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                    <th> Employer </th>
+                    <!-- END :: 07/10/2016 NPAY-163 Payroll UI issues added by Farhan-->
+                    <!-- START :: 01/5/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by jamil-->
+                    <th> Pay day </th>
+                     <!-- END :: 01/5/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by jamil-->
+                    <th> Employer contributions </th>                                 
+                    <th> Employee contributions </th> 
+                    <th> Total payment </th> 
+                    <th> Payments </th>
+                   <!-- <th> Date paid </th> --> 
+                </tr>
+            </thead>                            
+            <tbody> 
+                <!-- Please note if any column is added colspan has to be incremented for the alignment-->
+            	<tr>
+                        <td colspan="7"> 
+                        <center>
+                            <apex:outputText Value="No records to display" style="font-size:14px;"/>
+                        </center>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>  
+        </apex:outputText>
+        
+        <table class="table  table-hover" ng-show="filtered.length > 0 " >
+        <span style="color:#0070c0;font-weight:bold;" ng-show="filtered.length > 0 ">Pensions </span>
+            <thead  >
+                <tr class=" fontColor ">
+                    <th> Period </th>
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Payroll </th>
+                    <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Employer </th>
+                    <!-- START :: 01/5/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by jamil-->
+                    <th> Pay day </th>
+                     <!-- END :: 01/5/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by jamil-->
+                    <th> Employer contributions </th>                                 
+                    <th> Employee contributions </th> 
+                    <th> Total payment </th> 
+                    <th> Payments </th>
+                </tr>
+            </thead>                            
+            <tbody>   
+                <!-- Please note if any column is added colspan has to be incremented for the alignment-->
+                <tr ng-repeat="item in filtered = (pensionBenefitPaymentsItems | orderBy:sortingOrder:reverse | filter: greaterThan('xcdhcm__Total_employer_contributions__c', 'xcdhcm__Total_employee_contribution__c','Pensions'))" class="ng-cloak">
+                    <!-- START :: 06/03/2017 payroll5 workshop changes - payments column in other section alignment added by Farhan -->
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <td>
+                    <!-- START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->
+	                 <!--  <apex:outputLink value="/{{item.payPeriod.Id}}" target="_blank">
+	                     <apex:outputText value="{{item.payPeriod.Name}}" />
+	                  </apex:outputLink>
+	                  -->
+	                  <a href="/one/one.app#/alohaRedirect/{{item.payPeriod.Id}}" >{{item.payPeriod.Name}}</a>
+	                 <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  --> 
+	                </td>
+                    <td>
+                     <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->
+                    <!-- 
+	                  <apex:outputLink value="/{{item.payPeriod.XCD_PAY_Payroll__r.Id}}" target="_blank">
+	                     <apex:outputText value="{{item.payPeriod.XCD_PAY_Payroll__r.Payroll__c}}" />
+	                  </apex:outputLink> -->
+	                   <a href="/one/one.app#/alohaRedirect/{{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.Id}}" >{{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c}}</a>
+	                 <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->
+	                </td>
+	                <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <td class='employerCol'> {{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name}}</td>
+                    <td class='paydayCol'> {{item.payPeriod.xcdhcm__Pay_day__c | date:'dd/MM/yyyy'}} </td> 
+                    <td class='emplrcontriCol'> {{ item.payPeriod.xcdhcm__Total_employer_contributions__c| currency: item.payPeriod.CurrencyIsoCode }} </td>
+                    <td class='emplcontriCol'> {{ item.payPeriod.xcdhcm__Total_employee_contribution__c| currency: item.payPeriod.CurrencyIsoCode }}    </td>
+                    <td class='totalpayCol'>  {{(item.payPeriod.xcdhcm__Total_employer_contributions__c + item.payPeriod.xcdhcm__Total_employee_contribution__c) | currency: item.payPeriod.CurrencyIsoCode}}</td>
+                    <td class='reportCol'>
+                  	<apex:commandLink action="{!generatePayRunReports}" value="Pension Contributions    " styleclass="rowleftalign" target="_blank">
+	                <apex:param name="contIdParam" value="Pension_Contributions" assignTo="{!reportnames}"/>
+	                <apex:param name="payrollPeriod" value="{{item.payPeriod.Id}}" assignTo="{!payrollPeriod}"/>
+	                </apex:commandLink>
+                	</td>
+                	<!-- END :: 06/03/2017 payroll5 workshop changes - payments column in other section alignment added by Farhan -->
+                </tr>  
+            </tbody> 
+        </table>
+        
+         <table class="table  table-hover" ng-show="filtered1.length > 0 ">
+         <span style="color:#0070c0;font-weight:bold;" ng-show="filtered1.length > 0 ">Benefits </span>
+            <thead  >
+                <tr class=" fontColor ">
+                    <th> Period </th>
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Payroll </th>
+                    <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Employer </th>
+                     <!-- START :: 01/5/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by jamil-->
+                    <th> Pay day </th>
+                     <!-- END :: 01/5/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by jamil-->
+                    <th> Employer contributions </th>                                 
+                    <th> Employee contributions </th> 
+                    <th> Total payment </th> 
+                    <th> Payments </th>
+                </tr>
+            </thead>                            
+            <tbody>   
+                <tr ng-repeat="item in filtered1 = (pensionBenefitPaymentsItems | orderBy:sortingOrder:reverse | filter: greaterThan('empBenefitContibution', 'emprBenefitContibution','Benefits'))" class="ng-cloak">
+                    <!-- START :: 06/03/2017 payroll5 workshop changes - payments column in other section alignment added by Farhan -->
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <td>
+                    <!-- START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                     <!-- 
+	                  <apex:outputLink value="/{{item.payPeriod.Id}}" target="_blank">
+	                     <apex:outputText value="{{item.payPeriod.Name}}" />
+	                  </apex:outputLink> -->
+	                   <a href="/one/one.app#/alohaRedirect/{{item.payPeriod.Id}}" >{{item.payPeriod.Name}}</a>
+                      <!-- END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+	                </td>
+                    <td>
+                     <!-- START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                    <!-- 
+	                  <apex:outputLink value="/{{item.payPeriod.XCD_PAY_Payroll__r.Id}}" target="_blank">
+	                     <apex:outputText value="{{item.payPeriod.XCD_PAY_Payroll__r.Payroll__c}}" />
+	                  </apex:outputLink> -->
+	                  <a href="/one/one.app#/alohaRedirect/{{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.Id}}" >{{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c}}</a>
+                      <!-- END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+	                </td>
+	                <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <td class='employerCol'> {{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name}}</td>                
+                    <td class='paydayCol'> {{item.payPeriod.xcdhcm__Pay_day__c | date:"dd/MM/yyyy"}} </td> 
+                    <td class='emplrcontriCol'> {{ item.empBenefitContibution| currency: item.payPeriod.CurrencyIsoCode }} </td>
+                    <td class='emplcontriCol'> {{ item.emprBenefitContibution| currency: item.payPeriod.CurrencyIsoCode }}    </td>
+                    <td class='totalpayCol'>  {{(item.empBenefitContibution + item.emprBenefitContibution) | currency: item.payPeriod.CurrencyIsoCode}}</td>
+                     <td class='reportCol'> <apex:commandLink action="{!generatePayRunReports}" value="Benefit Payments    " styleclass="rowleftalign" target="_blank">
+                <apex:param name="contIdParam" value="Benefit_Payments" assignTo="{!reportnames}"/>
+                <apex:param name="payrollPeriod" value="{{item.payPeriod.Id}}" assignTo="{!payrollPeriod}"/>
+                </apex:commandLink>
+                </td>
+                	<!-- END :: 06/03/2017 payroll5 workshop changes - payments column in other section alignment added by Farhan -->
+                </tr>  
+            </tbody> 
+        </table>
+           <apex:outputText rendered="{!isUKNetPayRuns == true}"> 
+         <table class="table  table-hover" ng-show="filtered2.length > 0 ">
+         	<span style="color:#0070c0;font-weight:bold;" ng-show="filtered2.length > 0 ">Court Orders </span>
+                    <thead >
+                	<tr class=" fontColor ">
+                    <th> Period </th>
+                    <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Payroll </th>
+                    <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                    <th> Employer </th>
+                     <!-- START :: 01/5/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by jamil-->
+                    <th> Pay day </th>
+                     <!-- END :: 01/5/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by jamil-->
+                    <th> Employer contributions </th>                                 
+                    <th> Employee contributions </th> 
+                    <th> Total payment </th> 
+                    <th> Payments </th>
+                </tr>
+            </thead>               
+            <tbody>   
+                <tr ng-repeat="item in filtered2 = (pensionBenefitPaymentsItems | orderBy:sortingOrder:reverse | filter:'UK Net':strict | filter: greaterThan(0, 'xcdhcm__Total_attachments__c','Court Orders'))" class="ng-cloak">
+                        <!-- START :: 06/03/2017 payroll5 workshop changes - payments column in other section alignment added by Farhan -->
+                        <!-- START :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                        <td>
+                         <!-- START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                        <!-- 
+		                  <apex:outputLink value="/{{item.payPeriod.Id}}" target="_blank">
+		                     <apex:outputText value="{{item.payPeriod.Name}}" />
+		                  </apex:outputLink> -->
+		                   <a href="/one/one.app#/alohaRedirect/{{item.payPeriod.Id}}" >{{item.payPeriod.Name}}</a>
+                          <!-- END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+		                </td>
+                        <td>
+                        <!-- START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                        <!-- 
+		                  <apex:outputLink value="/{{item.payPeriod.XCD_PAY_Payroll__r.Id}}" target="_blank">
+		                     <apex:outputText value="{{item.payPeriod.XCD_PAY_Payroll__r.Payroll__c}}" />
+		                  </apex:outputLink> -->
+		                   <a href="/one/one.app#/alohaRedirect/{{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.Id}}" >{{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c}}</a>
+                          <!-- END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+		                </td>
+		                <!-- END :: 16/11/2017 NPAY-388 Payments screen presentation added by Tutu -->
+                        <td class='employerCol'> {{item.payPeriod.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name}}</td>                
+                        <td class='paydayCol'> {{item.payPeriod.xcdhcm__Pay_day__c | date:"dd/MM/yyyy"}} </td> 
+                        <td class='emplrcontriCol'> {{ 0.00 | currency: item.payPeriod.CurrencyIsoCode }} </td>
+                        <td class='emplcontriCol'> {{ item.payPeriod.xcdhcm__Total_attachments__c| currency: item.payPeriod.CurrencyIsoCode }}    </td>
+                        <td class='totalpayCol'>  {{(0+ item.payPeriod.xcdhcm__Total_attachments__c) | currency: item.payPeriod.CurrencyIsoCode}}</td>
+               			<td class='reportCol'>
+                  
+                 <apex:commandLink action="{!generatePayRunReports}" value="Court Orders" styleclass="rowleftalign" target="_blank">
+                 <!-- START :: 13/06/2018 NPAY-499 Payroll Reporting modified by Wasim -->
+                <apex:param name="contIdParam" value="Court_Orders_report" assignTo="{!reportnames}"/>
+                <!-- END :: 13/06/2018 NPAY-499 Payroll Reporting modified by Wasim -->
+                <apex:param name="payrollPeriod" value="{{item.payPeriod.Id}}" assignTo="{!payrollPeriod}"/>
+                </apex:commandLink>
+               </td>
+               			<!-- END :: 06/03/2017 payroll5 workshop changes - payments column in other section alignment added by Farhan -->
+                </tr>  
+            </tbody>
+        </table>
+         </apex:outputText>
+        </div>
+        </body>
+        </html>
+      </apex:form>
+    <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+    <!-- END :: 11/01/2017 NPAY-204 Presentation for Payments and for Gross Payroll Clients modified by Farhan -->
+</apex:page>

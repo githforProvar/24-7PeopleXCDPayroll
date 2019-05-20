@@ -1,0 +1,74 @@
+<!-- START :: 14/08/2018 NPPD-1710 modified by Ranjeet -->
+<apex:page standardcontroller="xcdhcm__Employee_Detail__c" showheader="true" setup="false" cache="false" standardStylesheets="true">
+<!-- END :: 14/08/2018 NPPD-1710 modified by Ranjeet -->
+<!-- START :: NPPD-1673 11/06/2018 Lightning Performance Improvement Modified by Ranjeet -->
+<html>
+
+    <head>
+<!--        <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet"/> -->
+<!--        <apex:includeLightning /> -->
+        <apex:slds />
+    </head>
+    
+    <body>
+        <apex:outputPanel id="contents" style="width:100%;text-align:center;">
+            <div id="empID">
+                <div class="slds-spinner_container slds-show slds-is-fixed" style="background-color:transparent;">
+                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                 </div>
+            </div>
+        </apex:outputPanel>
+    </body>
+    
+    <script>
+		//START :: 14/08/2018 NPPD-1710 modified by Ranjeet
+        var url = window.location.href;
+        var baseURL = new URL(url);
+        var recordId = baseURL.searchParams.get("id");
+        //START :: 09/10/2018 NPPD-1761 Save button redirects to Save and review compensation page issue fixes added by Ranjeet
+        if(recordId == undefined || recordId == null || recordId == 'null')
+        {
+        	recordId = baseURL.searchParams.get("Id");
+        }
+        //END :: 09/10/2018 NPPD-1761 Save button redirects to Save and review compensation page issue fixes added by Ranjeet
+        var permissionLevel = baseURL.searchParams.get("permissionLevel");
+        var parentPage = baseURL.searchParams.get("parentPage");
+        var selectedTab = baseURL.searchParams.get("tab");
+		var queryString = '';
+		if(recordId != undefined)
+		{
+			queryString += '?recordId=' + recordId;
+			
+			if(permissionLevel != undefined && permissionLevel != null && permissionLevel != 'null')
+            {
+                queryString += '&permissionLevel=' + permissionLevel;
+            }
+            
+			if (parentPage != undefined && parentPage.toLowerCase().indexOf("xcdhcm__") == -1)
+			{
+				parentPage = "xcdhcm__"+parentPage;
+			}
+			
+			if(parentPage != undefined && parentPage != null && parentPage != 'null')
+			{
+				queryString += '&parentPage=' + parentPage;
+			}
+
+			if(selectedTab != undefined && selectedTab != null && selectedTab != 'null')
+			{
+				queryString += '&selectedTab=' + selectedTab.toLowerCase();
+			}
+			
+			//queryString = '/lightning/n/EmployeeView' + queryString;
+			//sforce.one.navigateToURL('/lightning/n/EmployeeView' + queryString);
+			//window.open('/lightning/n/EmployeeView' + queryString,'_parent');
+			window.location.href = '/lightning/cmp/xcdhcm__EmployeeView' + queryString;
+		}
+		//END :: 14/08/2018 NPPD-1710 modified by Ranjeet
+	</script>
+</html>
+<!-- END ::NPPD-1673 11/06/2018 Lightning Performance Improvement Modified by Ranjeet -->
+</apex:page>

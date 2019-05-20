@@ -1,0 +1,170 @@
+<!-- START :: 19/05/2015 NPPD-818 Claim detail page should open under My Expense suggested by James  modified by Ranjeet -->
+<apex:page standardController="ProcessInstanceWorkitem" extensions="xcdhcm.ClaimProcessInstanceController" sidebar="false" wizard="false">
+<!-- END :: 19/05/2015 NPPD-818 Claim detail page should open under My Expense suggested by James  modified by Ranjeet -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/EmpDetPageCSS.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Sublineremovecss.css')}" />
+    
+    <style>
+        [class$='bPageBlock brandSecondaryBrd bDetailBlock secondaryPalette']{display:none;}
+        [class$='listHoverLinks']{display:none !important;}
+        [class$='tertiaryPalette extraRow dataRow even first']{display:none;}
+        [class$='fewerMore']{display:none !important;}
+    </style>
+    
+    <style type="text/css">
+        .popupBg {
+            background-color: #FFFFFF;
+            opacity: 0.0;
+            filter: alpha(opacity =   60);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+        .customPopup {
+            line-height: 25px;
+            position: absolute;
+            left: 50%;
+            padding: 10px;
+            z-index: 9999;
+            text-align: center;
+            top: 150px;
+            width: 500px;
+            margin-left: -250px;
+            text-decoration: none;
+            font-weight: bold;
+            background: #ffffff !important;
+            border: 1px solid #ccc !important;
+            -moz-box-shadow: 4px 5px 10px #99ccff;
+            -webkit-box-shadow: 4px 5px 10px #99ccff;
+            box-shadow: 4px 5px 10px #99ccff;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            color: #336699;
+        }
+        .butt {
+            border: 1px solid #d9d9d9 !important;
+            color: #999999 !important;
+            background-color: #fff !important;
+            background-image: none !important;
+            -moz-box-shadow: 2px 1px 8px #a6d6ff;
+            -webkit-box-shadow: 2px 1px 8px #a6d6ff;
+            box-shadow: 2px 1px 8px #a6d6ff;
+        }
+        .links {
+            display: none;
+        }
+        .imgg .popp {
+            background: none repeat scroll 0 0 rgba(000,000,000,.60);
+            font-size: 1em;
+            height: 1.6em;
+            line-height: 1.6em;
+            margin-top: 128px;
+            width: 150px;
+            position: absolute;
+            text-align: center;
+            z-index: 3;
+            display:none;
+        }
+        /*
+        //START :: 04/03/2015 NPPD-633 Commented by Ranjeet
+        th:nth-child(7),th:nth-child(8),th:nth-child(9),th:nth-child(10),th:nth-child(11),th:nth-child(12){
+            text-align:right;
+        }
+        */
+        .imgg:hover .popp {
+            display:block !important;
+        }
+        .apexp .totalRow {
+            background-color:#FFFFFF!important;
+        }
+        body .bEditBlock .pbBottomButtons, body .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons {
+            border-top: none !important;
+        }
+        body .bEditBlock .pbHeader, body .bLayoutBlock .pbHeader, body .apexp .bPageBlock.apexDefaultPageBlock .pbHeader {
+            border-bottom: 2px solid #63a4c5 !important;
+        }
+        .pbBody{
+            border-bottom: 2px solid #63a4c5 !important;
+        }
+        .bEditBlock input, .bEditBlock select, .bEditBlock img, .quickCreateModule input, .quickCreateModule select, .quickCreateModule img {
+            margin-left:1em!important;
+        }
+        body .pbBody table.list tr.headerRow th {
+            width:5%!important;
+        }
+        #fid{
+            color: #999 !important;
+            font-size: 11pt !important;font-weight: bold;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        body .pbBody table.list tr.headerRow th {
+            font-size:11pt!important;
+        }
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader {
+            font-size:14pt!important;
+        }
+        .ct{ 
+        text-align:center;
+        }
+        .headerRow .headerStyle{
+            background-color:#638658;
+            color:#FFFFFF;
+        }
+        
+        .bRelatedList .relatedProcessHistory .extraStatusDiv_P {
+            background-color: transparent;
+        }
+    </style>
+
+
+   <apex:form >
+        <apex:PageMessages id="errId" />
+        <!--<apex:sectionHeader title="Approval Request" subtitle="{!'Claim: '+objClaim.Name}"/>-->
+        <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+        
+        <apex:pageBlock title="{!$Label.xcdhcm__phprocessinstanceclaimwizardstagemanager}">
+        <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+           <apex:pageBlockButtons location="bottom"> 
+               <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+              
+               <apex:commandButton value="{!$Label.xcdhcm__processinstanceclaimwizardstagemanagerbapprove}" action="{!approve}"/>
+               <apex:commandButton value="{!$Label.xcdhcm__processinstanceclaimwizardstagemanagerbreject}" action="{!reject}"/>
+               <apex:commandButton value="{!$Label.xcdhcm__processinstanceclaimwizardstagemanagerbcancel}" action="{!cancel}"/>
+               <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+           </apex:pageBlockButtons>  
+           <apex:pageBlockSection columns="1">
+               <apex:pageBlockSectionItem >
+                   Claim reference <apex:outputField value="{!objClaim.Name}"/>
+               </apex:pageBlockSectionItem>
+               <apex:pageBlockSectionItem >
+                   Date submitted <apex:outputField value="{!objClaim.xcdhcm__Date_submitted__c}"/>
+               </apex:pageBlockSectionItem>
+               <apex:pageBlockSectionItem >
+                   Status <apex:outputField value="{!objClaim.xcdhcm__Status__c}"/>
+               </apex:pageBlockSectionItem>
+               <apex:pageBlockSectionItem >
+                  Comments <apex:inputTextArea value="{!comments}" rows="5" cols="100" style="width:75% !important; resize: none;"/>
+               </apex:pageBlockSectionItem>
+           </apex:pageBlockSection>
+       </apex:pageBlock>
+        <apex:detail relatedList="true" title="true"/>
+        
+        <script>
+          var table = document.getElementsByTagName("table")[1];
+          var rows = table.rows;
+          var firstRow = rows[rows.length-1];
+          
+          var cells = firstRow.getElementsByTagName("td");
+          var cell = cells[cells.length -1];
+
+          var divElement = document.createElement("div");
+          divElement.setAttribute("class", "extraStatusDiv_P");
+          divElement.innerHTML = "<img src='/img/icon/pending12.gif' alt='' class='extraStatus' title=''/><span class='extraStatus'>Pending</span>";
+          cell.appendChild(divElement);
+              
+        </script>
+    </apex:form>
+</apex:page>

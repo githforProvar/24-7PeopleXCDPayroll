@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Records public and company holidays.  Used to set up reference holiday year and as a basis for calculating employee leave</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <fieldSets>
+        <fullName>xcdhcm__Com_Hol_Year_Set</fullName>
+        <availableFields>
+            <field>xcdhcm__Carry_over_approved__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Check_for_Unique__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Company_Name_Leave_Year__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Country__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CurrencyIsoCode</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Eligible_for_leave__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employees_assigned__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employees_current_roles__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Id</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>IsDeleted</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastActivityDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Leave_year_starting_month__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Mass_leave_year_created__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SystemModstamp</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <description>Used in Visualforce page to create new company holiday year</description>
+        <displayedFields>
+            <field>Name</field>
+            <isFieldManaged>true</isFieldManaged>
+            <isRequired>true</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Companies_Name__c</field>
+            <isFieldManaged>true</isFieldManaged>
+            <isRequired>true</isRequired>
+        </displayedFields>
+        <label>Com Hol Year Set</label>
+    </fieldSets>
+    <fields>
+        <fullName>xcdhcm__Carry_over_approved__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>count of leave year records created for that Company Leave Year with status = Approved</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of current Employees whose leave carry over from the previous year is approved</inlineHelpText>
+        <label>Carry over approved</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Check_for_Unique__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check for unique</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Companies_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Company</label>
+        <referenceTo>xcdhcm__Company__c</referenceTo>
+        <relationshipLabel>Company Leave Years</relationshipLabel>
+        <relationshipName>Company_Holiday_Year</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Company_Name_Leave_Year__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Companies_Name__r.Name  &amp;  Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Company and leave year</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Country__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT(xcdhcm__Companies_Name__r.xcdhcm__Country__c)</formula>
+        <label>Country</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Eligible_for_leave__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Excludes Employees who are excluded from Leave</inlineHelpText>
+        <label>Eligible for leave</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employees_assigned__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>count of leave year records created for that Company Leave Year</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of current Employees with assigned current leave years in this Company.  If an Employee has two current Job Roles they may be assigned 2 leave years</inlineHelpText>
+        <label>Employees assigned</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employees_current_roles__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of Employees with current Job Roles in this Company. If an Employee has two current Job Roles this will be recorded as 2 entries</inlineHelpText>
+        <label>Employees current roles</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leave_year_starting_month__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT( xcdhcm__Companies_Name__r.xcdhcm__Leave_year_starting_month__c )</formula>
+        <label>Leave year start month</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Mass_leave_year_created__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>This field is used in the backend to store if the leave year has been created for all Employees for a particular year. This data is used in the starter process to determine if the leave year should be created for a new starter or not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>When checked, the Leave year is available to be assigned through the joiner process</inlineHelpText>
+        <label>Available for joiners</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>Company Leave Year</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>xcdhcm__Mass_leave_year_created__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+        <language>en_GB</language>
+    </listViews>
+    <nameField>
+        <label>Company leave year</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Company Leave Years</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>xcdhcm__Company_Holiday_Year_Name</fullName>
+        <active>true</active>
+        <description>Do not deactivate.  Company leave year must be entered as a year number</description>
+        <errorConditionFormula>IF(not(ISBLANK(Name)),NOT(REGEX(Name,&quot;[0-9]{4}&quot;)),FALSE)</errorConditionFormula>
+        <errorDisplayField>Name</errorDisplayField>
+        <errorMessage>Please enter the year in which the leave year starts.  This should be a 4 digit number starting 20--</errorMessage>
+    </validationRules>
+    <visibility>Public</visibility>
+    <webLinks>
+        <fullName>xcdhcm__Approve_Leave_Year</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Approve leave carry over</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/xcdhcm__LeaveYearApprovalPage?Id={!xcdhcm__Company_Holiday_Year__c.Id}&amp;ComId={!xcdhcm__Company_Holiday_Year__c.xcdhcm__Companies_NameId__c}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__Back</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>xBack</masterLabel>
+        <openType>noSidebar</openType>
+        <protected>false</protected>
+        <url>/{!xcdhcm__Company__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__Create_Holiday_Year_For_All_Employee</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Assign leave year</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/xcdhcm__CompanyLeaveYearCreationPage?Id={!xcdhcm__Company_Holiday_Year__c.Id}&amp;ComId={!xcdhcm__Company_Holiday_Year__c.xcdhcm__Companies_NameId__c}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__Custom_Delete</fullName>
+        <availability>online</availability>
+        <description>Custom delete button</description>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Delete</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>if(confirm(&apos;Please click OK to confirm&apos;)){ 
+
+{!REQUIRESCRIPT(&quot;/soap/ajax/15.0/connection.js&quot;)} 
+
+updateOpp = sforce.connection.deleteIds([&apos;{!xcdhcm__Company_Holiday_Year__c.Id}&apos;]); 
+
+window.location.href =&quot;{!$Site.BaseUrl}/apex/xcdhcm__Company?id={! xcdhcm__Company_Holiday_Year__c.xcdhcm__Companies_NameId__c}&amp;tab=CompanyDetails&quot;; 
+
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__New_leave_year</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>New leave year</masterLabel>
+        <openType>noSidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>/apex/xcdhcm__New_Com_Hol_Year?id={!xcdhcm__Company__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__Set_Up_Calendar</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Add holidays to Users&apos; calendars</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/xcdhcm__SetUpEmployeeCalendar?Id={!xcdhcm__Company_Holiday_Year__c.xcdhcm__Companies_NameId__c}&amp;ComId={!xcdhcm__Company_Holiday_Year__c.Id}</url>
+    </webLinks>
+</CustomObject>

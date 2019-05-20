@@ -1,0 +1,78 @@
+<!--START :: 03/05/2017 NPPD-1344 Company leave year - improve setup and carry over processes added by Kumbresh-->
+<apex:page standardController="xcdhcm__Company_Holiday_Year__c" extensions="xcdhcm.LeaveYearApprovalController" sidebar="false">
+
+<!-- <apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteCompanyDetails.css')}" />    
+    <style>
+     .slds-scope .slds-section-title--divider {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+    } 
+    body .bPageTitle .ptBody .links {
+    display: none;
+    }
+    </style>
+    <style type="text/css">
+        .bPageTitle .ptBody .content 
+        {
+            color: #336699 !important;
+            
+        }
+        .bPageTitle .ptBody .content .pageType
+        {
+            color: #336699 !important;
+        }
+        .bPageTitle .ptBody .content .pageDescription
+        {
+            font-weight: bold!important;
+        }
+        body .bPageBlock .pbBody .pbSubheader .hideListButton 
+        {
+            //display: none;
+        }
+        body .bRelatedList .bPageBlock .pbHeader 
+        {
+            border-top: 2px solid #63a4c5!important;
+        }
+        .pbBottomButtons #bottomButtonRow
+        {
+            display: none;
+        }
+        .listHoverLinks
+        {
+            display: none;
+        }
+        .fewerMore
+        {
+            display: none;
+        }
+        .helpPos{
+        position: relative;
+        left: 96%;
+        }
+    </style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head> 
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            
+    <apex:form id="theForm">
+        <span class="helpPos">
+        <apex:commandLink action="{!helpLinkLeaveYearApprovalsAdmin}" value="Help" id="theCommandLink1" rendered="{!HelpLeaveYearApprovalsAdmin}" />
+        </span>
+        <br/>
+        <apex:pageBlock >
+            <apex:PageMessages id="errorId" escape="false"/>
+            <apex:PageMessage title="{!$Label.xcdhcm__companyleaveyearpageimhavingcreatedclyandpublicholidays}" severity="info" escape="false" strength="3" />
+            <apex:detail relatedList="true" title="true" />
+        </apex:pageBlock>
+    </apex:form>
+    </body>
+    </html>
+</apex:page>
+<!--END :: 03/05/2017 NPPD-1344 Company leave year - improve setup and carry over processes added by Kumbresh-->

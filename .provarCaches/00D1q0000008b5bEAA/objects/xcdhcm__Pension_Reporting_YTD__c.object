@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Pension Reporting YTD records - one per Employee-Post reference per tax year.</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <fields>
+        <fullName>xcdhcm__Contract_leaving_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the employee left this Post and did not move on to another Post with the Employer.</inlineHelpText>
+        <label>Contract leaving date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_EE_AVC_CEAVC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Cum EE AVC (CEAVC)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__AVC_EAVC__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_EE_add_pension_cont_CEAPC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Cum EE add pension cont (CEAPC)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__EE_additional_cont_EAPC__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_EE_cont_50_50_CEC2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Cum EE cont 50/50 (CEC2)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__EE_contribution_50_50_scheme__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_EE_cont_main_CEC1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Cum EE cont main (CEC1)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__EE_contribution_main_scheme__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_EE_other_add_cont__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Cum EE other add cont</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__Other_additional_EE_cont__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_ER_add_pension_cont_CRAPC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional employer pension contributions (APCs) - YTD.</inlineHelpText>
+        <label>Cum ER add pension cont (CRAPC)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__ER_additional_cont_RAPC__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_ER_cont_CRC__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Employer contributions (these are not split over main and 50/50 sections).</description>
+        <externalId>false</externalId>
+        <label>Cum ER cont (CRC)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__ER_contribution_main_scheme__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_ER_other_add_cont__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Cum ER other add cont</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__Other_additional_ER_cont__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_add_regular_cont__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional regular contributions no longer open to new entrants.</inlineHelpText>
+        <label>Cum add regular cont</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__Additional_regular_cont_ARC__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_added_years__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Added years contributions no longer open to new entrants.</inlineHelpText>
+        <label>Cum added years</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__Added_years__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_pens_pay_50_50_CPP2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Cum pens pay 50/50 (CPP2)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__Post_pensionable_earnings_50_50_scheme__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_pens_pay_main_CPP1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Cum pens pay main (CPP1)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__Post_pensionable_earnings_main_scheme__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Cum_shared_cost_AVC_CRAVC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Employer contribution to AVC - YTD.</inlineHelpText>
+        <label>Cum shared cost AVC (CRAVC)</label>
+        <summarizedField>xcdhcm__Pension_Reporting__c.xcdhcm__Shared_cost_AVC_RAVC__c</summarizedField>
+        <summaryForeignKey>xcdhcm__Pension_Reporting__c.xcdhcm__Pension_Reporting_YTD__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Date_joined_pension_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Records date when Employee first joined main pension scheme. Where no data are available may use Start date.</inlineHelpText>
+        <label>Date joined pension scheme</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__DoB__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Personal__r.xcdhcm__DOB__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>DoB</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employer__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employer</label>
+        <referenceTo>xcdhcm__Employer__c</referenceTo>
+        <relationshipLabel>Pension Reporting YTDs</relationshipLabel>
+        <relationshipName>Pension_Reporting_YTDs</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employment_leaving_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the employee left this employment.</inlineHelpText>
+        <label>Employment leaving date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Full_time_equivalent_final_pay__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Full time equivalent pensionable pay in respect of the employment for the scheme year (pre 2014 CARE scheme definition).</inlineHelpText>
+        <label>Full time equivalent final pay</label>
+        <precision>17</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Gender__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>LEFT(TEXT(xcdhcm__Personal__r.xcdhcm__Gender__c), 1)</formula>
+        <label>Gender</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Mobile_phone__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Personal__r.xcdhcm__Personal_mobile__c</formula>
+        <label>Mobile phone</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Pay_Summary_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Pay Summary YTD</label>
+        <referenceTo>xcdhcm__Pay_Summary_YTD__c</referenceTo>
+        <relationshipLabel>Pension Reporting YTDs</relationshipLabel>
+        <relationshipName>Pension_Reporting_YTDs</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>true</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Payroll_no__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Pay_Summary_YTD__r.xcdhcm__Employee__r.xcdhcm__Payroll_no__c</formula>
+        <label>Payroll no</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Pension_Reporting__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Looks up latest Pension reporting record in the current tax year.</description>
+        <externalId>false</externalId>
+        <label>Pension Reporting</label>
+        <referenceTo>xcdhcm__Pension_Reporting__c</referenceTo>
+        <relationshipLabel>Pension Reporting YTDs</relationshipLabel>
+        <relationshipName>Pension_Reporting_YTDs</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Pension_reference__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Pension reference</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Pension_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Pension scheme</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Personal__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Personal</label>
+        <referenceTo>xcdhcm__Personal__c</referenceTo>
+        <relationshipLabel>Pension Reporting YTDs</relationshipLabel>
+        <relationshipName>Pension_Reporting_YTDs</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reason_for_leaving__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reason for leaving</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Promotion</fullName>
+                    <default>false</default>
+                    <label>Promotion</label>
+                </value>
+                <value>
+                    <fullName>Pay review</fullName>
+                    <default>false</default>
+                    <label>Pay review</label>
+                </value>
+                <value>
+                    <fullName>New role</fullName>
+                    <default>false</default>
+                    <label>New role</label>
+                </value>
+                <value>
+                    <fullName>Change of working hours</fullName>
+                    <default>false</default>
+                    <label>Change of working hours</label>
+                </value>
+                <value>
+                    <fullName>New joiner</fullName>
+                    <default>false</default>
+                    <label>New joiner</label>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                    <label>Other</label>
+                </value>
+                <value>
+                    <fullName>Corrected data error</fullName>
+                    <default>false</default>
+                    <label>Corrected data error</label>
+                </value>
+                <value>
+                    <fullName>LGPS</fullName>
+                    <default>false</default>
+                    <label>LGPS</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Staging_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Staging date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Personal__r.xcdhcm__Work_email__c</formula>
+        <label>Work email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_phone__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Personal__r.xcdhcm__Work_phone__c</formula>
+        <label>Work phone</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Pension Reporting YTD</label>
+    <nameField>
+        <displayFormat>PRYTD-{0000}</displayFormat>
+        <label>Pension Reporting YTD Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Pension Reporting YTDs</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

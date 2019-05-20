@@ -1,0 +1,53 @@
+<apex:page controller="xcdhcm.WorkCycleStackedBarChartController"  sidebar="false" showHeader="false">
+	<html>
+		<head>
+			<apex:includeLightning />
+			<apex:slds />
+			
+			<style>
+				tspan
+				{
+					font-family: 'Salesforce Sans',Arial,sans-serif;
+					color: #4E7EB2;
+				}
+				
+				.no-data-found
+				{
+					font-family: 'Salesforce Sans',Arial,sans-serif; 
+					color: #4E7EB2; font-size:18px; 
+					text-align: center; 
+					display:inline-block; 
+					position:fixed; 
+					top: 50%; 
+					left: 50%; 
+					transform: translate(-50%, -50%);				
+				}
+			</style>
+		</head>
+		
+		<body>
+			<apex:outputPanel rendered="{!data.size > 0}">
+				<div class="slds">
+					<div class="vf-surface vf-surface-default" style="width:{!if((150 + data.size*28) > 350, (150 + data.size*28), 350)}px; padding-left:150px; font-size:12pt; text-align: center;"> Work pattern </div>
+					<apex:chart data="{!data}" height="200" width="{!if((150 + data.size*28) > 220, (150 + data.size*28), 220)}">
+					    <apex:legend position="left"/> 
+					    <apex:axis type="Numeric" position="left" title="Hours" fields="{!fields}"  dashSize="6"  grid="true"  minimum="0" maximum="10"  steps="9">
+					        <apex:chartLabel />
+					    </apex:axis>
+					    <apex:axis type="Category" position="bottom" fields="name" title="Days">
+					        <apex:chartLabel rotate="0"/>
+					    </apex:axis>
+					    <apex:barSeries orientation="vertical" axis="left" stacked="true" xField="name" yField="{!fields}" title="{!titles}" colorSet="#4E7EB2, #AF4D50"/>
+					</apex:chart>
+				</div>
+			</apex:outputPanel>
+			<!-- START:: Issue fixes for T486504 by Ranjeet -->
+			<apex:outputPanel rendered="{!errTrue}">
+				<div class="slds no-data-found">
+					{!errMsg}
+				</div>
+			</apex:outputPanel>
+			<!-- END:: Issue fixes for T486504 by Ranjeet -->
+		</body>
+	</html>
+</apex:page>

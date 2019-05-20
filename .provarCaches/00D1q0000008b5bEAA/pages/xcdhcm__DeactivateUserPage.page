@@ -1,0 +1,296 @@
+<apex:page Standardcontroller="xcdhcm__Employee_Detail__c" extensions="xcdhcm.DeactivateUserController" sidebar="false"  id="thepage">
+	  <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />  
+	  <style>
+        .bPageBlock .detailList .dataCol 
+        {
+        width: 50%; 
+        }
+        .Assignment_dateColumnWidth input[type='text'] 
+        {
+        width: 50%;
+        }  
+		.managerColumnWidth input[type='text']
+        {
+        /*width: 50%;*/
+        }            
+        textarea
+        {
+        width:100%;
+        } 
+        .managerColumnWidth select
+        {
+        /*width:45%!important;*/
+        }
+        #datePicker 
+        {
+        width: 22%;
+        }
+        .apexp .detailList .list td, .apexp .detailList .list th, .apexp .editPage .bPageBlock .detailList .list tr td, .apexp .editPage .bPageBlock .detailList .list tr th 
+        {
+        border-bottom: white; 
+        }
+        abbr[title], acronym[title] 
+        {
+        text-decoration: none!important;
+        }
+        
+        .LiteHelpText:hover span 
+        {
+        left:5% !important;
+        }
+        .slds-scope img 
+        {
+        max-width: none;
+        } 
+        .infoM2 .msgIcon, .infoLarge 
+        {
+        display:none;
+        }
+        .infoM6, .infoM4, .infoM3, .infoM2, .infoS1 
+        {
+        width: 100%;
+        }
+        .slds-scope .slds-truncate 
+        {
+        word-break: normal;
+        white-space: normal!important;
+        }
+        .columnWidth
+        {
+        width: 10%;
+        }
+        .managerColumnWidth
+        {
+        width: 20%;	
+        }
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+	    display: none;
+	    }
+	    #datePicker 
+	    {
+    	margin-left: 107px !important;
+    	}
+    	<!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+        .popupBg
+        {
+        opacity: 4.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 60%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 150px;
+        width: 400px;
+        margin-left: -450px;
+        text-decoration: none;
+        font-weight: bold;
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;         
+        -moz-box-shadow: 4px 5px 10px #99ccff;
+        -webkit-box-shadow: 4px 5px 10px #99ccff;
+        box-shadow: 4px 5px 10px #99ccff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+        <!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu --> 
+    </style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+		
+      <apex:form id="frm" >
+              <!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+               <apex:outputPanel id="popup3">
+                   <apex:outputpanel styleClass="popupBg" rendered="{!displayIrrMessage}" style="opacity: 0.2;background-color: black;"/>
+                   <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayIrrMessage}">
+                       <center>  
+                           <apex:outputtext value="{!irrValidationMsg}" rendered="{!displayIrrMessage}"/>
+                           <br/><br/>
+                           <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!Saveempfn}" rerender="frm,id_Processleaver" styleclass="btn slds-button slds-button--brand" status="saveStatus"/>
+                           <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelPopup}" onClick="disableButton(this);" styleclass="slds-button slds-button--neutral"/>
+                       </center>
+                   </apex:outputPanel>
+               </apex:outputPanel>
+               <!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+              <!-- First Page to be displayed on deactivation --> 
+      		   	<apex:pageblock id="pgB" rendered="{!AND(us.xcdhcm__User__c=='Active',$User.Id != us.id,displaylastPayRun==false)}">
+      		   	 <apex:PageMessages id="err" />
+      		   	 <apex:pageBlockSection columns="1" id="pSec1">
+      		   		<apex:outputPanel id="outP" rendered="{!OR(displaylastPayRunVal1,displaylastPayRunVal2)}">
+	      		   		<apex:pageMessage id="pMsg1" summary="{!validationMsg}" severity="info" strength="1" rendered="{!displaylastPayRunVal1}"/>
+	      		   		<apex:pageMessage id="pMsg2" summary="{!validationMsg2}" severity="info" strength="1" rendered="{!displaylastPayRunVal2}"/>
+      		   		</apex:outputPanel>
+      		   	</apex:pageBlockSection>
+      		   		<apex:pageMessage summary="Please enter the leaver details of this employee to initiate the leaver process" severity="info" strength="3"/>
+
+                       <apex:pageBlockButtons Location="bottom" style="text-align: right!important;"> 
+	                     <apex:actionStatus id="waitStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputpanel >
+                                    <apex:commandButton value="{!$Label.xcdhcm__deactivateuserpagebcancel}" action="{!cancel}" rerender="frm,id_Processleaver" styleclass="slds-button slds-button--neutral" status="waitStatus"/>
+						 			<!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+						 			<apex:commandButton value="{!$Label.xcdhcm__deactivateuserpagebprocessleaver}" action="{!createIrregularOrCasualLeaverInfo}" rerender="popup3,frm,id_Processleaver" styleclass="slds-button slds-button--brand" status="waitStatus" id="id_Processleaver"/>  
+                                	<!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                                </apex:outputpanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+		               </apex:pageBlockButtons> 
+                    
+                      <apex:pageBlockSection >
+                        <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Detail__c.Fieldsets.xcdhcm__Leaver_Details}" var="p">
+                        	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+		               		<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Detail__c.fields[p].Accessible}">
+		               		<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+								<div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+									<div class="slds-form-element slds-p-around--small">                                                                                                  
+										<label class="slds-form-element__label" style="{!IF(p.label=='Blankspace','display:none;' ,'')}" >
+											<apex:outputPanel rendered="{!p.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+											{!p.label}
+											<span class="LiteHelpText">
+												<apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.fields[p].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+												<span>{!$ObjectType.xcdhcm__Employee_Detail__c.fields[p].inlineHelpText}</span>
+											</span>
+										</label>
+										<div class="slds-form-element__control">
+											<apex:inputField value="{!employee[p]}"   required="{!p.required}">
+												<apex:actionSupport event="onchange" action="{!lastPayRun}" reRender="pSec1" rendered="{!OR(employee.xcdhcm__Payroll_end_date__c!=null,employee.xcdhcm__Leaving_Date__c!=null)}"/>
+											</apex:inputField> 
+										</div>                                                                                        
+									</div>
+								</div>  
+							</apex:outputpanel>                                                                                                                                               
+		                </apex:repeat>
+		                </apex:pageBlockSection> 
+                     </apex:pageblock> 
+              
+              <!-- Check for reporting users and reassign -->
+              <!-- START :: 20/06/2018 NPPD-1622 Leaver process error message clears field value Added SetNullonerror by Namrata -->
+		    	<apex:pageBlock id="pgB2" rendered="{!AND(us.xcdhcm__User__c=='Active',$User.Id != us.id,employee.xcdhcm__Reason_Leaving__c != null,NOT(setNullonError),showReportees)}">	    
+              <!-- END :: 20/06/2018 NPPD-1622 Leaver process error message clears field value Added SetNullonerror by Namrata -->      
+                    <apex:pageMessages />
+						
+						<apex:outputpanel rendered="{!jobr.size!=0}" >
+							<apex:pageMessage summary="The system has checked and found that {!jobr.size} employee(s) report to {!employee.Name}.  
+														Please note here who the new Manager will be. A reminder will be sent to an HR Administrator 
+														to reassign the Manager before the Leaving date, which is {!employee.Leaving_Date__c}." severity="info" strength="3"/>
+						</apex:outputPanel>
+						
+						<br></br><br></br>
+						 <!-- START :: 20/06/2018 NPPD-1622 Leaver process error message clears field value Added SetNullonerror by Namrata -->
+						<apex:outputpanel rendered="{!AND(jobr.size!=0,employee.xcdhcm__Leaving_Date__c!=null,employee.xcdhcm__Reason_Leaving__c!=null,NOT(setNullonError),showReportees)}" >
+						 <!-- END :: 20/06/2018 NPPD-1622 Leaver process error message clears field value Added SetNullonerror by Namrata -->	
+							<!-- START:: 11/01/2019 NPPD-1819 FLS issue modify by Anil -->
+							<apex:pageBlockTable value="{!jobr}" var="jr"> 
+								<apex:column headerValue="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.Name.Label}" rendered="{!$objectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Employee_Details__c.Accessible}">
+                                    <div class="slds-truncate" >
+										<apex:outputField value="{!jr.Employee_Details__r.Name}"/>
+                                    </div>
+                               	</apex:column>
+
+								<apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.Name.Label}" rendered="{!$objectType.xcdhcm__Job_Role__c.Fields.Name.Accessible}">
+									<div class="slds-truncate" >
+										<apex:outputField value="{!jr.Name}"/>
+									</div>
+								</apex:column>
+								
+								<apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Manager__c.Label}" rendered="{!$objectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Manager__c.Accessible}">
+                                    <div class="slds-truncate" >
+                                        <apex:actionRegion >
+											<a href="/one/one.app#/alohaRedirect/{!jr.xcdhcm__Manager__c}" target="_top">{!jr.Manager__r.Name}</a>
+										</apex:actionRegion>
+                                    </div>
+								</apex:column>
+								
+								<apex:column style="width:32% !important;" headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__New_manager__c.Label}" rendered="{!$objectType.xcdhcm__Job_Role__c.Fields.xcdhcm__New_manager__c.Accessible}">
+                                    <div class="managerColumnWidth">
+                                        <apex:actionRegion >
+											 <apex:inputField value="{!jr.xcdhcm__New_manager__c}" required="true" style="width:12rem;"/> 
+										</apex:actionRegion>
+                                    </div>
+								</apex:column>
+
+								<apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Assignment_date__c.Label}" rendered="{!$objectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Assignment_date__c.Accessible}">
+                                    <div class="Assignment_dateColumnWidth" >
+                                        <apex:inputField value="{!jr.xcdhcm__Assignment_date__c}"  required="true"/ >
+                                    </div>
+								</apex:column>
+								
+							</apex:pageBlockTable>   
+							<!-- END:: 11/01/2019 NPPD-1819 FLS issue modify by Anil -->
+						</apex:outputpanel>
+					
+						<apex:outputpanel rendered="{!jobr.size==0}" >
+							<apex:pageMessage summary="To complete the process click 'Complete leaver process'.  The Employee's licence will be removed on their last working day." severity="info" strength="3"/>
+						</apex:outputPanel>
+						
+						  <!-- <apex:outputtext value="To complete the process click 'Complete leaver process'.  The Employee's licence will be removed on their last working day." 
+                                                style="color:#153E7E" rendered="{!jobr.size==0}"/> --> <br></br>
+                        <apex:pageBlockButtons Location="bottom" style="text-align: right!important;"> 
+                            <apex:actionStatus id="wait_Status">                   
+	                            <apex:facet name="stop">
+	                                <apex:outputpanel >
+	                                    <apex:commandButton value="{!$Label.xcdhcm__deactivateuserpagebdeactivate}" styleclass="slds-button slds-button--neutral" action="{!deactivateUser}" rendered="{!jobr.size==0}" status="wait_Status" id="id_Deactivate" onClick="if(!confirm('Do you want to deactivate the Employee?')){return false;}" rerender="frm,id_Deactivate" />
+				            			<apex:commandButton value="{!$Label.xcdhcm__deactivateuserpagebsaveandnext}" styleclass="slds-button slds-button--brand" action="{!Savefn}" rendered="{!jobr.size!=0}" rerender="frm,id_SaveandNext" status="wait_Status" id="id_SaveandNext"/>
+	                                </apex:outputpanel>
+	                            </apex:facet>
+	                            <apex:facet name="start">
+	                                <div class="slds-spinner_container slds-show slds-is-fixed">
+	                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+	                                        <div class="slds-spinner__dot-a"></div>
+	                                        <div class="slds-spinner__dot-b"></div>
+	                                    </div> 
+	                                </div>                    
+	                            </apex:facet>                                
+	                        </apex:actionStatus> 
+				        </apex:pageBlockButtons>  
+                      <br/>      
+            </apex:pageBlock>
+         
+              <!-- User not active   --> 
+          		<apex:pageBlock id="pgB3" rendered="{!us.xcdhcm__User__c!='Active'}">
+                <apex:pageMessages />          
+                    <apex:pageMessage summary="{!employee.Name} record has already been deactivated and does not have a User licence." 
+                                                severity="info" strength="3"/>  
+                    <apex:pageBlockButtons Location="bottom" style="text-align: right!important;">
+                     	<apex:commandButton value="{!$Label.xcdhcm__deactivateuserpagebback}" styleclass="slds-button slds-button--neutral" action="{!cancel}" rerender="frm"/>
+                      </apex:pageBlockButtons>
+                </apex:pageBlock>      
+          
+            <!-- Message for current user -->
+          		<apex:pageBlock id="pgB4" rendered="{!AND(us.xcdhcm__User__c=='Active',$User.Id == us.id)}">
+                <apex:pageMessages />
+                    <apex:pageMessage summary="{!$Label.xcdhcm__deactivate_yourself}" severity="info" strength="3"/>  
+                    <apex:pageBlockButtons Location="bottom" style="text-align: right!important;">
+                     	<apex:commandButton value="{!$Label.xcdhcm__deactivateuserpagebback}" styleclass="slds-button slds-button--neutral" action="{!cancel}" rerender="frm"/>
+                     </apex:pageBlockButtons>                 
+                </apex:pageBlock>
+              <div Class="line"></div> 
+			  <!-- <div style="border-bottom: 2px solid #63a4c5!important;"></div> -->
+      </apex:form>    
+	</body>
+    </html>
+</apex:page>

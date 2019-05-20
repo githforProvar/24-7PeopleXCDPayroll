@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata"
+   >
+ <fullName>xcdhcm__Post_Cost_view</fullName>
+  <flexiPageRegions>
+    <componentInstances>
+   <componentInstanceProperties>
+    <name>collapsed</name>
+        <value>true</value>
+   </componentInstanceProperties>
+   <componentInstanceProperties>
+    <name>numVisibleActions</name>
+        <value>3</value>
+   </componentInstanceProperties>
+   <componentName>force:highlightsPanel</componentName>
+     </componentInstances>
+    <name>header</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <flexiPageRegions>
+    <componentInstances>
+   <componentName>force:detailPanel</componentName>
+     </componentInstances>
+    <name>main</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <flexiPageRegions>
+      <name>sidebar</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <masterLabel>Post Cost view</masterLabel>
+    <sobjectType>xcdhcm__Post_Cost__c</sobjectType>
+ <template>
+  <name>flexipage:recordHomeTemplateDesktop</name>
+ </template>
+ <type>RecordPage</type>
+</FlexiPage>

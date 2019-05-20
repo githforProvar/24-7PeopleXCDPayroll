@@ -1,0 +1,1024 @@
+<apex:page id="bookLeavePage" standardController="xcdhcm__Employee_Detail__c" sidebar="false" showHeader="true" wizard="false" extensions="xcdhcm.LeaveExtensionController">
+    
+     <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />  
+    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {   
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .detailList tr td, .bPageBlock .detailList tr th, .hoverDetail .bPageBlock .detailList tr td, .hoverDetail .bPageBlock .detailList tr th 
+        {
+        border-bottom: none !important; 
+        }
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+    background-color: #ccc;
+    border-color: #ccc;
+    padding: .75rem 1rem;
+    background: #f4f6f9;
+    border-radius: 4px;
+    color: #54698d!important;
+    font-size: 1.15em;
+    letter-spacing: .0625rem;
+    font-weight: 500;
+}    
+.bPageBlock .requiredInput .requiredBlock {
+    background-color: #fff;
+    } 
+    <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important;
+		   position: sticky !important;     
+		} 
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+    </style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope"> 
+            
+            <apex:form id="frm"> 
+                
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelToEmpDetail}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Days_HolReq}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            
+                            <!-- ================================== Lightnign Spinner ======================================================    -->
+                            <apex:outputpanel >
+                                 <apex:actionStatus id="actStatusId" rendered="true">
+                                    <apex:facet name="start">
+                                        <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                <div class="slds-spinner__dot-a"></div>
+                                                <div class="slds-spinner__dot-b"></div>
+                                            </div>
+                                        </div>
+                                    </apex:facet>
+                                    <apex:facet name="stop">
+                                        <div class="slds-spinner_container slds-hide" style="top:10%; bottom:9%">
+                                            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                <div class="slds-spinner__dot-a"></div>
+                                                <div class="slds-spinner__dot-b"></div>
+                                            </div>
+                                        </div>
+                                    </apex:facet>
+                                </apex:actionStatus>
+                            </apex:outputpanel>  
+                            <!-- ================================== Lightnign Spinner ======================================================    -->
+                            
+                            <apex:actionFunction name="invokeCheckLS1" action="{!checkLS}" rerender="pgButton,dummyPanel,panel,occasionalPanel,errmsg" status="actStatusId"/>     
+                            <apex:actionFunction name="invokeCheckLS2" action="{!checkLS}" rerender="panel,occasionalPanel,errmsg" status="actStatusId"/>     
+                            
+                            <apex:pageBlock id="pgBlock" >
+                                <apex:pageMessage id="jobErrMsg" summary="{!$Label.xcdhcm__book_leave_page_job_role_required}" severity="info" strength="3" rendered="{!IF(OR(AND(multiLeaveEnable = false, leaveSummary.Employee_Details__r.xcdhcm__Job_Role__c = null), AND(multiLeaveEnable = true, leaveSummary.xcdhcm__Job_Role__c = null)), true, false)}" />  
+                                <apex:PageMessages id="errmsg" />
+                                
+                                <apex:outputPanel id="dummyPanel" rendered="{!allowLeaveBookingForLeaver}">
+                                    <apex:repeat value="{!Request}" var="lr" rows="1">
+                                        <apex:pageblockSection title="{!IF(AND(leaveSummary1 != null, maternityPaternityLeave = false, needSplittingUI = true, showDetail = false), leaveSummary1.Job_Role__r.Name, '')}" collapsible="false">
+                                            
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        Leave category
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!lr.xcdhcm__Country__c}" style="display : none;" />
+                                                        <apex:inputField value="{!lr.xcdhcm__Leave_Category__c}"  id="id_1_Leave_Request" onchange="bindEvent1();" rendered="{!multiLeaveEnable = false}" required="true"> 
+                                                        </apex:inputField>
+                                                        <apex:selectList size="1" value="{!lr.xcdhcm__Leave_Category__c}" id="id_1_Leave_RequestB" onchange="bindEvent1();" rendered="{!multiLeaveEnable = true}" required="true"> 
+                                                            <apex:selectOptions value="{!filterValues}">
+                                                            </apex:selectOptions>
+                                                        </apex:selectList>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>                        
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!illness = true}">
+                                            <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+					        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Illness_reasons__c.Accessible}">
+                                           <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+						    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$ObjectType.Leave_Request__c.Fields.Illness_reasons__c.Label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!lr.xcdhcm__Illness_reasons__c}"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem> 
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!sickLeave = true}">
+                                                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+					        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Industrial_injury__c.Accessible}">
+						                                     <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$ObjectType.Leave_Request__c.Fields.Industrial_injury__c.Label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!lr.xcdhcm__Industrial_injury__c}"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!illness = false}">
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!sickLeave = true}">
+                                            </apex:pageBlockSectionItem> 
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!occasionalLeave = true}">
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+					        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date__c.Accessible}">
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+						    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$Label.New_Days_HolReqNewleaveabsencerequestDate}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!lr.xcdhcm__Start_Date__c}" id="id_2_Leave_Request" onchange="bindEvent1();" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!occasionalLeave = true}">
+                                           <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+						<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date_AM_PM_All_Day__c.Accessible}">
+              			           <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+						    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$Label.New_Days_HolReqNewleaveabsencerequestAMPMAllDay}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!lr.xcdhcm__Start_Date_AM_PM_All_Day__c}" onfocus="removeNone(this.id);" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(occasionalLeave = true, showDetail = false)}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_Holiday_Hours__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$ObjectType.Leave_Request__c.Fields.Number_of_Holiday_Hours__c.Label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!lr.xcdhcm__Number_of_Holiday_Hours__c}" onchange="bindEvent1();" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(maternityPaternityLeave = false,occasionalLeave = false)}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                Start date
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!lr.xcdhcm__Start_Date__c}" id="id_2_Leave_Request" onchange="bindEvent1();"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(maternityPaternityLeave = false,occasionalLeave = false)}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__End_Date__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <apex:outputpanel rendered="{!endDateReq}">
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                </apex:outputpanel>
+                                                                End date
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__End_Date__c}"  id="id_3_Leave_Request" onchange="bindEvent1();" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem> 
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(maternityPaternityLeave = false,occasionalLeave = false)}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date_AM_PM_All_Day__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                Start date am/pm/all day
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__Start_Date_AM_PM_All_Day__c}" onfocus="removeNone(this.id);"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem> 
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(maternityPaternityLeave = false,occasionalLeave = false)}"> 
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__End_Date_AM_PM_All_Day__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                End date am/pm/all day
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__End_Date_AM_PM_All_Day__c}" onfocus="removeNone(this.id);"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!endDateReq = false}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Expected_return_to_work_date__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                Expected return to work date
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__Expected_return_to_work_date__c}" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(showNoOfDays = true,showDetail = false, endDateReq = true, OR(leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c != 'Irregular shift pattern', AND(leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c == 'Irregular shift pattern', shouldRender == false)))}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_days_of_holidays__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <apex:outputpanel rendered="{!reqAttribute1}">
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                </apex:outputpanel>
+                                                                Number of days
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__Number_of_days_of_holidays__c}" onchange="bindEvent1();"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(maternityPaternityLeave = false,shouldRender = true,showDetail = false,showHrs=true)}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Hours_booked_hh__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <apex:outputpanel rendered="{!reqAttribute1}">
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                </apex:outputpanel>
+                                                                Hours booked hh
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__Hours_booked_hh__c}" onchange="bindEvent1();" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!OR(occasionalLeave = false, AND(occasionalLeave = true, showDetail = false))}"> 
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Notes__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$ObjectType.Leave_Request__c.Fields.Notes__c.Label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__Notes__c}" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem> 
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(showNoOfDays = true,showDetail = false, endDateReq = false, lr.xcdhcm__End_Date__c != null, OR(leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c != 'Irregular shift pattern', AND(leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c == 'Irregular shift pattern', shouldRender == false)))}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_days_of_holidays__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                Number of days
+                                                                <apex:outputpanel rendered="{!reqAttribute1}">
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                </apex:outputpanel>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__Number_of_days_of_holidays__c}" onchange="bindEvent1();" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>                     
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(maternityPaternityLeave = false,shouldRender = true,showDetail = false,showHrs=true)}">
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__mm__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                mm
+                                                                <apex:outputpanel rendered="{!reqAttribute1}">
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                </apex:outputpanel>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__mm__c}" onchange="bindEvent1();" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                        </apex:pageBlockSection>
+                                        <apex:actionStatus startText="Please wait..." id="DetailStatus"/>
+                                    </apex:repeat>    
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel id="panel">
+                                    <apex:outputPanel rendered="{!occasionalLeave=false}">
+                                        <apex:repeat value="{!leaveRequestMulti}" var="lr" rows="1" rendered="{!AND(leaveSummaryMulti != null, maternityPaternityLeave = false)}">
+                                            <apex:pageBlockSection id="LSMulti" title="{!leaveSummaryMulti.Job_Role__r.Name}" collapsible="false"
+                                                                   columns="2" rendered="{!AND(showMultiLeaveSection = true, leaveSummaryMulti.Job_Role__r.xcdhcm__Pattern_Type__c != 'Regular work pattern - days', leaveSummaryMulti.Job_Role__r.xcdhcm__Pattern_Type__c != 'Regular work pattern - hours')}">
+                                                <apex:pageBlockSectionItem rendered="{!maternityPaternityLeave = false}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    Start date
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:outputField value="{!lr.xcdhcm__Start_Date__c}"/>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem >
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__End_Date__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    End date
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:outputField value="{!lr.xcdhcm__End_Date__c}" /> 
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!AND(OR(leaveSummaryMulti.Job_Role__r.xcdhcm__Pattern_Type__c != 'Irregular shift pattern', AND(leaveSummaryMulti.Job_Role__r.xcdhcm__Pattern_Type__c == 'Irregular shift pattern', shouldRender == false)), lr.xcdhcm__End_Date__c != null)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_days_of_holidays__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute3 = true}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    Number of days
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Number_of_days_of_holidays__c}" onchange="bindEvent2();" /> 
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!IF(AND(leaveSummaryMulti.Job_Role__r.xcdhcm__Pattern_Type__c ='Irregular shift pattern', shouldRender = true), true, false)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Hours_booked_hh__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute3}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    Hours booked hh
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Hours_booked_hh__c}" onchange="bindEvent2();" /> 
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem >
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!IF(AND(leaveSummaryMulti.Job_Role__r.xcdhcm__Pattern_Type__c = 'Irregular shift pattern', shouldRender = true), true, false)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__mm__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute3}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    mm
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__mm__c}" onchange="bindEvent2();" /> 
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                            </apex:pageBlockSection> 
+                                            <apex:actionStatus startText="Please wait..." id="DetailStatus2"/>
+                                        </apex:repeat>
+                                        
+                                        <apex:repeat value="{!leaveRequestMulti2}" var="lr" rows="1" rendered="{!AND(leaveSummaryMulti2 != null, maternityPaternityLeave = false)}">
+                                            <apex:pageBlockSection id="LSMulti2" title="{!leaveSummaryMulti2.Job_Role__r.Name}" collapsible="false"
+                                                                   columns="2" rendered="{!AND(showMultiLeaveSectionForSplit = true, leaveSummaryMulti2.Job_Role__r.xcdhcm__Pattern_Type__c != 'Regular work pattern - hours')}">
+                                                <apex:pageBlockSectionItem rendered="{!maternityPaternityLeave = false}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    Start date
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:outputField value="{!lr.xcdhcm__Start_Date__c}"/> 
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!maternityPaternityLeave = false}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__End_Date__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    End date
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:outputField value="{!lr.xcdhcm__End_Date__c}" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!AND(OR(leaveSummaryMulti2.Job_Role__r.xcdhcm__Pattern_Type__c != 'Irregular shift pattern', AND(leaveSummaryMulti2.Job_Role__r.xcdhcm__Pattern_Type__c == 'Irregular shift pattern', shouldRender == false)), lr.xcdhcm__End_Date__c != null)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_days_of_holidays__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute4}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    Number of days
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Number_of_days_of_holidays__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!IF(AND(leaveSummaryMulti2.Job_Role__r.xcdhcm__Pattern_Type__c = 'Irregular shift pattern', shouldRender = true), true, false)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Hours_booked_hh__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute4}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    Hours booked hh
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Hours_booked_hh__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem >
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!IF(AND(leaveSummaryMulti2.Job_Role__r.xcdhcm__Pattern_Type__c = 'Irregular shift pattern', shouldRender = true), true, false)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__mm__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute4}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    mm
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__mm__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                            </apex:pageBlockSection> 
+                                            <apex:actionStatus startText="Please wait..." id="DetailStatus2"/>
+                                        </apex:repeat>
+                                        
+                                        <apex:repeat value="{!leaveRequest}" var="lr" rows="1" rendered="{!AND(leaveSummary1 != null, maternityPaternityLeave = false)}">
+                                            <apex:pageBlockSection id="LS1Other" title="{!leaveSummary1.Job_Role__r.Name}" collapsible="false"
+                                                                   columns="2" rendered="{!AND(showDetail = true, needSplittingUI = true)}">
+                                                <apex:pageBlockSectionItem rendered="{!maternityPaternityLeave = false}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    Start date
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:outputField value="{!lr.xcdhcm__Start_Date__c}"/>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!lr.xcdhcm__End_Date__c != null}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__End_Date__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    End date
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:outputField value="{!lr.xcdhcm__End_Date__c}" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!AND(showNoOfDays=true, OR(leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c != 'Irregular shift pattern', AND(leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c == 'Irregular shift pattern', shouldRender == false)))}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_days_of_holidays__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel layout="block" styleClass="requiredBlock" rendered="{!reqAttribute1}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    Number of days
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Number_of_days_of_holidays__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!IF(AND(leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c ='Irregular shift pattern', shouldRender = true), true, false)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Hours_booked_hh__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel layout="block" styleClass="requiredBlock" rendered="{!reqAttribute1}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    Hours booked hh
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Hours_booked_hh__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem >                            
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!IF(AND(leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c = 'Irregular shift pattern', shouldRender = true), true, false)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__mm__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel layout="block" styleClass="requiredBlock" rendered="{!reqAttribute1}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    mm
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__mm__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                            </apex:pageBlockSection>
+                                            <apex:actionStatus startText="Please wait..." id="DetailStatus1"/>
+                                        </apex:repeat> 
+                                        
+                                        <apex:repeat value="{!leaveRequest2}" var="lr" rows="1" rendered="{!AND(leaveSummary2 != null, maternityPaternityLeave = false)}"> 
+                                            <apex:pageBlockSection id="LS2Other" title="{!leaveSummary2.Job_Role__r.Name}" collapsible="false"
+                                                                   columns="2" rendered="{!AND(showDetail = true, needSplittingUI = true)}">
+                                                <apex:pageBlockSectionItem rendered="{!maternityPaternityLeave = false}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    Start date
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:outputField value="{!lr.xcdhcm__Start_Date__c}"/>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!maternityPaternityLeave = false}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__End_Date__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    End date
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:outputField value="{!lr.xcdhcm__End_Date__c}" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!AND(OR(leaveSummary2.Job_Role__r.xcdhcm__Pattern_Type__c != 'Irregular shift pattern', AND(leaveSummary2.Job_Role__r.xcdhcm__Pattern_Type__c == 'Irregular shift pattern', shouldRender == false)), lr.xcdhcm__End_Date__c != null)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_days_of_holidays__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute2}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    Number of days
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Number_of_days_of_holidays__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!IF(AND(leaveSummary2.Job_Role__r.xcdhcm__Pattern_Type__c = 'Irregular shift pattern', shouldRender = true), true, false)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Hours_booked_hh__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute2}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    Hours booked hh
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Hours_booked_hh__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem >                            
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem rendered="{!IF(AND(leaveSummary2.Job_Role__r.xcdhcm__Pattern_Type__c = 'Irregular shift pattern', shouldRender = true), true, false)}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__mm__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute2}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    mm
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__mm__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                            </apex:pageBlockSection>                    
+                                            <apex:actionStatus startText="Please wait..." id="DetailStatus2"/>
+                                        </apex:repeat>
+                                    </apex:outputPanel>        
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel id="occasionalPanel">
+                                    <apex:outputPanel rendered="{!AND(occasionalLeave = true, showDetail = true)}">
+                                        <apex:repeat value="{!leaveRequestMulti}" var="lr" rows="1" rendered="{!AND(leaveSummaryMulti != null, maternityPaternityLeave = false)}">
+                                            <apex:pageBlockSection id="LSMulti" title="{!leaveSummaryMulti.Job_Role__r.Name}" rendered="{!leaveSummaryMulti.Job_Role__r.xcdhcm__Pattern_Type__c != 'Regular work pattern - days'}" collapsible="false" columns="2">
+                                                
+                                                <apex:pageBlockSectionItem >
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_Holiday_Hours__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute3 = true}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    {!$ObjectType.Leave_Request__c.Fields.Number_of_Holiday_Hours__c.Label}
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Number_of_Holiday_Hours__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem >
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Notes__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    {!$ObjectType.Leave_Request__c.Fields.Notes__c.Label}
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                     <apex:inputField value="{!lr.xcdhcm__Notes__c}" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                            </apex:pageBlockSection> 
+                                            <apex:actionStatus startText="Please wait..." id="DetailStatus2"/>
+                                        </apex:repeat>
+                                        
+                                        <apex:repeat value="{!leaveRequest}" var="lr" rows="1" rendered="{!AND(leaveSummary1 != null, maternityPaternityLeave = false)}">
+                                            <apex:pageBlockSection id="LS1Other" title="{!leaveSummary1.Job_Role__r.Name}" rendered="{!leaveSummary1.Job_Role__r.xcdhcm__Pattern_Type__c != 'Regular work pattern - days'}" collapsible="false" columns="2">
+                                                
+                                                <apex:pageBlockSectionItem >
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_Holiday_Hours__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <apex:outputpanel rendered="{!reqAttribute1}">
+                                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                                    </apex:outputpanel>
+                                                                    {!$ObjectType.Leave_Request__c.Fields.Number_of_Holiday_Hours__c.Label}
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:inputField value="{!lr.xcdhcm__Number_of_Holiday_Hours__c}" onchange="bindEvent2();" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                                
+                                                <apex:pageBlockSectionItem >
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Notes__c.Accessible}">
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$ObjectType.Leave_Request__c.Fields.Notes__c.Label}
+                                                                <apex:outputpanel rendered="{!reqAttribute1}">
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                </apex:outputpanel>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                 <apex:inputField value="{!lr.xcdhcm__Notes__c}" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                                </apex:pageBlockSectionItem>
+                                            </apex:pageBlockSection>
+                                            <apex:actionStatus startText="Please wait..." id="DetailStatus1"/>
+                                        </apex:repeat> 
+                                    </apex:outputPanel>
+                                </apex:outputPanel> 
+                                
+                            </apex:pageBlock>
+                            
+                            <apex:outputPanel id="popup">
+                                <apex:outputpanel id="popupSub1" styleClass="popupBg" rendered="{!displayPopup}"/>
+                                <apex:outputPanel id="popup1" styleClass="customPopup" layout="block" rendered="{!displayPopup}">
+                                    <center> 
+                                     
+                                        <apex:outputtext id="oText2" value="{!submittedMsg}" rendered="{!displayPopup}"/>
+                                        <br/>
+                                        <apex:commandButton id="okButton1" value="{!$Label.xcdhcm__new_days_holreqbok}" action="{!saveLeaveRequestOk}" rerender="popup" styleclass="slds-button slds-button--neutral"/>
+                                    
+                                    </center>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            <apex:outputPanel id="popup2" >
+                                <apex:outputpanel id="popupSub2" styleClass="popupBg" rendered="{!displayPopupNotsubmitted}"/>
+                                <apex:outputPanel id="popup11" styleClass="customPopup" layout="block" rendered="{!displayPopupNotsubmitted}">
+                                    <center>  
+                                        <apex:outputtext id="oText22" value="Your request has been saved but has not been submitted for approval. Please contact your System Administrator" rendered="{!displayPopupNotsubmitted}"/>
+                                        <br/>
+                                        <apex:commandButton id="okButtonAdmin" value="{!$Label.xcdhcm__new_days_holreqbok}" styleclass="slds-button slds-button--neutral"  onclick="redirect('{!leaveSummary.xcdhcm__Employee_Details__c}'); return false;" rendered="{!(permissionLevel !='ManagerView')}"/>
+                                        <apex:commandButton id="okButtonManager" value="{!$Label.xcdhcm__new_days_holreqbok}" styleclass="slds-button slds-button--neutral"  onclick="redirectMan('{!leaveSummary.xcdhcm__Employee_Details__c}'); return false;" rendered="{!(permissionLevel == 'ManagerView')}"/></center>
+                                </apex:outputPanel>
+                            </apex:outputPanel> 
+                            
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:outputPanel id="pgButton">   
+                                <apex:actionStatus id="saveStatus">                   
+                                    <apex:facet name="stop">
+                                        <apex:outputPanel >
+                                            <apex:commandButton id="cancelButtonBottom" value="{!$Label.xcdhcm__new_days_holreqbcancel}" action="{!cancelToEmpDetail}" immediate="true" styleclass="slds-button slds-button--neutral"/> 
+                                            <!--START :: 15-10-2018 NPPD-1750 Remove maternity leave coded validation modified by Kumbresh K-->
+                                            <!--
+                                            <apex:commandButton id="Submit3" value="{!$Label.xcdhcm__new_days_holreqbsubmitandattach}" rendered="{!AND(showAttachButton,allowLeaveBookingForLeaver)}"  action="{!saveAndAttachLeaveRequest}" status="saveStatus" rerender="jobErrMsg,errmsg,popup,popup2,Submit1,Submit3" disabled="{! !allowMaternityLeaveBooking}" styleclass="slds-button slds-button--neutral"/>            
+                                            <apex:commandButton id="Submit1" value="{!$Label.xcdhcm__new_days_holreqbsubmitleaverequest}" action="{!saveLeaveRequest}" status="saveStatus" rendered="{!allowLeaveBookingForLeaver}" rerender="jobErrMsg,errmsg,popup,popup2,Submit1,Submit3" disabled="{! !allowMaternityLeaveBooking}" styleclass="slds-button slds-button--brand"/>
+                                            -->
+                                            <apex:commandButton id="Submit3" value="{!$Label.xcdhcm__new_days_holreqbsubmitandattach}" rendered="{!AND(showAttachButton,allowLeaveBookingForLeaver)}"  action="{!saveAndAttachLeaveRequest}" status="saveStatus" rerender="jobErrMsg,errmsg,popup,popup2,Submit1,Submit3" styleclass="slds-button slds-button--neutral"/>            
+                                            <apex:commandButton id="Submit1" value="{!$Label.xcdhcm__new_days_holreqbsubmitleaverequest}" action="{!saveLeaveRequest}" status="saveStatus" rendered="{!allowLeaveBookingForLeaver}" rerender="jobErrMsg,errmsg,popup,popup2,Submit1,Submit3" styleclass="slds-button slds-button--brand"/>
+                                            <!--END :: 15-10-2018 NPPD-1750 Remove maternity leave coded validation modified by Kumbresh K-->
+                                        </apex:outputPanel>
+                                    </apex:facet>
+                                    <apex:facet name="start">
+                                        <!-- <apex:outputPanel >
+                                            <apex:commandButton value="{!$Label.xcdhcm__new_days_holreqbcancel}" disabled="true" />
+                                            <apex:commandButton value="{!$Label.New_Days_HolReqBProcessing}" disabled="true" />
+                                            <apex:commandButton value="{!$Label.New_Days_HolReqBProcessing}" disabled="true" />                       
+                                        </apex:outputPanel>   -->  
+                                        <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                <div class="slds-spinner__dot-a"></div>
+                                                <div class="slds-spinner__dot-b"></div>
+                                            </div>
+                                        </div>                    
+                                    </apex:facet>                                
+                                </apex:actionStatus> 
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+                
+            </apex:form>
+        </body>
+    </html>
+    
+    <style type="text/css">
+         .popupBg
+        {
+        //background-color:#FFFFFF;
+        opacity: 1.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 50%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 40%;
+        width: 500px;
+        margin-left: -250px;
+        text-decoration: none;
+        font-weight: bold;
+        
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;
+        
+   
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+       /* 
+        .butt
+        {
+        
+        border: 1px solid #d9d9d9 !important;
+        color: #999999 !important;
+        background-color: #fff !important;
+        background-image: none !important;
+        -moz-box-shadow: 2px 1px 8px #a6d6ff;
+        -webkit-box-shadow: 2px 1px 8px #a6d6ff;
+        box-shadow: 2px 1px 8px #a6d6ff;
+        }
+    */
+    </style>
+    <script>
+    //START :: 07/12/2018 NPPD-1815 Employee page loading issue modified by Anil
+    function redirect(empId)
+    {
+        var permissionLevel = '{!permissionLevel}';
+        var url;
+        if(permissionLevel != undefined && permissionLevel != 'null')
+        {
+            url ='/lightning/cmp/xcdhcm__EmployeeView?recordId='+empId+'&permissionLevel='+permissionLevel+'&selectedTab=holidaysumm';
+        }
+        else
+        {
+            url ='/lightning/cmp/xcdhcm__EmployeeView?recordId='+empId+'&selectedTab=holidaysumm';
+        }
+        window.location.href = url;
+    }
+    
+    function redirectMan(empId)
+    {
+        window.location.href='/lightning/cmp/xcdhcm__EmployeeView?recordId='+empId+'&permissionLevel=ManagerView&selectedTab=holidaysumm';  
+    }
+    //END :: 07/12/2018 NPPD-1815 Employee page loading issue modified by Anil
+    
+    function removeNone(idVal)
+    {
+        var list = document.getElementById(idVal);
+        // alert(list.options[0].text);
+        if(list.options[0].text == '--None--')
+        {
+            list.remove(0);
+        }
+    }
+    </script>
+    
+    <script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script>
+    
+    //START :: 07/04/2017 NPPD-1406 modified by Ranjeet 
+    function bindEvent1()
+    {      
+        //var leaveCategory = $("[id$='id_1_Leave_Request']").val();
+        //var startDate = $("[id$='id_2_Leave_Request']").val();
+        //var endDate = $("[id$='id_3_Leave_Request']").val();
+        //var maternityPaternityLeave = '{!maternityPaternityLeave}';
+        //var endDateReq = '{!endDateReq}';
+        invokeCheckLS1();
+    } 
+    
+    function bindEvent2()
+    {      
+        //var leaveCategory = $("[id$='id_1_Leave_Request']").val();
+        //var startDate = $("[id$='id_2_Leave_Request']").val();
+        //var endDate = $("[id$='id_3_Leave_Request']").val();
+        //var maternityPaternityLeave = '{!maternityPaternityLeave}';
+        //var endDateReq = '{!endDateReq}';
+        invokeCheckLS2(); 
+    } 
+    //END :: 07/04/2017 NPPD-1406 modified by Ranjeet 
+    </script>
+</apex:page>

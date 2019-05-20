@@ -1,0 +1,663 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.PerformanceExtensionController"  sidebar="false" showHeader="true" wizard="false" >
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />   
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style type="text/css">
+        .bEditBlock .pbHeader>table, .apexp .bPageBlock.apexDefaultPageBlock .pbHeader>table, #ep.bLayoutBlock .pbHeader>table {  
+           border: none;
+        }
+        body .bPageBlock .detailList tr td, body .bPageBlock .detailList tr th, body table.list tr td, body table.list tr th, body .hoverDetail .bPageBlock .detailList tr td, body .hoverDetail .bPageBlock .detailList tr th {
+            border: none;
+        }
+        .slds-scope .slds-table--bordered, .slds-scope .slds-table_bordered {
+                border: none;
+                background: #fff;
+            }          
+        .links 
+        {
+        display: none;
+        }
+        .customPopup 
+        {
+        background-color: #1E90FF;
+        border-radius: 6px 6px 6px 6px;
+        border-style: hidden;
+        border-width: 2px;
+        left: 50%;
+        padding: 10px;
+        position: absolute;
+        z-index: 9999;
+        width: 500px;
+        margin-left: -250px;
+        top: 70px;
+        }
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette
+        {
+        background-color: #ccc;
+        border-color: #ccc;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        border-radius: 4px;
+        color: #54698d!important;
+        font-size: 1.15em;
+        letter-spacing: .0625rem;
+        font-weight: 500;
+        }
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        body .bEditBlock .pbBody .pbSubheader, body .bWizardBlock .pbBody .pbSubheader
+        {
+        color: rgba(153, 153, 153, 0.92);
+        }
+        /* START :: Table css */
+        .dateInput  
+        {
+        white-space: nowrap;
+        } 
+        .dateOnlyInput input 
+        {
+        width: 10em !important; 
+        }
+        #actionColumn
+        {
+        color: white;
+        }
+        .slds-scope img 
+        {
+        max-width: 250%;
+        height: auto;
+        }
+        .ThisPageHelpText span 
+        {
+        display: none;
+        }
+        .ThisPageHelpText:hover span 
+        {
+        display: block !important;
+        width: 300px;
+        background-color: #16325c!important;   
+        border: 1px solid #16325c!important;
+        padding: 4px;
+        color: white;
+        position: absolute;
+        z-index: 1;
+        top:100%;
+        right:15%;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;  
+        border-radius: 4px!important;      
+        text-transform: none;   
+        }
+        .LiteHelpText:hover span 
+        {
+        text-transform: none;
+        } 
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        color: #54698d !important;
+        font-weight: 300;
+        font-size: 1.25rem !important;
+        line-height: 1.25 !important;
+        }
+        .datePicker {
+            position: fixed!important;
+        }
+        /* END :: Table css */
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">
+            
+            <apex:form id="theform">
+                <apex:pageBlock title="{!$Label.xcdhcm__phnew_employee_review}">
+                    <apex:PageMessages id="errmsg"/> 
+                </apex:pageBlock>
+                
+                <apex:pageBlock >        
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_reviewnewonetoonereview}" columns="2" collapsible="false" rendered="{!rectype == 'onetoone'}" id="one">
+                        <apex:repeat value="{!onetooneList}" var="pr" rows="1">
+                            <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__One_to_One_Set}" var="o">
+                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Review__c.fields[o].Accessible}">
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(o.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!o.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!o.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[o].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[o].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!pr[o]}" required="{!o.Required}" style="{!IF(o.label=='Blankspace','display:none;' ,'')}"/> 
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>            
+                                </apex:outputpanel>                                       
+                            </apex:repeat>
+                        </apex:repeat> 
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_reviewnewperformancereview}" columns="2" collapsible="false" rendered="{!rectype == 'perf'}" id="perf">
+                        <apex:repeat value="{!perfList}" var="pr" rows="1">
+                            <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Perfromance_Set}" var="o">
+                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Review__c.fields[o].Accessible}">
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(o.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!o.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!o.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[o].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[o].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!pr[o]}" required="{!o.Required}" style="{!IF(o.label=='Blankspace','display:none;' ,'')}"/> 
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>
+                                </apex:outputpanel>
+                            </apex:repeat>
+                        </apex:repeat> 
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_reviewnewprobationaryreview}" columns="2" collapsible="false" rendered="{!rectype == 'prob'}" id="prob">
+                        <apex:repeat value="{!probList}" var="pr" rows="1">
+                            <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Probation_Set}" var="o">
+                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Review__c.fields[o].Accessible}">
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(o.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!o.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!o.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[o].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[o].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!pr[o]}" required="{!o.Required}" style="{!IF(o.label=='Blankspace','display:none;' ,'')}"/> 
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>
+                                </apex:outputpanel>
+                            </apex:repeat>
+                        </apex:repeat> 
+                    </apex:pageBlockSection>  
+                </apex:pageBlock>
+                
+                <apex:pageBlock rendered="{!AND(rectype != 'prob',rectype == 'perf')}"> 
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton styleclass="slds-button slds-button--neutral" value="{!$Label.xcdhcm__new_employee_reviewbaddrow}" action="{!addObjective}" immediate="true" rerender="perfObj"  style="float:right;"/>
+                    </apex:pageBlockButtons>
+                    <!--  <apex:pageBlockSection title="{!$Label.New_Employee_ReviewObjectives}" rendered="{!rectype != null}" columns="1" collapsible="false" id="perfObj" > -->
+                    <apex:outputpanel rendered="{!rectype != null}" id="perfObj">
+                        <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!$Label.xcdhcm__new_employee_reviewobjectives}</h3>
+                        <apex:variable value="{!0}" var="rowNum" />
+                   
+                        <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="table">
+                            <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields.Name.Accessible}" >
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <span class="slds-truncate" title="{!$ObjectType.Objective__c.Fields.Name.Label}">
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    {!$ObjectType.Objective__c.Fields.Name.Label}
+                                                </span>
+                                            </div>
+                                        </th>
+                                         </apex:outputPanel>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__PerformanceObjective}">
+                                            <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields[f].Accessible}" >
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-th__action slds-text-link_reset">
+                                                    <apex:outputPanel rendered="{!f.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>
+                                                    <span class="slds-truncate" title="{!f.label}">
+                                                        {!f.label}
+                                                    </span>
+                                                    <span class="ThisPageHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Objective__c.Fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Objective__c.Fields[f].inlineHelpText}</span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            </apex:outputPanel>
+                                        </apex:repeat>
+                                        
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <apex:outputpanel rendered="{!objectiveList.size >1}">
+                                                <span id="actionColumn" >
+                                                    Action
+                                                </span>
+                                            </apex:outputpanel>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <apex:repeat value="{!objectiveList }" var="c">
+                                        <tr class="slds-hint-parent">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                    </apex:InputField>
+                                                </span>
+                                            </td>
+                                            
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__PerformanceObjective}">
+                                                <td role="gridcell" class="slds-cell-edit">
+                                                    <span class="slds-grid slds-grid_align-spread">
+                                                        <apex:inputField value="{!c[f]}" />
+                                                    </span>
+                                                </td>
+                                            </apex:repeat>
+                                            
+                                            
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <apex:outputpanel rendered="{!objectiveList.size >1}">
+                                                    <apex:commandlink action="{!deleteObjective}"  immediate="true" rerender="perfObj">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove" />
+                                                    </apex:commandlink>
+                                                </apex:outputpanel>
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </apex:outputpanel>
+                    <!-- </apex:pageBlockSection>  -->
+                </apex:pageBlock>
+                
+                <apex:pageBlock rendered="{!AND(rectype != 'prob',rectype == 'perf',ValueSection==true)}"> 
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton styleclass="slds-button slds-button--neutral" value="{!$Label.xcdhcm__new_employee_reviewbaddrow}" action="{!addValue}" immediate="true" rerender="perfval"  style="float:right;"/>
+                    </apex:pageBlockButtons>
+                    <!-- <apex:pageBlockSection title="{!$Label.New_Employee_ReviewValues}" rendered="{!rectype != null}" columns="1" collapsible="false" id="perfval" > -->
+                    <apex:outputpanel rendered="{!rectype != null}" id="perfval" >
+                        <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!$Label.xcdhcm__new_employee_reviewvalues}</h3>
+                        <apex:variable value="{!0}" var="rowNum" />
+                        
+                        
+                        <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="table">
+                            <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <span class="slds-truncate" title="{!$ObjectType.Values__c.Fields.Name.Label}">
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    {!$ObjectType.Values__c.Fields.Name.Label}
+                                                </span>
+                                            </div>
+                                        </th>
+                                        
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__Add_new_value}">
+                                        <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Values__c.Fields[f].Accessible}" >
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-th__action slds-text-link_reset">
+                                                    <apex:outputPanel rendered="{!f.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>
+                                                    <span class="slds-truncate" title="{!f.label}">
+                                                        {!f.label}
+                                                    </span>
+                                                    <span class="ThisPageHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Values__c.Fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Values__c.Fields[f].inlineHelpText}</span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            </apex:outputPanel>
+                                        </apex:repeat>
+                                        
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <apex:outputpanel rendered="{!ValueList.size >1}">
+                                                <span id="actionColumn" >
+                                                    Action
+                                                </span>
+                                            </apex:outputpanel>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <apex:repeat value="{!ValueList }" var="c">
+                                        <tr class="slds-hint-parent">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                    </apex:InputField>
+                                                </span>
+                                            </td>
+                                            
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__Add_new_value}">
+                                                <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Values__c.Fields[f].Accessible}" >
+					        <td role="gridcell" class="slds-cell-edit">
+                                                    <span class="slds-grid slds-grid_align-spread">
+                                                        <apex:inputField value="{!c[f]}" />
+                                                    </span>
+                                                </td>
+						 </apex:outputPanel>
+                                            </apex:repeat>
+                                            
+                                            
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <apex:outputpanel rendered="{!ValueList.size >1}">
+                                                    <apex:commandlink action="{!deleteValue}"  immediate="true" rerender="perfval">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </apex:outputpanel>
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </apex:outputpanel>
+                    <!-- </apex:pageBlockSection>  -->
+                </apex:pageBlock>
+                
+                <apex:pageBlock rendered="{!AND(rectype != 'prob',rectype == 'onetoone')}"> 
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton value="{!$Label.xcdhcm__new_employee_reviewbaddrow}" styleclass="slds-button slds-button--neutral" action="{!addObjective}" immediate="true" rerender="onetooneObj"  style="float:right;"/>
+                    </apex:pageBlockButtons>
+                    <!-- <apex:pageBlockSection title="{!$Label.New_Employee_ReviewObjectives}" rendered="{!rectype != null}" columns="1" collapsible="false" id="onetooneObj" > -->
+                    <apex:outputpanel rendered="{!rectype != null}" id="onetooneObj" >
+                        <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!$Label.xcdhcm__new_employee_reviewobjectives}</h3>
+                        <apex:variable value="{!0}" var="rowNum" />
+                                             
+                        
+                        <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="table">
+                            <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <span class="slds-truncate" title="{!$ObjectType.Objective__c.Fields.Name.Label}">
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    {!$ObjectType.Objective__c.Fields.Name.Label}
+                                                </span>
+                                            </div>
+                                        </th>
+                                        
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjective}">
+                                        <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields[f].Accessible}" >
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-th__action slds-text-link_reset">
+                                                    <apex:outputPanel rendered="{!f.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>
+                                                    <span class="slds-truncate" title="{!f.label}">
+                                                        {!f.label}
+                                                    </span>
+                                                    <span class="ThisPageHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Objective__c.Fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Objective__c.Fields[f].inlineHelpText}</span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                             </apex:outputPanel>
+                                        </apex:repeat>
+                                        
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <apex:outputpanel rendered="{!objectiveList.size >1}">
+                                                <span id="actionColumn" >
+                                                    Action
+                                                </span>
+                                            </apex:outputpanel>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <apex:repeat value="{!objectiveList }" var="c">
+                                        <tr class="slds-hint-parent">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                    </apex:InputField>
+                                                </span>
+                                            </td>
+                                            
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjective}">
+                                            <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields[f].Accessible}" >
+					        <td role="gridcell" class="slds-cell-edit">
+                                                    <span class="slds-grid slds-grid_align-spread">
+                                                        <apex:inputField value="{!c[f]}" />
+                                                    </span>
+                                                </td>
+			                    </apex:outputPanel>
+                                            </apex:repeat>
+                                            
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <apex:outputpanel rendered="{!objectiveList.size >1}">
+                                                    <apex:commandlink action="{!deleteObjective}"  immediate="true" rerender="onetooneObj">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </apex:outputpanel>
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </apex:outputpanel>
+                    <!-- </apex:pageBlockSection> --> 
+                </apex:pageBlock>
+                
+                <apex:pageBlock rendered="{!AND(rectype != 'perf',rectype != 'onetoone',rectype =='prob',ProbObjectiveSection == true)}"> 
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton value="{!$Label.xcdhcm__new_employee_reviewbaddrow}" styleclass="slds-button slds-button--neutral" action="{!addObjective}" immediate="true" rerender="probObj"  style="float:right;"/>
+                    </apex:pageBlockButtons>
+                    <!-- <apex:pageBlockSection title="{!$Label.New_Employee_ReviewObjectives}" rendered="{!rectype != null}" columns="1" collapsible="false" id="probObj" > -->
+                    <apex:outputpanel rendered="{!rectype != null}"  id="probObj" >
+                        <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!$Label.xcdhcm__new_employee_reviewobjectives}</h3>
+                        <apex:variable value="{!0}" var="rowNum" />
+                        
+                        
+                        <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="table">
+                            <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <span class="slds-truncate" title="{!$ObjectType.Objective__c.Fields.Name.Label}">
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    {!$ObjectType.Objective__c.Fields.Name.Label}
+                                                </span>
+                                            </div>
+                                        </th>
+                                        
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__NewprobationaryObjective}">
+                                          <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields[f].Accessible}" >
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-th__action slds-text-link_reset">
+                                                    <apex:outputPanel rendered="{!f.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>
+                                                    <span class="slds-truncate" title="{!f.label}">
+                                                        {!f.label}
+                                                    </span>
+                                                    <span class="ThisPageHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Objective__c.Fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Objective__c.Fields[f].inlineHelpText}</span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            </apex:outputPanel>
+                                        </apex:repeat>
+                                        
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <apex:outputpanel rendered="{!objectiveList.size >1}">
+                                                <span id="actionColumn" >
+                                                    Action
+                                                </span>
+                                            </apex:outputpanel>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <apex:repeat value="{!objectiveList }" var="c">
+                                        <tr class="slds-hint-parent">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                    </apex:InputField>
+                                                </span>
+                                            </td>
+                                            
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjective}">
+                                            <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields[f].Accessible}" >
+					        <td role="gridcell" class="slds-cell-edit">
+                                                    <span class="slds-grid slds-grid_align-spread">
+                                                        <apex:inputField value="{!c[f]}" />
+                                                    </span>
+                                                </td>
+					     </apex:outputPanel>	
+                                            </apex:repeat>
+                                            
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <apex:outputpanel rendered="{!objectiveList.size >1}">
+                                                    <apex:commandlink action="{!deleteObjective}"  immediate="true" rerender="probObj">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </apex:outputpanel>
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </apex:outputpanel>
+                    <!-- </apex:pageBlockSection> --> 
+                </apex:pageBlock>
+                
+                <apex:pageBlock rendered="{!And(NewDevelopmentSection == true,rectype == 'perf')}">
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton value="{!$Label.xcdhcm__new_employee_reviewbaddrow}" action="{!addPdp}" immediate="true" rerender="pdp" styleclass="slds-button slds-button--neutral" style="float:right;"/>
+                    </apex:pageBlockButtons>
+                    <!-- <apex:pageBlockSection title="{!$Label.New_Employee_ReviewPersonaldevelopmentplan}" rendered="{!rectype != null}" columns="1" collapsible="false" id="pdp" > -->
+                    <apex:outputpanel rendered="{!rectype != null}"  id="pdp" >
+                        <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!$Label.xcdhcm__new_employee_reviewpersonaldevelopmentplan}</h3>
+                        <apex:variable value="{!0}" var="rowNum" />
+                                             
+                        
+                        <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="table">
+                            <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <span class="slds-truncate" title="{!$ObjectType.Personal_development_plan__c.Fields.Name.Label}">
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    {!$ObjectType.Personal_development_plan__c.Fields.Name.Label}
+                                                </span>
+                                            </div>
+                                        </th>
+                                        
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__PerformancePDP}">
+                                           <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fields[f].Accessible}" >
+                                            <th class="slds-text-title_caps" scope="col">
+                                                <div class="slds-th__action slds-text-link_reset">
+                                                    <apex:outputPanel rendered="{!f.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>
+                                                    <span class="slds-truncate" title="{!f.label}">
+                                                        {!f.label}
+                                                    </span>
+                                                    <span class="ThisPageHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal_development_plan__c.Fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Personal_development_plan__c.Fields[f].inlineHelpText}</span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                             </apex:outputPanel>
+                                        </apex:repeat>
+                                        
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <apex:outputpanel rendered="{!pdpList.size >1}">
+                                                <span id="actionColumn" >
+                                                    Action
+                                                </span>
+                                            </apex:outputpanel>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <apex:repeat value="{!pdpList }" var="c" >
+                                        <tr class="slds-hint-parent">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                    </apex:InputField>
+                                                </span>
+                                            </td>
+                                            
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__PerformancePDP}">
+                                                <apex:outputPanel rendered="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fields[f].Accessible}" >
+						<td role="gridcell" class="slds-cell-edit">
+                                                    <span class="slds-grid slds-grid_align-spread">
+                                                        <apex:inputField value="{!c[f]}" />
+                                                    </span>
+                                                </td>
+						</apex:outputPanel>
+                                            </apex:repeat>
+                                            
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <apex:outputpanel rendered="{!pdpList.size >1}">
+                                                <apex:commandlink action="{!deletePdp}"  immediate="true" rerender="pdp">
+                                                    <apex:param name="rownumber" value="{!rowNum}"/>
+                                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                </apex:commandlink>   
+                                                </apex:outputpanel>
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </apex:outputpanel>
+                    <!-- </apex:pageBlockSection>  -->
+                </apex:pageBlock>      
+                
+                <apex:pageBlock >
+                    <apex:pageBlockButtons location="top" style="float:right;">         
+                        <apex:actionStatus id="saveStatus">                    
+                            <apex:facet name="stop"> 
+                                <apex:outputPanel >  
+                                    <apex:commandButton styleclass="slds-button slds-button--neutral " value="{!$Label.xcdhcm__new_employee_reviewbcancel}" action="{!cancelReview}" immediate="true" rerender="errmsg" status="saveStatus"/>
+                                    <apex:commandButton styleclass="slds-button slds-button--brand" value="{!$Label.xcdhcm__new_employee_reviewbsave}" action="{!savePerformanceReviewDetail}" rerender="errmsg" status="saveStatus" rendered="{!rectype != 'null'}" />
+                                </apex:outputPanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <apex:outputPanel >  
+                                    <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div> 
+                                </apex:outputPanel>
+                            </apex:facet>                               
+                        </apex:actionStatus>      
+                    </apex:pageBlockButtons> 
+                </apex:pageBlock>
+                <div Class="line"></div>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

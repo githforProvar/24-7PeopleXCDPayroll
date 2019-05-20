@@ -1,0 +1,49 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c"
+    extensions="xcdhcm.EmployeeController" sidebar="false" showHeader="false">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/EmpDetPageCSS.css')}" />    
+    <script>
+        function ClosePopup(){
+           window.parent.close();        
+        }
+        
+        window.onload = function() { 
+            if ({!schmaintenance}!=true){ 
+                window.parent.close(); 
+            } 
+        }
+    </script>
+    
+     <div style="width:600px;height:120px;"></div>
+     <apex:form style="height:400px; ">
+         <div  style="height:600px;">
+                <apex:OutputPanel layout="block" rendered="{!schmaintenance==true}" style="width:430px;height:270px;margin:auto;position:relative; border: 1px solid #f87878;
+                                                                                            border-radius: 10px;-moz-box-shadow: 0 0 9px #ccc;-webkit-box-shadow: 0 0 9px #ccc;
+                                                                                            box-shadow: 0 0 9px #ccc;">
+                    
+                    <div style="width:430px;height:35px;border-bottom: 2px solid #ccc;">
+                            <p style="font-weight: bold;font-size: 14px;margin-left: 95px;">Scheduled Maintenance Notification<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Service Will Not Be Available-</p>
+                    </div>
+                    
+                    <div style="margin-left:20px;margin-top:10px; background-repeat: no-repeat;background-size: 150px 150px;background-position-x: 258px;background-position-y: 58px;background-position: 100% 85%;background-image:url(/resource/XCD_static_resources/Icons/Schedule_Maintance_Img_Clock);">
+                    <h3 style="font-size: 12px;font-weight: bold;">
+                    <center>  
+                       <apex:outputText value="{!schmainStartDate}"/> <br/> to <br/>
+                       <apex:outputText value="{!schmainEndDate}"/><br/>
+                    </center>
+                    </h3>
+                        <p style="font-size:12px; margin:auto;width:380px;margin-top:20px;">
+                        Please be adivised that XCD HR will be performing scheduled maintenance during the above time period. </p>
+                        
+                        <p style="font-size:12px;margin:auto;width:380px;margin-top: 10px;">
+                        XCD HR will not be available during this period. Please plan accordingly. We apologize for any inconvenience to you and your business.
+                        </p>
+                        <!-- <apex:image value="{!URLFOR($Resource.Schedule_Maintance_Img_Clock)}"  style="float:right;width: 120px;margin-left: 15px;" /> -->
+                        
+                    
+                    <apex:commandLink id="btn" oncomplete="ClosePopup();" value="Continue" style="color:#555;float:right;margin-right:10px; margin-top:40px;"/>
+                        <br/><br/> 
+                    </div>
+                </apex:OutputPanel>
+             </div>        
+    </apex:form>
+</apex:page>

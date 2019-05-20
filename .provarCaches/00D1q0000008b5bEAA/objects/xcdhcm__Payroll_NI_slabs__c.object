@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>This custom setting is used for NI band setting on the basis of tax year.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>xcdhcm__NI_bands__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Used for storing no of bands used for the current tax year.</description>
+        <externalId>false</externalId>
+        <label>NI bands</label>
+        <length>50</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Related_NI_API_name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Used for storing API name related to band.</description>
+        <externalId>false</externalId>
+        <label>Related NI API name</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Related_YTD_NI_API_name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Used for storing YTD API name related to band.</description>
+        <externalId>false</externalId>
+        <label>Related YTD NI API name</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Tax_year__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Used for storing tax year.</description>
+        <externalId>false</externalId>
+        <label>Tax year</label>
+        <length>10</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Payroll NI slabs</label>
+    <visibility>Public</visibility>
+</CustomObject>

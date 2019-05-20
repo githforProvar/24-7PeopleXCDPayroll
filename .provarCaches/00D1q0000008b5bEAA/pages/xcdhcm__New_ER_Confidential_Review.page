@@ -1,0 +1,25 @@
+<!--  
+<apex:page standardController="Employee_Detail__c" extensions="ReviewExtensionController" sidebar="false" showHeader="true" wizard="false" >
+<apex:form >
+
+	<apex:pageBlock title="{!$Label.PHNew_ER_Confidential_Review}"> 
+     <apex:pageBlockButtons location="bottom">
+        	<apex:commandButton value="{!$Label.New_ER_Confidential_ReviewBSave}" action="{!saveERReviewDetail}"/>
+        	<apex:commandButton value="{!$Label.New_ER_Confidential_ReviewBCancel}" action="{!cancelERReview}"/>
+     </apex:pageBlockButtons>
+  
+ 
+  		<apex:pageBlockSection title="{!$Label.New_ER_Confidential_ReviewNewERReview}" columns="2">
+        <apex:repeat value="{!employeeConfidentialDetail}" var="ec" rows="1">
+            <apex:repeat value="{!$ObjectType.Employee_Review__c.Fieldsets.ER_Confidential_Set}" var="o" id="therepeat" >
+             <apex:inputField value="{!ec[o]}" required="{!o.Required}" />                                                         
+             </apex:repeat>
+             </apex:repeat> 
+     </apex:pageBlockSection>
+     
+    
+   </apex:pageBlock>
+    </apex:form>
+</apex:page>
+-->
+<apex:page ></apex:page>

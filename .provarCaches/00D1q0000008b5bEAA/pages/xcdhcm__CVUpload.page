@@ -1,0 +1,29 @@
+<apex:page controller="xcdhcm.AttachmentController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'RecruitmentAppCSS/Recruitmentsub.css')}" />  
+  <apex:form >
+    <apex:pageMessages id="errmsg"/>
+    <apex:pageBlock title="{!$Label.xcdhcm__phcvupload}">
+ 
+      <apex:pageBlockButtons >
+        <apex:commandButton action="{!uploadCV}" value="{!$Label.xcdhcm__cvuploadbupload}"/>
+        <apex:commandButton action="{!cancelApplicantUpload}" value="{!$Label.xcdhcm__cvuploadbcancel}" immediate="true"/>
+      </apex:pageBlockButtons>
+ 
+      <apex:pageBlockSection showHeader="false" columns="2" id="block1">
+ 
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="File" for="file"/>
+          <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="file" />
+        </apex:pageBlockSectionItem>
+ 
+        <apex:pageBlockSectionItem >
+          <apex:outputLabel value="Description" for="description"/>
+          <apex:inputTextarea value="{!attachment.description}" id="description"/>
+        </apex:pageBlockSectionItem>
+ 
+      </apex:pageBlockSection>
+ 
+    </apex:pageBlock>
+       <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+  </apex:form>
+</apex:page>

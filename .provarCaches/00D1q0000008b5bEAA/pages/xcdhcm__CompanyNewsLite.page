@@ -1,0 +1,398 @@
+<apex:page sidebar="false" wizard="false" cache="false"  showHeader="True"  standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.IntranetHomeController"
+standardStylesheets="true"  action="{!runQuery}">
+   <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+     <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet"/> 
+      <style>
+       .slds.slds-scope .slds-large-size_2-of-12, .slds-scope .slds-large-size--2-of-12 
+        {
+            width: 12.6666666667%!important;
+        }
+      </style>
+         
+     <script>
+         //START :: 09-10-2017 New Lightning UI Added by Rahul S 
+         //Used to display spinner on loading page
+         document.onreadystatechange = function () 
+         {
+             var state = document.readyState
+             if (state == 'interactive') 
+             {
+                 document.getElementById('contents').style.visibility="hidden";
+             } 
+             else if (state == 'complete') 
+             {
+                //wait for 6 sec.
+                setTimeout(function()
+                {
+                     document.getElementById('load').style.display = "none";
+                     document.getElementById('contents').style.visibility="visible";
+                },4000); 
+             }
+         }
+         //END :: 09-10-2017 New Lightning UI Added by Rahul S 
+      </script>
+      
+      <apex:includeLightning />
+      <head onLoad="init()" >
+         <apex:slds />
+      </head>
+      
+      <!-- used to display spinner on page load -->
+       <div id="load">
+           <div class="slds-spinner_container slds-show slds-is-fixed" style="background-color:white;">
+               <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                   <div class="slds-spinner__dot-a"></div>
+                   <div class="slds-spinner__dot-b"></div>
+               </div>
+           </div>
+       </div>
+       
+       <!-- used to display page content after page load -->
+       <div id="contents" style="width:100%;overflow:hidden;text-align:center;">
+          <!-- Grid view start -->
+          <apex:outputPanel >
+              <div class="slds-grid slds-wrap">
+              
+                 <!--Header Start -->
+                 <div class="slds-size_1-of-1" id="Header" ></div>
+                 <!--Header end -->
+                 
+                 <!--Right side Grid view start    -->
+                 <div class="slds-size_3-of-12" style="vertical-align:top; text-align:center; padding-left: 58px; padding-right: 58px;">
+                     <div id="BusinessCard" style="margin-left:auto; margin-right:auto; margin-top:-70px"> </div>
+                    <div id="ActionIcon" style="padding-top:20px; height:100%; margin-left:auto; margin-right:auto;"></div>  
+                 </div>
+                 <!--Right side Grid view end -->
+                 
+                <!--Middle part Grid view start -->
+                <div class="slds-size_5-of-12" style="vertical-align:top; text-align:center; padding-top:30px;">
+                    <div style="height: 100%; padding-left:30px; padding-right:30px; padding-top:25px; display:block; border-left: 1px solid #ccc; border-right: 1px solid #ccc;">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-size_1-of-1">
+                               <div style="height:15mm; padding-top:4.5mm; padding-left:4.5mm; background-color:#96A0D0; border-top-left-radius:5mm; border-top-right-radius:5mm;vertical-align: middle;text-align: left;">
+                                   <span class="slds-icon_container" title="" style="vertical-align: middle;"> 
+                                       <svg class="slds-icon slds-icon--small" aria-hidden="true">
+                                           <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#right')}"></use> 
+                                       </svg>
+                                   </span>
+                                   <!--START :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                   <span style="color:white;font-size:1vw; font-weight:bold; text-align: left">{!$Label.CompanyNewsLiteCompanyvideo}</span>      
+                                   <!--END :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->                                                 
+                               </div>
+                               <div style="margin-bottom:25px;">                        
+                                 <apex:iframe height="322" src="{!companyVideoURL}" frameborder="0"></apex:iframe>
+                               </div>
+                            </div>
+                            
+                            <div class="slds-size_1-of-2" style="border-right: 1px solid rgba(0, 0, 0, 0.2); padding-right:30px;">
+                                <apex:outputPanel rendered="{!showMessageBoard}">   
+                                   <div class="border-radius-circle" style="height:15mm; padding-left:4.5mm; background-color:#ED6E65; border-top-left-radius:5mm; border-top-right-radius:5mm; display: flex;justify-content: left; align-items: center;">
+                                       <span class="slds-icon_container" title=""> 
+                                           <svg class="slds-icon slds-icon--small" aria-hidden="true">
+                                               <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#description')}"></use> 
+                                           </svg>
+                                       </span>
+                                       <!--START :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                       <span style="color:white;font-size:1vw; font-weight:bold; text-align: left">{!compNewsRecordTypeLabels['Message_Board']}</span>
+                                       <!--END :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                   </div>
+                                   
+                                   <div style="font-size:0.75vw; margin-top:5px; margin-bottom:15px;text-align: left;">
+                                        <apex:repeat value="{!messageBoardRecords}" var="message">
+                                           <div style="margin-bottom:5px;">
+                                               <apex:outputText escape="false" value="{!message.xcdhcm__Rich_header__c}"></apex:outputText>
+                                               <apex:outputText escape="false" value="{!message.xcdhcm__Rich_message__c}"></apex:outputText>
+                                           </div>
+                                        </apex:repeat>
+                                    </div>&nbsp; <a style="float: right;" onclick="">View More</a>
+                                </apex:outputPanel>
+                            
+                                <apex:outputPanel rendered="{!showExcellence}"> 
+                                    <div class="border-radius-circle" style="height:15mm; padding-left:4.5mm; background-color:#56B475; border-top-left-radius:5mm; border-top-right-radius:5mm; display: flex;justify-content: left;align-items: center;">
+                                        <span class="slds-icon_container" title="" style="vertical-align: middle;"> 
+                                            <svg class="slds-icon slds-icon--small" aria-hidden="true">
+                                                <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#topic')}"></use> 
+                                            </svg>
+                                        </span>
+                                        <!--START :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                        <span style="color:white;font-size:1vw; font-weight:bold; text-align: left">{!compNewsRecordTypeLabels['Excellence']}</span>
+                                        <!--END :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                    </div>                                      
+                                    <div style="font-size:0.75vw; margin-top:5px; margin-bottom:15px;text-align: left;">
+                                        <apex:repeat value="{!excellenceRecords}" var="excellence">
+                                            <div style="margin-bottom:5px;">
+                                                <apex:outputText escape="false" value="{!excellence.xcdhcm__Rich_header__c}"></apex:outputText>
+                                                <apex:outputText escape="false" value="{!excellence.xcdhcm__Rich_message__c}"></apex:outputText>
+                                            </div>
+                                        </apex:repeat>
+                                    </div>&nbsp; <a style="float: right;" onclick="">View More</a>
+                                </apex:outputPanel> 
+                            </div>
+                                
+                            <div class="slds-size_1-of-2" style="padding-left:30px;">
+                                <apex:outputPanel rendered="{!showFeaturedStaffProfile}">   
+                                    <div style="background-image:url('{!featuredStaffImage}');height: 50mm; border-radius:5mm;background-size:cover;">
+                                       <div class="border-radius-circle" style="height:15mm; padding-left:4.5mm; background-color:rgba(127, 203, 214, 0.64); border-top-left-radius:5mm; border-top-right-radius:5mm; display: flex;justify-content: left;align-items: center;">
+                                           <span class="slds-icon_container" title="" style="vertical-align: middle;"> 
+                                               <svg class="slds-icon slds-icon--small" aria-hidden="true">
+                                                   <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#user')}"></use> 
+                                               </svg>
+                                           </span>
+                                           <!--START :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                           <span style="color:white;font-size:1vw; font-weight:bold; text-align: left">{!compNewsRecordTypeLabels['Featured_profile']}</span>
+                                           <!--END :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                       </div>
+                                   </div>
+                                   <div style="font-size:0.75vw; margin-top:5px; margin-bottom:15px;text-align: left;">
+                                       <apex:repeat value="{!featuredStaffRecords}" var="featuredStaff">
+                                           <div style="margin-bottom:5px;">                                                        
+                                               <apex:outputText escape="false" value="{!featuredStaff.xcdhcm__Rich_message__c}"></apex:outputText>
+                                           </div>
+                                       </apex:repeat>
+                                   </div>&nbsp; <a style="float: right;margin-top:-5px;" onclick="">View More</a>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel rendered="{!showVacancies}">
+                                    <div class="border-radius-circle" style="height:15mm; padding-left:4.5mm; background-color:#E9696E; border-top-left-radius:5mm; border-top-right-radius:5mm; display: flex;justify-content: left;align-items: center;">
+                                        <span class="slds-icon_container" title="" style="vertical-align: middle;"> 
+                                            <svg class="slds-icon slds-icon--small" aria-hidden="true">
+                                                <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#people')}"></use> 
+                                            </svg>
+                                        </span>
+                                        <!--START :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                        <span style="color:white;font-size:1vw; font-weight:bold; text-align: left">{!$Label.CompanyNewsLiteVacancies}</span>
+                                        <!--END :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                                    </div>
+                                    <div style="font-size:0.75vw; margin-top:5px; margin-bottom:15px;text-align: left;">
+                                        <apex:repeat value="{!allVacancy}" var="vacancy">
+                                        <div style="margin-bottom:5px;">
+                                            <span style="font-weight:800;">{!vacancy.Job_title__c}</span><br/>
+                                            <span style="font-weight:400;font-variant:normal;color:#000;">{!vacancy.Location__r.Name}</span>
+                                        </div>
+                                        </apex:repeat>
+                                    </div>&nbsp; <a style="float: right;" href="/one/one.app#/alohaRedirect/apex/xcdhcm__InternalPosition" >View More</a>
+                                </apex:outputPanel>
+                            </div>
+                        </div>                            
+                    </div>
+                </div>
+                <!--Middle part Grid view end -->
+                 
+                 <!--Left part Grid view start -->
+                 <div class="slds-size_4-of-12" style="vertical-align:top; padding-top:55px;">
+                    <div style="padding-left:58px; padding-right:58px;">
+                    <div id="MyCalender"></div>
+                    <div>
+                       <apex:outputPanel rendered="{!showSurvey}">
+                          <div class="border-radius-circle" style="height:15mm; padding-left:4.5mm; background-color:#56B475; border-top-left-radius:5mm; border-top-right-radius:5mm; display: flex;justify-content: left;align-items: center;">
+                             <span class="slds-icon_container" title="">
+                                <svg class="slds-icon slds-icon--small" aria-hidden="true" style="vertical-align: middle;">
+                                   <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#people')}"></use>
+                                </svg>
+                             </span>
+                             <!--START :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                             <span style="color:white;font-size:1vw; font-weight:bold; text-align: left">{!compNewsRecordTypeLabels['Survey_Results']}</span>
+                             <!--END :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                          </div>
+                          <div style="font-size:0.75vw; margin-top:5px; margin-bottom:15px;text-align: left;">
+                             <apex:repeat value="{!surveyResultsRecords}" var="surveyResults">
+                                <div style="margin-bottom:5px;">
+                                   <apex:outputText escape="false" value="{!surveyResults.xcdhcm__Rich_header__c}"></apex:outputText>
+                                   <apex:outputText escape="false" value="{!surveyResults.xcdhcm__Rich_message__c}"></apex:outputText>
+                                </div>
+                             </apex:repeat>
+                          </div>
+                          &nbsp; <a style="float: right;margin-right: 8px;" onclick="">View More</a>
+                       </apex:outputPanel>
+                    </div>
+                    <div>
+                       <div class="border-radius-circle" style="height:15mm; padding-left:4.5mm; background-color:#48AAE6; border-top-left-radius:5mm; border-top-right-radius:5mm; display: flex;justify-content: left;align-items: center;">
+                          <span class="slds-icon_container" title="" style="vertical-align: middle;">
+                             <svg class="slds-icon slds-icon--small" aria-hidden="true">
+                                <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#frozen')}"></use>
+                             </svg>
+                          </span>
+                          <!--START :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                          <span style="color:white;font-size:1vw; font-weight:bold; text-align: left">{!$Label.CompanyNewsLiteTweets}</span>
+                          <!--END :: 08-01-2018 Lightning Patch1 NPPD-1590 Company News sections are hardcoded change to custom labels Modified by Rahul S.-->
+                       </div>
+                       <a class="twitter-timeline" data-height="400" href="{!companyTwitterURL}" data-chrome="noheader nofooter noborders transparent"></a>
+                       <script async="x"  src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                    </div>
+                 </div>
+                 <!--Left part Grid view end -->
+              </div>
+          </apex:outputPanel>
+          <!-- Grid view start -->   
+      </div>
+      
+       <!-- START:: 09/12/2017 soql error chnaged by kamal --> 
+      <script> 
+       $Lightning.use
+         (
+             "xcdhcm:XCDLightning", function() 
+             {
+                 $Lightning.createComponent
+                 (
+                     "xcdhcm:NavigationBar",
+                     { 
+                        height:22.0
+                     },
+                     "Header",
+                     function(cmp) 
+                     {
+                     }
+                 );
+             }
+         );   
+         
+                  
+        $Lightning.use
+        (
+           "xcdhcm:XCDLightning", function() 
+           {
+                 
+                 var employeeInfo = {};
+                 employeeInfo['employeeId'] = '{!employeeInfo["employeeId"]}';
+                 employeeInfo['userId'] = '{!employeeInfo["userId"]}';
+                 employeeInfo['personalId'] = '{!employeeInfo["personalId"]}';
+                 employeeInfo['companyId'] = '{!employeeInfo["companyId"]}';
+                 employeeInfo['profileImageURL'] = '{!employeeInfo["profileImageURL"]}';
+                 employeeInfo['empName'] = '{!employeeInfo["empName"]}';
+                 employeeInfo['email'] = '{!employeeInfo["email"]}';
+                 employeeInfo['phone'] = '{!employeeInfo["phone"]}';
+                 employeeInfo['Job_Role'] = '{!employeeInfo["Job_Role"]}';
+                 employeeInfo['Leaving_Date'] = '{!employeeInfo["Leaving_Date"]}';
+           
+                $Lightning.createComponent
+                (
+                   "xcdhcm:MyActionIcon",
+                   { 
+                       displayActionH : false,
+                       parentPage: "CompanyNewsLite",
+                       permissionLevel: "EmployeeView",                       
+                       employeeInfo: employeeInfo
+                   },
+                   "ActionIcon",
+                   function(cmp) 
+                   {
+                   }
+               );
+            }
+        );
+         
+        var showCalendar =  JSON.parse('{!calendarPermission}'); 
+        if(showCalendar)
+        {
+           $Lightning.use
+           (
+               "xcdhcm:XCDLightning", function() 
+               {
+                    var userID='{!employeeInfo["userId"]}';
+                    var empID='{!employeeInfo["employeeId"]}'; 
+               
+                    $Lightning.createComponent
+                    (
+                       "xcdhcm:MyCalenderLite",
+                       {
+                           parentPage: "CompanyNewsLite",
+                           permissionLevel: "EmployeeView",
+                           empID: empID,
+                           userID: userID
+                       },
+                       "MyCalender",
+                       function(cmp) 
+                       {
+                       }
+                    );
+                }
+            );
+         }
+         
+         
+         
+        
+        $Lightning.use
+        (
+            "xcdhcm:XCDLightning", function() 
+            {
+                var userID='{!employeeInfo["userId"]}'; 
+                var empID='{!employeeInfo["employeeId"]}'; 
+                var empName='{!employeeInfo["empName"]}'; 
+                var profileImageURL='{!employeeInfo["profileImageURL"]}';
+                //START :: 20-03-2018 Lightning Performance Improvement Added by Rahul S 
+                var showBusinessCardImageUpload='{!showBusinessCardImageUpload}';
+                //END :: 20-03-2018 Lightning Performance Improvement Added by Rahul S 
+                
+                $Lightning.createComponent
+                (
+                    "xcdhcm:MyBusinessCard",
+                    { 
+                        parentPage:"CompanyNewsLite",
+                        permissionLevel:"EmployeeView",
+                        widthH:200,
+                        marginL:35,
+                        marginT:-(200-2*35)/2,
+                        showNameTrue:true,
+                        userID: userID,
+                        empID: empID,
+                        empName: empName,
+                        profileImageURL: profileImageURL,
+                        //START :: 20-03-2018 Lightning Performance Improvement Added by Rahul S 
+                        imageUploadTrue:showBusinessCardImageUpload,
+                        renderBodyTrue:true
+                        //END :: 20-03-2018 Lightning Performance Improvement Added by Rahul S 
+                    }, 
+                    "BusinessCard",
+                    function(cmp) 
+                    {
+                    }
+                );
+            }
+        );
+        
+       </script> 
+       <!-- END:: 09/12/2017 soql error chnaged by kamal -->            
+      <style>
+            .divScroll 
+            {
+                overflow:scroll;
+                width:390mm;
+                height:100%;
+            }   
+            
+            .slds-scope .slds-col
+            {
+                -webkit-flex: inherit;
+            }
+         
+            .rgtbar
+            {
+                vertical-align:top; 
+                padding-top:16mm;
+            }
+                 
+            @media (min-width:768px) and (max-width:1024px) 
+            {
+                .THIS #MyCalender
+                {
+                    padding:20px;
+                }
+                
+                .THIS .customIcon 
+                {
+                    font-family: 'Dosis',sans-serif;
+                }
+            
+                .rgtbar
+                {
+                    vertical-align:top; 
+                    padding-top:16mm;
+                    margin-right:10px;
+                    margin-left:180px;
+                }
+            } 
+      </style>
+   </html>
+</apex:page>

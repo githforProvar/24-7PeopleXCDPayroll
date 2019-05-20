@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Used to display/hide the columns on Timesheets. All frequencies, all types except Days, Project</description>
+    <fields>
+        <fullName>xcdhcm__Balance__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Balance</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Date_hyperlink__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Date hyperlink</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Due__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Due</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Flex_Adjustment_Running_balance__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Flex - Adjustment &amp; Running balance</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Flex_Daily_flex__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Flex - Daily flex</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Hours_Input_Start_End_Break__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Hours Input - Start, End, Break</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Hours_Input_Total_hours__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Hours Input - Total hours</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leave__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Leave</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Overtime_Input__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Overtime - Input</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Overtime_Output__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Overtime - Output</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Toil_Claim__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Toil - Claim</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Top_bar__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Top bar</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Totals_section__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Totals section</label>
+        <type>Checkbox</type>
+    </fields>
+    <label>Timesheet component</label>
+    <pluralLabel>Timesheet components</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

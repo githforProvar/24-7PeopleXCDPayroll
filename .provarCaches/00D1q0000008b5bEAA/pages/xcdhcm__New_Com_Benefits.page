@@ -1,0 +1,88 @@
+<apex:page standardController="xcdhcm__Company__c" extensions="xcdhcm.CompanyExtensionController" sidebar="false" showHeader="true" wizard="false" >
+<!-- START :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+ <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteCompanySub.css')}" />  
+   <style>
+     .slds-scope .slds-section-title--divider 
+     {	 
+        text-transform: none !important;
+	    font-size: 1rem;
+	    line-height: 0.6!important;
+	    border-radius: 4px!important;
+	    font-weight: 500!important; 
+	} 
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form >
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!CancelCompanyBenefits}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Com_Benefits}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                           <!-- ================================== Page content  ==========================================================    -->
+                           <apex:PageMessages id="error_id" />
+                           <apex:repeat value="{!companyBenefits}" var="cb" rows="1">
+                                <h3 class="slds-section-title--divider">{!$Label.xcdhcm__new_com_benefitsnewcompanybenefit}</h3>
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Company_Benefits__c.Fieldsets.xcdhcm__Com_Benefits_Set}" var="i">
+                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        	<!-- START:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh--> 
+											<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Company_Benefits__c.fields[i].Accessible}">
+											<!-- END:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh-->
+                                           	<div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                 	<apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                	{!i.label}
+                                                	<span class="LiteHelpText">
+											        	<apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Company_Benefits__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+											            <span>{!$ObjectType.Company_Benefits__c.fields[i].inlineHelpText}</span>
+													</span>
+                                                </label> 
+                                                <div class="slds-form-element__control">
+                                                   	<apex:inputField value="{!cb[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>   
+                                                </div>                                                                                        
+                                            </div>
+                                            <!-- START:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh--> 
+		                                	</apex:outputpanel>
+		                                	<!-- END:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh-->
+                                        </div>  
+                                    </apex:repeat>
+                                </div>
+                                <br/>
+                        	</apex:repeat>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                        	<apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_com_benefitsbcancel}" action="{!CancelCompanyBenefits}" immediate="true"  styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+			                            <apex:commandButton value="{!$Label.xcdhcm__new_com_benefitsbsaveandnew}" action="{!saveAndNewCompanyBenefits}" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="error_id,id_saveBtn"/>
+			                            <apex:commandButton value="{!$Label.xcdhcm__new_com_benefitsbsave}" action="{!saveCompanyBenefits}"  styleclass="slds-button slds-button--brand" status="saveStatus" rerender="error_id,id_saveBtn" id="id_saveBtn"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form> 
+        </body>
+    </html>
+    <!-- END :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+</apex:page>

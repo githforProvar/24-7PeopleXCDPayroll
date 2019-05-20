@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Filters compensation, benefits and review summary records for Non Admin profiles. Display options as Admin</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>xcdhcm__Display_option__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The compensation,benefit and review records are filtered based on display option configured.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Configure one of the following as Display option , 
+All records,Last 3 years,Last 2 years,Last 12 months,Current year,Current + previous years,Current + 2 previous years,Current record only.</inlineHelpText>
+        <label>Display option</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Other_Filter_Permission_Sets__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Other Filter:Permission Sets</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Other_Filter_Profiles__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Other Filter:Profiles</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Comp_Benefit_Review_Summary_Other_Filter</label>
+    <visibility>Public</visibility>
+</CustomObject>

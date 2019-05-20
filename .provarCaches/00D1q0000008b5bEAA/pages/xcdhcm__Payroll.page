@@ -1,0 +1,573 @@
+<!-- START :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil -->   
+<apex:page standardController="xcdhcm__Pay_Period__c"
+    action="{!getPayRollDetail}" extensions="xcdhcm.PayrollController"
+    sidebar="false">
+    <!--<apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+  <style>  
+ 
+ <!-- start:: added by Farhan  -->
+ .customPopup {
+    background-color: #1E90FF;
+    border-radius: 6px 6px 6px 6px;
+    border-style: hidden;
+    border-width: 2px;
+    left: 50%;
+    padding: 10px;
+    position: absolute;
+    z-index: 9999;
+    width: 500px;
+    margin-left: -250px;
+    top: 70px;
+}
+   #hlpbtn:hover .titlepopup
+    {
+        display: block !important;
+        background: #FEFDB9;
+        padding: 4px;
+        color: #000;
+        position: absolute;
+        z-index: 1;
+        border: 1px solid #FFA603;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;
+    
+    }
+    .select1 
+    {
+     width: 40px!important; 
+    } 
+    .topic { font-size: 10px; text-decoration: none; }
+    body .pbBody table.list tr.headerRow th 
+    {
+      width:1% !important;
+    }
+    <!-- START:: NPAY-2 class ng-cloak added by Farhan  -->
+    .ng-cloak 
+    {
+        display: none !important;
+    }
+    <!-- END:: NPAY-2 class ng-cloak added by Farhan  -->
+
+
+    <!-- end:: added by Farhan  -->
+
+</style>
+<html>
+<head>
+  
+  <title></title>
+  
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css"/>
+     
+
+     
+     <script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+     <script src="//code.angularjs.org/snapshot/angular.min.js"></script>
+     <link rel="stylesheet"  href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css"/>
+     
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <apex:form > 
+ <div class="container" ng-app="myapp" ng-controller ="customerCtrl" style="width:99% !important" ng-init="search()" >
+
+
+ <!-- START :: 04/05/2016 NPPD-1139 UserGuide Link Added by Namrata-->
+     <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;"
+               target="_blank" action="{!helpLinkPayrollAdmin}" value="Help"
+                id="theCommandLink1" rendered="{!HelpPayrollAdmin}" />
+     <!-- END :: 04/05/2016 NPPD-1139 UserGuide Link Added by Namrata-->
+
+        <apex:pageBlock title="" id="rows1">
+        <apex:pageMessages id="erMsg" />
+            <apex:pageBlockButtons location="top">
+                        <!-- START :: 26/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                        
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollbnewemployer}" id="Newemployer" action="{!newEmpolyee}" rendered="{!AdminViewNewEmployerButton == true}"/>
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollbnewpayroll}" id="Newpayroll" action="{!newPayroll}" />
+                        <!-- START 23/02/2016 NPAY-105 Additional Pay Run - Call from Payroll Not Pay Run by Shiva -->
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollbadditionalpayroll}" id="Additionalpayroll" action="{!additionalPayRun}" />
+                        <!-- END 23/02/2016 NPAY-105 Additional Pay Run - Call from Payroll Not Pay Run by Shiva -->
+                        <!-- For phase 2 ---->
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollbceasepayroll}" id="Ceasepayroll" action="{!ceasepayroll}" />
+                        <!-- END :: 26/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                        
+                        <!-- START :: 14/11/2016 NPAY-71 Year End Process added by Farhan-->
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollbnewtaxyear}" id="Newtaxyear" action="{!newTaxYear}" />
+                        <!-- END :: 14/11/2016 NPAY-71 Year End Process added by Farhan-->
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <table >
+            <tr>
+                <td>
+                    <apex:outputLabel value="View" style="margin-right:10px;"/>
+                </td>
+                <td>
+                    <!-- START:: NPAY-2 view filter box width modified by Farhan  -->
+                   <apex:actionRegion >  
+                                        <apex:SelectList size="1" value="{!selectedVal}"  style="margin-right:150px;"> 
+                                            <apex:actionSupport event="onchange" action="{!searchEmployer}" status="actStatusId"/>
+                                            <apex:selectOptions value="{!openPresentationOptions}" /> 
+                                            <apex:actionStatus startText="Loading detail..." id="actStatusId"/>  
+                                        </apex:SelectList>
+                                    </apex:actionRegion> 
+                  
+                </td>
+             
+                 <td>
+                     <span class="" style="margin-right:250px;width:160px !important;"></span><apex:outputLabel value="Search" style="margin-right:10px;"/>
+                 </td>
+                 
+                 <td>
+                     <input  id= "myInput" type="text" ng-model="criteria.searchtext" ng-change="search()"  placeholder="Search"  ng-model-options="{debounce: {'default': 1000, 'blur': 0}}" style = "width: 250px !important;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC); 
+                              background-repeat: no-repeat;background-position: 235px 8px;"/>
+                                                               
+                 </td>
+           </tr>
+        </table>                             
+  <div>
+  </div>
+      <!-- Default panel contents -->
+     
+
+      <!-- Table --> 
+    <table class="table  table-hover data-table myTable " >
+      
+         <thead>
+                    <tr>
+                     <!--        <th class="Payroll"> <a ng-click="sort_by('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c')" href="#">Payroll 
+                                    <span class="{{Header[0]}}"></span></a>
+                    </th> -->
+                    <th class="Payroll"> <a ng-click="changeSorting('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c')"> Payroll
+    					<!-- <i> is common for icons -->
+    					<i class="glyphicon" ng-class="getIcon('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c')"></i></a>
+                    </th>
+                            <th class="Name"><a ng-click="changeSorting('Name')" href="#">Pay run 
+                                    <i class="glyphicon" ng-class="getIcon('Name')"></i></a>
+                    </th>
+                           <th class="Payrollstatus"><a ng-click="changeSorting('xcdhcm__Payroll_status__c')" href="#"> Status
+                                     <i class="glyphicon" ng-class="getIcon('xcdhcm__Payroll_status__c')"></i></a>
+                    </th>
+                            <th class="Frequency"><a ng-click="changeSorting('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c')" href="#"> Frequency 
+                                   <i class="glyphicon" ng-class="getIcon('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c')"></i></a>
+                    </th>
+                           
+                           <th class="Taxperiod"><a ng-click="changeSorting('xcdhcm__Period_Number__c')" href="#"> Tax period 
+                                     <i class="glyphicon" ng-class="getIcon('xcdhcm__Period_Number__c')"></i></a>
+                    </th>
+                           <th class="Employer">
+                                <a href="#" ng-click="changeSorting('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name')">Employer
+                                     <i class="glyphicon" ng-class="getIcon('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name')"></i></a>
+                    </th>
+                           
+                             <th class="Payrollapproach"> <a ng-click="changeSorting('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c')" href="#">Payroll approach 
+                                    <i class="glyphicon" ng-class="getIcon('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c')"></i></a>
+                    </th>
+                            <apex:outputText rendered="{!hidePayRefCol == false}">
+                                <th class="PAYEreference">
+                                    <a ng-click="changeSorting('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__HMRC_office_number__c',$event)" href="#"> PAYE reference 
+                                        <i class="glyphicon" ng-class="getIcon('xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__HMRC_office_number__c')"></i></a>
+                                   
+                                </th>
+                            </apex:outputText>
+                            
+                            <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                 <!--   START ::summer17&Payroll6 regression issue list changed by Jamil-->
+                <tr  ng-repeat="item in customers | orderBy:sort.active:sort.descending | filter:criteria.searchtext" class="ng-cloak">
+                  <!--   END ::summer17&Payroll6 regression issue list changed by Jamil-->
+                        <td><a ng-href="/{{item.xcdhcm__XCD_PAY_Payroll__r.Id}}" ng-bind="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c"></a></td>               
+                        <td ng-bind="item.Name"></td>
+                        <td ng-bind="item.xcdhcm__Payroll_status__c"></td>
+                        <td ng-bind="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c"></td>
+                        <td ng-bind="item.xcdhcm__Period_Number__c"></td>
+                        <td><a ng-href="/{{item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Id}}" ng-bind="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name"></a></td> 
+                        <td ng-bind="item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c"></td>
+                    <apex:outputText rendered="{!hidePayRefCol == false}">
+                    <td style="text-align:left">{{item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__HMRC_office_number__c}} / {{item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Employer_PAYE_reference__c}}</td>
+                    </apex:outputText>
+                    <td >
+                    <div ng-if="item.xcdhcm__Payroll_status__c==='Draft'">
+                 
+                    <!--START :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->                
+                      <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-primary active">Process</a>
+                   </div>         
+                    <div ng-if="item.xcdhcm__Payroll_status__c==='Final'"> 
+                    <div ng-if="item.xcdhcm__FPS_status_system__c != null && item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'"> 
+                    <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-default">View</a>
+                    </div>
+                    <div ng-if="item.xcdhcm__FPS_status_system__c == null && item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'UK Net'"> 
+                    <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-primary active">Process</a>
+                    </div>
+                    <div ng-if="item.xcdhcm__Approval_status__c != null && item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'Bermuda'"> 
+                    <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-default">View</a>
+                    </div>
+                    <div ng-if="item.xcdhcm__Approval_status__c == null && item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'Bermuda'"> 
+                    <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-primary active">Process</a>
+                    </div>
+                    <div ng-if="item.xcdhcm__Approval_status__c != null && item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'Gross'"> 
+                    <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-default">View</a>
+                    </div>
+                    <div ng-if="item.xcdhcm__Approval_status__c == null && item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c == 'Gross'"> 
+                    <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-primary active">Process</a>
+                    </div>
+                    </div>
+                    <div ng-if="item.xcdhcm__Payroll_status__c==='New'">      
+                     <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-default">Process</a>
+                    </div> 
+                    <!--START :: 04/01/2017 NPAY-71 Year end process modified by Tutu -->
+                    <div ng-if="item.xcdhcm__Payroll_status__c==='Additional'">      
+                     <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-default">Process</a>
+                    </div>
+                    <!-- END :: 04/01/2017 NPAY-71 Year end process modified by Tutu -->         
+                     <!--START :: 04/05/2018 NPAY-467 Issues on Payments page added by Jamil-->
+                    <div ng-if="item.xcdhcm__Payroll_status__c==='Test'">      
+                     <a href="/apex/xcdhcm__PayrollPeriod?id={{item.Id}}&sfdc.override=1" class="btn btn-default">View</a>
+                    </div>
+                    <!-- END :: 04/05/2018 NPAY-467 Issues on Payments page added by Jamil -->         
+                    </td>                     
+                     <!--END :: 09/05/2017 NPAY-241 Payroll Process - Improvements added by Shiva -->   
+                </tr>
+            </tbody>
+        </table>
+    <!-- Dropdown Style -->
+    <table  style="width:99% !important"> 
+    <tr> 
+    <td width="50%">
+       
+            <span class="ng-cloak" ng-if="criteria.page > 0"> {{(criteria.page -1) * criteria.pagesize + 1}} - 
+                     {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}} of {{paging.total}} records.</span>
+                      Select page size. <select class="select1" ng-model="criteria.pagesize"              
+                           ng-options="obj as obj for obj in paging.pagingOptions" />                    
+                                       
+  
+      </td>
+      <td  width="25%"> 
+    
+            <ul class="pagination" > 
+                <li ng-class="{active:0}"><a href="#" ng-click="First()"><span class="glyphicon glyphicon-step-backward"></span></a>
+            </li>
+                <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+                    <a class="topic" href="#" ng-if="item == 'Prev'" ng-click="Prev()">Previous</a>
+                    <a class="topic" href="#" ng-if="item == 'Next'" ng-click="Next()">Next</a>
+                </li>
+                <li>
+                    <a href="#" ng-click="Last()"><span class="glyphicon glyphicon-step-forward"></span></a>
+            </li>
+        </ul>
+     </td>
+     <td width="15%"></td>
+      
+       <td width="20%">
+    
+                <span class="ng-cloak" ng-if="customers.length > 0 ">
+  Page <input class="ng-cloak" type='number' name="input" id="test"
+                         ng-model='criteria.page'
+                         min="1"
+                         max="{{paging.totalpages}}"
+                         style='width:40px;'  />
+                        of {{paging.totalpages}}
+                <span  ng-if="criteria.page =='undefined'" ng-click="MaxPage()"> </span>   
+     </span>
+      
+     
+     
+  
+       </td>
+    </tr>
+</table>        
+ </div>
+ 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular-animate.min.js'></script>
+
+<script type="text/javascript"> 
+              function stopRKey(evt) { 
+              var evt = (evt) ? evt : ((event) ? event : null); 
+              var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+              if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+             } 
+            document.onkeypress = stopRKey; 
+            
+            $('#test').bind('keydown', function(e) {
+            if (e.keyCode == 13) {
+             e.preventDefault();
+             }
+        });
+            </script>        
+ <script type="text/javascript">      
+ angular.module('myapp', ['ngAnimate'])
+  .controller('customerCtrl',['$scope', '$filter', function($scope, $filter)
+   {   
+  
+		  $scope.criteria={
+		    searchtext:'',
+		    page: 1,
+		    pagesize:40,
+		    sort: 'Name',
+		    desc : false 
+		  };
+		  $scope.paging ={
+		    total : 0,
+		    totalpages: 0,
+		    showing: 0,
+		    pagearray: [],
+		    pagingOptions: [10,20,30,40,50]
+		  };
+		  
+		   var searchMatch = function (haystack, needle) {
+		                            if (!needle) {
+		                                return true;
+		                            }
+		                            return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+		                        };
+		  
+		     $scope.search = function()
+		     {   
+				   //$scope.customers =  $filter('filter')(customers, {Name: $scope.criteria.searchtext });
+				   $scope.customers = ($filter('filter')(allPayrolls,
+				function (item)
+				{
+				    return searchUtil(item, $scope.criteria.searchtext);
+				}
+				   ));
+				  
+				   $scope.paging.total = $scope.customers.length;    
+				   var a = ($scope.criteria.page - 1) * $scope.criteria.pagesize;
+				   var b = $scope.criteria.page  * $scope.criteria.pagesize;
+				  
+				   $scope.customers = $scope.customers.slice( a, b );   
+				   $scope.paging.showing = $scope.customers.length;
+				   paging($scope.criteria.page, $scope.criteria.pagesize,$scope.paging.total);
+		  }
+		  
+		  function paging(current, pagesize, total){
+		    var totalpages = Math.ceil(total/pagesize);
+		    $scope.paging.totalpages = totalpages;
+		    // clear it before playing
+		    $scope.paging.pagearray = [];
+		       if(totalpages <=1) 
+		            { 
+		               return;
+		            }
+		            if(totalpages >=1) 
+		            {
+		               
+		                $scope.paging.pagearray.push('Prev');
+		                $scope.paging.pagearray.push('Next');
+		            } 
+		           }  
+		          
+		          $scope.$watch('criteria', function(newValue, oldValue)
+		          {
+		            if(!angular.equals(newValue, oldValue)){
+		                $scope.search();
+		            }
+		          }, true);
+		          
+		          $scope.Prev = function(){
+		            if($scope.criteria.page > 1)      
+		              $scope.criteria.page--;
+		            else if($scope.criteria.page == 1)
+		            {
+		                $scope.criteria.page=1;
+		            } 
+		             
+		          }
+		          
+		          $scope.Next = function(){
+		            if($scope.criteria.page < $scope.paging.totalpages)
+		            {      
+		              $scope.criteria.page++;
+		            }else
+		            {
+		              scope.criteria.page = $scope.paging.totalpages
+		            }   
+		          }
+		          
+		          $scope.Last= function(){
+		            
+		              $scope.criteria.page = $scope.paging.totalpages;
+		              
+		          }
+		           $scope.First= function(){
+		            
+		              $scope.criteria.page = 1;
+		              
+		          }
+		  
+		  
+		  $scope.Prev = function(){
+		   //START ::06/09/2018  p1.5/1.6 regression issue problem Jamil
+		   //NPAY-441 Pay run page - Employee number search / Return action
+		    //if($scope.criteria.page >= 1)
+		    if($scope.criteria.page > 1)
+		    //NPAY-441 Pay run page - Employee number search / Return action  
+		   //END :: 06/09/2018  p1.5/1.6 regression issue problem Jamil      
+		      $scope.criteria.page--;
+		  }
+		  
+		  $scope.Next = function(){
+		    if($scope.criteria.page < $scope.paging.totalpages)      
+		      $scope.criteria.page++;
+		  }
+		        // change sorting order
+		        /*
+		          $scope.sort_by = function(newSortingOrder) {
+		            if ($scope.sortingOrder == newSortingOrder){
+		              $scope.reverse = !$scope.reverse;
+		            }
+		            $scope.sortingOrder = newSortingOrder;
+		            
+		            
+		            if ($scope.reverse) iconName = 'glyphicon glyphicon-chevron-up';
+		                else iconName = 'glyphicon glyphicon-chevron-down';
+                if (sortBy === 'xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c') {
+            $scope.Header[0] = iconName;
+                } else if (sortBy === 'Name') {
+            $scope.Header[1] = iconName;
+                } else if (sortBy === 'xcdhcm__Payroll_status__c'){
+            $scope.Header[2] = iconName;
+        }
+                else if (sortBy === 'xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c'){
+            $scope.Header[3] = iconName;
+        }
+               else if (sortBy === 'xcdhcm__Period_Number__c'){
+            $scope.Header[4]= iconName;
+        } 
+              else if (sortBy === 'xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name'){
+            $scope.Header[5]= iconName;
+        } 
+              else if (sortBy === 'xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c'){
+            $scope.Header[6]= iconName;
+        }
+              else if (sortBy === 'xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__HMRC_office_number__c'){
+            $scope.Header[7]= iconName;
+        }                            
+
+        $scope.reverse = !$scope.reverse;
+
+    };
+		    */
+$scope.sort = {
+  active: '',
+  descending: undefined
+}     
+
+$scope.changeSorting = function(column) {
+
+  var sort = $scope.sort;
+
+  if (sort.active == column) {
+     sort.descending = !sort.descending;
+  } 
+  else {
+    sort.active = column;
+    sort.descending = false;
+  }
+};
+
+$scope.getIcon = function(column) {
+
+  var sort = $scope.sort;
+
+  if (sort.active == column) {
+    return sort.descending
+      ? ' '
+      : ' ';
+    }
+
+  return ' ';
+}
+		
+        
+   function searchUtil(item, toSearch) 
+        {
+	    /* Search Text in following fields */
+	  return (item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name.toLowerCase().indexOf(toSearch.toLowerCase()) > -1
+   
+     || item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c.toLowerCase().indexOf(toSearch.toLowerCase()) > -1
+     || item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Payroll_approach__c.toLowerCase().indexOf(toSearch.toLowerCase()) > -1
+     || item.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c.toLowerCase().indexOf(toSearch.toLowerCase()) > -1
+     || item.xcdhcm__Payroll_status__c.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 
+     || item.Name.toLowerCase().indexOf(toSearch.toLowerCase()) > -1
+     || item.xcdhcm__Period_Number__c == toSearch)? true : false;
+
+  }
+    
+   // START ::summer17&Payroll6 regression issue list changed by Jamil
+    $scope.orderByFunction = function(customers){
+    return parseInt(customers.Period_Number__c);
+    
+    angular.forEach(customers, function (item) {
+  item.xcdhcm__Period_Number__c = parseFloat(item.xcdhcm__Period_Number__c);
+});
+  };
+  
+  $scope.resetAll = function () {
+              if( $scope.criteria.searchtext == '')
+              {
+                $scope.criteria.page =1;
+              }
+                
+               
+               
+            };
+		            
+    var input = document.getElementById('myInput');
+
+    input.onkeydown = function()
+     {
+	    var key = event.keyCode || event.charCode;
+	
+	    if( key == 8 || key == 46 )
+	    {
+	        $scope.criteria.page =1;
+	        return true;
+	    }    
+	}; 
+	input.onkeydown = function()
+	 {
+        $scope.criteria.page =1;
+		        return true;
+     };              		 
+}
+]);    
+   // START ::summer17&Payroll6 regression issue list changed by Jamil
+   
+         
+          // customers ={!conListJSON};
+	       // END ::summer17&Payroll6 regression issue list changed by Jamil
+      // }]); // end of .controller('customerCtrl',['$scope', '$filter', function($scope, $filter)
+        
+        var allPayrolls = {!conListJSON};
+        for(var i = 0; i < allPayrolls.length; i++){
+   				 var obj = allPayrolls[i];
+			    for(var prop in obj)
+			    {
+			        if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop]))
+			        {
+			            obj[prop] = +obj[prop];   
+			        }
+			    }
+}
+
+</Script>
+     </apex:form>
+</body>
+</html>
+</apex:page>
+ <!--  END :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil -->

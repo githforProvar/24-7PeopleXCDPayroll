@@ -1,0 +1,230 @@
+<!--START :: 14-11-2017 NPPD-1530 Fix size issue with Sharing Audit modified by Kumbresh-->
+<apex:page controller="xcdhcm.SharingAuditController" sidebar="false"> 
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEditPage.css')}" />
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="sharingAuditApp" lang="en">
+        <head>
+            <apex:slds />
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+            <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>    
+            <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+            <style>
+            
+            .bPageBlock {
+    border-top: 0px solid #222 !important;
+    }
+            </style>
+        </head>
+        <script>
+            
+            var sharingAuditApp = angular.module('sharingAuditApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+             
+            sharingAuditApp.controller('sharingAuditWrapController',   function($scope,$window,$filter,$uibModal,$sce,$timeout, $log, $compile){
+                
+                <!--- JSON from apex controller --->
+                $scope.items = {!wrapList}; 
+                    
+                //Pagination
+                $scope.filteredItems = [];
+                $scope.maxSize = 5; 
+                $scope.itemsPerPage = 100;
+                $scope.currentPage = 1; 
+                $scope.showevaluatesection = "false";
+                $scope.reshareSuccessMsg = "false";
+                $scope.initialChkBoxVal = false;
+                $scope.reShareAuditRecordWrapListJSON = [];
+                
+                //functions have been describe process the data for display
+                search();
+                
+                //Initialize the Search Filters 
+                function searchMatch(haystack, needle) 
+                {
+                    if(!needle) 
+                    {
+                        return true;
+                    }
+                    return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+                }
+                
+                function search() 
+                {
+                    $scope.filteredItems = $filter('filter')($scope.items, function (item) 
+                    {
+                        for(var attr in item) 
+                        {
+                        if(searchMatch(item.FirstName , $scope.query))
+                                return true;
+                        }
+                        return false;
+                    });
+                    if($scope.filteredItems.length < 1)
+                    {
+                        $scope.showevaluatesection = "false";
+                    }
+                    else
+                    {
+                        $scope.showevaluatesection = "true";
+                    }
+                }
+                
+                $scope.selectRecords = function() 
+                {
+                    $scope.filteredItems.forEach(function(item)
+                    {
+                        item.isSelected = $scope.initialChkBoxVal;
+                    }); 
+                }; 
+                 
+                $scope.reShare = function()
+                {
+                    for (var i = 0; i < $scope.filteredItems.length; i++)
+                    {
+                        if($scope.filteredItems[i].isSelected == true)
+                        {
+                            $scope.reShareAuditRecordWrapListJSON.push($scope.filteredItems[i]);
+                        }
+                    }
+                
+                    if($scope.reShareAuditRecordWrapListJSON !='' && $scope.reShareAuditRecordWrapListJSON.length > 0)
+                    {
+                        $scope.reshareSuccessMsg = "true";
+                        reShareFunc();
+                    }
+                }; 
+                
+                function reShareFunc()
+                { 
+                    Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.SharingAuditController.reShareRecordsMethod}',
+                    JSON.stringify($scope.reShareAuditRecordWrapListJSON),
+                       function(result, event)
+                       {
+                           if (event.status)
+                           {
+                               //Nothing to return
+                           }
+                           else if (event.type === 'exception') {
+                               $scope.errMsg = event.message;
+                           } else {
+                               $scope.errMsg = event.message;
+                           }
+                       }, 
+                   {escape: false}
+                   );
+                }
+                 
+            });
+            
+        </script>
+        <body ng-controller="sharingAuditWrapController" style="font-size:10px;" ng-cloak="x">
+            <apex:form >
+                <div ng-show="showevaluatesection == 'false'">
+                    <apex:pageBlock title="{!$Label.xcdhcm__phsharingaudit}" id="pgblk1id">
+                        <br/>
+                        <apex:pageBlockButtons location="top">
+                            <apex:commandbutton value="{!$Label.xcdhcm__sharingauditbinitiatesharingaudit}" action="{!initiateSharingAudit}" rerender="pgblk1id"  rendered="{!initiateSuccessMsg!=true}"/>
+                        </apex:pageBlockButtons>
+                        <apex:pagemessage summary="You will be notified with the email once the evaluation is completed.Do not make any manager change on the system." severity="info" strength="3" rendered="{!initiateSuccessMsg}"/>
+                    </apex:pageBlock>
+                </div>
+                
+                <div ng-show="showevaluatesection == 'true'">
+                    <apex:pageBlock title="{!$Label.xcdhcm__phsharingaudit}" id="pgblk2id">
+                        
+                        <div ng-if="reshareSuccessMsg == 'true'">
+                            <apex:pagemessage summary="You will be notified with the email once the reshare process is completed.Do not make any manager change on the system." severity="info" strength="3"/>
+                        </div>
+                        
+                        <div ng-if="reshareSuccessMsg == 'false'">
+                            <apex:pageBlockButtons location="top">
+                                <apex:commandbutton rerender="pgblk2id" style="display:none;">
+                                    <input type="button" ng-click="reShare()" value="{!$Label.SharingAuditBReshare}" class="btn"/>
+                                </apex:commandbutton>                       
+                            </apex:pageBlockButtons>
+                        </div>
+                        
+                        <table class="slds-table slds-table_bordered  slds-table_fixed-layout" style="font-size: 11px;" >                                                                        
+                            <thead title="{!$Label.SharingAuditListofEmployees}">
+                                <tr class="slds-text-title--caps">
+                                    <th scope="col" style="width: 3.25rem;font-size: 12px;" >
+                                       <input type="checkbox" ng-model="initialChkBoxVal" ng-change="selectRecords()"></input>
+                                    </th>
+                                    
+                                    <th scope="col" style="font-size: 12px;"> 
+                                        <div id="Column1" class="slds-truncate" title="{!$ObjectType.Sharing_audit__c.fields.Employee_L__c.label}">
+                                            {!$ObjectType.Sharing_audit__c.fields.Employee_L__c.label}
+                                        </div>
+                                    </th>
+                                    
+                                    <th scope="col" style="font-size: 12px;">
+                                        <div id="Column2" class="slds-truncate" title="{!$ObjectType.Sharing_audit__c.fields.Record__c.label}" >
+                                            {!$ObjectType.Sharing_audit__c.fields.Record__c.label}
+                                        </div>
+                                    </th>
+                                    
+                                    
+                                    <th scope="col" style="font-size: 12px;">
+                                        <div id="Column4" class="slds-truncate" title="{!$ObjectType.Sharing_audit__c.fields.Manager__c.label}" >
+                                            {!$ObjectType.Sharing_audit__c.fields.Manager__c.label}
+                                        </div>
+                                    </th>
+                                    
+                                    <th scope="col" style="font-size: 12px;">
+                                        <div id="Column5" class="slds-truncate" title="{!$ObjectType.User.fields.IsActive.label}" >
+                                            {!$ObjectType.User.fields.IsActive.label}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                <tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak">
+                                    <td >
+                                        <div class="slds-truncate" title="{{item.isSelected}}">
+                                            <input type="checkbox" ng-model="item.isSelected"/>
+                                        </div>
+                                    </td>
+                                    
+                                    <td >
+                                        <div class="slds-truncate" title="{{item.xcdhcm__Employee_L__r.Name}}">
+                                            {{item.empName}}
+                                        </div>
+                                    </td>
+                                    
+                                    <td >
+                                        <div class="slds-truncate" title="{{item.xcdhcm__Record__c}}">
+                                            {{item.recordName}}
+                                        </div>
+                                    </td>
+                                    
+                                    <td >
+                                        <div class="slds-truncate" title="{{item.xcdhcm__Manager__r.Name}}">
+                                            {{item.mgrName}}
+                                        </div>
+                                    </td>
+                                    
+                                    <td >
+                                        <div class="slds-truncate" title="{{item.xcdhcm__Manager__r.IsActive}}">
+                                            <input type="checkbox" ng-model="item.isActivemgr" ng-disabled="true" /> 
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </apex:pageBlock>
+                </div>
+                <!-- =========================================START Pagination=== ================================================ -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-left: 0px;font-size: 12px;" ng-show="showevaluatesection == 'true'">
+                    <ul uib-pagination ="x"  total-items="filteredItems.length" ng-model="currentPage" items-per-page="itemsPerPage" 
+                        max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true" >
+                    </ul>
+                </div>
+                <!-- =========================================END Pagination=== ================================================ -->
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

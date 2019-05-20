@@ -1,0 +1,1494 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.JoinerExtensionController" action="{!creatUserinit}" sidebar="false" showHeader="true">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteJoinerFirst.css')}" />    
+    <script >
+    function assignValue(buttonNum)
+    {
+        document.getElementById('{!$Component.theform.theblock.pSec.theField}').value = buttonNum;
+    } 
+    
+    function DisableAllButtons (actionText) 
+    {
+        var buttons = document.getElementsByClassName("btn");
+        for (var i = 0; i < buttons.length; i++) 
+        {
+            var button = buttons[i];
+            button.disabled = true;
+            button.classList.add("btnDisabled");
+            if ( actionText != null && actionText != "" ) button.value = actionText;
+            button.style.color='#336699';
+        }
+    }
+    function SaveOnClick (buttonNum) 
+    {
+        DisableAllButtons ("Processing...");
+        document.getElementById('{!$Component.theform.theblock.pSec.theField}').value = buttonNum;
+        doSave();
+    }           
+    
+    var adjustDatePicker = function(e)
+    {
+        e.preventDefault();
+        var picker = document.getElementById('datePicker');
+        var scrollContainer = document.getElementById('containingDiv');
+        
+        console.log(picker.style.top);
+        picker.style.top = (parseInt(picker.style.top) - scrollContainer.scrollTop) + 'px';
+        console.log(picker.style.top);
+    };        
+    
+    </script>
+    
+    <style>
+        .Custom283Tab .secondaryPalette, .individualPalette .Custom283Block .secondaryPalette 
+        {
+            background-color: #fff;
+            border-color: #fff;
+        }
+        
+        .bPageBlock .detailList .dataCol 
+        {
+        	width: 50%; 
+        }
+        
+        #datePicker 
+        {
+        	width: 22%;
+        }
+        
+        .apexp .detailList .list td, .apexp .detailList .list th, .apexp .editPage .bPageBlock .detailList .list tr td, .apexp .editPage .bPageBlock .detailList .list tr th 
+        {
+        	border-bottom: white; 
+        }
+        
+        abbr[title], acronym[title] 
+        {
+        	text-decoration: none!important;
+        }
+        
+        .LiteHelpText:hover span 
+        {
+        	left:5% !important;
+        }
+        
+        .slds-scope img 
+        {
+        	max-width: none;
+        } 
+        
+       	<!-- START :: 02-11-2017 Lightning 2 NPPD-1467 Joiner process - information messages Added by Rahul S -->
+        .infoM2 .msgIcon, .infoLarge 
+        {
+        	display:none;
+        }
+        
+        .infoM6, .infoM4, .infoM3, .infoM2, .infoS1 
+        {
+        	width: 100%;
+        }
+      	<!-- END :: 02-11-2017 Lightning 2 NPPD-1467 Joiner process - information messages Added by Rahul S -->
+      
+        .popupBg
+        {
+	        opacity: 1.0;
+	        filter: alpha(opacity = 60);
+	        position: absolute;
+	        width: 100%;
+	        height: 100%;
+	        top: 0;
+	        left: 0;
+	        z-index: 9998;
+        }
+        
+        .customPopup
+        {
+	        line-height: 25px;
+	        position: absolute;
+	        left: 50%;
+	        padding:10px;
+	        z-index: 9999;
+	        text-align: center;
+	        top: 40%;
+	        width: 500px;
+	        margin-left: -250px;
+	        text-decoration: none;
+	        font-weight: bold;
+	        
+	        background: #ffffff !important;
+	        border: 1px solid #ccc !important;
+	        
+	        -moz-box-shadow: 4px 5px 10px #99ccff;
+	        -webkit-box-shadow: 4px 5px 10px #99ccff;
+	        box-shadow: 4px 5px 10px #99ccff;
+	        -webkit-border-radius: 5px;
+	        -moz-border-radius: 5px;
+	        color:#336699;
+ 		<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+        .lookupInput
+        {
+             display: inline-table;
+             width: 100% !important;
+        }
+       
+        .lookupInput img
+        {
+            margin-right: 2em;
+            margin-top: 10px;
+        }
+        <!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+    </style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form id="theform">
+            	<!-- START :: NPPD-1162 12/04/2018 Work cycle related validation error messages Modified by Ranjeet -->
+                <apex:actionFunction name="doSave" action="{!checkJrValidationMsg}" >
+                <!-- END :: NPPD-1162 12/04/2018 Work cycle related validation error messages Modified by Ranjeet -->
+                    <apex:param name="varA" value="3" assignTo="{!varA}" />
+                </apex:actionFunction>
+                
+                <div style="float:left;margin-top:8px;margin-bottom: 10px; margin-left: 12px;">
+                    <h3 class="slds-text-heading--medium"> Set up new employee</h3>   
+                </div>
+                <apex:pageBlock mode="edit" id="theblock">
+                    <!-- START :: 02-11-2017 Lightning 2 NPPD-1467 Joiner process - information messages Added by Rahul S -->
+                    <apex:pageMessage summary="{!$Label.xcdhcm__createusersimusethispagetosetupnewemployment}" severity="info" strength="3"/>
+                    <!-- END:: 02-11-2017 Lightning 2 NPPD-1467 Joiner process - information messages Added by Rahul S -->
+                    <apex:pageMessages id="errorId" escape="false"/>
+                    
+                    <apex:actionStatus id="wait">                   
+                        <apex:facet name="start">
+                            <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </apex:facet>
+                        <apex:facet name="stop">
+                            <div class="slds-spinner_container slds-hide slds-is-fixed">
+                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </apex:facet>                                
+                    </apex:actionStatus>
+                    
+                    <apex:actionRegion >
+                        <apex:pageBlockSection id="info" title="{!$Label.xcdhcm__createusers_additional_infopersonal}" columns="1"> 
+                            <apex:pageBlockSectionItem helptext="Use this field where the new joiner already has a User record. Note that for rejoiners you should create a new and not reuse the old User record." id="theblocksecitem" rendered="{!creEmpDetail.id == null}">
+                                <apex:outputpanel >
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                            <label class="slds-form-element__label" style="margin-left:13px">
+                                                Select existing user (if available)
+                                                <!-- <img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" title="Use this field where the new joiner already has a User record. Note that for rejoiners you should create a new and not reuse the old User record."/> -->
+                                                <span class="LiteHelpText">
+                                                    <img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                    <span>Use this field where the new joiner already has a User record. Note that for rejoiners you should create a new and not reuse the old User record.</span>
+                                                </span>
+                                            </label> 
+                                            <div class="slds-form-element__control">
+                                                <apex:outputPanel >
+                                                    <apex:inputHidden value="{!UserId}" id="targetId"/>
+                                                    <apex:inputText size="30" value="{!userName}" id="targetName" style="width:47%;margin-left:12px" tabindex="1">
+                                                        <apex:actionSupport event="onkeyup" action="{!userExist}" reRender="errorId,theblockone,tstpopup"/>     
+                                                    </apex:inputText> 
+                                                    <!-- <apex:actionStatus startText="Loading detail..." id="recordStatus"/>   -->
+                                                    <apex:actionStatus id="recordStatus">                   
+                                                        <apex:facet name="start">
+                                                            <div class="slds-spinner_container slds-show" >
+                                                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                                    <div class="slds-spinner__dot-a"></div>
+                                                                    <div class="slds-spinner__dot-b"></div>
+                                                                </div>
+                                                            </div>
+                                                        </apex:facet>
+                                                        <apex:facet name="stop">
+                                                            <div class="slds-spinner_container slds-hide">
+                                                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                                    <div class="slds-spinner__dot-a"></div>
+                                                                    <div class="slds-spinner__dot-b"></div>
+                                                                </div>
+                                                            </div>
+                                                        </apex:facet>                                
+                                                    </apex:actionStatus> 
+                                                    <apex:commandLink action="{!ShowUserListPopup}"  type="image/png" rerender="tstpopup" style="text-decoration:none" tabindex="1">
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/lookup.png')}" class="ClookupIcon" title="User Lookup (New Window)"/>
+                                                    </apex:commandlink>
+                                                </apex:outputPanel>
+                                            </div>                                                                                        
+                                        </div>
+                                    </div> 
+                                </apex:outputpanel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel id="tstpopup">
+                                    <apex:outputPanel rendered="{!displayUserListPopup}">
+                                        <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                                            <div class="slds-modal__container">
+                                                <div class="slds-modal__header">
+                                                    <apex:commandLink action="{!CloseUserListPopup}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                                        <!-- START :: 19-07-2018 Summer P1 regression issue modified by Rahul S -->
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                                                    	<!-- END :: 19-07-2018 Summer P1 regression issue modified by Rahul S -->
+                                                    </apex:commandLink>
+                                                    <h2 id="header43" class="slds-text-heading--medium"></h2>
+                                                </div>
+                                                <div class="slds-modal__content slds-p-around--medium"> 
+                                                    <div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" /><h1 style="font-size: 1.8em;color: #333435;">Lookup</h1></div>
+                                                    <p> Enter search text and click Go </p><br/>
+                                                    <apex:outputText Style="Color:red;" value="Your search returned {!activeUsrCount} Active users. Only first 100 are displayed.  Please narrow search result by typing in the user's first name." rendered="{!activeUsrCount>100}"/> 
+                                                    <br/>
+                                                    <!-- STRAT :: 19-07-2018 Summer P1 regression issue modified by Rahul S -->
+                                                    <apex:inputText value="{!query}" id="query" style="width:25% !important"/> 
+                                                    <!-- END :: 19-07-2018 Summer P1 regression issue modified by Rahul S -->
+                                                    <apex:commandButton value="{!$Label.xcdhcm__createusersbshowactive}" action="{!runQuery}" reRender="tstpopup" styleclass="slds-button slds-button--neutral"/>
+                                                    <apex:commandButton value="{!$Label.xcdhcm__createusersbshowall}" action="{!showAllUser}" rerender="tstpopup" styleclass="slds-button slds-button--neutral"/><br/>
+                                                    <p> Show all will also display all Inactive users. If selecting an Inactive user at least one Salesforce and one Platform license must be available to ensure the new user is setup correctly</p><br/><br/>
+                                                    <div style="height:360px;overflow:auto;">
+                                                        <h1 style="font-size: 1.2em;color: #333435;">Recently Viewed Users</h1>
+                                                        <apex:pageBlockTable value="{!userlist}" var="usr"> 
+                                                            <apex:column headerValue="{!$ObjectType.user.Fields.Name.Label}">
+                                                                <apex:commandLink value="{!usr.Name}" action="{!userSelected}" reRender="info,errorId"> 
+                                                                    <apex:param name="UserIDD" value="{!usr.id}" />
+                                                                    <apex:param name="UserNamee" value="{!usr.Name}" />
+                                                                </apex:commandLink> 
+                                                            </apex:column>
+                                                            <apex:column headerValue="{!$ObjectType.user.Fields.Title.Label}">
+                                                                <apex:outputField value="{!usr.Title}" />
+                                                            </apex:column>
+                                                            <apex:column headerValue="{!$ObjectType.user.Fields.Department.Label}">
+                                                                <apex:outputField value="{!usr.Department}" />
+                                                            </apex:column>
+                                                            <apex:column headerValue="{!$ObjectType.user.Fields.IsActive.Label}">
+                                                                <apex:outputField value="{!usr.IsActive}" />
+                                                            </apex:column>
+                                                        </apex:pageBlockTable>   
+                                                    </div> <br/>
+                                                    <!--                                         <center><apex:commandButton value="{!$Label.xcdhcm__createusersbclose}" action="{!CloseUserListPopup}" rerender="tstpopup"/></center> -->
+                                                </div>
+                                                <div class="slds-modal__footer">
+                                                    <apex:commandButton value="{!$Label.xcdhcm__createusersbclose}" action="{!CloseUserListPopup}" rerender="tstpopup" styleclass="slds-button slds-button--neutral"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-backdrop slds-backdrop--open"></div>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                
+                                
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlock mode="edit" id="theblockone">
+                                <apex:pageBlockSection rendered="{!OR(registeredUser == false,userName==null)}" columns="2" id="reguserfalse">
+                                    
+                                    <apex:pageBlockSectionItem id="FirstName"  >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        First name
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputText value="{!FirstNameValue}"  tabindex="1"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem id="LastName"  >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr> 
+                                                        Last name
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputText value="{!LastNameValue}" tabindex="1"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>  
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        {!$ObjectType.User.Fields.Email.Label}
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                    	<!-- START:: 16/08/2018 NPPD-1701 modified by Ranjeet -->
+                                                        <apex:inputField value="{!createUser.Email}" required="false" taborderhint="1">
+                                                        	<apex:actionSupport event="onblur" action="{!setUserNameByEmail}" reRender="useroutpanel,errorId" status="wait"/>
+                                                        </apex:inputField>
+                                                        <!-- END:: 16/08/2018 NPPD-1701 modified by Ranjeet -->
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        {!$ObjectType.User.Fields.Username.Label}
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputPanel styleClass="requiredInput" layout="block" id="useroutpanel">
+                                                            <apex:outputPanel styleClass="requiredBlock" layout="block"/>   
+                                                            <apex:inputField value="{!createUser.Username}" required="false"  taborderhint="1">
+                                                                <!--  <apex:actionSupport event="onchange" action="{!userNameExist}" reRender="useroutpanel,errorId" status="recordStatus"/> -->
+                                                                <!--   <apex:actionStatus startText="Loading detail..." id="recordStatus" /> -->
+                                                                <apex:actionSupport event="onchange" action="{!userNameExist}" reRender="useroutpanel,errorId" status="wait"/>
+                                                            </apex:inputField>
+                                                        </apex:outputPanel>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >Work mobile</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!createUser.MobilePhone}"  taborderhint="1"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >Work phone</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!createUser.Phone}" taborderhint="1"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >   
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        Profile
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:actionRegion >  
+                                                            <apex:outputPanel styleClass="requiredInput" layout="block">
+                                                                <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                                                <apex:selectList id="profilePicklist" value="{!createUser.ProfileId}" size="1" required="true" tabindex="10">  
+                                                                    <apex:selectOptions value="{!ProfileOptions}"/>  
+                                                                </apex:selectList>  
+                                                            </apex:outputPanel> 
+                                                        </apex:actionRegion>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>  
+                                    
+                                    <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__License_User__c.inlineHelpText}">
+										<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+										<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__License_User__c.Accessible}" >
+										<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        Activate license
+                                                        <span class="LiteHelpText">
+                                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__License_User__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                            <span>{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__License_User__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!creEmpDetail.xcdhcm__License_User__c}" required="true" taborderhint="1"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+						            <!-- START :: 01-09-2017 Summer2017Patch NPPD-1516 Joiner Process - Data Security Modified by Rahul S -->
+						            <apex:pageBlockSectionItem rendered="{!AND(ShowPermissionSetField == true, userInactive!=true)}" > 
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small" style="width:200%">                                                                                                     
+                                                    <label class="slds-form-element__label" >Permission set</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:panelGrid columns="3" id="PersetID">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <apex:selectList id="sel1" value="{!leftselectedPermissionSet}" multiselect="true" style="width: 100%!important;" size="5" tabindex="10">
+                                                                            <apex:selectOptions value="{!UnSelectedPermissionSetValues}" />
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                    <td style="width:1%!important">
+                                                                        <table style="margin-top:12px" >
+                                                                            <tr>
+                                                                                <apex:commandButton action="{!selectclickPermissionSet}" style="width: 24px;font-size:16px;" value=">" rerender="PersetID" tabindex="10"/>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <apex:commandButton action="{!unselectclickPermissionSet}" style="width: 24px;font-size:16px;" value="<" rerender="PersetID" tabindex="10"/> 
+                                                                            </tr> 
+                                                                        </table>
+                                                                    </td>
+                                                                    <td>
+                                                                        <apex:selectList id="sel2" value="{!rightselectedPermissionSet}" multiselect="true" style="width: 100%!important;" size="5" tabindex="10">
+                                                                            <apex:selectOptions value="{!SelectedPermissionSetValues}" />
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </apex:panelGrid>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>          
+                                    </apex:pageBlockSectionItem>
+						            <!-- END :: 01-09-2017 Summer2017Patch NPPD-1516 Joiner Process - Data Security Modified by Rahul S -->
+						            <!-- START :: 01-09-2017 Summer2017Patch NPPD-1516 Joiner Process - Data Security Modified by Rahul S -->
+						             <apex:pageBlockSectionItem rendered="{!ShowPublicGroupField}"> 
+						             <!-- END :: 01-09-2017 Summer2017Patch NPPD-1516 Joiner Process - Data Security Modified by Rahul S -->
+				                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small" style="width:200%">                                                                                                     
+                                                    <label class="slds-form-element__label" >Assign to public group(s)</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:panelGrid columns="3" id="grp">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <apex:selectList id="gd1" value="{!leftselectedGroup}" multiselect="true" style="width: 100%!important;"  size="5" tabindex="10">
+                                                                            <apex:selectOptions value="{!unselectedvaluesGroup}" />
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                    <td style="width:1%!important"> 
+                                                                        <table style="margin-top:12px" >
+                                                                            <tr>
+                                                                                <apex:commandButton action="{!selectclickGroup}" style="width: 24px;font-size:16px;" value=">" rerender="grp" rendered="{!creEmpDetail.id == null}" tabindex="10"/>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <apex:commandButton action="{!unselectclickGroup}" style="width: 24px;font-size:16px;" value="<" rerender="grp" rendered="{!creEmpDetail.id == null}" tabindex="10"/> 
+                                                                            </tr> 
+                                                                        </table> 
+                                                                    </td>
+                                                                    <td> 
+                                                                        <apex:selectList id="gd2" value="{!rightselectedGroup}" multiselect="true" style="width: 100%!important;" size="5" tabindex="10">
+                                                                            <apex:selectOptions value="{!SelectedValuesGroup}" />
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </apex:panelGrid>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>    
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem helpText="{!$ObjectType.User.Fields.xcdhcm__Generate_new_password__c.inlineHelpText}">
+										<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+										<apex:outputpanel rendered="{!$ObjectType.User.Fields.xcdhcm__Generate_new_password__c.Accessible}">
+										<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.User.Fields.Generate_new_password__c.Label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.User.Fields.xcdhcm__Generate_new_password__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                            <span>{!$ObjectType.User.Fields.xcdhcm__Generate_new_password__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!createUser.xcdhcm__Generate_new_password__c}"  taborderhint="1"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                </apex:pageBlockSection>
+                                
+                                <apex:pageBlockSection rendered="{!OR(AND(registeredUser == true,userName!=null),creEmpDetail.id !=null)}" columns="2" id="regusertrue">
+                                    
+                                    <apex:pageBlockSectionItem id="FirstName1"  >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >First name</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputText value="{!FirstNameValue}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >{!$ObjectType.User.Fields.Email.Label}</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField value="{!createUser.Email}"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem id="LastName1"  > 
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >Last name</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputText value="{!LastNameValue}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>   
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >{!$ObjectType.User.Fields.Username.Label}</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField value="{!createUser.Username}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >Work mobile</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField value="{!createUser.MobilePhone}"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >Work phone</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField value="{!createUser.Phone}"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >Profile</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputField value="{!createUser.ProfileId}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem rendered="{!userInactive == true}" helpText="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__License_User__c.inlineHelpText}">
+										<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+										<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__License_User__c.Accessible}" >
+										<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        Activate license
+                                                        <span class="LiteHelpText">
+                                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__License_User__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                            <span>{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__License_User__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:InputField value="{!creEmpDetail.xcdhcm__License_User__c}"  taborderhint="10"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+            <!-- START :: 01-09-2017 Summer2017Patch NPPD-1516 Joiner Process - Data Security Modified by Rahul S -->
+            <apex:pageBlockSectionItem rendered="{!AND(ShowPermissionSetField == true, userInactive!=true)}"> 
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small" style="width:200%">                                                                                                     
+                                                    <label class="slds-form-element__label" >Permission set</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:panelGrid columns="3" id="PersetID">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <apex:selectList id="sel1" value="{!leftselectedPermissionSet}" multiselect="true" style="width: 100%!important;"   size="5">
+                                                                            <apex:selectOptions value="{!UnSelectedPermissionSetValues}" />
+                                                                        </apex:selectList>
+                                                                    </td>  
+                                                                    <td style="width:1%!important">
+                                                                        <table  style="margin-top:10px!important;"  >
+                                                                            <tr>
+                                                                                <apex:commandButton action="{!selectclickPermissionSet}" style="width: 24px;font-size:16px;" value=">" rerender="PersetID" rendered="{!creEmpDetail.id == null}" />
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <apex:commandButton action="{!unselectclickPermissionSet}" style="width: 24px;font-size:16px;" value="<" rerender="PersetID" rendered="{!creEmpDetail.id == null}"  /> 
+                                                                            </tr> 
+                                                                        </table>
+                                                                    </td>
+                                                                    <td>
+                                                                        <apex:selectList id="sel2" value="{!rightselectedPermissionSet}" multiselect="true" style="width: 100%!important;" size="5">
+                                                                            <apex:selectOptions value="{!SelectedPermissionSetValues}" />
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </apex:panelGrid> 
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>  
+                                    </apex:pageBlockSectionItem>
+            <!-- END :: 01-09-2017 Summer2017Patch NPPD-1516 Joiner Process - Data Security Modified by Rahul S -->
+                                    
+            <!-- START :: 01-09-2017 Summer2017Patch NPPD-1516 Joiner Process - Data Security Modified by Rahul S -->
+            <apex:pageBlockSectionItem rendered="{!ShowPublicGroupField}"> 
+            <!-- END :: 01-09-2017 Summer2017Patch NPPD-1516 Joiner Process - Data Security Modified by Rahul S -->
+                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small" style="width:200%">                                                                                                     
+                                                    <label class="slds-form-element__label" >Assign to public group(s)</label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:panelGrid columns="3" id="grp">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        <apex:selectList id="gd1" value="{!leftselectedGroup}" multiselect="true" style="width: 100%!important;" size="5" >
+                                                                            <apex:selectOptions value="{!unselectedvaluesGroup}" />
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                    <td style="width:1%!important">
+                                                                        <table style="margin-top:10px!important;"  >
+                                                                            <tr>
+                                                                                <apex:commandButton action="{!selectclickGroup}" style="width: 24px;font-size:16px;" value=">" rerender="grp" rendered="{!creEmpDetail.id == null}" />
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <apex:commandButton action="{!unselectclickGroup}" style="width: 24px;font-size:16px;" value="<" rerender="grp" rendered="{!creEmpDetail.id == null}" /> 
+                                                                            </tr> 
+                                                                        </table>
+                                                                    </td>
+                                                                    <td>
+                                                                        <apex:selectList id="gd2" value="{!rightselectedGroup}" multiselect="true" style="width: 100%!important;" size="5">
+                                                                            <apex:selectOptions value="{!SelectedValuesGroup}" />
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </apex:panelGrid>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>           
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem rendered="{!userInactive == true}" helpText="{!$ObjectType.User.Fields.xcdhcm__Generate_new_password__c.inlineHelpText}">
+										<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+										<apex:outputpanel rendered="{!$ObjectType.User.Fields.xcdhcm__Generate_new_password__c.Accessible}">
+										<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.User.Fields.Generate_new_password__c.Label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.User.Fields.xcdhcm__Generate_new_password__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.User.Fields.xcdhcm__Generate_new_password__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!createUser.xcdhcm__Generate_new_password__c}"  taborderhint="10"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>                 
+                                </apex:pageBlockSection>
+                            </apex:pageBlock>
+                            
+                        </apex:pageBlockSection>             
+                        
+                    </apex:actionRegion>
+                    
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__createusersemployeeinformation}" columns="2" id="jbsec">
+                        <!-- START :: 19-09-2018 NPPD-1674 P1 Summer2018 Hybrid Joiner Process Modified by Rahul S -->
+                        <apex:pageBlockSectionItem id="Post" rendered="{!DisplayPost}" helpText="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Post_L__c.inlineHelpText}">
+                        <!-- END :: 19-09-2018 NPPD-1674 P1 Summer2018 Hybrid Joiner Process Modified by Rahul S -->
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Post_L__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                            <div class="slds-grid">
+                                <div class="slds-col slds-size--1-of-2">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr> 
+                                            {!$ObjectType.Job_Role__c.Fields.Post_L__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Post_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Post_L__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >
+                                                <apex:outputPanel >
+                                                    <apex:inputField value="{!createJobRole.xcdhcm__Post_L__c}" required="true" taborderhint="2" >
+                                                        <apex:actionSupport event="onchange" action="{!queryPost}" rerender="jbsec" status="wait"> 
+                                                            <!-- <apex:actionStatus startText="Loading detail..." id="wait"/> -->
+                                                        </apex:actionSupport>
+                                                    </apex:inputField>
+                                                </apex:outputPanel>
+                                            </apex:actionRegion>
+                                        </div>                                                                                       
+                                    </div>
+                                </div> 
+                                
+                                <!-- START::16/08/2018 NPPD-1701 added by Ranjeet -->
+                                <div class="slds-col slds-size--1-of-2" style="padding-top: 38px; padding-left: 10px; position:relative;">
+                                    <span><a href="/lightning/r/Report/{!reportId}/view" style="color:red; text-decoration: underline;" target="_blank"> Click here to see recent posts </a></span>
+                              	</div>
+                                <!-- END::16/08/2018 NPPD-1701 added by Ranjeet -->
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+                        
+                        
+                        <apex:pageBlockSectionItem id="jobtitle">
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.Name.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Job_Role__c.Fields.Name.Label}
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!createJobRole.Name}" required="true" taborderhint="2" /> 
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>               
+                        
+                        <apex:pageBlockSectionItem id="pbsec" helpText="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Company__c.inlineHelpText}">  
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Company__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Employee_Detail__c.Fields.Company__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Company__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                <span>{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Company__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >   
+                                                <apex:outputPanel styleClass="requiredInput" layout="block">
+                                                    <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                                    <apex:selectList id="compPicklist" value="{!creEmpDetail.xcdhcm__Company__c}" size="1"  required="true" tabindex="20" >
+                                                        <apex:selectOptions value="{!CompanyOptions}"/>  
+                                                        <!--                                                         <apex:actionSupport event="onchange" action="{!queryCompanyDetails}" rerender="pbWorkingDays,locPicklist,contractual,depPicklist" status="recordStatus"/> -->
+                                                        <apex:actionSupport event="onchange" action="{!queryCompanyDetails}" rerender="pbWorkingDays,locPicklist,contractual,depPicklist" status="wait"/>
+                                                    </apex:selectList>  
+                                                </apex:outputPanel>  
+                                                <!--                                                 <apex:actionStatus startText="Loading detail..." id="recordStatus"/>   -->
+                                            </apex:actionRegion> 
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>  
+                        
+                        <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Employment_Type__c.inlineHelpText}">
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Employment_Type__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Job_Role__c.Fields.Employment_Type__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Employment_Type__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Employment_Type__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!createJobRole.xcdhcm__Employment_Type__c}" required="true" taborderhint="2"/>
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+                        
+                        <apex:pageBlockSectionItem id="locId" helpText="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Location__c.inlineHelpText}">  
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Location__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            {!$ObjectType.Job_Role__c.Fields.Location__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Location__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Location__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >  
+                                                <apex:selectList id="locPicklist" value="{!createJobRole.xcdhcm__Location__c}" size="1"  tabindex="20">  
+                                                    <apex:selectOptions value="{!LocationOptions}"/>  
+                                                </apex:selectList>  
+                                            </apex:actionRegion> 
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>  
+                        
+                        <!-- START :: 24/05/2017 NPPD-1041 Move Employment status to Job Role modified by Kumbresh-->
+                        <apex:pageBlockSectionItem >
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Employment_Status__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Job_Role__c.Fields.Employment_Status__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Employment_Status__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Job_Role__c.Fields.Employment_Status__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >
+                                                <apex:inputField value="{!createJobRole.xcdhcm__Employment_Status__c}" required="true"  taborderhint="2">
+                                                    <apex:actionSupport event="onchange" rerender="conEndDateid" status="wait"/>
+                                                </apex:inputfield>
+                                            </apex:actionRegion>
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+                        <!-- END :: 24/05/2017 NPPD-1041 Move Employment status to Job Role modified by Kumbresh-->
+                        
+                        <apex:pageBlockSectionItem id="deptId" rendered="{!DepartmentField==true}" helpText="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_L__c.inlineHelpText}">
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_L__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Job_Role__c.Fields.Department_L__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_L__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >  
+                                                <apex:outputPanel styleClass="requiredInput" layout="block">
+                                                    <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+													<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+													<apex:inputField value="{!createJobRole.xcdhcm__Department_L__c}" required="true" taborderhint="2" />
+													<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                                </apex:outputPanel>
+                                            </apex:actionRegion>  
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>  
+                        
+                        <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Pattern_Type__c.inlineHelpText}">
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Pattern_Type__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Job_Role__c.Fields.Pattern_Type__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Pattern_Type__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Pattern_Type__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <!-- START :: NPPD-1162 12/04/2018 Toggle showing of Work cycle and Working days fields based on Pattern type selected  Modified by Ranjeet -->
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >
+                                                <apex:inputField value="{!createJobRole.xcdhcm__Pattern_Type__c}" required="true"  taborderhint="2">
+                                                	<apex:actionSupport event="onchange" rerender="workCyclePanel, firstDayOfCyclePanel" status="wait"/>
+                                                </apex:inputField>
+                                            </apex:actionRegion>
+                                        </div>                                                                                        
+                                        <!-- END :: NPPD-1162 12/04/2018 Toggle showing of Work cycle and Working days fields based on Pattern type selected  Modified by Ranjeet -->
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Working_Days_Week__c.inlineHelpText}">
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Working_Days_Week__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Job_Role__c.Fields.Working_Days_Week__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Working_Days_Week__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Working_Days_Week__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                         	                <!-- START :: NPPD-1162 12/04/2018  Modified by Ranjeet-->
+                                            <apex:inputField value="{!createJobRole.xcdhcm__Working_Days_Week__c}" onchange="setParams('Working_Days_Week__c', this.value);" required="true"  taborderhint="3"/>
+                                        	<!-- END :: NPPD-1162 12/04/2018  Modified by Ranjeet-->
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Contractual_Hours__c.inlineHelpText}">
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Contractual_Hours__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Job_Role__c.Fields.Contractual_Hours__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Contractual_Hours__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                <span>{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Contractual_Hours__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                       	    <!-- START :: NPPD-1162 12/04/2018  Modified by Ranjeet-->
+                                            <apex:inputField value="{!createJobRole.xcdhcm__Contractual_Hours__c}" onchange="setParams('Contractual_Hours__c', this.value);" required="true" id="contractual" taborderhint="3"/>
+                                     		<!-- END :: NPPD-1162 12/04/2018  Modified by Ranjeet-->
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>   
+                        
+                        <!-- START :: NPPD-1162 12/04/2018 Toggle showing of Work cycle and Working days fields based on Pattern type selected  Modified by Ranjeet -->
+                        <apex:pageBlockSectionItem >
+                           	<apex:outputPanel id="workCyclePanel"> 
+								<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+								<!-- <apex:outputpanel rendered="{!IF(NOT(AND( createJobRole.Pattern_Type__c = 'Flexible working days', createJobRole.Pattern_Type__c = 'Irregular shift pattern')),true,false)}"> -->
+								<apex:outputpanel rendered="{!IF(AND($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Working_Days__c.Accessible, createJobRole.xcdhcm__Pattern_Type__c != 'Work cycle - days',createJobRole.xcdhcm__Pattern_Type__c != 'Work cycle - hours', createJobRole.xcdhcm__Pattern_Type__c != 'Flexible working days', createJobRole.xcdhcm__Pattern_Type__c != 'Irregular shift pattern'),true,false)}">
+								<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->		
+										<div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+										    <div class="slds-form-element slds-p-around--small">                                                                                                     
+										        <label class="slds-form-element__label" >
+										            <abbr class="slds-required" title="required">*</abbr>
+										            {!$ObjectType.Job_Role__c.Fields.Working_Days__c.Label}
+										            <span class="LiteHelpText">
+										                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Working_Days__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+										                <span>{!$ObjectType.Job_Role__c.Fields.Working_Days__c.inlineHelpText}</span>
+										            </span>
+										        </label> 
+										        
+										        <apex:inputField id="JWorkingdays" value="{!createJobRole.xcdhcm__Working_Days__c}" required="true" taborderhint="2" />
+										    
+										    </div>
+										</div> 
+									</apex:outputpanel>
+	
+								<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+								<apex:outputpanel rendered="{!AND($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Work_Cycle__c.Accessible, IF(OR(createJobRole.xcdhcm__Pattern_Type__c = 'Work cycle - days', createJobRole.xcdhcm__Pattern_Type__c = 'Work cycle - hours'),true,false))}">
+								<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+										<div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+										    <div class="slds-form-element slds-p-around--small">                                                                                                     
+										        <label class="slds-form-element__label" >
+										            <abbr class="slds-required" title="required">*</abbr>
+										            {!$ObjectType.Job_Role__c.Fields.Work_Cycle__c.Label}
+										            <span class="LiteHelpText">
+										                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Work_Cycle__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+										                <span>{!$ObjectType.Job_Role__c.Fields.Work_Cycle__c.inlineHelpText}</span>
+										            </span>
+										        </label> 
+										        
+										        <div class="slds-form-element__control">
+											        <apex:actionRegion >
+												        <apex:inputField id="workCycle" value="{!createJobRole.xcdhcm__Work_Cycle__c}" required="true" taborderhint="2">
+                                                        	<!-- START :: NPPD-1720 11/09/2018  Modified by Ranjeet -->
+                                                            <apex:actionSupport event="onselect" action="{!setFirstDayOfCycle}" rerender="firstDayOfCyclePanel, errorId" status="wait"/>
+                                                        	<!-- END :: NPPD-1720 11/09/2018  Modified by Ranjeet -->
+												        </apex:inputField>
+											        </apex:actionRegion>
+										        </div>
+										    </div>
+										</div> 
+									</apex:outputpanel>
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<!-- </apex:outputpanel> -->
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                           	</apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+                        <!-- END :: NPPD-1162 12/04/2018 Toggle showing of Work cycle and Working days fields based on Pattern type selected  Modified by Ranjeet -->
+
+                        <!-- START :: NPPD-1162 12/04/2018 Work cycle related validation error messages Added by Ranjeet -->
+                        <!-- START :: 10-07-2018 Summer 2018 P1 regression issue T482956 Create New Joiner Modified by Rahul s-->
+                        <apex:pageBlockSectionItem >
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputPanel >
+                            <apex:outputPanel id="firstDayOfCyclePanel">
+								<apex:outputPanel rendered="{!IF(AND($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__First_day_of_cycle_editable__c.Accessible, OR(createJobRole.xcdhcm__Pattern_Type__c = 'Work cycle - days', createJobRole.xcdhcm__Pattern_Type__c = 'Work cycle - hours'), NOT(ISNULL(createJobRole.xcdhcm__Work_Cycle__c))),true,false)}">
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                            <label class="slds-form-element__label" >
+                                                {!$ObjectType.Job_Role__c.Fields.First_day_of_cycle_editable__c.Label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__First_day_of_cycle_editable__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Job_Role__c.Fields.First_day_of_cycle_editable__c.inlineHelpText}</span>
+                                                </span>
+                                            </label> 
+                                            
+                                            <apex:inputField id="firstDayOfCycle" value="{!createJobRole.xcdhcm__First_day_of_cycle_editable__c}" taborderhint="2" />
+                                        </div>
+                                    </div> 
+                                </apex:outputpanel>
+								</apex:outputPanel>
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                               
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+										<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+										<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Manager__c.Accessible}">
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Job_Role__c.Fields.Manager__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Manager__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                <span>{!$ObjectType.Job_Role__c.Fields.Manager__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!createJobRole.xcdhcm__Manager__c}" required="true"  taborderhint="3"/>
+                                        </div>                                                                                        
+										</apex:outputpanel>
+										<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                    </div>
+                                </div> 
+                                
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+                        <!-- END :: 10-07-2018 Summer 2018 P1 regression issue T482956 Create New Joiner Modified by Rahul s-->
+                        <!-- END :: NPPD-1162 12/04/2018 Work cycle related validation error messages Added by Ranjeet -->
+                        
+                        
+                    </apex:pageBlockSection>  
+                    
+                    <apex:pageBlockSection id="pSec" title="{!$Label.xcdhcm__createuserskeydates}" columns="2">    
+						<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+						<apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Start_Date__c.inlineHelpText}"  rendered="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Start_Date__c.Accessible}">
+						<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->	
+                            <apex:outputpanel >
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$ObjectType.Employee_Detail__c.Fields.Start_Date__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Start_Date__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                <span>{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Start_Date__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                        	<!-- START :: NPPD-1162 12/04/2018 Work cycle related validation error messages Modified by Ranjeet -->
+                                        	<apex:actionRegion >
+                                            	<apex:inputField value="{!createJobRole.xcdhcm__Start_Date__c}" onclick="adjustDatePicker(event);" required="true" taborderhint="3">
+                                            		<apex:actionSupport event="onchange" action="{!setFirstDayOfCycle}" rerender="firstDayOfCyclePanel,errorId" status="wait"/>
+                                            	</apex:inputField>
+                                            </apex:actionRegion>
+                                            <!-- END :: NPPD-1162 12/04/2018 Work cycle related validation error messages Modified by Ranjeet -->
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>   
+                        
+						<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+						<apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Continuous_Service_Date__c.inlineHelpText}" rendered="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Continuous_Service_Date__c.Accessible}">
+						<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->	
+                            <apex:outputpanel >
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <apex:outputPanel >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <apex:outputLabel value="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Continuous_Service_Date__c.Label}"  for="consr" styleclass="slds-form-element__label"/>
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Continuous_Service_Date__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}" />
+                                                <span>{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Continuous_Service_Date__c.inlineHelpText}</span>
+                                            </span>
+                                        </apex:outputPanel>
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!creEmpDetail.xcdhcm__Continuous_Service_Date__c}" onclick="adjustDatePicker(event);" required="true"  id="consr" taborderhint="3"/>
+                                        </div>                                                                                        
+                                    </div>   
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>     
+                        <apex:pageBlockSectionItem >
+                           <apex:outputPanel id="conEndDateid"> 
+								<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+								<apex:outputpanel rendered="{!AND($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Contract_end_date__c.Accessible,IF(OR(OR(createJobRole.xcdhcm__Employment_Status__c == 'FTC',createJobRole.xcdhcm__Employment_Status__c == 'Agency temp') ,OR(createJobRole.xcdhcm__Employment_Status__c == 'Contractor', createJobRole.xcdhcm__Employment_Status__c == 'Temporary')),true,false))}">
+								<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                   <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                            <!-- START :: 24/05/2017 NPPD-1041 Move Employment status to Job Role modified by Kumbresh-->   
+                                            <apex:outputPanel rendered="{!IF(createJobRole.xcdhcm__Employment_Status__c == 'FTC',true,false)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                            <apex:outputLabel value="Contract end date" for="enid" styleclass="slds-form-element__label"/>
+                                            <span class="LiteHelpText">  
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Contract_end_date__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Job_Role__c.Fields.Contract_end_date__c.inlineHelpText}</span>
+                                            </span>
+                                            <div class="slds-form-element__control">                                           
+                                                <apex:inputField value="{!createJobRole.xcdhcm__Contract_end_date__c}" onclick="adjustDatePicker(event);" required="{!IF(createJobRole.xcdhcm__Employment_Status__c == 'FTC',true,false)}"  id="enid" taborderhint="3"/>
+                                                <!-- END :: 24/05/2017 NPPD-1041 Move Employment status to Job Role modified by Kumbresh-->
+                                            </div>                                                                                            
+                                        </div>
+                                    </div> 
+                                </apex:outputpanel>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>     
+                        <apex:inputHidden value="{!varA}" id="theField" />
+                        
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection id="emphistory" title="{!$Label.xcdhcm__createusersemployeehistory}" columns="1" rendered="{!RejoinerSection}"  >
+                        <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Rejoiner__c.inlineHelpText}">
+							<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+							<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Rejoiner__c.Accessible}">
+							<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            {!$ObjectType.Employee_Detail__c.Fields.Rejoiner__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Rejoiner__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.xcdhcm__Employee_Detail__c.Fields.xcdhcm__Rejoiner__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >     
+                                                <apex:inputField value="{!creEmpDetail.xcdhcm__Rejoiner__c}" taborderhint="3">
+                                                    <!-- <apex:actionSupport event="onclick" action="{!reJoiner}" reRender="empHistoryPanel" status="recordStatus"/> 
+<apex:actionStatus startText="Loading detail..." id="recordStatus"/>   -->
+                                                    <apex:actionSupport event="onclick" action="{!reJoiner}" reRender="empHistoryPanel" status="wait"/>
+                                                </apex:inputField>              
+                                            </apex:actionRegion>
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel>    
+                        </apex:pageBlockSectionItem>               
+                        
+                        <apex:outputPanel id="empHistoryPanel">
+                            <apex:pageBlockSection id="empHistoryOne" rendered="{!reJoinerFields==true}" columns="2">      
+                                <apex:variable value="{!0}" var="i" />
+                                <apex:variable value="{!0}" var="j" />
+                                <apex:repeat value="{!$objectType.xcdhcm__Employee_Detail__c.Fieldsets.xcdhcm__Rejoiner}" var="d" >
+									<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+									<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields[d].Accessible}">
+									<!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                <label class="slds-form-element__label" style="{!IF(d.label=='Blankspace','display:none;' ,'')}" >
+                                                    <apex:outputPanel rendered="{!OR(d.Required,d.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                    {!d.label}
+                                                    <span class="LiteHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.fields[d].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Employee_Detail__c.fields[d].inlineHelpText}</span>
+                                                    </span>
+                                                </label>
+                                                <div class="slds-form-element__control">
+                                                    <apex:inputField value="{!creEmpDetail[d]}" html-tabIndex="{!IF((mod(i,2)) == 0, 60, 70)}" required="{!OR(d.Required,d.DBRequired)}" >
+                                                        <apex:variable value="{!i+1}" var="i" /></apex:inputField> 
+                                                </div>                                                                                        
+                                            </div>
+                                        </div> 
+                                    </apex:outputpanel>
+                                </apex:repeat>
+                                <br/> 
+                                
+                            </apex:pageBlockSection> 
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                    <apex:pageblockbuttons location="bottom" style="text-align: right!important;">
+                        <apex:commandButton action="{!cancelCreation}" value="{!$Label.xcdhcm__createusersbcancel}" immediate="true" tabindex="40" styleclass="slds-button slds-button--neutral"/>   
+                        <!-- START :: NPPD-1162 12/04/2018 Work cycle related validation error messages Modified by Ranjeet -->
+                        <apex:commandButton onClick="assignValue('1');document.getElementById('{!$Component.theform.btn6}').value='Processing...';document.getElementById('{!$Component.theform.btn6}').disabled=true;document.getElementById('{!$Component.theform.btn6}').style.color='#336699';  this.disabled=true;this.style.color='#336699';this.disabled=true;this.value='Processing...';" action="{!checkJrValidationMsg}" id="btn4" styleclass="slds-button slds-button--neutral" rendered="{!CreateJoinerButton}"  rerender="errorId,btn4,btn6,popup" value="{!$Label.xcdhcm__createusersbcreatejoiner}" tabindex="40"/>                                           
+                        
+                        <apex:commandButton onClick="assignValue('2');document.getElementById('{!$Component.theform.btn4}').value='Processing...';document.getElementById('{!$Component.theform.btn4}').disabled=true;document.getElementById('{!$Component.theform.btn4}').style.color='#336699';this.style.color='#336699';this.disabled=true;this.value='Processing...';" action="{!checkJrValidationMsg}" id="btn5" styleclass="slds-button slds-button--neutral" rendered="{!Create_joiner_and_next!=true}" rerender="errorId,btn5,btn4,popup" value="{!$Label.xcdhcm__createusersbcreatejoinerandleaveyear}" tabindex="40"/>                
+                        
+                        <apex:commandButton onClick="SaveOnClick(3); return false;" id="btn6" value="{!$Label.xcdhcm__createusersbcreatejoinerandnext}" rendered="{!Create_joiner_and_next==true}" tabindex="40" styleclass="slds-button slds-button--brand">
+                            <apex:param name="varA" value="3" assignTo="{!varA}" />
+                        </apex:commandButton>
+                        <!-- END :: NPPD-1162 12/04/2018 Work cycle related validation error messages Modified by Ranjeet -->
+                        
+                        <!-- <apex:actionStatus id="saveStatus">                   
+<apex:facet name="stop">
+<apex:outputPanel >
+<apex:commandButton onClick="assignValue('1');document.getElementById('{!$Component.theform.btn6}').value='Processing...';document.getElementById('{!$Component.theform.btn6}').disabled=true;document.getElementById('{!$Component.theform.btn6}').style.color='#336699';  this.disabled=true;this.style.color='#336699';this.disabled=true;this.value='Processing...';" action="{!createUser}" id="btn4" rendered="{!CreateJoinerButton}"  rerender="id_cancelBtn,errorId,btn4,btn6" value="{!$Label.xcdhcm__createusersbcreatejoiner}" tabindex="40" styleclass="slds-button slds-button--neutral" status="saveStatus" />                                           
+<apex:commandButton onClick="assignValue('2');document.getElementById('{!$Component.theform.btn4}').value='Processing...';document.getElementById('{!$Component.theform.btn4}').disabled=true;document.getElementById('{!$Component.theform.btn4}').style.color='#336699';this.style.color='#336699';this.disabled=true;this.value='Processing...';" action="{!createUser}" id="btn5" rerender="id_cancelBtn,errorId,btn5,btn4" value="{!$Label.xcdhcm__createusersbcreatejoinerandleaveyear}" rendered="{!Create_joiner_and_next!=true}" tabindex="40" styleclass="slds-button slds-button--neutral" status="saveStatus" />                
+<apex:commandButton onClick="assignValue('3');document.getElementById('{!$Component.theform.btn4}').value='Processing...';document.getElementById('{!$Component.theform.btn4}').disabled=true;this.style.color='#336699';this.value='Processing...';" action="{!createUser}" id="btn6" value="{!$Label.xcdhcm__createusersbcreatejoinerandnext}" rendered="{!Create_joiner_and_next==true}" tabindex="40" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_cancelBtn"/>
+<apex:commandButton action="{!cancelCreation}" value="{!$Label.xcdhcm__createusersbcancel}" immediate="true" tabindex="40" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_cancelBtn" id="id_cancelBtn"/>  
+</apex:outputPanel>
+</apex:facet>
+<apex:facet name="start">
+<div class="slds-spinner_container slds-show slds-is-fixed" >
+<div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+<div class="slds-spinner__dot-a"></div>
+<div class="slds-spinner__dot-b"></div>
+</div> 
+</div>                    
+</apex:facet>                                
+</apex:actionStatus>  -->
+                    </apex:pageblockbuttons>
+                </apex:pageBlock>  
+                <!-- START :: NPPD-1162 12/04/2018 Work cycle related validation error messages Added by Ranjeet -->
+                <apex:outputPanel id="popup">
+                    <apex:outputPanel rendered="{!(displayJobRolePopup)}">
+                        <apex:outputPanel styleClass="popupBg"/>
+                        <apex:outputPanel id="popup1" styleClass="customPopup" layout="block" >
+                            <center>
+                                <apex:outputtext id="oText" value="{!popupMsg}"/>
+                            </center>
+                            <apex:outputPanel > 
+                                <apex:actionStatus id="saveStatus">                   
+                                    <apex:facet name="stop">
+                                        <apex:outputPanel >
+                                        	<!-- START:: 16/08/2018 NPPD-1701 added by Ranjeet -->
+                                        	<apex:outputPanel rendered="{!duplicateEmployeeList.size > 0}">
+                                        		<div class="slds-form-element__control slds-p-around_medium slds-scrollable_y" style="width:100%; max-height:200px; font-weight:400; display: inline-flex;">
+													<table>
+														<thead>                               
+															<tr class="slds-text-title_caps">                                                               
+																<th>     
+																	<div class="slds-form-element__control slds-p-left--small" style="max-width:10em;display: inline-flex;">
+																		<div title="{!$ObjectType.Employee_Detail__c.fields['Name'].label}" class="slds-truncate slds-form-element__label">
+																			{!$ObjectType.Employee_Detail__c.fields['Name'].label}
+																			<span class="LiteHelpText">
+																				<apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.fields['Name'].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+																				<span>{!$ObjectType.Employee_Detail__c.fields['Name'].inlineHelpText}</span>
+																			</span>
+																		</div> 
+																	</div> 
+																</th> 
+																<th>     
+																	<div class="slds-form-element__control slds-p-left--small" style="max-width:10em;display: inline-flex;">
+																		<div title="{!$ObjectType.Employee_Detail__c.fields['xcdhcm__Job_Role__c'].label}" class="slds-truncate slds-form-element__label">
+																			{!$ObjectType.Employee_Detail__c.fields['xcdhcm__P_Job_Title__c'].label}
+																			<span class="LiteHelpText">
+																				<apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.fields['xcdhcm__Job_Role__c'].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+																				<span>{!$ObjectType.Employee_Detail__c.fields['xcdhcm__P_Job_Title__c'].inlineHelpText}</span>
+																			</span>
+																		</div> 
+																	</div> 
+																</th> 
+																<th>     
+																	<div class="slds-form-element__control slds-p-left--small" style="max-width:10em;display: inline-flex;">
+																		<div title="{!$ObjectType.Employee_Detail__c.fields['xcdhcm__Company__c'].label}" class="slds-truncate slds-form-element__label">
+																			{!$ObjectType.Employee_Detail__c.fields['xcdhcm__Companies__c'].label}
+																			<span class="LiteHelpText">
+																				<apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.fields['xcdhcm__Company__c'].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+																				<span>{!$ObjectType.Employee_Detail__c.fields['xcdhcm__Companies__c'].inlineHelpText}</span>
+																			</span>
+																		</div> 
+																	</div> 
+																</th> 
+															</tr>
+														</thead>  
+														<tbody>  
+															<apex:repeat value="{!duplicateEmployeeList}" var="row">
+																<tr>                             
+																	<td> 
+																		<div class="slds-truncate slds-form-element__control slds-p-left--small">
+																			<apex:outputLink target="_blank" value="/lightning/r/{!row['Id']}/view"  style="color:black; text-decoration: underline;">
+																				<apex:outputField value="{!row['Name']}"/>
+																			</apex:outputLink>
+																		</div>  
+																	</td> 
+																	<td> 
+																		<div class="slds-truncate slds-form-element__control slds-p-left--small">
+																			<apex:outputField value="{!row['xcdhcm__P_Job_Title__c']}" style="color:black;"/>
+																		</div>  
+																	</td>                                                       
+																	<td> 
+																		<div class="slds-truncate slds-form-element__control slds-p-left--small">
+																			<apex:outputField value="{!row['xcdhcm__Companies__c']}" style="color:black;"/>
+																		</div>  
+																	</td>                                                       
+																</tr>
+															</apex:repeat>
+														</tbody>
+													</table>
+                                       			</div>
+                                        	</apex:outputPanel>
+                                        	<!-- END:: 16/08/2018 NPPD-1701 added by Ranjeet -->
+                                            <apex:commandButton value="{!$Label.xcdhcm__clonejbrolebcancel}" styleclass="slds-button slds-button--neutral" action="{!cancelCreateUser}" rerender="popup" status="saveStatus" />
+                                            <apex:commandButton value="{!$Label.xcdhcm__clonejbrolebok}" styleclass="slds-button slds-button--neutral" action="{!createUser}" rerender="popup, errorId"  status="saveStatus" />                                                        
+                                        </apex:outputPanel> 
+                                    </apex:facet>
+                                    <apex:facet name="start">
+                                        <apex:outputPanel >
+                                            <div class="slds-spinner_container slds-show " >
+                                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </apex:outputPanel>                        
+                                    </apex:facet>                                
+                                </apex:actionStatus> 
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                <!-- END :: NPPD-1162 12/04/2018 Work cycle related validation error messages Added by Ranjeet -->
+            </apex:form>
+        </body>
+	    
+	    <!-- START :: NPPD-1162 12/04/2018 Toggle showing of Work cycle and Working days fields based on Pattern type selected  Modified by Ranjeet-->
+		<script type="text/javascript"> 
+			var contractualHrs = "{!JSENCODE(contractualHrs)}";
+			var workingDaysperWeek = "{!JSENCODE(workingDaysperWeek)}";
+			
+			function setParams(param, val)
+			{
+				if(param == 'Contractual_Hours__c')
+				{
+					contractualHrs = val;
+				}
+				else
+				{
+					workingDaysperWeek = val;
+				}
+			}
+		
+			function openLookup(baseURL, width, modified, searchParam)
+			{
+				var originalbaseURL = baseURL;
+				var originalwidth = width;
+				var originalmodified = modified;
+				var originalsearchParam = searchParam;
+				var lookupType = baseURL.substr(baseURL.length-3, 3);
+				
+				if (modified == '1') 
+				{
+					baseURL = baseURL + searchParam;
+				}
+	
+				var isCustomLookup = false;
+	
+				// Following "a0t" is the lookup type for Work_cycle__c object so change this as per your standard or custom object
+				if(lookupType == '{!workCyclePrefixVal}')
+				{
+					var urlArr = baseURL.split("&");
+					var txtId = '';
+					if(urlArr.length > 2) 
+					{
+						urlArr = urlArr[1].split('=');
+						txtId = urlArr[1];
+					}
+	
+					// Following is the url of Custom Lookup page. You need to change that accordingly
+					baseURL = "/apex/xcdhcm__CustomWorkCycleLookup?txt=" + txtId;
+	
+					// Following is the id of apex:form control "theForm". You need to change that accordingly
+					baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.theForm}");
+					if (modified == '1') 
+					{
+						baseURL = baseURL + "&lksearch=" + searchParam;
+					}
+					
+					if(contractualHrs != undefined)
+					{
+						baseURL += "&contractual_hrs=" + escapeUTF(contractualHrs);
+					}
+					
+					if(workingDaysperWeek != undefined)
+					{
+						baseURL += "&working_days_per_week=" + escapeUTF(workingDaysperWeek);
+					}
+					
+					// Following is the ID of inputField that is the lookup to be customized as custom lookup
+					if(txtId.indexOf('workCycle') > -1 )
+					{				
+						isCustomLookup = true;
+					}
+				}
+	
+				if(isCustomLookup == true)
+				{
+					openPopup(baseURL, "lookup", 350, 480, "width="+width+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+				}
+				else 
+				{
+					if (modified == '1') 
+					{
+						originalbaseURL = originalbaseURL + originalsearchParam;
+					}
+					openPopup(originalbaseURL, "lookup", 350, 480, "width="+originalwidth+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+				} 
+			}
+		</script>            
+	    <!-- END :: NPPD-1162 12/04/2018 Toggle showing of Work cycle and Working days fields based on Pattern type selected  Modified by Ranjeet-->
+    
+    </html> 
+</apex:page>

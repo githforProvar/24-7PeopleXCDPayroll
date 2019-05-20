@@ -1,0 +1,109 @@
+<apex:page controller="xcdhcm.RtiMyNINOController" rendered="true" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/EmpDetPageCSS.css')}"/>  
+ 
+<style type="text/css">
+.links
+{
+    display: none;
+}
+.Custom83Tab .tertiaryPalette, .individualPalette .Custom83Block .tertiaryPalette, .layoutEdit .individualPalette .Custom83Block .tertiaryPalette 
+{
+	background-color: #fff !important;
+	border-top: 2px solid #75b2dd !important;
+}
+body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child
+{
+	width:1.5%!important;
+}
+body .pbBody table.list tr.headerRow th 
+{
+  background: #ffffff !important;
+  border: none;
+  color: #999999 !important;
+  font-size: .9em;
+  font-weight: bold;
+  padding: 5px 2px 4px 5px;
+  border-bottom: 1px solid #cde2f5 !important;
+  border-top: 1px solid #cde2f5 !important;
+}
+body .pbBody table 
+{
+  border-bottom: 1px solid #cde2f5 !important; 
+}
+.customPopup 
+{
+    background-color: #1E90FF;
+    border-radius: 6px 6px 6px 6px;
+    border-style: hidden;
+    border-width: 2px;
+    left: 50%;
+    padding: 10px;
+    position: absolute;
+    z-index: 9999;
+    width: 500px;
+    margin-left: -250px;
+    top: 70px;
+}
+</style>
+<script> 
+ 
+  <script type="text/javascript"> 
+  function openLookup(baseURL, width, modified, searchParam){
+    var originalbaseURL = baseURL;
+    var originalwidth = width;
+    var originalmodified = modified;
+    var originalsearchParam = searchParam;    
+    var lookupType = baseURL.substr(baseURL.length-3, 3);
+    if (modified == '1') baseURL = baseURL + searchParam;   
+    var isCustomLookup = false;
+    alert(lookupType );
+    // Following "001" is the lookup type for Account object so change this as per your standard or custom object
+    if(lookupType == "001"){  
+      var urlArr = baseURL.split("&");
+      var txtId = '';
+      if(urlArr.length > 2) {
+        urlArr = urlArr[1].split('=');
+        txtId = urlArr[1];
+      }      
+      // Following is the url of Custom Lookup page. You need to change that accordingly
+      baseURL = "/apex/xcdhcm__CustomNINOLookup?txt=" + txtId;     
+      // Following is the id of apex:form control "myForm". You need to change that accordingly
+      baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.myForm}");
+      if (modified == '1') {
+        baseURL = baseURL + "&lksearch=" + searchParam;
+        //alert(searchParam);
+      }      
+      // Following is the ID of inputField that is the lookup to be customized as custom lookup
+      if(txtId.indexOf('RTI_Submission__c') > -1 ){
+        isCustomLookup = true;  
+      }
+    }   
+    if(isCustomLookup == true){
+      openPopup(baseURL, "lookup", 350, 480, "width="+width+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+    }
+    else {
+      if (modified == '1') originalbaseURL = originalbaseURL + originalsearchParam;
+      openPopup(originalbaseURL, "lookup", 350, 480, "width="+originalwidth+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+    } 
+  }
+</script>
+ 
+<apex:form id="myForm"> 
+  <apex:pageMessages id="erMsg"></apex:pageMessages> 
+  <apex:pageBlock title="{!$Label.xcdhcm__phrtininosummary}" id="rows">    
+   <apex:outputtext value="Search Employee"/>&nbsp;
+   <apex:inputField id="test" value="{!contact.xcdhcm__Employee__c}"/>
+   <apex:actionStatus id="proccessStatus">
+      <apex:facet name="stop">           
+    	<apex:commandButton value="{!$Label.xcdhcm__rtininosummarybnext}" action="{!sendNINOVerfication}" status="proccessStatus"  rerender="erMsg"/>
+      </apex:facet>
+      <apex:facet name="start">  
+        <apex:commandButton value="{!$Label.xcdhcm__rtininosummarybprocessing}" disabled="true"/>
+      </apex:facet>
+   </apex:actionStatus>   
+   <apex:outputtext value="National insurance number" style="margin-left:450px;"/>&nbsp;
+   <apex:inputtext id="ninoId" value="{!rtiNinorecord.xcdhcm__NI_no__c}"/>&nbsp;
+   <apex:commandButton value="{!$Label.xcdhcm__rtininosummarybsavetopersonal}" action="{!saveToPersonal}"/>
+  </apex:PageBlock>
+</apex:form>    
+</apex:page>

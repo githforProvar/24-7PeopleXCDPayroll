@@ -1,0 +1,70 @@
+<apex:page standardController="xcdhcm__Pay_Period__c"
+	extensions="xcdhcm.PayrollController" sidebar="false"
+	showHeader="true" wizard="false" id="thePage">
+<!-- START 23/02/2016 NPAY-105 Additional Pay Run - Call from Payroll Not Pay Run Modified by Shiva -->  
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+	<style>
+.customnotabTab .tertiaryPalette,.individualPalette .customnotabBlock .tertiaryPalette,.layoutEdit .individualPalette .customnotabBlock .tertiaryPalette
+	{
+	background-color: #FFFFFF;
+}
+</style>
+
+	<apex:form id="theform">
+		<apex:pageBlock title="{!$Label.xcdhcm__additionalpayrollrunadditionalpayrollrun}">
+			<apex:PageMessages id="errorMsg" />
+			<apex:pageBlockButtons >
+				<apex:commandButton value="{!$Label.xcdhcm__additionalpayrollrunbsave}"
+					action="{!saveAdditionalPayrollRun}" rerender="errorMsg" />
+				<apex:commandButton value="{!$Label.xcdhcm__additionalpayrollrunbcancel}" action="{!Back}" immediate="true" />
+			<!-- END :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+			</apex:pageBlockButtons>
+			<!-- START:: 13/03/2015 NPPD-747 Enhancement on Additional Payroll Run Added by Sabir -->
+			<apex:actionRegion >
+				<apex:pageBlockSection columns="2" collapsible="false">
+					<apex:inputField value="{!additionalPayPeriod.xcdhcm__XCD_PAY_Payroll__c}" required="true"/>
+					<apex:pageBlockSectionItem id="item">
+						<apex:outputLabel value="{!$objectType.xcdhcm__Pay_Period__c.fields.xcdhcm__Additional_payment_type__c.label}" />
+						<apex:SelectList value="{!selectedPaymentType}" multiselect="true"
+							size="3"
+							style="{!if(selectedPaymentType = null, 'border-left:3px solid #c00!important;padding-left: 1px!important;', '')}">
+							<apex:selectOptions value="{!AdditionalPayrollRunTypes}" />
+						</apex:SelectList>
+					</apex:pageBlockSectionItem>
+					<apex:repeat value="{!additionalPayPeriod}" var="additional"
+						rows="1" id="outerRepeat">
+						<apex:repeat value="{!$ObjectType.xcdhcm__Pay_Period__c.Fieldsets.xcdhcm__Additional_Payroll_Run}"
+							var="i">
+							<apex:inputField value="{!additional[i]}"
+								required="{!i.Required}" />
+						</apex:repeat>
+					</apex:repeat>
+				<!--
+				<apex:commandButton value="Save"
+					action="{!saveAdditionalPayrollRun}" rerender="errorMsg" />
+				<apex:commandButton value="Cancel" action="{!Back}" immediate="true" />
+					<apex:repeat value="{!additionalPayPeriod}" var="additional"
+						rows="1" id="outerRepeat">
+						<apex:repeat value="{!$ObjectType.xcdhcm__Pay_Period__c.Fieldsets.xcdhcm__Additional_Payroll_Run}"
+							var="i">
+							<apex:inputField value="{!additional[i]}"
+								required="{!i.Required}" />
+						</apex:repeat>
+					</apex:repeat>
+					<apex:pageBlockSectionItem id="item">
+						<apex:outputLabel value="{!$objectType.xcdhcm__Pay_Period__c.fields.xcdhcm__Additional_payment_type__c.label}" />
+						<apex:SelectList value="{!selectedPaymentType}" multiselect="true"
+							size="3"
+							style="{!if(selectedPaymentType = null, 'border-left:3px solid #c00!important;padding-left: 1px!important;', '')}">
+							<apex:selectOptions value="{!AdditionalPayrollRunTypes}" />
+						</apex:SelectList>
+					</apex:pageBlockSectionItem>
+					-->
+				</apex:pageBlockSection>
+			</apex:actionRegion>
+			<!--END :: 13/03/2015 NPPD-747 Enhancement on Additional Payroll Run Added by Sabir -->
+		</apex:pageBlock>
+		<div style="border-bottom: 2px solid #63a4c5 !important;"></div>
+	</apex:form>
+	<!-- END 23/02/2016 NPAY-105 Additional Pay Run - Call from Payroll Not Pay Run Modified by Shiva -->
+</apex:page>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata"
+   >
+ <fullName>xcdhcm__CalendarTab</fullName>
+  <flexiPageRegions>
+    <componentInstances>
+   <componentName>xcdhcm:Calendar</componentName>
+     </componentInstances>
+    <name>main</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <masterLabel>CalendarTab</masterLabel>
+     <template>
+  <name>flexipage:defaultAppHomeTemplate</name>
+ </template>
+ <type>AppPage</type>
+</FlexiPage>

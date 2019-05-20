@@ -1,0 +1,155 @@
+<apex:page standardController="xcdhcm__Employer__c"
+    extensions="xcdhcm.PayrollController" sidebar="false">
+    <!-- <apex:page action="{!getPayRollDetail}" controller="PayrollController"> -->
+    <!--<apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+
+
+    <style type="text/css">
+.custPopup {
+    background-color: white;
+    border-width: 2px;
+    border-style: inset;
+    z-index: 9999;
+    left: 50%;
+    padding: 10px;
+    position: absolute;
+    width: 650px;
+    margin-left: -250px;
+    top: 100px;
+}
+
+.popupBackground {
+    background-color: black;
+    opacity: 0.20;
+    filter: alpha(opacity =                   20);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+}
+
+body .pbBody table.list tr.headerRow th:first-child,body .pbBody table.list tr.dataRow td:first-child
+    {
+    border-left-width: 0;
+    width: 0.1% !important;
+}
+
+.bPageTitle .ptBody .content {
+    display: none;
+}
+
+body .bPageBlock .pbTitle h2 {
+    display: none;
+}
+
+.customnotabTab .tertiaryPalette,.individualPalette .customnotabBlock .tertiaryPalette,.layoutEdit .individualPalette .customnotabBlock .tertiaryPalette
+    {
+    background-color: #FFFFFF;
+    border-color: #63a4c5 !important;
+    border-top: 2px solid #63a4c5 !important;
+}
+
+.Custom50Tab .tertiaryPalette,.individualPalette .Custom50Block .tertiaryPalette,.layoutEdit .individualPalette .Custom50Block .tertiaryPalette
+    {
+    background-color: #FFFFFF;
+    border-color: #63a4c5 !important;
+    /*  border-top: 2px solid #63a4c5 !important; */
+}
+
+body .bPageBlock .pbBody .pbSubheader .hideListButton {
+    display: none;
+}
+
+.triangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 20px;
+    border-color: transparent transparent transparent #4a86e8;
+}
+
+.pagination ul {
+    box-shadow: none !important;
+}
+</style>
+    <script>
+function launchWindow()
+{
+    alert('Test');
+}
+
+</script>
+    <apex:form >
+
+		<apex:pageBlock title="{!$Label.xcdhcm__phnewemployer}" mode="edit" id="pageId">
+
+            <apex:pageBlockButtons >
+				<apex:commandButton action="{!newEmployer}" value="{!$Label.xcdhcm__newemployerbsave}" />
+				<!--  START :: 30/06/2017 NPAY-338 Payroll issue listNew Employer page - cannot click cancel button without filling in mandatory data -->
+				<!--  <apex:commandButton action="{!callpageredirect}"  value="{!$Label.xcdhcm__newemployerbcancel}" /> -->
+				<apex:commandButton action="{!callpageredirect}" immediate="true" value="{!$Label.xcdhcm__newemployerbcancel}" />
+				<!-- END :: 30/06/2017 NPAY-338 Payroll issue listNew Employer page - cannot click cancel button without filling in mandatory data -->
+            </apex:pageBlockButtons>
+
+			<apex:pageBlockSection title="{!$Label.xcdhcm__newemployeremployername}" columns="2">
+                <apex:repeat value="{!$ObjectType.xcdhcm__Employer__c.fieldsets.xcdhcm__Employer_name}"
+                    var="fieldValue">
+                    <apex:inputField value="{!employer[fieldValue]}"
+                        required="{!fieldValue.Required}">
+                    </apex:inputField>
+                </apex:repeat>
+                <apex:inputField value="{!employer.xcdhcm__Payroll_approach__c}" required="true">
+                <apex:actionSupport action="{!priorityChanged}" reRender="pageId" event="onchange"/>
+                </apex:inputField>
+                <!-- 
+                <apex:outputText label="View employee" value="">
+                    <apex:outputLink value="/00Ob0000003lwJW">View employee</apex:outputLink>
+                </apex:outputText>
+                 -->
+            </apex:pageBlockSection>
+
+
+            <apex:outputPanel id="dynamicTablePanel">
+				<apex:pageBlockSection title="{!$Label.xcdhcm__new_employerhmrc}" columns="2"
+                    rendered="{!showDetails}">
+                    <apex:repeat value="{!$ObjectType.xcdhcm__Employer__c.fieldsets.xcdhcm__HMRC}"
+                        var="fieldValueHMRC">
+
+                        <apex:inputField value="{!employer[fieldValueHMRC]}"
+                            required="{!fieldValueHMRC.Required}" />
+                    </apex:repeat>
+                </apex:pageBlockSection>
+				<apex:pageBlockSection title="{!$Label.xcdhcm__newemployerbankdetails}" columns="2"
+                    rendered="{!showDetails}">
+                    <apex:repeat value="{!$ObjectType.xcdhcm__Employer__c.fieldsets.xcdhcm__Bank_details}"
+                        var="fieldValueBankdetails">
+                        <apex:inputField value="{!employer[fieldValueBankdetails]}"
+                            required="{!fieldValueBankdetails.Required}" />
+                    </apex:repeat>
+                </apex:pageBlockSection>
+				<apex:pageBlockSection title="{!$Label.xcdhcm__newemployerrtisubmission}" columns="2"
+                    rendered="{!showDetails}">
+                    <apex:repeat value="{!$ObjectType.xcdhcm__Employer__c.fieldsets.xcdhcm__RTI_submission}"
+                        var="fieldValueRTIsubmission">
+                        <apex:inputField value="{!employer[fieldValueRTIsubmission]}"
+                            required="{!fieldValueRTIsubmission.Required}" />
+                    </apex:repeat>
+                </apex:pageBlockSection>
+                <!-- START:: 25/02/2016 NPAY-124 Add Auto-Enrolment pension scheme to new employer page added by Farhan --> 
+				<apex:pageBlockSection title="{!$Label.xcdhcm__newemployerautoenrolment}" columns="2"
+					rendered="{!showDetails}">
+					<apex:repeat value="{!$ObjectType.xcdhcm__Employer__c.fieldsets.xcdhcm__Auto_enrolment}"
+						var="fieldValueAutoenrolment">
+						<apex:inputField value="{!employer[fieldValueAutoenrolment]}" />
+						</apex:repeat>
+				</apex:pageBlockSection>
+				<!-- END:: 25/02/2016 NPAY-124 Add Auto-Enrolment pension scheme to new employer page added by Farhan --> 
+            </apex:outputPanel>
+
+        </apex:pageBlock>
+
+    </apex:form>
+</apex:page>

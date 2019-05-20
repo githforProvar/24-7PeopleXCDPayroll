@@ -1,0 +1,267 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" sidebar="false" showHeader="true" extensions="xcdhcm.OvertimeExtensionController">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />            
+    <style>  
+        .slds-scope .slds-section-title--divider 
+        {   
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        }
+        .bPageBlock .requiredInput .requiredBlock 
+        { 
+	    	display: none;
+	    }
+	    .datePicker
+       	{ 
+			margin-left:210px !important;
+		  	width: 21% !important;
+		  	position: sticky !important;    
+		} 
+    </style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form id="frm">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelToEmpDetail2}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHBookOvertime}</h2> 
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageBlock id="pgBlock" >
+                                <apex:PageMessages />
+                                
+                                <apex:repeat value="{!overtimeRequest}" var="otReq" rows="1">
+                                    <h3 class="slds-section-title--divider">{!$Label.xcdhcm__bookovertimeenterovertimedetails}</h3>
+                                    <apex:pageBlockSection columns="2" collapsible="false">
+                                        
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Overtime__c.Fieldsets.xcdhcm__Book_Overtime_Request}" var="i">
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Overtime__c.fields[i].Accessible}">
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Overtime__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!otReq[i]}" required="{!i.required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                         
+                                                    </div>
+                                                </div>  
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                        
+                    <!-- START :: 25/09/2017 NPPD-1537 Coded compensation field added on Overtime record commented by Farhan -->
+                    <!-- START :: 25/08/2016 NPPD-1031 Display claim overtime button only where employee is authorised to claim Added by Rahul S
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputpanel >
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <label class="slds-form-element__label" >
+                                                            {!$objectType.Overtime__c.fields.Rate_of_pay__c.label}
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:outputfield value="{!otReq.Rate_of_pay__c}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                    <!-- END :: 25/08/2016 NPPD-1031 Display claim overtime button only where employee is authorised to claim Added by Rahul S
+                    <!-- END :: 25/09/2017 NPPD-1537 Coded compensation field added on Overtime record commented by Farhan -->
+                                        
+                                        <apex:pageBlockSectionItem >
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Overtime__c.fields.xcdhcm__Overtime_Category__c.Accessible}">
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        <apex:outputLabel value="{!$objectType.xcdhcm__Overtime__c.fields.xcdhcm__Overtime_Category__c.label}" for="selectedReason" styleclass="slds-form-element__label" />
+                                                        <div class="slds-form-element__control">
+                                                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                                                <apex:selectList size="1" id="selectedReason" value="{!otReq.xcdhcm__Overtime_Category__c}">
+                                                                    <apex:selectOptions value="{!reasonOptions}" />
+                                                                </apex:selectList>
+                                                            </apex:outputPanel>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        <apex:pageBlockSectionItem rendered="{!otFlag == true}">
+                                            
+                                            <apex:outputpanel >
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <label class="slds-form-element__label" >
+                                                            <abbr class="slds-required" title="required">*</abbr>
+                                                            Manager approval
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                                                <apex:selectList size="1" value="{!selectedapprover}" label="Manager approval" required="true">
+                                                                    <apex:selectOptions value="{!memberslist}" />
+                                                                </apex:selectList>
+                                                            </apex:outputPanel>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        <apex:pageBlockSectionItem >
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Overtime__c.fields.xcdhcm__Notes__c.Accessible}">
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <apex:outputLabel value="{!$objectType.xcdhcm__Overtime__c.fields.xcdhcm__Notes__c.label}" for="notes" styleclass="slds-form-element__label"/>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField id="notes" value="{!otReq.xcdhcm__Notes__c}" />
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                    </apex:pageBlockSection>
+                                </apex:repeat>
+                            </apex:pageBlock>
+                            
+                            <apex:outputPanel id="popup">
+                                <apex:outputpanel styleClass="popupBg" rendered="{!displayPopup}" />
+                                <apex:outputPanel id="popup1" styleClass="customPopup" layout="block" rendered="{!displayPopup}">
+                                    <center>  
+                                        <apex:outputtext id="oText2" value="Overtime requested has been submitted for approval successfully" rendered="{!displayPopup}" />
+                                        <br/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__bookovertimebok}" action="{!saveOvertimeRequestOk}" style="width: 100px;" rerender="popup" styleclass="slds-button slds-button--neutral" />
+                                    </center>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            
+                            <apex:outputPanel id="popup2">
+                                <apex:outputpanel styleClass="popupBg" rendered="{!displayPopupNotsubmitted}"/>
+                                <apex:outputPanel id="popup11" styleClass="customPopup" layout="block" rendered="{!displayPopupNotsubmitted}">
+                                    <center>  
+                                        <apex:outputtext id="oText22"
+                                                         value="Your request has been saved but has not been submitted for approval. Please contact your System Administrator"
+                                                         rendered="{!displayPopupNotsubmitted}" />
+                                        <br/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__bookovertimebok}" style="width: 100px;" action="{!saveOvertimeRequestOk}" styleclass="slds-button slds-button--neutral" />
+                                    </center>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__bookovertimebcancel}" action="{!cancelToEmpDetail2}" immediate="true" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="Submit1"/>  
+                                        <apex:commandButton id="Submit1" value="{!$Label.xcdhcm__bookovertimebsubmitovertime}" action="{!saveOvertimeRecord}" status="saveStatus" rerender="frm,popup,popup2,Submit1" styleclass="slds-button slds-button--brand"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+    
+    <style type="text/css">
+        .popupBg
+        {
+        //background-color:#FFFFFF;
+        opacity: 1.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 50%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 40%;
+        width: 500px;
+        margin-left: -250px;
+        text-decoration: none;
+        font-weight: bold;
+        
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;
+        
+        -moz-box-shadow: 4px 5px 10px #99ccff;
+        -webkit-box-shadow: 4px 5px 10px #99ccff;
+        box-shadow: 4px 5px 10px #99ccff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+        /* 
+        .butt
+        {
+        
+        border: 1px solid #d9d9d9 !important;
+        color: #999999 !important;
+        background-color: #fff !important;
+        background-image: none !important;
+        -moz-box-shadow: 2px 1px 8px #a6d6ff;
+        -webkit-box-shadow: 2px 1px 8px #a6d6ff;
+        box-shadow: 2px 1px 8px #a6d6ff;
+        }
+        */
+    </style>
+    
+    <script>
+    
+    function disable_quicksave(buttonid1,buttonid2) 
+    {
+        document.getElementById(buttonid1).disabled=true;
+        document.getElementById(buttonid1).style.opacity= "0.5";
+        document.getElementById(buttonid1).style.cursor = "default";
+        document.getElementById(buttonid1).style.pointerEvents = "none";
+        
+        document.getElementById(buttonid2).disabled=true;
+        document.getElementById(buttonid2).style.opacity= "0.5";
+        document.getElementById(buttonid2).style.cursor = "default";
+        document.getElementById(buttonid2).style.pointerEvents = "none";
+    }
+    
+    </script>
+</apex:page>

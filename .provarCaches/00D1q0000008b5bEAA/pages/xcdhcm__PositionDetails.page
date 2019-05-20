@@ -1,0 +1,62 @@
+<!-- 
+Name: PositionDetails Page 
+* @author Praveen
+* @date 07/03/2014
+* @description Page is used in site to display Vacancies Details on site for both internal and external vacancies.
+ -->
+
+
+<apex:page standardController="xcdhcm__Vacancy__c" extensions="xcdhcm.PositionDetailsController" showheader="false" sidebar="false" >
+
+<apex:composition template="{!$Site.Template}">
+<apex:define name="body">
+<apex:form >
+   <div id="PositionMain">
+    <apex:pageBlock id="theBlock" title="{!$Label.xcdhcm__phpositiondetails}">
+    <apex:PageMessages />   
+     
+         <!--START :: 23/07/2014 NPPD-452 Recruitment site setup - views Added by Praveen -->    
+             
+        <apex:pageBlockSection title="{!Vacancydetailstitle}" columns="1" >
+            <apex:repeat value="{!vacancy}" var="vac" rows="1">
+                <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__Vacancy_details}" var="a">
+                    <apex:outputField value="{!xcdhcm__Vacancy__c[a]}" />
+                </apex:repeat>
+            </apex:repeat>    
+        </apex:pageBlockSection>    
+        
+        <apex:pageBlockSection title="{!Jobdescriptiondetailstitle}" columns="1">
+          <apex:repeat value="{!vacancy}" var="vac" rows="1">
+            <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__Job_description_details}" var="b">
+              <apex:outputField value="{!xcdhcm__Vacancy__c[b]}" />
+            </apex:repeat>
+          </apex:repeat>  
+       </apex:pageBlockSection>  
+
+        <apex:pageBlockSection title="{!Compensationdetailstitle}"  columns="1"
+                                rendered="{!xcdhcm__Vacancy__c.xcdhcm__Publish_salary_external__c==true}">
+            <apex:repeat value="{!vacancy}" var="vac" rows="1">  
+                <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__Compensation_detail}" var="c" >
+                    <apex:outputField value="{!xcdhcm__Vacancy__c[c]}"/>
+                </apex:repeat>  
+            </apex:repeat>      
+        </apex:pageBlockSection>      
+      <!-- END :: 23/07/2014 NPPD-452 Recruitment site setup - views Added by Praveen -->    
+            
+      <apex:pageBlockButtons >
+        <apex:commandButton value="{!$Label.xcdhcm__positiondetailsbback}" action="{!back}" styleClass="Positionback"/>
+        <!-- START :: NPD-565 modified by saravanan -->
+        <apex:commandButton value="{!$Label.xcdhcm__positiondetailsbapply}" action="{!applyPositionForm}" styleClass="Positionapply"/>
+         <!-- END :: NPD-565 modified by saravanan --> 
+      </apex:pageBlockButtons>
+    </apex:pageBlock>
+    <div class="line"></div>
+    
+    </div>
+</apex:form>
+
+</apex:define>
+</apex:composition>
+
+
+</apex:page>

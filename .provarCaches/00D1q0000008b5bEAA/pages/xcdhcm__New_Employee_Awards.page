@@ -1,0 +1,343 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.RewardExtensionController" sidebar="false"  showHeader="true" wizard="false">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        .bEditBlock .pbSubheader .pbSubExtra 
+        {
+        display: none;
+        }
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: #ccc!important;
+        border-color: #ccc!important;
+        }
+        body .bEditBlock .pbBody .pbSubheader, body .bWizardBlock .pbBody .pbSubheader
+        {
+        font-size: 1.15em!important;
+        line-height: 1.25!important;
+        color: #54698d!important;
+        letter-spacing: .0625rem!important; 
+        font-weight: normal!important;
+        }
+        .closeIcon
+        {
+        display:none;
+        }
+        body .bEditBlock .pbBody .pbSubheader, body .bWizardBlock .pbBody .pbSubheader 
+        {
+        border-top: white !important;
+        }
+		<!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+    .popupBg
+   {
+      opacity: 4.0;
+      filter: alpha(opacity = 60);
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 9998;
+   }
+   .customPopup
+   {
+      line-height: 25px;
+      position: absolute;
+      left: 60%;
+      padding:10px;
+      z-index: 9999;
+      text-align: center;
+      top: 150px;
+      width: 400px;
+      margin-left: -450px;
+      text-decoration: none;
+      font-weight: bold;
+      background: #ffffff !important;
+      border: 1px solid #ccc !important;         
+      -moz-box-shadow: 4px 5px 10px #99ccff;
+      -webkit-box-shadow: 4px 5px 10px #99ccff;
+      box-shadow: 4px 5px 10px #99ccff;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      color:#336699;
+    }
+    <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->     
+    <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+    .datePicker
+    { 
+	   margin-left:210px !important;
+	   width: 21% !important;
+	   position: sticky !important;     
+	} 
+	<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope"> 
+            
+            <apex:form id="theform">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!backToRewardTab}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Employee_Awards}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageBlock mode="edit" id="theblock">
+                                <apex:PageMessages id="errorMsg" />
+                                
+								<!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+		<apex:outputPanel id="popup3">
+	         <apex:outputpanel styleClass="popupBg" rendered="{!AND(selectedAwardType != '--Select--', displayPopup)}" style="opacity: 0.2;background-color: black;"/>
+	         <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!AND(selectedAwardType != '--Select--', displayPopup)}">
+	            <center>  
+	                <apex:outputtext value="{!validationPopupMsg}" />
+	                <br/><br/>
+	                <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!saveEmployeeAwards}" styleclass="slds-button slds-button--neutral" onClick="disableButton(this);" />
+					<apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelPopup}" styleclass="slds-button slds-button--neutral" onClick="disableButton(this);" />
+	   			</center>
+	         </apex:outputPanel>
+	     </apex:outputPanel>
+	     <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+		 
+                                <apex:actionRegion >
+                                    <apex:pageBlockSection id="sec" title="{!$Label.xcdhcm__new_employee_awardsselectawardtype}" columns="1" rendered="{!selectedAwardType == '--Select--'}" collapsible="false">
+                                        <apex:pageBlockSectionItem id="item">
+                                            <apex:outputLabel />
+                                            <apex:SelectList id="List" value="{!selectedAwardType}" size="1" style="width: 20%!important;">
+                                                <apex:actionSupport event="onchange" action="{!choosenAwardRecord}" reRender="theform" status="recordStatus" />
+                                                <apex:selectOptions value="{!AwardType}" />
+                                            </apex:SelectList>
+                                        </apex:pageBlockSectionItem>
+                                        <!-- ================================== Lightnign Spinner ======================================================    -->
+                                        <apex:outputpanel >
+                                            <apex:actionStatus id="recordStatus" >
+                                                <apex:facet name="start">
+                                                    <div class="slds-spinner_container slds-show" style="top:28%; bottom:30%">
+                                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                            <div class="slds-spinner__dot-a"></div>
+                                                            <div class="slds-spinner__dot-b"></div>
+                                                        </div>
+                                                    </div>
+                                                </apex:facet>
+                                                <apex:facet name="stop">
+                                                    <div class="slds-spinner_container slds-hide" >
+                                                        
+                                                    </div>
+                                                </apex:facet>
+                                            </apex:actionStatus>
+                                        </apex:outputpanel>  
+                                        <!-- ================================== Lightnign Spinner ======================================================    -->
+                                    </apex:pageBlockSection>
+                                    
+                                    <apex:repeat value="{!employeeAwards}" var="eAwards" rows="1">
+                                        <apex:pageBlockSection columns="1" id="pSec1" rendered="{!AND(eAwards.xcdhcm__Earliest_payment_date__c!=null,empDetail.xcdhcm__Payroll_start_date__c!=null,eAwards.xcdhcm__Earliest_payment_date__c < empDetail.xcdhcm__Payroll_start_date__c)}" >
+                                            <apex:outputPanel id="out1">
+                                                <apex:pageMessage id="pMsg" summary="If this payment is to be made by XCD Payroll, set Earliest payment date on or after {!empDetail.xcdhcm__Payroll_start_date__c}"
+                                                                  severity="info" strength="1" />
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSection>
+                                        <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_awardsbonusdetail}" columns="2" collapsible="false" rendered="{!selectedAwardType == Bonus.Name}" id="userDetails">
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Bonus}" var="i">
+                                            <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.Fields[i].Accessible}" >
+                                                <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.Fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eAwards[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}">
+                                                                    <apex:actionSupport event="onchange" reRender="pSec1" />
+                                                                </apex:inputField>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                            
+                                            <apex:pageBlockSectionItem id="item1">
+                                                <apex:outputpanel >
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                Compensation
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                             <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Compensation__c.Accessible}" >
+                                                              <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->    
+                                                                <apex:actionRegion >
+                                                                    <apex:inputField value="{!eAwards.xcdhcm__Compensation__c}" required="true">
+                                                                        <apex:actionSupport event="onchange" action="{!readCompensation}" status="loadSalary" reRender="BaseSalary1,BaseSalary,box2,box1" oncomplete="" />
+                                                                    </apex:inputField>
+                                                                </apex:actionRegion>
+                                                                 </apex:outputpanel>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem id="item">
+                                                <apex:outputpanel >
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                Annual salary
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:outputText value="{!dBaseSalary}" rendered="true" id="BaseSalary1" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.fields.xcdhcm__Percentage_bonus__c.Accessible}">
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <label class="slds-form-element__label" >
+                                                            {!$ObjectType.Benefit__c.fields.Percentage_bonus__c.Label}
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!eAwards.xcdhcm__Percentage_bonus__c}" id="box1" onkeyUp="percentage();" />
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.fields.xcdhcm__Payment_amount__c.Accessible}">
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <label class="slds-form-element__label" >
+                                                        	<abbr class="slds-required" title="required">*</abbr>
+                                                            {!$ObjectType.Benefit__c.fields.Payment_amount__c.Label}
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!eAwards.xcdhcm__Payment_amount__c}" id="box2" onkeyUp="paymentAmount();" required="true"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.fields.xcdhcm__Notes__c.Accessible}" >
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <label class="slds-form-element__label" >
+                                                            {!$ObjectType.Benefit__c.fields.Notes__c.Label}
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!eAwards.xcdhcm__Notes__c}" id="box3" />
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                            
+                                            <apex:inputHidden value="{!dBaseSalary}" id="BaseSalary" rendered="true" />
+                                        </apex:pageBlockSection>
+                                        <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_awardscommissiondetail}" columns="2" collapsible="false"
+                                                               rendered="{!selectedAwardType == Commission.Name}">
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Commission}" var="i">
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.Fields[i].Accessible}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.Fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eAwards[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}">
+                                                                    <apex:actionSupport event="onchange" reRender="pSec1" />
+                                                                </apex:inputField>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                        </apex:pageBlockSection>
+                                    </apex:repeat>
+                                </apex:actionRegion>
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_employee_awardsbcancel}" action="{!backToRewardTab}" rendered="{!selectedAwardType!='--Select--'}" immediate="true" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_employee_awardsbsave}" action="{!createPopup}" rendered="{!selectedAwardType!='--Select--'}" status="saveStatus" rerender="butn,errorMsg,popup3,id_saveBtn" id="id_saveBtn" styleclass="slds-button slds-button--brand"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:10%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script> 
+    //calculate the Proposed increase
+    //var proposedIncreaseVal = (currentSalary * increasePercent) / 100; 
+    function percentage()
+    { 
+        var j$ = jQuery.noConflict();
+        var baseSalary = j$("input[id$='BaseSalary']").val();
+        var unit = j$("input[id$='box1']").val();
+        var proposedIncreaseVal =((baseSalary)*(unit/100)).toFixed(2);
+        j$("input[id$='box2']").val(proposedIncreaseVal );                                     
+        
+    }
+    
+    function paymentAmount()
+    {
+        var j$ = jQuery.noConflict();
+        var baseSalary = j$("input[id$='BaseSalary']").val();
+        var unit = j$("input[id$='box2']").val();
+        var percentage =((unit/baseSalary)*100).toFixed(2);
+        j$("input[id$='box1']").val(percentage ); 
+    }
+    </script>
+</apex:page>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testCase failureBehaviour="Continue" id="14">
+<testCase failureBehaviour="Continue" id="1">
   <summary/>
   <steps>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.testapis.ApexConnect" name="ApexConnect" testItemId="1" title="Salesforce Connect: Admin (Test)">
@@ -661,7 +661,7 @@
       <clauses>
         <clause name="substeps" testItemId="588">
           <steps>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="589" title="With xcdhcm__XCD_PAY_Periods__r rows {8}">
+            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="589" title="With xcdhcm__XCD_PAY_Periods__r rows {7}">
               <tags/>
               <arguments>
                 <argument id="uiConnectionName">
@@ -671,10 +671,10 @@
                   <value class="uiLocator" uri="sf:ui:locator:row?table=xcdhcm__XCD_PAY_Periods__r%2Fxcdhcm__XCD_PAY_Periods__rTable"/>
                 </argument>
                 <argument id="uiRowLocator">
-                  <value class="value" valueClass="decimal">8</value>
+                  <value class="value" valueClass="decimal">7</value>
                 </argument>
                 <argument id="locatorDescription">
-                  <value class="value" valueClass="string">With xcdhcm__XCD_PAY_Periods__r rows {8}</value>
+                  <value class="value" valueClass="string">With xcdhcm__XCD_PAY_Periods__r rows {7}</value>
                 </argument>
                 <argument id="failIfNotFound">
                   <value class="value" valueClass="boolean">true</value>
@@ -905,7 +905,6 @@
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">templates/StudentloanAnd1Priority1OtherInputSheet.xlsx</workbookPath>
                     <worksheetName class="value" valueClass="string">October2018PayPeriod</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>

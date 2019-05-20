@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Sets up record for each day on which employee is absent</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>Private</externalSharingModel>
+    <fields>
+        <fullName>xcdhcm__AM_PM_Allday__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>AM/PM/Allday</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>AM</fullName>
+                    <default>false</default>
+                    <label>AM</label>
+                </value>
+                <value>
+                    <fullName>PM</fullName>
+                    <default>false</default>
+                    <label>PM</label>
+                </value>
+                <value>
+                    <fullName>All day</fullName>
+                    <default>false</default>
+                    <label>All day</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Company__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Companies__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Company</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Current_month__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>month(  xcdhcm__Date__c  ) = month(today())</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Current month</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Day__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(MOD( xcdhcm__Date__c  - DATE(1900, 1, 6), 7), 0, &quot;Saturday&quot;, 1, &quot;Sunday&quot;, 2,&quot;Monday&quot;, 3, &quot;Tuesday&quot;, 4, &quot;Wednesday&quot;, 5, &quot;Thursday&quot;, 6,&quot;Friday&quot;,&quot;&quot;)</formula>
+        <label>Day</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Leave_Request__r.xcdhcm__Employee_Details__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Employee</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_leaving_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Leave_Request__r.xcdhcm__Employee_leaving_date__c</formula>
+        <label>Employee leaving date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leave_Request__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Leave request</label>
+        <referenceTo>xcdhcm__Leave_Request__c</referenceTo>
+        <relationshipName>Individual_Leave_Records</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leave_category__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(xcdhcm__Leave_Request__r.xcdhcm__Leave_Category__c,
+&quot;Annual Leave&quot;, &quot;Annual Leave&quot;,
+&quot;TOIL&quot;, &quot;TOIL&quot;,
+&quot;Sabbatical&quot;, &quot;Sabbatical&quot;,
+&quot;Study Leave&quot;, &quot;Study Leave&quot;,
+&quot;Other paid leave&quot;, &quot;Other paid leave&quot;,
+&quot;Unpaid Leave&quot;,&quot;Unpaid Leave&quot;,
+&quot;Sick Leave&quot;,&quot;Sick Leave&quot;,
+&quot;Compassionate&quot;,&quot;Compassionate&quot;,
+&quot;Emergency Leave for Dependants&quot;,&quot;Emergency Leave for Dependants&quot;,
+&quot;Maternity &amp; Paternity&quot;,&quot;Maternity &amp; Paternity&quot;,
+&quot;Working from home&quot;,&quot;Working from home&quot;,
+&quot;Business Travel&quot;,&quot;Business Travel&quot;,
+&quot;Conference / Seminar&quot;,&quot;Conference / Seminar&quot;,
+&quot;Jury Service&quot;,&quot;Jury Service&quot;,
+&quot;Working Weekends&quot;,&quot;Working Weekends&quot;,
+&quot;Sick leave - paid&quot;,&quot;Sick leave - paid&quot;,
+&quot;Sick leave - unpaid&quot;,&quot;Sick leave - unpaid&quot;,
+&quot;&quot;
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Leave category</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leaver_before_data_retention_period__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If(
+  not(isblank( xcdhcm__Leave_Request__r.xcdhcm__Employee_Details__r.xcdhcm__Company__r.xcdhcm__GDPR_data_retention_threshold__c )), 
+  xcdhcm__Employee_leaving_date__c &lt; xcdhcm__Leave_Request__r.xcdhcm__Employee_Details__r.xcdhcm__Company__r.xcdhcm__GDPR_data_retention_threshold__c, 
+  xcdhcm__Employee_leaving_date__c &lt; xcdhcm__Leave_Request__r.xcdhcm__Employee_Details__r.xcdhcm__Company__r.xcdhcm__HMRC_data_retention_threshold__c 
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Leaver before data retention period</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Number_of_days__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If( 
+or(ispickval(xcdhcm__AM_PM_Allday__c,  &quot;AM&quot;),ispickval(xcdhcm__AM_PM_Allday__c,  &quot;PM&quot;)), 0.5,1)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Number of days</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Number_of_hours__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>if( xcdhcm__Number_of_days__c =1, 
+if(
+or( xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_AM_hh_mm__c &lt;&gt; null,
+ xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_PM_hh_mm__c &lt;&gt; null),
+ (VALUE(left(xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_AM_hh_mm__c,2)) + VALUE(left( xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_PM_hh_mm__c,2)) +
+  ((1/60) * (value(right(xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_AM_hh_mm__c,2)) + VALUE(right( xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_PM_hh_mm__c,2))))),
+ xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Contractual_Hours__c /
+ xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Working_Days_Week__c ),
+
+if( and(xcdhcm__Number_of_days__c =0.5, ispickval( xcdhcm__AM_PM_Allday__c ,&quot;AM&quot;)),
+if(xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_AM_hh_mm__c &lt;&gt; null,  (VALUE(left(xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_AM_hh_mm__c,2))  +  ((1/60) * (value(right(xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_AM_hh_mm__c,2)) ))),
+0.5 * xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Contractual_Hours__c /
+ xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Working_Days_Week__c ),
+
+if( and(xcdhcm__Number_of_days__c =0.5, ispickval( xcdhcm__AM_PM_Allday__c ,&quot;PM&quot;)),
+if(xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_PM_hh_mm__c &lt;&gt; null,  (VALUE(left(xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_PM_hh_mm__c,2))  +  ((1/60) * (value(right(xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Hours_PM_hh_mm__c,2)) ))),
+0.5 * xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Contractual_Hours__c /
+ xcdhcm__Leave_Request__r.xcdhcm__Leave_Summary__r.xcdhcm__Job_Role__r.xcdhcm__Working_Days_Week__c ),
+0
+)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Number of hours</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Test_employee__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Leave_Request__r.xcdhcm__Employee_Details__r.xcdhcm__Test_employee__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Test employee</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Type_of_leave__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASE(xcdhcm__Leave_Request__r.xcdhcm__Type_of_Leave__c ,
+&quot;Annual Leave&quot;,&quot;Annual Leave&quot;,
+&quot;Paid Leave&quot;,&quot;Paid Leave&quot;,
+&quot;Unpaid Leave&quot;,&quot;Unpaid Leave&quot;,
+&quot;Sick Leave&quot;,&quot;Sick Leave&quot;,
+&quot;Work&quot;,&quot;Work&quot;,
+&quot;&quot;
+)</formula>
+        <label>Type of leave</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Leave Record</label>
+    <nameField>
+        <displayFormat>ILR-{0000}</displayFormat>
+        <label>Leave record id</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Leave Records</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>Private</sharingModel>
+    <startsWith>Vowel</startsWith>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -1,0 +1,801 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.RewardExtensionController" sidebar="false" showHeader="true" wizard="false">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" /> 
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {   
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        .bEditBlock .pbSubheader .pbSubExtra 
+        {
+        display: none;
+        }
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: #ccc!important;
+        border-color: #ccc!important;
+        }
+        body .bEditBlock .pbBody .pbSubheader, body .bWizardBlock .pbBody .pbSubheader
+        {
+        font-size: 1.0em!important;
+        line-height: 1.25!important;
+        color: #54698d!important;
+        letter-spacing: .0625rem!important;
+        font-weight: normal!important;
+        }
+        <!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+        .popupBg
+        {
+        opacity: 4.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 60%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 150px;
+        width: 400px;
+        margin-left: -450px;
+        text-decoration: none;
+        font-weight: bold;
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;         
+        -moz-box-shadow: 4px 5px 10px #99ccff;
+        -webkit-box-shadow: 4px 5px 10px #99ccff;
+        box-shadow: 4px 5px 10px #99ccff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+        <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->  
+        <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important; 
+		   position: sticky !important;    
+		} 
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">
+            <apex:form id="theform">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!backToRewardTab}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Employee_Benefits}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <!-- START :: 19/08/2017 NPPD-1187 Calculation basis for part period Benefit/Award payments Added by Tutu -->
+                            <apex:outputPanel id="backMsg">
+	     	<!-- START :: 17/05/2018 NPAY-493 Change information message text Added by Tutu -->
+    		<apex:pageMessage id="pMsg1" summary="{!backPayMsg}" severity="info" strength="1" rendered="{!isBackPayMsg}" escape="false"/>
+    		<!-- END :: 17/05/2018 NPAY-493 Change information message text Added by Tutu -->
+                            </apex:outputPanel> 
+                            <!-- END :: 19/08/2017 NPPD-1187 Calculation basis for part period Benefit/Award payments Added by Tutu -->
+                            
+                            <apex:pageBlock mode="edit">
+                                <apex:pagemessages id="errorMsg"/>
+                                <!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+                                <apex:outputPanel id="popup3">
+                                    <apex:outputpanel styleClass="popupBg" rendered="{!AND(selectedBenefitType != '--Select--', displayPopup)}" style="opacity: 0.2;background-color: black;"/>
+                                    <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!AND(selectedBenefitType != '--Select--', displayPopup)}">
+                                        <center>  
+                                            <apex:outputtext value="{!validationPopupMsg}" rendered="{!AND(selectedBenefitType != '--Select--', displayPopup)}"/>
+                                            <br/><br/>
+                                            <!--START :: 24/04/2017 TestTrial issue in Lightning1 & 2 regression issue for T194400-Benefit modified by Kumbresh -->
+                                            <apex:actionStatus id="OKStatus">                   
+				                                <apex:facet name="stop">
+				                                    <apex:outputPanel >
+				                                    	<!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+										                <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!createIrregularOrCasualPopupInfo}" rendered="{!displayOkButton == false}" rerender="popup,popup3,errorMsg"  styleclass="slds-button slds-button--brand" id="id_okD" status="OKStatus" />														
+				                                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!saveEmployeeBenefits}" rendered="{!displayOkButton == true}" rerender="popup,popup3,errorMsg"  styleclass="slds-button slds-button--brand" id="id_ok" status="OKStatus" />
+				                                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelPopup}" styleclass="slds-button slds-button--neutral" status="OKStatus"/>
+				                                        <!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+				                                    </apex:outputPanel>
+				                                </apex:facet>
+				                                <apex:facet name="start">
+				                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+				                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+				                                            <div class="slds-spinner__dot-a"></div>
+				                                            <div class="slds-spinner__dot-b"></div>
+				                                        </div> 
+				                                    </div>                    
+				                                </apex:facet>                                
+				                            </apex:actionStatus> 
+				                            <!--END :: 24/04/2017 TestTrial issue in Lightning1 & 2 regression issue for T194400-Benefit modified by Kumbresh -->
+                                        </center>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->  
+                                <apex:actionRegion >
+                                    <apex:pageBlockSection id="sec" title="{!$Label.xcdhcm__new_employee_benefitsselectbenefittype}" columns="1" rendered="{!selectedBenefitType == '--Select--'}" collapsible="false">
+                                        
+                                        <apex:pageBlockSectionItem id="item">
+                                            <apex:outputLabel />
+                                            <apex:SelectList id="List" value="{!selectedBenefitType}" size="1" style="width: 20%!important;">
+                                                <apex:actionSupport event="onchange" action="{!choosenBenefitRecord}" reRender="theform" status="recordStatus" />
+                                                <apex:selectOptions value="{!BenefitType}"/>
+                                            </apex:SelectList>
+                                        </apex:pageBlockSectionItem>
+                                        <!-- ================================== Lightnign Spinner ======================================================    -->
+                                        <apex:outputpanel >
+                                            <apex:actionStatus id="recordStatus" >
+                                                <apex:facet name="start">
+                                                    <div class="slds-spinner_container slds-show" style="top:28%; bottom:30%">
+                                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                            <div class="slds-spinner__dot-a"></div>
+                                                            <div class="slds-spinner__dot-b"></div>
+                                                        </div>
+                                                    </div>
+                                                </apex:facet>
+                                                <apex:facet name="stop">
+                                                    <div class="slds-spinner_container slds-hide" >
+                                                        
+                                                    </div>
+                                                </apex:facet>
+                                            </apex:actionStatus>
+                                        </apex:outputpanel>  
+                                        <!-- ================================== Lightnign Spinner ======================================================    -->
+                                    </apex:pageBlockSection>
+                                    
+                                    <apex:repeat value="{!employeeBenefits}" var="eBen" rows="1">
+                                     <!-- START :: 15/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                     <apex:actionStatus id="recordStatus">                   
+                                            <apex:facet name="start">
+                                                <div class="slds-spinner_container slds-show" style="top:32%; bottom:30%" >
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>
+                                            <apex:facet name="stop">
+                                                <div class="slds-spinner_container slds-hide "> </div>
+                                            </apex:facet>                                
+                                        </apex:actionStatus>
+                                        <!-- END :: 15/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                        <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_benefitsallowancedetail}" columns="2" collapsible="false" rendered="{!selectedBenefitType == Allowance.Name}">
+                                            
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee__c.Accessible}">
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->      
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employee__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Employee__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Benefit_Type__c.Accessible}">
+                                              <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->    
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Benefit_Type__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:actionRegion >
+                                                                    <apex:inputField id="type" value="{!eBen.xcdhcm__Benefit_Type__c}" required="true">
+                                                                        <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                                                        <apex:actionSupport event="onchange" action="{!onChangeBenefitType}" reRender="fromPanel1,carId"/>
+                                                                        <!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                                                    </apex:inputField>
+                                                                </apex:actionRegion>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Allowance}" var="i">
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.Fields[i].Accessible}">
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.Fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}">
+                                                                    <!-- START :: 19/08/2017 NPPD-1187 Calculation basis for part period Benefit/Award payments Added by Tutu -->
+                                                                    <apex:actionSupport event="onchange" action="{!backDatedPayInfoMsg}" rerender="backMsg"/>
+                                                                </apex:inputField>
+                                                                <!-- END :: 19/08/2017 NPPD-1187 Calculation basis for part period Benefit/Award payments Added by Tutu -->
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                            
+                                            <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputpanel id="fromPanel1">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+	                                                <apex:outputpanel rendered="{!AND(isActiveBenefit,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Payment_due__c.Accessible)}">
+	                                              <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->      
+	                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+	                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+	                                                                <abbr class="slds-required" title="required">*</abbr>
+	                                                                {!$objectType.Benefit__c.fields.Payment_due__c.label}
+	                                                            </label> 
+	                                                            <div class="slds-form-element__control">
+	                                                            	<apex:inputField value="{!eBen.xcdhcm__Payment_due__c}" required="true" />
+	                                                            </div>                                                                                        
+	                                                        </div>
+	                                                    </div> 
+	                                                </apex:outputpanel>
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                        </apex:pageBlockSection>
+                                        
+                                        <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_benefitsregularbenefit}" columns="2" collapsible="false" rendered="{!selectedBenefitType == RegularBenefit.Name}">
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee__c.Accessible}">
+                                              <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->    
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employee__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Employee__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Benefit_Type__c.Accessible}">
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->   
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Benefit_Type__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:actionRegion >
+                                                                    <apex:inputField id="type" value="{!eBen.xcdhcm__Benefit_Type__c}" required="true">
+                                                                        <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                                                        <apex:actionSupport event="onchange" action="{!onChangeBenefitType}"  reRender="fromPanel3,carId"/>
+                                                                        <!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                                                    </apex:inputField>
+                                                                </apex:actionRegion>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Benefit_third_party}" var="i">
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.Fields[i].Accessible}">
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->    
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.Fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                    <!-- START :: 19/08/2017 NPPD-1187 Calculation basis for part period Benefit/Award payments Added by Tutu -->
+                                                                    <apex:actionSupport event="onchange" action="{!backDatedPayInfoMsg}" rerender="backMsg"/>
+                                                                </apex:inputField>
+                                                                <!-- END :: 19/08/2017 NPPD-1187 Calculation basis for part period Benefit/Award payments Added by Tutu -->
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                             <!-- START :: 15/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Variable_contribution_basis__c.Accessible}">
+                                              <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->        
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Variable_contribution_basis__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                               <apex:actionRegion >
+                                                                <apex:inputField id="type" value="{!eBen.xcdhcm__Variable_contribution_basis__c}">
+                                                                   <apex:actionSupport event="onchange"  reRender="theform" status="recordStatus"/>
+                                                                </apex:inputField>
+                                                                </apex:actionRegion> 
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!OR(eBen.xcdhcm__Variable_contribution_basis__c == null,eBen.xcdhcm__Variable_contribution_basis__c == '--None--')}">
+                                                <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employer_Contribution__c.Accessible}">
+                                                  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->    
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employer_Contribution__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Employer_Contribution__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!OR(eBen.xcdhcm__Variable_contribution_basis__c == null,eBen.xcdhcm__Variable_contribution_basis__c == '--None--')}">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee_Contribution__c.Accessible}">
+                                                  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->   
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employee_Contribution__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Employee_Contribution__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(eBen.xcdhcm__Variable_contribution_basis__c != null,eBen.xcdhcm__Variable_contribution_basis__c != '--None--')}">
+                                                <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employer_Contribution_Per__c.Accessible}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->   
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Employer_Contribution_Per__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Employer_Contribution_Per__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(eBen.xcdhcm__Variable_contribution_basis__c != null,eBen.xcdhcm__Variable_contribution_basis__c != '--None--')}">
+                                                <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee_Contribution_per__c.Accessible}">
+                                                  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->   
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Employee_Contribution_per__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Employee_Contribution_per__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                             <!-- END :: 15/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                             
+                                            <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputPanel id="fromPanel3">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+	                                                <apex:outputpanel rendered="{!AND(isActiveBenefit,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Payment_due__c.Accessible)}">
+	                                                <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->     
+	                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+	                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+	                                                            <label class="slds-form-element__label" >    
+	                                                                <abbr class="slds-required" title="required">*</abbr>
+	                                                                {!$objectType.Benefit__c.fields.Payment_due__c.label}
+	                                                            </label>
+	                                                            <div class="slds-form-element__control">
+	                                                            	<apex:inputField value="{!eBen.xcdhcm__Payment_due__c}" required="true" />
+	                                                            </div>                                                                                        
+	                                                        </div>
+	                                                    </div> 
+	                                                </apex:outputpanel>
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>  
+                                            <!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->             
+                                        </apex:pageBlockSection>
+                                        
+                                        
+                                        <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_benefitsregulardeduction}" columns="2" collapsible="false" rendered="{!selectedBenefitType == deductionsRegular.Name}">
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee__c.Accessible}">
+                                               <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->      
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employee__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Employee__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Benefit_Type__c.Accessible}">
+                                                <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->      
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Benefit_Type__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:actionRegion >
+                                                                    <apex:inputField id="type" value="{!eBen.xcdhcm__Benefit_Type__c}" required="true">
+                                                                        <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                                                        <apex:actionSupport event="onchange" action="{!onChangeBenefitType}" reRender="fromPanel5"/>
+                                                                        <!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                                                    </apex:inputField>
+                                                                </apex:actionRegion>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Deductions_regular}"  var="i">
+                                               <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.Fields[i].Accessible}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->    
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.Fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                    <!-- START :: 19/08/2017 NPPD-1187 Calculation basis for part period Benefit/Award payments Added by Tutu -->
+                                                                    <apex:actionSupport event="onchange" action="{!backDatedPayInfoMsg}" rerender="backMsg"/>
+                                                                </apex:inputField>
+                                                                <!-- END :: 19/08/2017 NPPD-1187 Calculation basis for part period Benefit/Award payments Added by Tutu -->
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                            
+                                            <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputPanel id="fromPanel5">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+	                                                <apex:outputpanel rendered="{!AND(isActiveBenefit,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Payment_due__c.Accessible)}">
+	                                                <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->     
+	                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+	                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+	                                                            <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.Benefit__c.fields.Payment_due__c.label}
+	                                                            </label> 
+	                                                            <div class="slds-form-element__control">
+	                                                            	<apex:inputField value="{!eBen.xcdhcm__Payment_due__c}" required="true"/>
+	                                                            </div>                                                                                        
+	                                                        </div>
+	                                                    </div> 
+	                                                </apex:outputpanel>
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                        </apex:pageBlockSection>
+                                        
+                                        <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_benefitscourtorderorattachment}" columns="2"  collapsible="false" rendered="{!selectedBenefitType == courtOrder.Name}">
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee__c.Accessible}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employee__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Employee__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Benefit_Type__c.Accessible}">
+                                                <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->      
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Benefit_Type__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:actionRegion >
+                                                                    <apex:inputField id="type" value="{!eBen.xcdhcm__Benefit_Type__c}" required="true">
+                                                                        <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                                                        <apex:actionSupport event="onchange" action="{!onChangeBenefitType}" reRender="fromPanel7"/>
+                                                                        <!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                                                    </apex:inputField>
+                                                                </apex:actionRegion>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Statutory_Payment}" var="i">
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.Fields[i].Accessible}">
+                                             <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.Fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                            <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                            <apex:pageBlockSectionItem >
+                                                <apex:outputpanel id="fromPanel7">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+	                                                <apex:outputPanel rendered="{!AND(isActiveBenefit,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Payment_due__c.Accessible)}">
+	                                               <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->     
+	                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+	                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+	                                                            <label class="slds-form-element__label" >
+	                                                                <abbr class="slds-required" title="required">*</abbr>
+	                                                                {!$objectType.Benefit__c.fields.Payment_due__c.label}
+	                                                            </label>
+	                                                            <div class="slds-form-element__control">
+	                                                               <apex:inputField value="{!eBen.xcdhcm__Payment_due__c}" required="true" />
+	                                                            </div>                                                                                        
+	                                                        </div>
+	                                                    </div> 
+	                                                </apex:outputpanel>
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                        </apex:pageBlockSection>
+                                        
+                                        <apex:pageBlockSection title="{!$Label.xcdhcm__new_employee_benefitsrepayableloan}" columns="2" collapsible="false" rendered="{!selectedBenefitType == repayableLoan.Name}">
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Repayable_loan}" var="i">
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.Fields[i].Accessible}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.Fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                        </apex:pageBlockSection>
+                                        
+                                        <!-- START :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                        <apex:pageBlockSection columns="2" id="carId">
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!AND(isBenefitCarType,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Vehicle__c.Accessible)}">
+                                               <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->       
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <apex:outputLabel styleclass="slds-form-element__label" value="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Vehicle__c.label}" />
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Vehicle__c}"  />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!AND(isBenefitCarType,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Amendment_indicator__c.Accessible)}">
+                                                <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->      
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <apex:outputLabel value="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Amendment_indicator__c.label}"  styleclass="slds-form-element__label"/>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Amendment_indicator__c}"  />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!AND(isBenefitCarType,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Calculated_price__c.Accessible)}">
+                                               <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->       
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <apex:outputLabel value="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Calculated_price__c.label}"  styleclass="slds-form-element__label"/>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Calculated_price__c}"  />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!AND(isBenefitCarType,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Cash_equivalent_of_fuel__c.Accessible)}">
+                                                   <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->    
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <apex:outputLabel value="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Cash_equivalent_of_fuel__c.label}"  styleclass="slds-form-element__label"/>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Cash_equivalent_of_fuel__c}"  />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                              <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!AND(isBenefitCarType,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Cash_equivalent_of_vehicle__c.Accessible)}">
+  											  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->                                                     
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <apex:outputLabel value="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Cash_equivalent_of_vehicle__c.label}"  styleclass="slds-form-element__label"/>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:outputPanel id="car10">
+                                                                    <apex:inputField value="{!eBen.xcdhcm__Cash_equivalent_of_vehicle__c}"  />
+                                                                </apex:outputPanel>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            <apex:pageBlockSectionItem >
+                                              <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!AND(isBenefitCarType,$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Date_free_fuel_provided__c.Accessible)}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->      
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <apex:outputLabel value="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Date_free_fuel_provided__c.label}"  styleclass="slds-form-element__label" />
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Date_free_fuel_provided__c}" />
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                        </apex:pageBlockSection>
+                                        
+                                        <apex:pageBlockSection >
+                                        	<apex:pageBlockSectionItem >
+                                        	  <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Notes__c.Accessible}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->     
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Notes__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!eBen.xcdhcm__Notes__c}"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                        </apex:pageBlockSection>
+                                    	<!-- END :: 11-07-2018 P1 Regression issue T482959 Payment due field label is not showing Modified by Rahul S-->
+                                    </apex:repeat>
+                                    
+                                </apex:actionRegion>
+                            </apex:pageBlock>
+                            
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_employee_benefitsbcancel}" action="{!backToRewardTab}" rendered="{!selectedBenefitType!='--Select--'}" immediate="true" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/> 
+                                        <!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->  
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_employee_benefitsbsave}" action="{!createPopup}" rendered="{!selectedBenefitType!='--Select--'}" status="saveStatus" rerender="butn,errorMsg,popup3,id_saveBtn" styleclass="slds-button slds-button--brand" id="id_saveBtn"/>
+                                        <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu --> 
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

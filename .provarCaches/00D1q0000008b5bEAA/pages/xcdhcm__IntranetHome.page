@@ -1,0 +1,411 @@
+<!-- START :: 05/10/2016 NPPD-1272 Intranet Home page created by Deepak. -->
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.IntranetHomeController" sidebar="false" showHeader="true"
+    wizard="false" cache="false" readOnly="false" 
+     action="{!runQuery}">   
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Intranet.css')}" />
+<script>
+    function confirmCancel() 
+    {
+        var isCancel = confirm("Do you want to cancel this leave booking?");
+        if (isCancel) return true;
+  
+        return false;
+    }
+    
+    function confirmHolAbsDel() 
+    {
+        var isCancel = confirm("Do you want to Delete the Holiday Absence?");
+        if (isCancel) return true;
+  
+        return false;
+    }
+    
+    function confirmEmpDel() 
+    {
+        var isCancel = confirm("Are you sure you want to delete the 'My Exceed' record. On doing so you will loose all your personal records present in the system. To proceed click 'Ok' and to cancel click 'Cancel'");
+        if (isCancel) return true;
+  
+        return false;
+    }
+    
+    function confirmOvertimeCancel() 
+    {
+      var isCancel = confirm("Do you want to cancel this Overtime claim?");
+      if (isCancel) return true;
+      return false;
+    } 
+     
+    function ReloadWindow()
+    {
+        window.location.reload();
+    }
+        
+    function confirmEnrolCancel() 
+    {
+        var isCancel = confirm("Do you want to cancel this Enrolment record?");
+        if (isCancel) return true;
+        return false;
+    } 
+    
+</script>
+
+  <apex:form >
+         <apex:OutputPanel rendered="{!schmaintenance==true}" >
+             <div  style="height:600px;">
+                <apex:OutputPanel layout="block" rendered="{!schmaintenance==true}" style="width:430px;height:270px;margin:auto;position:relative; border: 1px solid #f87878;
+                                                                                            border-radius: 10px;-moz-box-shadow: 0 0 9px #ccc;-webkit-box-shadow: 0 0 9px #ccc;
+                                                                                            box-shadow: 0 0 9px #ccc;">
+                    
+                    <div style="width:430px;height:35px;border-bottom: 2px solid #ccc;">
+                            <p style="font-weight: bold;font-size: 14px;margin-left: 95px;">Scheduled Maintenance Notification<br/></p>
+                    </div>
+                    
+                    <div style="margin-left:20px;margin-top:10px; background-repeat: no-repeat;background-size: 150px 150px;background-position-x: 258px;background-position-y: 58px;background-position: 100% 85%;background-image:url(/resource/Schedule_Maintance_Img_Clock);">
+                    <h3 style="font-size: 12px;font-weight: bold;">
+                     <center>  
+                        <apex:outputText value="{!schmainStartDate}"/> <br/> to <br/>
+                        <apex:outputText value="{!schmainEndDate}"/><br/>
+                     </center> 
+                     </h3>
+                        <p style="font-size:12px; margin:auto;width:380px;margin-top:20px;">
+                        Please be advised that XCD HR will be performing scheduled maintenance during the above time period. </p>
+                        
+                        <p style="font-size:12px;margin:auto;width:380px;margin-top: 10px;">
+                        XCD HR will not be available during this period. Please plan accordingly. We apologise for any inconvenience to you and your business.
+                        </p>
+                        
+                        <br/><br/>
+                        
+                    <apex:commandLink action="{!Closeschmaintenance}" value="Continue" style="color:#555; float: right;margin-right: 20px;" rendered="{!showContinue==true}"/>
+                        <br/><br/> 
+                    </div>
+                </apex:OutputPanel>
+             </div>        
+         </apex:OutputPanel>
+
+    </apex:form>
+<!-- START : Business card -->
+<apex:outputPanel rendered="{!schmaintenance==false}">
+<apex:outputPanel rendered="{!empDetail.Id!=null}">
+<!-- START :: 11/02/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+<table style="width:100%; padding-top:2%;table-layout:fixed;word-wrap:break-word;">
+<!-- HOME :: 11/02/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+<tr>
+<td valign="Top" width="15%" style="padding-top:5.5px;">
+<apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__Company__c}" rendered="false"/>
+<apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__User__c}" rendered="false"/>
+
+<apex:outputpanel styleClass="pic" style="margin-top:0px;" id="image" layout="block">
+            <div class="imgg">
+                <apex:form >
+                    <div class="popp">                
+                        <apex:commandLink action="{!imageupload}" value="Add photo"
+                                        rendered="{!AND(ImageUpload=true,imageRender!=true)}" style="color:#fff;text-decoration:none;margin-left:4px;"/>
+                        <apex:commandLink action="{!imageupload}" value="Update | Delete"
+                                        rendered="{!AND(ImageUpload=true,imageRender=true)}" style="color:#fff;text-decoration:none;margin-left:4px;"/>
+                    </div>
+                    
+                    <apex:commandLink action="{!imageupload}" rendered="{!AND(ImageUpload=true,imageRender=true)}">
+                        <span class="blur"></span>
+                        <apex:image value="{!ImageURL}" width="150px" height="150px"
+                            rendered="{!imageRender}" />
+                    </apex:commandLink>
+                    <apex:commandLink action="{!imageupload}" rendered="{!AND(ImageUpload=true,imageRender!=true)}">
+                        <span class="blur"></span>
+                        <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Employee_Default_Image.png')}"
+                            width="150px" height="150px" rendered="{!imageRender!=true}" />
+                    </apex:commandLink>
+                    
+                </apex:form>
+            </div>
+                
+                <apex:form style="margin-bottom:1px;" rendered="{!ImageUpload=false}">
+                    <apex:image value="{!ImageURL}" width="150px" height="150px" rendered="{!AND(ImageUpload=false,imageRender=true)}"/>
+                    <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Employee_Default_Image.png')}"
+                                width="150px" height="150px" rendered="{!AND(ImageUpload=false,imageRender!=true)}"/>
+                </apex:form>
+                    
+            <br/><br/>
+                        <apex:outputText style="font-weight:bold;font-size:150%;padding-top:15px;"
+                            value="{!xcdhcm__Employee_Detail__c.Name}" />
+                        <br />
+                        <apex:outputText style="color:#000000;"
+                            value="{!us.title}" />                        
+                        <br />
+                        <br />
+
+                        <apex:outputLabel style="color:#999999;" for="phone" value="phone" /> 
+                         <br />                         
+                        <apex:outputText id="phone" style="color:#000;font-weight:bold;"
+                            value="{!us.Phone}" />
+                        <br />                        
+                        <apex:outputLabel style="color:#999999;" for="Email"
+                            value="email " />
+                        <br />   
+                        <!-- START :: 11/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                        <div style="word-wrap: break-word;">                      
+                        <!-- END :: 11/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                        <apex:outputText id="Email" style="color:#000;font-weight:bold;"
+                            value="{!us.email}" />
+                        </div>                       
+                        <apex:outputLabel style="color:#999999;" for="Manager"
+                            value="Manager" />
+                        <br />
+                        <apex:outputText id="Manager" style="color:#000;font-weight:bold;"
+                            value="{!us.manager.Name}" />
+                        <br />
+                        <apex:outputLabel style="color:#999999;" for="Department"
+                            value="Department"
+                            rendered="{!us.Department!=null}" />
+                        <br />
+                        <apex:outputText id="Department" 
+                            style="color:#000;font-weight:bold;"
+                            value="{!us.Department}"
+                            rendered="{!us.Department!=null}" />
+                        <br />
+                        <br />
+                        <br />
+                        <apex:form >
+                            <apex:commandLink style="text-decoration: none;" action="{!QuickBookHoliday}" target="_blank"> <apex:commandButton value="{!$Label.xcdhcm__abemployeebookleave}" id="theCommandLink" styleclass="sidebutton"
+                               rendered="{!AND(BookLeaveButton==true, jobRole != null, isHideLeave == false)}" /> </apex:commandLink>
+                            <apex:outputText rendered="{!BookLeaveButton==true}" ><br/></apex:outputText>                        
+                            <apex:commandLink style="text-decoration: none;" action="{!bookOvertimeReqButton}" target="_blank"><apex:commandButton value="{!$Label.xcdhcm__abemployeeclaimovertime}" id="overtimeButton"
+                                rendered="{!(ClaimOvertimeButton == true)}" styleclass="sidebutton"
+                            style="margin-top:10%;" /></apex:commandLink>
+                            <apex:outputText rendered="{!ClaimOvertimeButton==true}" ><br/></apex:outputText> 
+                            <apex:commandLink style="text-decoration: none;" action="{!newTimesheet}" target="_blank"><apex:commandButton value="{!$Label.xcdhcm__abemployeeviewtimesheet}" id="newtimesheetButton"
+                                rendered="{!(NewTimesheetButton == true)}" styleclass="sidebutton"
+                            style="margin-top:10%;" /></apex:commandLink>
+                            <apex:outputText rendered="{!NewTimesheetButton==true}" ><br/></apex:outputText>
+                            <apex:commandLink style="text-decoration: none;" action="{!newExpensePage}" target="_blank"><apex:commandButton value="{!$Label.xcdhcm__abemployeeviewexpenses}" 
+                                rendered="{!NewExpenseSideButton==true}" styleclass="sidebutton"
+                                style="margin-top:10%;" /></apex:commandLink>
+                            <apex:outputText rendered="{!NewExpenseSideButton==true}" ><br/></apex:outputText>
+                            <apex:commandLink style="text-decoration: none;" action="{!hrRequestBtn}" target="_blank"><apex:commandButton id="hrbunt" 
+                             value="{!$Label.xcdhcm__abemployeehrrequest}"
+                             styleclass="sidebutton" rendered="{!hrRequestbtnview==true}"
+                            style="margin-top:10%;"  /></apex:commandLink>
+                            <apex:outputText rendered="{!hrRequestbtnview==true}" ><br/></apex:outputText> 
+                            <apex:commandButton id="btn1"
+                            onClick="window.open('{!FirstCBLink}');" value="{!$Label.xcdhcm__abemployeefirstb}"
+                            rendered="{!AND(FirstCBValue,FirstButton)}" styleclass="sidebutton"
+                            style="margin-top:10%;" reRender="btn1" />
+                            <apex:outputText rendered="{!AND(FirstCBValue,FirstButton)}" ><br/></apex:outputText>
+
+                        <apex:commandButton id="btn2"
+                            onClick="window.open('{!SecondCBLink}');" value="{!$Label.xcdhcm__abemployeesecondb}"
+                            rendered="{!AND(SecondCBValue,SecondButton)}" styleclass="sidebutton"
+                            style="margin-top:10%;" reRender="btn2" />
+                            <apex:outputText rendered="{!AND(SecondCBValue,SecondButton)}" ><br/></apex:outputText>
+
+                        <apex:commandButton id="btn3"
+                            onClick="window.open('{!ThirdCBLink}');" value="{!$Label.xcdhcm__abemployeethirdb}"
+                            rendered="{!AND(ThirdCBValue,ThirdButton)}" styleclass="sidebutton"
+                            style="margin-top:10%;" reRender="btn3" />
+                            <apex:outputText rendered="{!AND(ThirdCBValue,ThirdButton)}" ><br/></apex:outputText>
+                            
+                        <apex:commandLink style="text-decoration: none;" action="{!teamChartView}" target="_blank"><apex:commandButton value="{!$Label.xcdhcm__abemployeeviewmyteam}" id="teamchart" styleclass="sidebutton" 
+                             style="margin-top:10%;" rendered="{!MyTeamBtnEmployeePage==true}"/></apex:commandLink>
+                             <apex:outputText rendered="{!AND(MyTeamBtnEmployeePage==true)}" ><br/></apex:outputText>
+                   
+                        <apex:commandLink style="text-decoration: none;" action="{!PaySlipButton}" target="_blank"><apex:commandButton value="{!$Label.xcdhcm__abemployeeviewpayslips}" id="PayslipButton"
+                                rendered="{!(PaySlipViewButton == true)}" styleclass="sidebutton"
+                            style="margin-top:10%;" /></apex:commandLink>
+                           <apex:outputText rendered="{!AND(PaySlipViewButton==true)}" ><br/></apex:outputText>
+                           
+                        <apex:commandButton value="{!$Label.xcdhcm__abemployeetotalrewardstatement}" styleclass="sidebutton"
+                           style="margin-top:10%;white-space: normal;height:20%;" rendered="{!TotalRewardButton = true}"
+                               onClick="window.open('{!newTotalRewardButton}');return false;" />
+                            <apex:outputText rendered="{!TotalRewardButton = true}"> <br/> </apex:outputText>  
+                         
+                        <apex:commandLink style="text-decoration: none;" action="{!newPayrollEmployee}" target="_blank"><apex:commandButton id="newPayrollEmployeeBtn"  
+                            value="{!$Label.xcdhcm__abemployeenewpayrollemployee}" styleclass="sidebutton"    
+                            style="margin-top:10%;white-space: normal;height:20%" rendered="{!newPayrollEmployeeButton==true}" /></apex:commandLink>
+                              <apex:outputText rendered="{!newPayrollEmployeeButton==true}" ><br/></apex:outputText>          
+                            
+                            <apex:commandLink style="text-decoration: none;" action="{!leaver}" target="_blank"><apex:commandButton value="{!$Label.xcdhcm__abemployeeprocessleaver}"
+                                rendered="{!AND(leaverButton==true,$User.Id!=xcdhcm__Employee_Detail__c.xcdhcm__User__c)}" styleclass="sidebutton"
+                                style="margin-top:10%;" /></apex:commandLink>
+                             <apex:outputText rendered="{!AND(leaverButton==true,$User.Id!=xcdhcm__Employee_Detail__c.xcdhcm__User__c)}" ><br/></apex:outputText> 
+                              
+                        <center>
+                            <div id="logout" style="margin-top: 30%;  margin-left: -7px; ">
+                                <a href="/secur/logout.jsp" class="logout">Logout</a>
+                            </div>
+                        </center>
+                    </apex:form>
+                </apex:outputpanel>
+
+
+<!-- END : Business card -->
+</td><td style="width:83%; height:100%" valign="Top">
+<table width="100%"> 
+<tr><td valign="Top">
+        <table width="100%"> 
+        <!-- START :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+        <!-- 
+         <tr width="100%" height="14%"><td>
+         <apex:image url="{!BannerImage}" rendered="{!IF(BannerImage='false', 'false', 'true')}" width="100%" height="100%"></apex:image>
+         <apex:image url="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Images/Header.png')}" rendered="{!IF(BannerImage='false', 'true', 'false')}" width="100%" height="100%"></apex:image>
+         </td><td style="width:23%;height:100%;padding-left:1%" ><div class="Calendar"><div class="Section1"><apex:OutputText style="font-weight:bold;" value="{!CalendarMonth}"/><apex:OutputText value=" "/><apex:OutputText value="{!CalendarYear}"/></div><div class="Section2"><apex:OutputText value="{!CalendarDate}"></apex:OutputText></div></div></td></tr>
+        <tr width="100%" height="53%" ><td>
+        -->
+        <tr width="100%" height="14%"><td style="padding-right: 5px;">
+        <apex:image url="{!BannerImage}" rendered="{!IF(BannerImage='false', 'false', 'true')}" width="100%" height="100%" style="box-shadow: 0px 10px 15px #98b4d1;"></apex:image>
+        <apex:image url="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Images/Header.png')}" rendered="{!IF(BannerImage='false', 'true', 'false')}" width="100%" height="100%" style="box-shadow: 0px 10px 15px #98b4d1;"></apex:image>
+        </td><td style="width:23%;height:100%;padding-left:1%" ><div class="Calendar" style="box-shadow: 0px 10px 15px #98b4d1;"><div class="Section1"><apex:OutputText style="font-weight:bold;" value="{!CalendarMonth}"/><apex:OutputText value=" "/><apex:OutputText value="{!CalendarYear}"/></div><div class="Section2"><apex:OutputText value="{!CalendarDate}"></apex:OutputText></div></div></td></tr>
+        <tr width="100%" height="53%" ><td style="padding-right: 0px;">
+        <!-- END :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->    
+            <table style="width:100%;height:100%;" >
+            <tr>
+            <!-- START :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+            <!-- <td style="width:71%; height:100%; white-space: nowrap; overflow: hidden;"> -->
+                <td style="width:71%; height:100%; white-space: nowrap; overflow: hidden;padding-top:15px;">
+            <!-- END :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                         <!-- START :: 08/11/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+            <!-- START :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+            <!--  <table style="width:85%;height:43%;table-layout:fixed" align="left"> -->           
+                        <table style="width:85%;table-layout:fixed" align="left">
+            <!-- END :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                            <tr><td style="width:100%;padding-bottom:10%;padding-top:5px;">    
+                            <b><apex:OutputText Style="color: #336699;font-size:14px;width:100%;white-space:normal;word-wrap:break-word" value="{!HeaderTitle}" /></b>
+                            <br />
+                            <apex:OutputText Style="color: #999999;width:100%;white-space:normal;word-wrap:break-word" value="{!HeaderDesc}"/>
+                            </td></tr>
+                             <!-- END :: 08/11/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+                        </table>
+                        <table style="width:85%;height:500px;" align="left">
+                            <tr><td style="width:490px;height:500px;" valign="Top">
+                            <!-- START :: 11/02/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+                            <table border="0" style="table-layout:fixed;word-wrap:word-break;" width="100%">
+                            <!-- END :: 11/02/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+                                <th><apex:OutputText Style="color: #336699;font-size:14px;" value="{!$Label.xcdhcm__intranethomecompanynews}" /></th>
+                            <!-- START :: 08/11/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+                </table>
+                                <!-- <tr><td style="width:490px;color: #999999;white-space: normal;"><apex:OutputText value="{!$Label.IntranetHomeCompanyNewsDescription}" /></td></tr> -->                              
+                            <table border="0" style="table-layout:fixed" width="100%">
+                                <tr><td style="width:490px;"><apex:OutputText rendered="{!CompanyNews==Null || CompanyNews.Size==0}" style="color: #999999;" Value="No new updates"/></td></tr>
+                                <apex:repeat rendered="{!CompanyNews!=Null && CompanyNews.Size!=0}" var="news" value="{!CompanyNews}">                                
+                                <tr><td style="width:100%;color:#336699;font-weight:bold;overflow:hidden;white-space:normal;word-wrap:break-word;"><apex:OutputText >{!news.xcdhcm__News_title__c}</apex:OutputText></td></tr> 
+                                <tr><td style="width:100%;padding-bottom:15px;"><div style="width:100%;max-height:42px;color: #999999;overflow:hidden;white-space:normal;word-wrap:break-word;"><apex:OutputText value="{!LEFT(news.xcdhcm__News__c,175)}...."></apex:OutputText></div></td></tr>
+                                <tr><td style="width:100%;padding-bottom:15px;"><apex:OutputText rendered="{!IF(news.xcdhcm__News_link__c!= null , true , false)}"><apex:outputLink target="_blank" value="{!news.xcdhcm__News_link__c}" style="text-decoration: none;"><apex:OutputText style="font-style:italic;" value="{!news.xcdhcm__News_link__c}"/></apex:outputLink></apex:OutputText></td></tr>
+                                </apex:repeat>
+                            <!-- END :: 08/11/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+                            </table>                         
+                         </td></tr>
+                        </table>
+                                        
+                </td>
+                <!-- START :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                <!-- <td style="width:29%;" valign="Top" > -->
+                <td style="width:29%;padding-top:15px;padding-right: 0px;" valign="Top" >
+                <!-- END :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                <!-- START :: 25/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                       <!-- <table style="width:205px;" align="right">
+                        <apex:OutputText rendered="{!HomePoliciesViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!Btn1Link}" target="_blank"> 
+                         <apex:image url="{!HRPoliciesImage}" rendered="{!IF(HRPoliciesImage='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <apex:image url="{!URLFOR($Resource.Css,'Policies.png')}" rendered="{!IF(HRPoliciesImage='false', 'true', 'false')}" width="205px" height="110px"></apex:image></apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                          <apex:OutputText rendered="{!InternalPositionViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!ViewVacanciesLink}" target="_blank">                         
+                          <apex:image url="{!ViewVacanciesImage}" rendered="{!IF(ViewVacanciesImage='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <apex:image url="{!URLFOR($Resource.Css,'Vacancies.png')}" rendered="{!IF(ViewVacanciesImage='false', 'true', 'false')}" width="205px" height="110px"></apex:image></apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                        <apex:OutputText rendered="{!CompanyBenefitsViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!CompanyBenefitsLink}" target="_blank">
+                         <apex:image url="{!CompanyBenefitsImage}" rendered="{!IF(CompanyBenefitsImage='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <apex:image url="{!URLFOR($Resource.Css,'Benefits.png')}" rendered="{!IF(CompanyBenefitsImage='false', 'true', 'false')}" width="205px" height="110px"></apex:image>
+                        </apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                        <apex:OutputText rendered="{!BookLeaveViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!BookLeaveLink}" target="_blank">
+                         <apex:image url="{!BookLeaveImage}" rendered="{!IF(BookLeaveImage='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <apex:image url="{!URLFOR($Resource.Css,'leave.png')}" rendered="{!IF(BookLeaveImage='false', 'true', 'false')}" width="205px" height="110px"></apex:image>
+                        </apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                        
+                        <apex:OutputText rendered="{!ObjectivesViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!ObjectivesLink}" target="_blank">
+                         <apex:image url="{!ObjectivesImage}" rendered="{!IF(ObjectivesImage='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <apex:image url="{!URLFOR($Resource.Css,'leave.png')}" rendered="{!IF(ObjectivesImage='false', 'true', 'false')}" width="205px" height="110px"></apex:image>
+                        </apex:commandLink></td></apex:Form></tr></apex:OutputText> -->
+                        
+                        <table style="width:205px;" align="right">
+                        <apex:OutputText rendered="{!Btn1ViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!Btn1Link}" target="_blank"> 
+                         <apex:image url="{!Btn1Image}" rendered="{!IF(Btn1Image='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <!-- START :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                          <apex:image url="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Images/Button_1.png')}" rendered="{!IF(Btn1Image='false', 'true', 'false')}" width="205px" height="110px"></apex:image></apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                         <!-- END :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                          <apex:OutputText rendered="{!Btn2ViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!Btn2Link}" target="_blank">                         
+                          <apex:image url="{!Btn2Image}" rendered="{!IF(Btn2Image='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <!-- START :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->  
+                         <apex:image url="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Images/Button_2.png')}" rendered="{!IF(Btn2Image='false', 'true', 'false')}" width="205px" height="110px"></apex:image></apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                         <!-- END :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                        <apex:OutputText rendered="{!Btn3ViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!Btn3Link}" target="_blank">
+                         <apex:image url="{!Btn3Image}" rendered="{!IF(Btn3Image='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <!-- START :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                         <apex:image url="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Images/Button_3.png')}" rendered="{!IF(Btn3Image='false', 'true', 'false')}" width="205px" height="110px"></apex:image>
+                         <!-- END :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                        </apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                        <apex:OutputText rendered="{!Btn4ViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!Btn4Link}" target="_blank">
+                         <apex:image url="{!Btn4Image}" rendered="{!IF(Btn4Image='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <!-- START :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                         <apex:image url="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Images/Button_4.png')}" rendered="{!IF(Btn4Image='false', 'true', 'false')}" width="205px" height="110px"></apex:image>
+                         <!-- END :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                        </apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                        <apex:OutputText rendered="{!Btn5ViewStatus}"><tr><apex:Form ><td style="width:205px; height:110px;padding-top:5px;padding-bottom:5px;"><apex:commandLink action="{!Btn5Link}" target="_blank">
+                         <apex:image url="{!Btn5Image}" rendered="{!IF(Btn5Image='false', 'false', 'true')}" width="205px" height="110px"></apex:image>
+                         <!-- START :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                         <apex:image url="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Images/Button_5.png')}" rendered="{!IF(Btn5Image='false', 'true', 'false')}" width="205px" height="110px"></apex:image>
+                         <!-- END :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                        </apex:commandLink></td></apex:Form></tr></apex:OutputText>
+                        <!-- END :: 25/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                        </table>
+                </td>
+              </tr> 
+              </table>
+            <!-- START :: 08/11/2016 NPPD-1291 Company news improvements modified by Deepak. -->
+                      <!-- </td><td style="width:225px;height:500px;padding-left:1%" valign="top">          
+                            <table border="0" width="225" style="padding-top:5px;">
+                                <th width="225" style="padding-bottom:15px;"><apex:OutputText Style="color:#336699;white-space: normal;" value="{!$Label.xcdhcm__intranethomeimportantdates}" /></th> 
+                                
+                                <apex:repeat rendered="{!(ImportantDates!=null && ImportantDates.size>0)}" var="impDates" value="{!ImportantDates}">
+                                <tr><td style="width:225px;color:#336699;overflow:hidden;white-space:normal;word-wrap:break-word;"><b><apex:OutputText value="{!impDates.xcdhcm__Event_date__c} - {!impDates.xcdhcm__News_title__c}"></apex:OutputText></b></td></tr> 
+                                <tr><td style="width:225px;padding-bottom:25px;"><div style="width:225px;max-height:56px;color: #999999;overflow:hidden;white-space:normal;word-wrap:break-word;"><apex:OutputText value="{!LEFT(impDates.News__c,100)}..."></apex:OutputText><apex:outputLink rendered="{!IF(impDates.xcdhcm__News_link__c!= null , true , false)}" target="_blank" style="text-decoration: none;" value="{!impDates.xcdhcm__News_link__c}"><b>Read More</b></apex:outputLink></div></td></tr>
+                                 <tr><td style="padding-bottom: 20px;"><div class="dash"></div></td></tr>
+                                </apex:repeat>
+                                <tr><td style="width:225px;"><apex:OutputText style="color: #999999;" rendered="{!(ImportantDates!=null && ImportantDates.size==0)}" Value="No important dates this month"/></td></tr>
+                            </table>          
+                        </td></tr> -->
+                        <!-- START :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                        <!--  </td><td style="width:225px;height:500px;padding-left:1%" valign="top">     -->
+                        </td><td style="width:225px;height:500px;padding-left:1%;padding-top:15px;" valign="top"> 
+                        <!-- END :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->     
+                        <!-- START :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->   
+                            <table border="0" width="225" style="padding-top:5px;table-layout:fixed;word-wrap:break-word;">
+                                <th width="225" style="padding-bottom:15px;"><apex:OutputText Style="color:#336699;white-space: normal;" value="{!$Label.xcdhcm__intranethomeimportantdates}" /></th>  
+                            </table>     
+                            <div style="overflow-y:auto; overflow-x:hidden;width:225px;height:500px">
+                            <table border="0" width="225" style="table-layout:fixed;word-wrap:break-word;padding-top:5px;">
+                        <!-- END :: 10/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                                <tr><td style="width:225px;"><apex:OutputText rendered="{!ImportantDates==Null || ImportantDates.Size==0}" style="color: #999999;" Value="No important dates this month"/></td></tr>                                                 
+                                <apex:repeat rendered="{!ImportantDates!=Null && ImportantDates.Size!=0}" var="impDates" value="{!ImportantDates}">
+                                <!-- START :: 11/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                                <tr><td style="width:225px;color:#336699;"><div style="width:190px;"><b><apex:OutputText value="{!impDates.xcdhcm__Event_date__c} - {!impDates.xcdhcm__News_title__c}"></apex:OutputText></b></div></td></tr> 
+                                <!-- END :: 11/02/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                                <!-- START :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                                <!-- 
+                                <tr><td style="width:225px;padding-bottom:25px;"><div style="width:225px;max-height:56px;color: #999999;overflow:hidden;white-space:normal;word-wrap:break-word;"><apex:OutputText value="{!LEFT(impDates.News__c,90)}"></apex:OutputText><apex:outputLink rendered="{!IF(impDates.xcdhcm__News_link__c!= null , true , false)}" target="_blank" style="text-decoration: none;" value="{!impDates.xcdhcm__News_link__c}"><b>...Read More</b></apex:outputLink></div></td></tr>
+                                 <tr><td style="padding-bottom: 20px;"><div class="dash"></div></td></tr>
+                                 --> 
+                                 <tr><td style="width:225px;padding-bottom:25px;"><div style="width:190px;max-height:56px;color: #999999;overflow:hidden;white-space:normal;word-wrap:break-word;"><apex:OutputText value="{!LEFT(impDates.xcdhcm__News__c,80)}"></apex:OutputText><apex:outputLink rendered="{!IF(impDates.xcdhcm__News_link__c!= null , true , false)}" target="_blank" style="text-decoration: none;" value="{!impDates.xcdhcm__News_link__c}"><b>...Read More</b></apex:outputLink></div></td></tr>
+                                 <tr><td style="padding-bottom: 20px;"><div class="dash" style="width:180px;"></div></td></tr>
+                                <!-- END :: 09/01/2017 NPPD-1306 Company News - enhancements modified by Deepak. -->
+                                </apex:repeat>
+                            </table>
+                            </div>
+                             <!-- END :: 08/11/2016 NPPD-1291 Company news improvements modified by Deepak. -->         
+                        </td></tr>
+                        
+        </table>
+  </td></tr>
+  </table>
+ </td>
+ </tr>
+ </table>
+</apex:outputPanel>
+</apex:outputPanel>
+</apex:page>
+<!-- END :: 05/10/2016 NPPD-1272 Intranet Home page created by Deepak. -->

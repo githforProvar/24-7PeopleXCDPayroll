@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Settings for a range of functions including joiner, leave, overtime, recruitment, expenses, documents, salary award and publish payslip message</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>xcdhcm__Batch_size__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Batch size</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Description__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__IsActive__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>IsActive</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Keywords_to_exclude__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Profiles, permission sets and public groups with these Keywords will not be included in new joiner, edit JR and change JR process.</description>
+        <externalId>false</externalId>
+        <label>Keywords to exclude</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Keywords_to_include__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Profiles with these Keywords will be included in new joiner, edit JR and change JR process.</description>
+        <externalId>false</externalId>
+        <label>Keywords to include</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leave_category__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Leave category</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Manager__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If this field is Active it will share the records with the manager and hierarchy user with this profile</description>
+        <externalId>false</externalId>
+        <label>Manager</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Mileage_expense_rate__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Mileage expense rate</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__New_joiner_add_info_page_sections__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Stores profiles active for assigning profiles, permission sets and public groups on joiner page, edit and change job role page.</description>
+        <externalId>false</externalId>
+        <label>New_joiner_add_info_page_sections</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__No_of_license_available__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field will store total number of &apos;Salesforce Platform&apos; or &apos;Salesforce CRM Content User&apos; license available.</description>
+        <externalId>false</externalId>
+        <label>No of license available</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Search_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>User to controller vacancy search type patten in site and internal page</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Give the search type AND / OR</inlineHelpText>
+        <label>Search_Type</label>
+        <length>10</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Team_Leader__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If this field is Active it will share the records with the manager and hierarchy user with this profile</description>
+        <externalId>false</externalId>
+        <label>Team Leader</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__isEmailActive__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>isEmailActive</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>XCD Control Panel</label>
+    <visibility>Public</visibility>
+</CustomObject>

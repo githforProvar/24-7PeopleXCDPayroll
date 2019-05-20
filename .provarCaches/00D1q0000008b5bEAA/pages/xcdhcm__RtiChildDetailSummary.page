@@ -1,0 +1,11 @@
+<apex:page standardController="xcdhcm__RTI__c">
+<apex:outputPanel rendered="{!xcdhcm__RTI__c.RTI_summary__r.xcdhcm__Status__c == 'ACCEPTED'}">
+<style type="text/css">
+body input.btn, body input.btnDisabled, body input.btnCancel 
+{
+    display:none !important;
+}
+</style>
+</apex:outputPanel>
+	<apex:detail relatedList="true" title="true"/>
+</apex:page>

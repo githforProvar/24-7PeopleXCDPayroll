@@ -1,0 +1,94 @@
+<apex:page showHeader="true" tabStyle="xcdhcm__Vacancy__c" title="Assign Agency" controller="xcdhcm.PostToAgenciesController"
+sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'RecruitmentAppCSS/Recruitmentsub.css')}" />  
+	<!-- START :: 05/12/2018 NPPD-1789 Redirection issue in post to agency page Added by Anil -->
+	<head>
+    	<apex:slds />
+    </head>
+    <apex:form >   
+        <apex:pageMessages id="id_error"/>
+	    <!-- END :: 05/12/2018 NPPD-1789 Redirection issue in post to agency page Added by Anil -->  
+        <apex:pageBlock title="{!$Label.xcdhcm__phposttoagencies}">
+             <apex:pageBlockTable value="{!AgencyWrapperClsList}" var="recagVar">
+                <apex:column headervalue="Select" width="3%">
+                    <apex:facet name="header">
+                        <apex:inputCheckbox >
+                            <apex:actionSupport event="onclick" onsubmit="checkAll(this)" reRender=""/>
+                        </apex:inputCheckbox>
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!recagVar.selected}" id="checkedoneReg" 
+                    rendered="{!recagVar.disabled!=true}"/>
+                </apex:column>
+               
+                <!-- START :: 22/07/2014 NPPD-443 Recruitment bugs and urgent issues - views Modified by Praveen -->
+                              
+                <apex:column headerValue="{!$ObjectType.xcdhcm__Recruitment_Agency__c.fields.Name.label}">
+                    <apex:outputField value="{!recagVar.reqAgnIns.Name}"/>
+                </apex:column>
+                
+                <apex:column headerValue="{!$objectType.xcdhcm__Recruitment_Agency__c.Fields.xcdhcm__Agency_rate__c.Label}">
+                    <apex:outPutField value="{!recagVar.reqAgnIns.xcdhcm__Agency_rate__c}"/>
+                </apex:column> 
+                
+                <apex:column headerValue="{!$objectType.xcdhcm__Recruitment_Agency__c.Fields.xcdhcm__Contractual_terms__c.Label}">
+                    <apex:outPutField value="{!recagVar.reqAgnIns.xcdhcm__Contractual_terms__c}"/>
+                </apex:column> 
+                
+                <apex:column headerValue="{!$objectType.xcdhcm__Recruitment_Agency__c.Fields.xcdhcm__PSL_agency__c.Label}">
+                    <apex:outPutField value="{!recagVar.reqAgnIns.xcdhcm__PSL_agency__c}"/>
+                </apex:column>                         
+                
+              
+                <apex:column headerValue="{!$objectType.xcdhcm__Agency_Vacancy__c.Fields.xcdhcm__Max_No_of_candidates_per_vacancy__c.Label}">
+                    <apex:inputField value="{!recagVar.agnVacIns.xcdhcm__Max_No_of_candidates_per_vacancy__c}" 
+                    rendered="{!recagVar.disabled!=true}"/>
+                    <apex:outputField value="{!recagVar.agnVacIns.xcdhcm__Max_No_of_candidates_per_vacancy__c}" rendered="{!recagVar.disabled=true}"/>
+                </apex:column> 
+            </apex:pageBlockTable>
+             <!-- END :: 22/07/2014 NPPD-443 Recruitment bugs and urgent issues - views Modified by Praveen -->   
+             <!-- START :: 05/12/2018 NPPD-1789 Redirection issue in post to agency page modified by Anil -->
+             </apex:pageBlock>
+             <!-- <apex:pageBlock >   
+            	<apex:pageBlockButtons location="bottom">
+	                <apex:commandButton value="{!$Label.xcdhcm__posttoagenciesbsave}" action="{!saveAgencyVacancyJunctionRecord}"/>
+	                <apex:commandButton value="{!$Label.xcdhcm__posttoagenciesbcancel}" action="{!cancel}"/>
+            	</apex:pageBlockButtons>
+        	</apex:pageBlock> -->
+        	<apex:pageBlock >
+				<apex:pageBlockButtons location="bottom">         
+					<apex:actionStatus id="saveStatus">                    
+						<apex:facet name="stop"> 
+							<apex:outputPanel >  
+								<apex:commandButton id="id_saveBtn" value="{!$Label.xcdhcm__posttoagenciesbsave}" action="{!saveAgencyVacancyJunctionRecord}" rerender="id_error,id_saveBtn" status="saveStatus"/>
+								<apex:commandButton value="{!$Label.xcdhcm__posttoagenciesbcancel}" action="{!cancel}" status="saveStatus"/>
+							</apex:outputPanel>
+						</apex:facet>
+						<apex:facet name="start">
+							<apex:outputPanel >  
+								<div class="slds-spinner_container slds-show slds-is-fixed" >
+									<div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+										<div class="slds-spinner__dot-a"></div>
+										<div class="slds-spinner__dot-b"></div>
+									</div> 
+								</div> 
+							</apex:outputPanel>
+						</apex:facet>                               
+					</apex:actionStatus>      
+				</apex:pageBlockButtons> 
+			</apex:pageBlock>
+			<!-- END :: 05/12/2018 NPPD-1789 Redirection issue in post to agency page modified by Anil -->
+       <div style="border-bottom: 2px solid #63a4c5!important;"></div>    
+    </apex:form>
+
+    <script>
+    function checkAll(cb)
+    {
+        var inputElem = document.getElementsByTagName("input");
+        for(var i=0; i<inputElem.length; i++)
+        {
+            if(inputElem[i].id.indexOf("checkedoneReg")!=-1)
+            inputElem[i].checked = cb.checked;
+        }
+    }
+    </script>
+</apex:page>

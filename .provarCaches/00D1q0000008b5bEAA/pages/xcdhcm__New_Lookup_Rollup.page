@@ -1,0 +1,235 @@
+<apex:page standardController="xcdhcm__Lookup_Rollup_Summary__c"
+	extensions="xcdhcm.LookupRollupController" sidebar="false" showHeader="true">
+
+	<style>
+.vfHelpText a {
+	position: absolute;
+}
+
+.vfHelpText a span {
+	display: none;
+}
+
+.vfHelpText a:hover span {
+	display: block;
+	position: absolute;
+	top: 1.25em;
+	padding: 2px 5px;
+	left: -10em;
+	width: 15em;
+	z-index: 100;
+	border: 1px solid orange;
+	background-color: #FEFDB9;
+	color: black;
+}
+</style>
+	<!-- START :: 14/05/2015 NPPD-805 Lookup rollup issues Modify by Sabir -->
+	<apex:form id="frm">
+		<apex:pageBlock title="{!$Label.xcdhcm__phnew_lookup_rollup}">
+			<apex:PageMessages />
+
+			<apex:pageBlockButtons location="top">
+				<!-- START :: 23/09/2016 NPPD-1274 Include Module in Lookup Rollup engine added by Farhan -->
+				<apex:commandButton value="{!$Label.xcdhcm__new_lookup_rollupbsave}" action="{!saveRollup}" rerender="frm" />
+				<!-- END :: 23/09/2016 NPPD-1274 Include Module in Lookup Rollup engine added by Farhan -->
+				<apex:commandButton value="{!$Label.xcdhcm__new_lookup_rollupbcancel}" action="{!cancel}" />
+			</apex:pageBlockButtons>
+
+			<apex:pageBlockSection title="{!$Label.xcdhcm__new_lookup_rollupnewrollup}" columns="2">
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="{!$objectType.xcdhcm__Lookup_Rollup_Summary__c.fields.Name.label}" />
+					<apex:inputfield value="{!lookupRollup.Name}" />
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Type" for="picklistname" />
+					<apex:outputPanel layout="block" styleClass="requiredInput">
+						<apex:outputPanel layout="block" styleClass="requiredBlock" />
+						<apex:actionRegion >
+							<apex:selectList size="1" required="false" id="picklistname"
+								value="{!selectedPicklistValue}">
+								<apex:selectOptions value="{!picklistOptions}" />
+								<apex:actionSupport event="onchange" action="{!reload}"
+									reRender="parentName,parentFields,childObject,childRelField,childFields,outputPanel1"
+									onComplete="displayPopup();" />
+							</apex:selectList>
+						</apex:actionRegion>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Parent object" for="parentName" />
+					<apex:outputPanel layout="block" styleClass="requiredInput">
+						<apex:outputPanel layout="block" styleClass="requiredBlock" />
+						<apex:actionRegion >
+							<apex:selectList size="1" required="false" id="parentName"
+								value="{!selectedParentObject}" styleClass="select-box"
+								title="{!selectedParentObject}">
+								<apex:selectOptions value="{!ParentObjectList}" />
+								<apex:actionSupport event="onchange"
+									action="{!getParentFieldList}" reRender="parentFields"
+									onComplete="displayPopup();" />
+							</apex:selectList>
+						</apex:actionRegion>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Rollup summary field" for="parentFields" />
+					<apex:outputPanel layout="block" styleClass="requiredInput">
+						<apex:outputPanel layout="block" styleClass="requiredBlock" />
+						<apex:actionRegion >
+							<apex:selectList size="1" required="false" id="parentFields"
+								value="{!selectedRollupSummaryField}" styleClass="select-box"
+								title="{!selectedRollupSummaryField}">
+								<apex:selectOptions value="{!parentFieldsOptions}" />
+								<apex:actionSupport event="onchange"
+									action="{!getChildObjectList}" reRender="childObject"
+									onComplete="displayPopup();" />
+							</apex:selectList>
+						</apex:actionRegion>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Child object" for="childObject" />
+					<apex:outputPanel layout="block" styleClass="requiredInput">
+						<apex:outputPanel layout="block" styleClass="requiredBlock" />
+						<apex:actionRegion >
+							<apex:selectList size="1" required="false" id="childObject"
+								value="{!selectedChildObject}" styleClass="select-box"
+								title="{!selectedChildObject}">
+								<apex:selectOptions value="{!childObjectOptions}" />
+								<apex:actionSupport event="onchange"
+									action="{!getChildRelationField}"
+									reRender="childRelField,childFields"
+									onComplete="displayPopup();" />
+							</apex:selectList>
+						</apex:actionRegion>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Child relation field" for="childField" />
+					<apex:outputPanel layout="block" styleClass="requiredInput">
+						<apex:outputPanel layout="block" styleClass="requiredBlock" />
+						<apex:actionRegion >
+							<apex:selectList size="1" required="false" id="childRelField"
+								value="{!selectedChildRelationField}" styleClass="select-box"
+								title="{!selectedChildRelationField}">
+								<apex:selectOptions value="{!relationFieldsOptions}" />
+								<apex:actionSupport event="onchange"
+									action="{!getChildFieldList}" reRender="childFields"
+									onComplete="displayPopup();" />
+							</apex:selectList>
+						</apex:actionRegion>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Field to aggregate" for="childFields" />
+					<apex:outputPanel layout="block" styleClass="requiredInput"
+						id="aggField">
+						<apex:outputPanel layout="block" styleClass="requiredBlock" />
+						<apex:selectList size="1" required="false" id="childFields"
+							value="{!selectedFieldToAggregate}" styleClass="select-box"
+							title="{!selectedFieldToAggregate}">
+							<apex:selectOptions value="{!childFieldsOptions}" />
+							<apex:actionSupport action="{!getChildFieldList}"
+								event="onchange" onComplete="displayPopup();"
+								rerender="outputPanel1" />
+						</apex:selectList>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+
+				<!-- <apex:pageBlockSectionItem >
+					<apex:outputLabel value="{!$objectType.Lookup_Rollup_Summary__c.fields.Rollup_type__c.label}" />
+				<apex:inputfield value="{!lookupRollup.Rollup_type__c}" />
+				</apex:pageBlockSectionItem> -->
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="{!$objectType.xcdhcm__Lookup_Rollup_Summary__c.fields.xcdhcm__Mode__c.label}" />
+					<apex:inputfield value="{!lookupRollup.xcdhcm__Mode__c}" required="true"/>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="{!$objectType.xcdhcm__Lookup_Rollup_Summary__c.fields.xcdhcm__Filter_criteria__c.label}" />
+					<apex:actionRegion >
+						<apex:inputfield value="{!lookupRollup.xcdhcm__Filter_criteria__c}" required="true">
+							<apex:actionSupport event="onchange"
+								action="{!getRollupFilterStatus}" status="counterStatus"
+								rerender="outputPanel1" onComplete="displayPopup();" />
+						</apex:inputfield>
+						<apex:actionStatus id="counterStatus" startText="Loading..." />
+					</apex:actionRegion>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="{!$objectType.xcdhcm__Lookup_Rollup_Summary__c.fields.xcdhcm__isActive__c.label}" />
+					<apex:inputfield value="{!lookupRollup.xcdhcm__isActive__c}" />
+				</apex:pageBlockSectionItem>
+				
+				<!-- START :: 26/08/2016 NPPD-1274 Include Module in Lookup Rollup engine added by Farhan -->
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="{!$objectType.xcdhcm__Lookup_Rollup_Summary__c.fields.xcdhcm__Module__c.label}" />
+					<apex:outputPanel layout="block" styleClass="requiredInput">
+						<apex:outputPanel layout="block" styleClass="requiredBlock" />
+						<apex:inputfield value="{!lookupRollup.xcdhcm__Module__c}" required="true"/>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+				<!-- END :: 26/08/2016 NPPD-1274 Include Module in Lookup Rollup engine added by Farhan -->
+
+			</apex:pageBlockSection>
+
+			<apex:outputpanel id="outputPanel1">
+				<apex:pageblockTable value="{!lookupRollupFilters}" var="filter"
+					id="filterPanel" rendered="{!displayFilters}">
+
+					<apex:column headervalue="{!$ObjectType.xcdhcm__Lookup_Rollup_Filter__c.Fields.xcdhcm__Filter_field__c.Label}">
+						<apex:selectList size="1" required="false" id="filterFields"
+							value="{!filter.selectedFilterField}" styleClass="select-box"
+							title="{!filter.selectedFilterField}">
+							<apex:selectOptions value="{!childObjectOptionsFilter}" />
+						</apex:selectList>
+					</apex:column>
+
+					<apex:column headervalue="{!$ObjectType.xcdhcm__Lookup_Rollup_Filter__c.Fields.xcdhcm__Operator__c.Label}">
+						<apex:inputfield value="{!filter.rollupFilter.xcdhcm__Operator__c}" />
+					</apex:column>
+
+					<apex:column headervalue="{!$ObjectType.xcdhcm__Lookup_Rollup_Filter__c.Fields.xcdhcm__Filter_value__c.Label}">
+						<span class="vfHelpText"> <apex:outputLink value="javascript:return false;">
+								<img src="/s.gif" alt="" class="helpOrb" />
+								<span>{!$ObjectType.Lookup_Rollup_Filter__c.Fields.Filter_value__c.InlineHelpText}</span>
+							</apex:outputLink> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+						<apex:inputField value="{!filter.rollupFilter.xcdhcm__Filter_value__c}" />
+					</apex:column>
+				</apex:pageblockTable>
+			</apex:outputpanel>
+		</apex:pageBlock>
+	</apex:form>
+	<!-- This Jquery is used for populating Api in picklist -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script>
+		function displayPopup() {
+			$(".select-box option").each(function() {
+				var value = $(this).val();
+				$(this).attr("title", value);
+			});
+		}
+	</script>
+	<script>
+		$(document).ready(function() {
+			$(".select-box option").each(function() {
+				var value = $(this).val();
+				$(this).attr("title", value);
+			});
+
+		});
+	</script>
+	<!-- This Jquery is used for populating Api in picklist -->
+	<!-- END:: 14/05/2015 NPPD-805 Lookup rollup issues Modify by Sabir -->
+</apex:page>

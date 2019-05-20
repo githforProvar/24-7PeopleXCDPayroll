@@ -1,0 +1,231 @@
+<!-- 
+Name: Company Benefit Page 
+* @author Sabir Khan
+* @date 05/12/2014
+* @description 494 Total Reward, Salary Review and Bulk New Benefits (Rollup Summary) Added by Sabir.
+-->
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.RewardExtensionController" sidebar="false" showHeader="true" wizard="false">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />       
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {    
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        background-color: #fff;
+        }
+        .requiredLegend 
+        {
+        display: none;
+        }
+        .ThisPageHelpText span 
+        {
+        display: none;
+        }
+        .ThisPageHelpText:hover span 
+        {
+        display: block !important;
+        width: 300px;
+        background-color: #16325c!important;   
+        border: 1px solid #16325c!important;
+        padding: 4px;
+        color: white;
+        position: absolute;
+        z-index: 1;
+        top:100%;
+        right:15%;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;  
+        border-radius: 4px!important;      
+        text-transform: none;   
+        }
+        .dateInput  
+        {
+        white-space: nowrap;
+        } 
+        .dateOnlyInput input 
+        {
+        width: 10em !important; 
+        }
+        #actionColumn
+        {
+        color: white;
+        }
+        .slds-scope img 
+        {
+        max-width: 250%;
+        height: auto;
+        }
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        color: #54698d !important;
+		font-weight: 300;
+		font-size: 1.25rem !important;
+		line-height: 1.25 !important;
+        }
+        .bPageBlock .pbHeader
+        {
+        background: #fafaf9 !important;  
+        }
+        .slds-cell-edit
+        {
+        background: #ffffff;
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form id="theform">
+                <!-- <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;"
+                                  target="_blank" action="{!helpLinkCompanyBenefit}" value="Help"
+                                  id="theCommandLink1" rendered="{!HelpCompanyBenefit}"/>
+                
+                <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;"
+                                  target="_blank" action="{!helpLinkCompanyBenefit}" value="Help"
+                                  id="theCommandLink2" rendered="{!HelpCompanyBenefitAdmin}"/>  -->                       
+                <apex:pageBlock Title="{!$Label.xcdhcm__phcompanybenefits}" id="pb1">
+                    
+                    <apex:actionStatus id="wait">                   
+                        <apex:facet name="start">
+                            <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </apex:facet>
+                        <apex:facet name="stop">
+                            <div class="slds-spinner_container slds-hide slds-is-fixed">
+                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </apex:facet>                                
+                    </apex:actionStatus>
+                    
+                    <apex:PageMessages id="errorMsg"/>
+                    <apex:pageMessage summary="You may assign to the Employee regular Company-wide Benefits, Allowances or Deductions.  Note - blank rows must be deleted" severity="info" strength="3"/>           
+                    <apex:variable value="{!0}" var="rowNum" />
+                    
+                    <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="id_table">
+                        <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <apex:outputpanel rendered="{!companyBenefitRecords.size >1}">
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <span id="actionColumn" >
+                                                Action
+                                            </span>
+                                        </th>
+                                    </apex:outputpanel>
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Company_Benefits__c}" var="i">
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <abbr class="slds-required" title="required">*</abbr>
+                                                <span class="slds-truncate" title="{!i.label}">
+                                                    {!i.label}
+                                                </span>
+                                                <span class="ThisPageHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Company_Benefits__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span >{!$ObjectType.Benefit__c.Fields.Company_Benefits__c.inlineHelpText}</span>
+                                                </span>
+                                            </div>
+                                        </th>
+                                    </apex:repeat>
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Company_Benefit_Columns}" var="i">
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                <span class="slds-truncate" title="{!i.label}">
+                                                    {!i.label}
+                                                </span>
+                                                <span class="ThisPageHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Benefit__c.Fields[i].inlineHelpText}</span>
+                                                </span> 
+                                            </div>
+                                        </th>
+                                    </apex:repeat>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <apex:repeat value="{!companyBenefitRecords}" var="CB" >
+                                    <tr class="slds-hint-parent">
+                                        <apex:outputpanel rendered="{!companyBenefitRecords.size >1}">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <apex:actionRegion >
+                                                    <apex:commandlink action="{!delRecord1}" immediate="true">
+                                                        <apex:param name="rownumber" value="{!rowNum}" assignTo="{!rownumber}" />
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove" />
+                                                    </apex:commandlink>
+                                                </apex:actionRegion>
+                                            </td>
+                                        </apex:outputpanel>
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Company_Benefits__c}" var="i">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:actionRegion >
+                                                        <apex:selectList size="1" required="true" id="benefit"  value="{!CB.selectedBenefitType}">
+                                                            <apex:selectOptions value="{!CompanyBenefits}" />
+							     <!-- START :: 07/03/2017 regression issue from testrail SObject row does not allow errors -Reward modified by Farhan -->
+                            <apex:actionSupport event="onchange"
+                                action="{!defaultBenefitValues}" reRender="render1,errorMsg" status="load">
+                            <!-- END :: 07/03/2017 regression issue from testrail SObject row does not allow errors -Reward modified by Farhan -->
+                                                                <apex:param name="indexValue" value="{!rowNum}" assignTo="{!indexValue}" />
+                                                            </apex:actionSupport>
+                                                        </apex:selectList>
+                                                    </apex:actionRegion>
+                                                </span>
+                                            </td>
+                                        </apex:repeat>
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Company_Benefit_Columns}" var="i">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:actionRegion >
+                                                        <apex:inputField value="{!CB.benefit[i]}" required="{!i.Required}" />
+                                                    </apex:actionRegion>
+                                                </span>
+                                            </td>
+                                        </apex:repeat>
+								<!-- START :: 11/12/2018 NPPD 1820 Joiner add benefit screen changes added by Namrata-->
+							<apex:variable value="{!(rowNum+1)}" var="rowNum" />
+								<!-- END :: 11/12/2018 NPPD 1820 Joiner add benefit screen changes added by Namrata-->
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                    <apex:pageBlockButtons location="bottom" id="butn" style="float:right;">  
+                        <apex:actionStatus id="saveStatus">                    
+                            <apex:facet name="stop">
+                                <apex:outputPanel >
+                                    <apex:commandButton action="{!addRow1}" value="{!$Label.xcdhcm__companybenefitsbadd}" styleclass="slds-button slds-button--neutral" />
+                                    &nbsp;
+                                    <apex:commandButton action="{!cancelRecord}" value="{!$Label.xcdhcm__companybenefitsbcancel}" styleclass="slds-button slds-button--neutral" immediate="true" status="saveStatus" rerender="id_saveBtn"/>
+                                    <apex:commandButton value="{!$Label.xcdhcm__companybenefitsbsave}" action="{!saveBenefit}"  styleclass="slds-button slds-button--brand" status="saveStatus" rerender="id_saveBtn,errorMsg" id="id_saveBtn"/>
+                                </apex:outputPanel>  
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed" style="Z-index:2">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>                       
+                            </apex:facet>                               
+                        </apex:actionStatus>  
+                    </apex:pageBlockButtons>
+                </apex:pageBlock>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

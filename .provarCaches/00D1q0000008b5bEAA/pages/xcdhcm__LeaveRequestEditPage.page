@@ -1,0 +1,104 @@
+<apex:page standardController="xcdhcm__Leave_Request__c" extensions="xcdhcm.LeaveRequestEditController" sidebar="false" showHeader="true" >
+
+<!-- START :: 10/08/2015 NPPD-891 Sick Leave no end date - bug fixes commented by Ranjeet -->
+<!--<apex:stylesheet value="{!URLFOR($Resource.XCD_static_resources,'Css/Employeesubpagecss.css')}"/>
+<style>
+.Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette
+{
+background:none !important;
+border-top: 2px solid #63a4c5 !important;
+}
+
+</style>-->
+<!-- START :: 10/08/2015 NPPD-891 Sick Leave no end date - bug fixes commented by Ranjeet -->
+	<div class="bPageTitle"><div class="ptBody"><div class="content" style="padding-left:5px;"><h1 class="pageType">Leave Request Edit<span class="titleSeparatingColon">:</span></h1><h2 class="pageDescription"> {!LeaveRecordEdit['Name']}</h2><div class="blank">&nbsp;</div></div><div class="links"><a href="javascript:openPopupFocusEscapePounds(%27https://sites.google.com/a/xcdhr.com/user-guide/?loc=help&amp;target=co_edit.htm&amp;section=CustomObjects%27, %27Help%27, 1024, 768, %27width=1024,height=768,resizable=yes,toolbar=yes,status=yes,scrollbars=yes,menubar=yes,directories=no,location=yes,dependant=no%27, false, false);" title="Help for this Page (New Window)"><span class="helpLink">Help for this Page</span><img src="/s.gif" alt="" class="helpIcon"/></a></div></div><div class="ptBreadcrumb"></div></div>
+    <apex:form Id="theForm">
+        
+        <!-- START :: 10/08/2015 NPPD-891 Sick Leave no end date - bug fixes commented by Ranjeet -->
+        <!--<apex:PageBlock Id="thePageBlock" title="Leave/Absence request detail" >
+            <apex:PageMessages id="errmsg" />
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!saveLeaveRecord}" reRender="errmsg"/>
+                <apex:commandButton value="Cancel" action="{!Cancel}" />
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection title="Leave/absence request" columns="2" >                         
+                <apex:repeat value="{!$ObjectType.Leave_Request__c.FieldSets.Leave_Absence_Request_Detail_Section_For}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Request dates" columns="2" rendered="{!Leave_Request__c.Employee_Details__r.Job_Role__r.Pattern_Type__c=='Regular Working Hours'}">                          
+                <apex:repeat value="{!$ObjectType.Leave_Request__c.FieldSets.Request_Dates_Section_for_Full_Time}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Request dates" columns="2" rendered="{!Leave_Request__c.Employee_Details__r.Job_Role__r.Pattern_Type__c!='Regular Working Hours'}">                        
+                <apex:repeat value="{!$ObjectType.Leave_Request__c.FieldSets.Request_Dates_Section_for_Part_Time}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Details" columns="2" rendered="{!Leave_Request__c.Employee_Details__r.Job_Role__r.Pattern_Type__c=='Regular Working Hours'}">                         
+                <apex:repeat value="{!$ObjectType.Leave_Request__c.FieldSets.Details_Full_Time}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Details" columns="2" rendered="{!Leave_Request__c.Employee_Details__r.Job_Role__r.Pattern_Type__c!='Regular Working Hours'}">                         
+                <apex:repeat value="{!$ObjectType.Leave_Request__c.FieldSets.Details_Part_Time}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="System information" columns="2" >                         
+                <apex:repeat value="{!$ObjectType.Leave_Request__c.FieldSets.System_Rec_Info_for_both}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>-->
+            <!-- END :: 10/08/2015 NPPD-891 Sick Leave no end date - bug fixes commented by Ranjeet -->
+
+            <!-- START :: 10/08/2015 NPPD-891 Sick Leave no end date - bug fixes added by Ranjeet -->
+		<apex:PageBlock Id="thePageBlock" title="{!$Label.xcdhcm__phleaverequesteditpage}" mode="edit" tabStyle="Employee_detail__c">
+            <apex:PageMessages id="errmsg" />
+            <apex:pageBlockButtons >
+                <apex:commandButton value="{!$Label.xcdhcm__leaverequesteditpagebsave}" action="{!saveLeaveRecord}" reRender="errmsg"/>
+                <apex:commandButton value="{!$Label.xcdhcm__leaverequesteditpagebcancel}" action="{!Cancel}" />
+            </apex:pageBlockButtons>            
+            <apex:pageBlockSection columns="2" collapsible="false"> 
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Leave_Request_Detail_Section}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}" required="{!OR(m.required, m.dbrequired)}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="{!$Label.xcdhcm__days_requested_header}" columns="2" rendered="{!Leave_Request__c.Employee_Details__r.Job_Role__r.Pattern_Type__c=='Regular Working Hours'}" collapsible="false"> -->                        
+			<apex:pageBlockSection title="{!$Label.xcdhcm__days_requested_header}" columns="2" collapsible="false">                
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Days_requested}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}" required="{!OR(m.required, m.dbrequired)}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <!-- <apex:pageBlockSection title="{!$Label.Hours_Requested_Header}" columns="2" rendered="{!Leave_Request__c.Employee_Details__r.Job_Role__r.Pattern_Type__c!='Regular Working Hours'}" collapsible="false">                        
+                <apex:repeat value="{!$ObjectType.Leave_Request__c.FieldSets.Hours_requested}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}" required="{!OR(m.required, m.dbrequired)}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>            
+            <apex:pageBlockSection title="{!$Label.xcdhcm__self_certification_header}" columns="2" rendered="{!isSickLeave}" collapsible="false"> --> 
+            <apex:pageBlockSection title="{!$Label.xcdhcm__self_certification_header}" columns="2" collapsible="false">                         
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Self_certification}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}" required="{!OR(m.required, m.dbrequired)}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>            
+            <apex:pageBlockSection title="{!$Label.xcdhcm__return_to_work_interview_header}" columns="2" collapsible="false">                        
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Return_to_work_interview}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}" required="{!OR(m.required, m.dbrequired)}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>            
+            <apex:pageBlockSection title="{!$Label.xcdhcm__sick_pay_header}" columns="2" collapsible="false" rendered="{!IF(AND(isMaternityLeave, SickPaySection == true), true, false)}">                        
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Sick_pay}" var="m">
+                    <apex:inputField value="{!LeaveRecordEdit[m]}" required="{!OR(m.required, m.dbrequired)}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>            
+            <!-- END :: 10/08/2015 NPPD-891 Sick Leave no end date - bug fixes added by Ranjeet -->
+            
+            
+        </apex:PageBlock> 
+         <!-- END :: 10/08/2015 NPPD-891 Sick Leave no end date - bug fixes commented by Ranjeet -->
+         <!-- <div style="border-bottom: 2px solid #63a4c5!important;"></div>-->
+         <!-- END :: 10/08/2015 NPPD-891 Sick Leave no end date - bug fixes commented by Ranjeet -->
+    </apex:form>
+</apex:page>

@@ -1,0 +1,70 @@
+<!-- START :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+<apex:page standardController="xcdhcm__Financial_Control__c" extensions="xcdhcm.FinancialController" tabStyle="Financial_Control__tab" sidebar="false"
+wizard="false" cache="false" readOnly="false">
+<!-- END :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+	<!--<apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+	<style>
+	.Custom20Tab .tertiaryPalette,.individualPalette .Custom20Block .tertiaryPalette,.layoutEdit .individualPalette .Custom20Block .tertiaryPalette
+	{
+		background-color: #FFFFFF;
+		border-color: #63a4c5 !important;
+		border-top: 2px solid #63a4c5 !important;
+	}
+	.labelStyle
+	{
+		color: #999999 !important;
+		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 10pt;
+		font-weight: bold;
+	}
+	.pbSubheader 
+	{
+		display :none;
+	}
+	</style>
+	<script>
+		function disableButton(objBtn) 
+		{
+		    objBtn.disabled = true;
+		    objBtn.style.color='#336699';
+		    objBtn.value='Processing...';
+		}
+	</script>
+	<apex:form id="theform">
+		<apex:pageBlock title="{!$Label.xcdhcm__phnewfinancialcontrol}" id="pageId" rendered="{!recordUpdated == false}">
+			<apex:pageMessages escape="false"/>
+
+			<apex:pageBlockButtons location="bottom">
+				<apex:commandButton action="{!saveFinancialControl}" value="{!$Label.xcdhcm__financialcontrolbsave}" onClick="disableButton(this);" reRender="theform"/>
+				<apex:commandButton action="{!back}" value="{!$Label.xcdhcm__financialcontrolbcancel}" immediate="true" onClick="disableButton(this);" reRender="theform"/>
+			</apex:pageBlockButtons>
+
+			<apex:pageBlockSection title="" columns="2" collapsible="false">
+				<apex:repeat var="info" value="{!$ObjectType.xcdhcm__Financial_Control__c.fieldSets.xcdhcm__New_financial_control}">
+					<apex:inputField value="{!financialControlRecord[info]}"
+						required="{!info.Required}" />
+				</apex:repeat>
+			</apex:pageBlockSection>
+
+		</apex:pageBlock>
+		<apex:pageBlock title="{!$Label.xcdhcm__phnewfinancialcontrol}" id="pageId2" rendered="{!recordUpdated == true}">
+			<apex:pageMessages escape="false"/>
+
+			<apex:pageBlockButtons location="bottom">
+				<!-- START :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+				<apex:commandButton action="{!back}" value="{!$Label.xcdhcm__financialcontrolbok}" immediate="true" onClick="disableButton(this);" reRender="theform"/>
+				<!-- END :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+			</apex:pageBlockButtons>
+			
+			<apex:pageBlockSection title="" columns="2" collapsible="false" >
+				<apex:repeat var="info" value="{!$ObjectType.xcdhcm__Financial_Control__c.fieldSets.xcdhcm__New_financial_control}">
+					<apex:outputField value="{!financialControlRecord[info]}" />
+				</apex:repeat>
+			</apex:pageBlockSection>
+			
+		</apex:pageBlock>
+		
+	</apex:form>
+	 <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+</apex:page>

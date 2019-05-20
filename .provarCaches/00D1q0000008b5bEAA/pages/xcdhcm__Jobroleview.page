@@ -1,0 +1,14 @@
+<!-- START :: NPD-848 modified by saravanan -->
+<apex:page standardController="xcdhcm__Job_Role__c" extensions="xcdhcm.JobroleViewController" showHeader="true" sidebar="true">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteVacancy.css')}" /> 
+    <style>
+    .bPageBlock .pbButton 
+    {
+    margin-top: 0px !important;
+	}
+    </style>
+    <apex:form >
+        <apex:detail relatedList="true" title="true" inlineEdit="true"/>
+    </apex:form>
+</apex:page> 
+ <!-- END :: NPD-848 modified by saravanan -->

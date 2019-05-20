@@ -1,0 +1,270 @@
+<apex:page standardController="xcdhcm__Compensation__c" extensions="xcdhcm.PayrollAssumedLGPSReviewController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}"/>
+<style type="text/css">
+body 
+{
+  font-size: 10px !important;   
+}
+input[type="text"],input[type='number'] 
+{
+	height: 12px!important;
+    width: 130px!important;
+    font-size: 10px!important;
+}
+.pagination-large ul>li>a, .pagination-large ul>li>span {
+    padding: 5px 10px!important;
+    font-size: 10.5px!important;
+}
+/* necessary stylesheet modification */
+.ui-tooltip 
+{
+	padding: 10px 20px;
+	box-shadow: 0 0 0px black;
+	font-family: Arial,Helvetica,sans-serif;
+	color: black;
+	margin: 0; 
+	font-size: 110%;
+	font-weight:normal;
+	border: 2px solid Black;
+	background-color: #FEFDB9;
+	padding: 5px;
+	opacity: 1.00;
+	width:200px;
+}
+      
+.helpText_tooltip, .helpText_tooltipOn 
+{
+	position: relative;
+	background-image: url(/img/help/helpOrbs.gif);
+	width: 18px;
+	height: 15px;
+	background-position:0px 0px;
+	vertical-align:text-bottom;
+}
+
+.helpText_tooltipOn
+{
+	background-position:19px 0px;
+}
+
+.SecondTD
+{
+	padding-left:2px; 
+	text-align:left;
+}
+
+.firstTD
+{
+	padding-right:2px;  
+	text-align:right;
+}
+</style>
+<apex:form >
+<div ng-controller="ctrlRead">
+<apex:pageBlock title="Payroll review assumed LGPS" id="rows">
+<apex:pageMessages id="erMsg"/>
+<html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"/>
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
+<script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script type="text/javascript">
+var myapp = angular.module('hello', []);
+var sortingOrder = 'compData.xcdhcm__Employee__c';
+<!-- Define Controller  -->
+var contrl=myapp.controller('ctrlRead', function ($scope, $filter) 
+{
+	<!--- Initialize Scope Variables --->
+	$scope.sortingOrder = sortingOrder;
+	$scope.reverse = false;
+	$scope.filteredItems = [];
+	$scope.groupedItems = [];
+	$scope.itemsPerPage = 40;
+	//$scope.pagedItems = [];
+	$scope.currentPage = 0;
+	$scope.selectedAll = true;
+	$scope.items = [];
+	$scope.items ={!wrapCompListAJ};
+	var pagedItems = [];   
+	pagedItems = $scope.items;    
+    var searchMatch = function (haystack, needle) 
+    {
+        if(!needle) 
+        {
+            return true;
+        }
+        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+    };       
+    //Initialize the Search Filters 
+    $scope.search = function () 
+    {
+        $scope.filteredItems = $filter('filter')($scope.items, function (item) 
+        {
+	        for(var attr in item) 
+	        {
+	        	if (searchMatch(item.compData.xcdhcm__Employee__c, $scope.query))
+	            return true;
+	        }
+        	return false;
+        });
+        // Define Sorting Order
+        if ($scope.sortingOrder !== '') 
+        {
+            $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+        }
+        $scope.currentPage = 0;
+        // Group by pages
+        $scope.groupToPages();
+    };
+    //Getting code from static resource
+    {!scriptCode}
+    $scope.selectedData = function()
+    {
+        saveUpdate(JSON.stringify($scope.items));
+    };
+});
+contrl.$inject = ['$scope', '$filter'];
+$(function()
+  {
+    $(".displayTooltip").tooltip();
+    $(".displayTooltip").mouseover(function() 
+	{
+		$(this).find('img').addClass('helpText_tooltipOn');
+    });  
+	$(".displayTooltip").mouseleave(function() 
+	{
+		$(this).find('img').removeClass('helpText_tooltipOn');
+	});     
+  });
+</script>
+</head>
+<body>
+	<table class="table  table-hover,ng-cloak ">
+		<thead>
+			<tr>
+			  <th class="compData.selected">
+                  <input type="checkbox" ng-model="selectedAll" ng-click="checkAll()"/>
+              </th>
+              <th>{!$ObjectType.Compensation__c.Fields.Employee__c.Label}
+              	<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="Link to the employees compensation record."/>
+				</span>&nbsp;
+              </th>
+              <th>{!$ObjectType.Compensation__c.Fields.First_day_of_absence__c.Label}
+				<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="{!$ObjectType.Compensation__c.Fields.First_day_of_absence__c.inlineHelpText}"/>
+				</span>&nbsp;
+              </th>
+              <th>{!$ObjectType.Compensation__c.Fields.Days_absent_at_reduced_pay__c.Label}
+              	<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="{!$ObjectType.Compensation__c.Fields.Days_absent_at_reduced_pay__c.inlineHelpText}"/>
+				</span>&nbsp;
+              </th>
+              <th>{!$ObjectType.Compensation__c.Fields.Daily_rate_of_pay_lgps__c.Label}
+              	<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="{!$ObjectType.Compensation__c.Fields.Daily_rate_of_pay_lgps__c.inlineHelpText}"/>
+				</span>&nbsp;
+              </th>
+              <th>{!$ObjectType.Compensation__c.Fields.Assumed_earnings_for_absence__c.Label}
+              	<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="{!$ObjectType.Compensation__c.Fields.Assumed_earnings_for_absence__c.inlineHelpText}"/>
+				</span>&nbsp;
+              </th>              	
+              <!-- START :: 23/10/2018 NPAY-655 Pensionable Pay - Mark Pay Details Correctly Added by Tutu -->
+              <th>{!$ObjectType.Compensation__c.Fields.Payment_for_days_present__c.Label}
+              	<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="{!$ObjectType.Compensation__c.Fields.Payment_for_days_present__c.inlineHelpText}"/>
+				</span>&nbsp;
+              </th>
+              <!-- END :: 23/10/2018 NPAY-655 Pensionable Pay - Mark Pay Details Correctly Added by Tutu -->             	
+              <th>{!$ObjectType.Compensation__c.Fields.Employer_pensionable_earnings_calculated__c.Label}
+              	<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="{!$ObjectType.Compensation__c.Fields.Employer_pensionable_earnings_calculated__c.inlineHelpText}"/>
+				</span>&nbsp;
+              </th>
+              <th>{!$ObjectType.Compensation__c.Fields.Employer_pensionable_earnings__c.Label}
+              	<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="{!$ObjectType.Compensation__c.Fields.Employer_pensionable_earnings__c.inlineHelpText}"/>
+				</span>&nbsp;
+              </th>
+              <th>{!$ObjectType.Compensation__c.Fields.Calculation_notes__c.Label}
+              	<span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="{!$ObjectType.Compensation__c.Fields.Calculation_notes__c.inlineHelpText}"/>
+				</span>&nbsp;
+              </th>
+			</tr>
+		</thead>
+		<tbody> 	
+	        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse | filter:query" class="ng-cloak">
+               <td style="text-align:left;">                                       
+                  <input type="checkbox" ng-value="{{item.selected}}"  name="item.selected"  ng-model="item.selected"/>
+               </td>
+               <td style="text-align:left;">
+               	  <a href="/one/one.app#/alohaRedirect/{{item.compData.Id}}" >{{item.compData.xcdhcm__Employee__r.Name}}</a>
+               </td>
+               <td style="text-align:left;">
+               	  <a href="/one/one.app#/alohaRedirect/{{item.leaveData.Id}}" >{{item.compData.xcdhcm__First_day_of_absence__c | date:'dd/MM/yyyy'}}</a>                                                       
+               </td>
+               <td style="text-align:left;">
+               	  <a href="/one/one.app#/alohaRedirect/{{item.leaveData.Id}}" >{{item.compData.xcdhcm__Days_absent_at_reduced_pay__c}}</a>
+               </td>
+               <td style="text-align:left;">
+                  {{item.compData.xcdhcm__Daily_rate_of_pay_lgps__c | currency: "{!curr}" : 2}}                                     
+               </td>
+               <td style="text-align:left;">
+                  {{item.compData.xcdhcm__Assumed_earnings_for_absence__c | currency: "{!curr}" : 2}}                                     
+               </td>
+               <td style="text-align:left;">
+                  {{item.compData.xcdhcm__Payment_for_days_present__c | currency: "{!curr}" : 2}}                                     
+               </td>
+               <td style="text-align:left;">
+                  {{item.compData.xcdhcm__Employer_pensionable_earnings_calculated__c | currency: "{!curr}" : 2}}                                     
+               </td>
+               <td style="text-align:left;">
+               	  <input type="number" ng-value="{{item.compData.xcdhcm__Employer_pensionable_earnings__c | currency: '': 2}}"  name="item.inputAssumed" ng-model="item.compData.xcdhcm__Employer_pensionable_earnings__c" />
+               </td>
+               <td style="text-align:left;">
+               	  <input type="text" ng-value="{{item.compData.xcdhcm__Calculation_notes__c}}"  name="item.inputAssumed" ng-model="item.compData.xcdhcm__Calculation_notes__c"/>
+               </td>
+	        </tr>
+	    </tbody>
+	    <tfoot>
+	    	<tr>
+	            <td colspan="9" style="border:none !important;">
+			    	<div class="pagination pagination-large pagination-centered">
+				       <ul style="box-shadow:none !important;">  
+				           <li ng-class="{disabled: currentPage == 0}">
+				               <a ng-click="prevPage()"> Prev</a>
+				           </li>
+				           <li ng-repeat="n in range(pagedItems.length)"
+				           ng-class="{active: n == currentPage}"
+				           ng-click="setPage()">
+				               <a ng-bind="n + 1">1</a>
+				           </li>
+				           <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+				               <a ng-click="nextPage()">Next </a>
+				           </li>
+				       </ul>
+				   </div>
+			   </td>
+		   </tr>
+	    </tfoot>
+	</table>
+</body>
+</html>
+<apex:pageBlockButtons location="Bottom">
+   <apex:commandButton style="display:none;">       
+   		<input type="button" ng-click="selectedData()" value="{!$Label.PayrollLGPSBSaveandaction}" class="btn"/>      
+   </apex:commandButton>
+   <apex:actionFunction name="saveUpdate" action="{!saveAndUpdate}" rerender="erMsg,hiddenBlock" >
+   		<apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+   </apex:actionFunction>
+   <apex:commandButton value="{!$Label.xcdhcm__payrolllgpsbback}" action="{!backPage}" rerender="hiddenBlock"/>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+<apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
+</div>
+</apex:form>
+</apex:page>

@@ -1,0 +1,24 @@
+<apex:page standardController="xcdhcm__Company__c" extensions="xcdhcm.CompanyExtensionController" sidebar="false" showHeader="true" wizard="false" >
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Sublineremovecss.css')}" />
+<apex:form >
+
+    <apex:pageBlock title="{!$Label.xcdhcm__phnew_ethnicity}">
+    <apex:pageMessages />   
+     <apex:pageBlockButtons location="both" >
+        <apex:commandButton value="{!$Label.xcdhcm__new_ethnicitybsave}" action="{!saveEthnicity}"/>
+        <apex:commandButton value="{!$Label.xcdhcm__new_ethnicitybsaveandnew}" action="{!saveAndNewEthnicity}"/>
+        <apex:commandButton value="{!$Label.xcdhcm__new_ethnicitybcancel}" action="{!cancelEthnicity}" immediate="true"/>
+     </apex:pageBlockButtons>
+ 
+     <apex:pageBlockSection title="{!$Label.xcdhcm__new_ethnicitynewethnicity}" columns="2" collapsible="false">
+        <apex:repeat value="{!ethnicity}" var="eth" rows="1">
+            <apex:repeat value="{!$ObjectType.xcdhcm__Ethnicity__c.Fieldsets.xcdhcm__New_Ethnicity_Set}" var="i">
+             <apex:inputField value="{!eth[i]}" required="{!i.Required}"/>                                                                                                                                               
+            </apex:repeat>
+        </apex:repeat>
+     </apex:pageBlockSection>
+    
+   </apex:pageBlock>
+       <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+    </apex:form>
+</apex:page>

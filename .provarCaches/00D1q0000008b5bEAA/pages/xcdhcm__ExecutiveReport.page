@@ -1,0 +1,19 @@
+<apex:page controller="xcdhcm.ExecutiveReportController" sidebar="false" action="{!redirect}">
+	
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteExcReport.css')}" />
+	
+	<style>
+        html body.sfdcBody
+        {
+		   	background: none rgba(255, 255, 255, 1);
+		}
+		/* START :: 24-05-2018 # : NPPD-1614 : Lightning issue crowd test Added by Anil*/
+		#auraErrorMessage
+		{
+			display: none;
+		}
+		/* END :: 24-05-2018 # : NPPD-1614 : Lightning issue crowd test Added by Anil*/ 
+	</style> 
+	
+	<apex:detail subject="{!exRep.id}" relatedList="false" title="false" />
+</apex:page>

@@ -1,0 +1,15 @@
+<apex:page standardController="xcdhcm__Benefit__c">
+  <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />  
+  <style>
+  .msgIcon
+  {
+  display:none;
+  }
+  .message 
+  {
+  font-size: 14px;
+  }
+  </style>
+  <apex:pageMessage id="pMsg1" summary="To add new benefit records please go to the page for the relevant Company or Employee" severity="info" strength="1" />
+  
+</apex:page>

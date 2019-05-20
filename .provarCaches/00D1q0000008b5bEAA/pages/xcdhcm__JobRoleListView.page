@@ -1,0 +1,215 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.ModifyJobRoleController" rendered="true" sidebar="false">
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />
+
+	<style>
+		.slds-scope .slds-section-title--divider 
+		{
+			text-transform: none !important;
+			font-size: 1rem;
+			line-height: 0.6 !important;
+			border-radius: 4px !important;
+			font-weight: 500 !important;
+		}
+		
+		input[type='text'] 
+		{
+			width: 50%;
+		}
+		
+		textarea 
+		{
+			width: 50%;
+		}
+		
+		select 
+		{
+			width: 50% !important;
+		}
+		
+		.infoM2 .messageTable td 
+		{
+			width: 2px;
+		}
+		
+		.slds-scope .slds-form-element__label 
+		{
+			padding-left: 3%;
+		}
+		
+		<!-- Start: PopUp window to display the user Records -->
+		.custPopup 
+		{
+			background: #fff url(/img/alohaSkin/lookup_bg.png) repeat-x;
+			border-width: 2px;
+			border-style: inset;
+			z-index: 9999;
+			left: 45%;
+			padding: 10px;
+			position: absolute;
+			/* These are the 3 css properties you will need to change so the popup 
+		        displays in the center of the screen. First set the width. Then set 
+		        margin-left to negative half of what the width is. You can add 
+		        the height property for a fixed size pop up if you want.*/
+			width: 650px;
+			margin-left: -250px;
+			top: 50px;
+		}
+		
+		.popupBackground 
+		{
+        //background-color:black;
+			opacity: 0.20;
+			filter: alpha(opacity = 20);
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			z-index: 9998;
+		}
+		
+		.pageTitleIcon 
+		{
+			background-image: url(/img/sprites/master.png);
+			background-position: 0 -1202px;
+			width: 32px;
+			height: 32px;
+		}
+		<!-- End : PopUp window to display the user Records -->
+	</style>
+	
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<head>
+			<apex:slds />
+		</head>
+		
+		<body class="slds-scope">
+			<apex:form id="myForm">
+				<div role="dialog" tabindex="-1" aria-labelledby="header43"
+					class="slds-modal slds-fade-in-open slds-modal--large">
+					<div class="slds-modal__container">
+						<div class="slds-modal__header">
+							<apex:commandLink action="{!cancel}" id="theCommandLink1"
+								immediate="true"
+								styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+								<img
+									src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}"
+									alt="Cancel" style="width: 67%;" />
+							</apex:commandLink>
+							<h2 id="header43" class="slds-text-heading--medium"></h2>
+						</div>
+						<div class="slds-modal__content slds-p-around--medium">
+							<!-- ================================== Page content  ==========================================================    -->
+							<apex:pageBlock id="theblock">
+								<apex:pageMessages id="errorId"></apex:pageMessages>
+								<apex:pageMessage id="jobroleInfoMsg"
+									summary="{!IF(modifyJobroleOption = 'changeJobRole', $Label.xcdhcm__jobrolelistview_select_job_role_to_change_msg, $Label.xcdhcm__jobrolelistview_select_job_role_to_end_msg)}"
+									severity="info" strength="3" />
+								<br />
+								<br />
+								
+								<!-- START:: 12/11/2018 NPPD-1819 FLS issue modify by  Ranjeet -->
+								<apex:outputpanel id="info">
+									<apex:outputpanel >
+										<div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+											<div class="slds-form-element slds-p-around--small">
+												<label class="slds-form-element__label"> Select a Job Role </label>
+												<div class="slds-form-element__control">
+													<apex:inputHidden value="{!jobIdSelected}" id="targetId" />
+													<apex:inputText size="30" value="{!jobNameSelected}" id="targetName" style="width:175px;margin-left:15px" tabindex="1" />
+													<apex:commandLink action="{!showJobroleListPopup}" type="image/png" rerender="tstpopup" style="text-decoration:none" tabindex="1">
+														<img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/lookup.png')}" class="ClookupIcon" title="Job role Lookup (New Window)" />
+													</apex:commandlink>
+												</div>
+											</div>
+										</div>
+									</apex:outputpanel>
+									
+	                                <apex:outputPanel id="tstpopup">
+	                                    <apex:outputPanel rendered="{!displayJobroleListPopup}">
+	                                        <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-col slds-size--1-of-2 slds-modal slds-fade-in-open slds-modal--small" style="margin: auto;">
+	                                            <div class="slds-modal__container">
+	                                                <div class="slds-modal__header">
+	                                                    <apex:commandLink action="{!closeJobroleListPopup}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+	                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+	                                                    </apex:commandLink>
+	                                                    <h2 id="header43" class="slds-text-heading--medium"></h2>
+	                                                </div>
+	                                                <div class="slds-modal__content slds-p-around--medium"> 
+	                                                    <div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" /><h1 style="font-size: 1.8em;color: #333435;">Lookup</h1></div><br/><br/>
+	                                                    <div style="height:360px;overflow:auto;">
+	                                                        <apex:pageBlockTable value="{!jobroleList}" var="jr"> 
+	                                                            <apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.Name.Label}">
+	                                                                <apex:commandLink value="{!jr.Name}" action="{!jobroleSelected}" reRender="info,errorId"> 
+																		<apex:param name="idSelected" value="{!jr.id}" />
+																		<apex:param name="nameSelected" value="{!jr.Name}" />
+	                                                                </apex:commandLink> 
+	                                                            </apex:column>
+	                                                            
+	                                                            <apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_Name__c.Label}" rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Department_Name__c.Accessible}">
+	                                                                <apex:outputField value="{!jr.xcdhcm__Department_Name__c}"/>
+	                                                            </apex:column>
+
+	                                                            <apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Manager__c.Label}" rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Manager__c.Accessible}">
+	                                                                <apex:outputText value="{!jr.Manager__r.Name}" id="managerID"/>
+	                                                            </apex:column>
+	                                                            
+	                                                            <apex:column headerValue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Start_Date__c.Label}" rendered="{!$ObjectType.xcdhcm__Job_Role__c.Fields.xcdhcm__Start_Date__c.Accessible}">
+	                                                                <apex:outputField value="{!jr.xcdhcm__Start_Date__c}"/>
+	                                                            </apex:column>
+	                                                        </apex:pageBlockTable>   
+	                                                    </div> <br/>
+	                                                </div>
+	                                                <div class="slds-modal__footer">
+	                                                    <apex:commandButton value="{!$Label.xcdhcm__createusersbclose}" action="{!closeJobroleListPopup}" rerender="tstpopup" styleclass="slds-button slds-button--neutral"/>
+	                                                </div>
+	                                            </div>
+	                                        </div>
+	                                        <!-- <div class="slds-backdrop slds-backdrop--open"></div> -->
+	                                    </apex:outputPanel>
+	                                </apex:outputPanel>
+								<!-- END:: 12/11/2018 NPPD-1819 FLS issue modify by  Ranjeet -->	
+		
+								</apex:outputPanel>
+								
+								<div class="errorMsg" style="padding-left: 112px; width: 150px;">
+									<apex:outputpanel layout="block" styleClass="requiredInput" rendered="{!LEN(errorMsg) > 0}">
+										<apex:outputpanel layout="block" styleClass="requiredBlock"></apex:outputpanel>
+										<strong>{!'Error:'}</strong>&nbsp;{!errorMsg}
+		                            </apex:outputPanel>
+								</div>
+							</apex:pageBlock>
+							<!-- ================================== Page content  ==========================================================    -->
+						</div>
+						
+						<div class="slds-modal__footer">
+							<apex:actionStatus id="saveStatus">
+								<apex:facet name="stop">
+									<apex:outputPanel >
+										<apex:commandButton value="{!$Label.xcdhcm__jobrolelistviewbcancel}"
+											action="{!cancel}"
+											styleclass="slds-button slds-button--neutral"
+											status="saveStatus" rerender="id_saveBtn" />
+										<apex:commandButton value="{!$Label.xcdhcm__jobrolelistviewbnext}"
+											action="{!processChangeJobrole}"
+											styleclass="slds-button slds-button--brand"
+											reRender="id_saveBtn" status="saveStatus" id="id_saveBtn" />
+									</apex:outputPanel>
+								</apex:facet>
+								<apex:facet name="start">
+									<div class="slds-spinner_container slds-show" style="top: 30%; bottom: 30%">
+										<div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+											<div class="slds-spinner__dot-a"></div>
+											<div class="slds-spinner__dot-b"></div>
+										</div>
+									</div>
+								</apex:facet>
+							</apex:actionStatus>
+						</div>
+					</div>
+				</div>
+				<div class="slds-backdrop slds-backdrop--open"></div>
+			</apex:form>
+		</body>
+	</html>
+</apex:page>

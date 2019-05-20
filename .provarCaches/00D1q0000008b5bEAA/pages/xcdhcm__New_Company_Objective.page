@@ -1,0 +1,134 @@
+<apex:page standardController="xcdhcm__Company__c" extensions="xcdhcm.CompanyExtensionController" sidebar="false">
+    <!-- START :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />     
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {	 
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .dateInput  
+        {
+        white-space: nowrap;
+        } 
+        .dateOnlyInput input 
+        {
+        width: 10em !important; 
+        }
+        #actionColumn
+        {
+        color: white;
+        }
+        .slds-scope img 
+        {
+        max-width: 250%;
+        height: auto;
+        }
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        color: #54698d !important;
+		font-weight: 300;
+		font-size: 1.25rem !important;
+		line-height: 1.25 !important;
+        }
+        .LiteHelpText:hover span 
+        {
+        text-transform: none;
+        } 
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form >
+                <apex:PageMessages id="error_id"/>
+                <apex:pageBlock title="{!$Label.xcdhcm__phnew_company_objective}">
+                    <apex:variable value="{!0}" var="rowNum" />
+                    
+                    <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="table">
+                        <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <apex:outputpanel rendered="{!companyObjectives.size >1}">
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <span id="actionColumn" >
+                                                Action
+                                            </span>
+                                        </th>
+                                    </apex:outputpanel>
+                                    <!-- START :: 18-07-2018 P1 Summer2018  Regression Lightning Issues/Actions T482976 modified by Anil-->
+                                    <apex:repeat var="cv" value="{!$ObjectType.xcdhcm__Company_Objectives__c.FieldSets.xcdhcm__Company_Objectives}">
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <apex:outputPanel rendered="{!OR(cv.required, cv.dbrequired)}"><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>
+                                                <span class="slds-truncate" title="{!cv.label}">
+                                                    {!cv.label}
+                                                </span>
+                                                <span class="ThisPageHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Company_Objectives__c.Fields[cv].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Company_Objectives__c.Fields[cv].inlineHelpText}</span>
+                                                </span> 
+                                            </div>
+                                        </th>
+                                    </apex:repeat>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <apex:repeat value="{!companyObjectives}" var="companyObjective" >
+                                    <tr class="slds-hint-parent">
+                                        <apex:outputpanel rendered="{!companyObjectives.size >1}">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <!-- START :: 08-06-2018 P1 Summer2018  NPPD-1533 Lightning Issues/Actions modified by Rahul S-->
+                                                <apex:commandlink immediate="true" action="{!delcomsheet}">
+                                                    <apex:param name="comObjid" value="{!companyObjective.Id}" />
+                                                    <apex:param name="rownumber" value="{!rowNum}" />
+                                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove" /> 
+                                                </apex:commandlink>
+                                                <!-- END :: 08-06-2018 P1 Summer2018  NPPD-1533 Lightning Issues/Actions modified by Rahul S-->
+                                            </td>
+                                        </apex:outputpanel>
+                                        <apex:repeat var="cv" value="{!$ObjectType.xcdhcm__Company_Objectives__c.FieldSets.xcdhcm__Company_Objectives}">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:inputField value="{!companyObjective[cv]}" required="{!OR(cv.required, cv.dbrequired)}"/>
+                                                </span>
+                                            </td>
+                                        </apex:repeat>
+                                        <!-- END :: 18-07-2018 P1 Summer2018  Regression Lightning Issues/Actions T482976 modified by Anil-->
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <apex:pageBlockButtons location="bottom" style="text-align: right!important;">
+                        <apex:actionStatus id="saveStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputPanel > 
+                                    <!-- START :: 08-06-2018 P1 Summer2018  NPPD-1533 Lightning Issues/Actions modified by Rahul S-->
+                                    <apex:commandButton value="{!$Label.xcdhcm__new_company_objectivebaddrow}" action="{!addRow}" immediate="true" styleclass="slds-button slds-button--neutral"/>
+                                    <!-- END :: 08-06-2018 P1 Summer2018  NPPD-1533 Lightning Issues/Actions modified by Rahul S-->
+                                    <apex:commandButton value="{!$Label.xcdhcm__new_company_objectivebcancel}" action="{!cancelCompanyObjective}" immediate="true"  styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                    <apex:commandButton value="{!$Label.xcdhcm__new_company_objectivebsave}" action="{!saveCompanyObjective}"  styleclass="slds-button slds-button--brand" status="saveStatus" rerender="error_id,id_saveBtn" id="id_saveBtn"/>
+                                </apex:outputPanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageBlockButtons>
+                </apex:pageBlock>
+            </apex:form> 
+        </body>
+    </html>
+    <!-- END :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+</apex:page>

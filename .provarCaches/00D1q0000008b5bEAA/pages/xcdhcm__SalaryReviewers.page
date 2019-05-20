@@ -1,0 +1,672 @@
+<apex:page standardcontroller="xcdhcm__Salary_Review__c"  extensions="xcdhcm.BulkNewSalaryReviewController"
+ sidebar="false" showHeader="true" wizard="false" cache="false" readOnly="false" docType="html-5.0">
+ <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />       
+		<style> 
+			body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+			{
+				font-family:Salesforce Sans,Arial,sans-serif!important;
+				font-size: 1.4rem!important;
+	    			color: #16325c;
+				margin-left: 1mm;
+			}
+
+		/*column header*/
+			.table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>th 
+			{
+	       		font-size: 1.1rem!important;;
+    				color: #54698d;
+    				font-weight: normal;
+    				font-family: 'Salesforce Sans',Arial,sans-serif;
+    				line-height: 1.25; 
+    				letter-spacing:.0625rem;
+			}
+		/*column data*/
+			.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+	        		font-size: 1.2rem!important;;
+    				color: #16325c;
+    				font-weight: normal;
+    				font-family: 'Salesforce Sans',Arial,sans-serif;
+    				
+			}
+			
+		   
+		    	#LiteHelpTextID span 
+            {
+            	display: none;
+            }
+            
+            #LiteHelpTextID:hover span 
+            {
+                display: block !important;
+                width: 300px;
+                background-color: #16325c!important;   
+                border: 1px solid #16325c!important;
+                padding: 4px;
+                color: white;
+                position: absolute;
+                z-index: 1;
+                top:100%;
+                right:20%;
+                text-align: justify;
+                white-space: normal;
+                font-weight: normal;  
+                border-radius: 4px!important;    
+                left:5% !important;     
+            }
+            
+            #LiteHelpTextID:hover 
+            {
+            	position: inherit;
+            }
+            input[type="text"] {
+		    width: 100px !important;
+		}
+
+		input[type="float"] {
+		    width: 85px !important;
+		}
+	
+		input[type="float"] {
+		    height: 20px !important;
+		}
+		
+		.fa 
+		{
+   		 font-size: 8pt!important;
+		}
+		
+		.slds-scope button, .slds-scope input, .slds-scope optgroup, .slds-scope select, .slds-scope textarea 
+		{
+    			font-size: 12px;
+		}
+		.slds-scope table 
+		{
+		    font-size: 13px;
+		}
+		.modal-content 
+		{
+    			width: 80%;
+		}
+		  .slds-scope .slds-truncate 
+	    {
+	    		white-space: normal;
+	    		width:180px;
+	    		word-break: break-all;
+		}
+		.css1{
+		  font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;
+		}
+		
+	</style>
+ <apex:form id="theForm">
+	<div style=" width: 50%;height: 1%;">
+		<apex:pageMessages id="errorId" escape="false"/>
+  	</div>
+  	
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="SalaryApp" lang="en">
+ 		<head>
+			<meta charset="utf-8"/>
+			<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
+			<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+			<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+			<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+			<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+			<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+		<apex:slds />
+		</head>
+        <script type="text/javascript"> 
+              function stopRKey(evt) { 
+              var evt = (evt) ? evt : ((event) ? event : null); 
+              var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+              if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+             } 
+            document.onkeypress = stopRKey; 
+        </script>
+        <script type="text/javascript">
+         var myapp = angular.module('SalaryApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+		 	var contrl=myapp.controller('ctrlRead', function ($scope, $filter ,$uibModal) {
+		 		$scope.filteredItems = [];
+		        $scope.itemsPerPage = 25;
+		        $scope.currentPage = 1;
+        			$scope.maxlength = 5;
+        		
+        		$scope.selecteDropDown = "--Select--";
+        		$scope.selectedValue = "--Select--";
+        		var allItems = {!SalaryReviwers};
+		        $scope.items = allItems;
+
+	        	//Initialize the Search Filters 
+			  		var searchMatch = function (haystack, needle) {
+	                  if (!needle) {
+	                      return true;
+	                  }
+	                  return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+	              	};
+             
+	              	$scope.search = function () {
+	                  	$scope.filteredItems = $filter('filter')($scope.items, function (item) {
+	                      	for (var attr in item) {
+	                          if (searchMatch(item.Name , $scope.query))
+	                              return true;
+	                      	}
+	                      	return false;
+	                  	});
+	              	};
+	              	
+	              	// functions have been describe process the data for display
+             			$scope.search();
+             			
+	              	//for reviwer serach
+	              	$scope.changeReviewer = function()
+	            	{
+	                 	if($scope.reviewerName == '')
+	                 	{
+	                 	 	$scope.search();
+	                 	}
+	            	};
+		            $scope.SaveData = function()
+	                {
+		                for(i in $scope.filteredItems)
+						{
+							delete $scope.filteredItems[i].xcdhcm__Reviewer_1__r;
+							delete $scope.filteredItems[i].xcdhcm__Reviewer_2__r;
+							delete $scope.filteredItems[i].xcdhcm__Reviewer_3__r;
+							delete $scope.filteredItems[i].xcdhcm__Reviewer_4__r;
+						}
+	                    saveMethod(JSON.stringify($scope.items));
+	                };   
+	            	
+              		$scope.companies =[];
+              		$scope.departments1 =[];
+              		
+              		$scope.dropboxitemselected = function(item) 
+              		{
+                    		$scope.selecteDropDown = item;
+                      	if($scope.selecteDropDown == "Company")
+                      	{
+                      		$scope.selectedValue = '';
+                      		var allComapny = {!AllCompany};
+		        				$scope.companies = allComapny;
+		        			/*	alert(allComapny);
+                      		if(allComapny != "All Companies')
+                      		{
+		        					$scope.companies = allComapny;
+		        				}
+		        			alert(JSON.stringify($scope.companies ));*/
+                      	}
+                      	if($scope.selecteDropDown == "Department")
+                      	{
+                      		$scope.selectedValue = '';
+					       	var allDepartment = {!AllDepartment};
+					        $scope.departments1 = allDepartment;
+                      	}
+                   		if($scope.selecteDropDown == "--Select--")
+                   		{
+                   			$scope.selectedValue = '--Select--';
+                   			$scope.search();
+                   		}
+                    }
+                    
+                    $scope.dropDownsearch = function () {
+	                  	$scope.filteredItems = $filter('filter')($scope.items, function (item) {
+	                      	for (var attr in item) 
+	                      	{
+	                          	if($scope.selectedValue != "--Select--" && (item.xcdhcm__Company__c  != null && searchMatch(item.xcdhcm__Company__c , $scope.selectedValue)) || (item.xcdhcm__Employee_dept__c  != null && searchMatch(item.xcdhcm__Employee_dept__c , $scope.selectedValue)))
+	                           		return true; 
+	                      	}
+	                      	return false;
+	                  	});
+	              	};
+	              	
+		            $scope.animationsEnabled = true;
+		            $scope.reviewerName = '';
+					$scope.openReviewer = function(){			
+					Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.BulkNewSalaryReviewController.getReviewers}',$scope.reviewerName,
+	                    function(result, event){
+	                        if (event.status) {
+				                    var modalInstance = $uibModal.open({
+									animation: $scope.animationsEnabled,
+									templateUrl: 'userContent.html',
+									controller: 'userModalInstanceCtrl',	
+									size : 'lg',
+									resolve: {
+											reviewerName: function () {
+											return $scope.reviewerName;
+										},
+										userDetails: function () {
+											return result;
+										}
+									}
+								});
+							
+								modalInstance.result.then(function (selectedUser) {                                                              
+	                          		$scope.selectedUsr = selectedUser;
+						        	$scope.reviewerName =   selectedUser.Name; 
+					            	$scope.filteredItems = $filter('filter')($scope.items, function (item){
+							            for (var attr in item)
+							            {
+							            	if(item.xcdhcm__Reviewer_1__c != null && searchMatch(item.xcdhcm__Reviewer_1__c , $scope.selectedUsr.Id) || item.xcdhcm__Reviewer_2__c != null && searchMatch(item.xcdhcm__Reviewer_2__c , $scope.selectedUsr.Id)
+							            	|| item.xcdhcm__Reviewer_3__c != null && searchMatch(item.xcdhcm__Reviewer_3__c , $scope.selectedUsr.Id) 	|| item.xcdhcm__Reviewer_4__c != null && searchMatch(item.xcdhcm__Reviewer_4__c , $scope.selectedUsr.Id))
+							            	{
+								            	return true;
+							            	}
+							            }
+						            	return false;
+						        	});
+	                          });
+	                        } else if (event.type === 'exception') {
+	                            alert('Error.....');
+	                        } else {
+	                        alert('Error.....22222');
+	                        }
+	                    }, 
+	                    {escape: false}
+	                );
+				}
+				 
+				$scope.reviewerName1 = '';				
+				$scope.openReviewer1 = function(empSalaryId){			
+					Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.BulkNewSalaryReviewController.getReviewers}',$scope.reviewerName1,
+	                    function(result, event){
+	                        if (event.status) {
+				                    var modalInstance = $uibModal.open({
+									animation: $scope.animationsEnabled,
+									templateUrl: 'userContent.html',
+									controller: 'userModalInstanceCtrl1',	
+									size : 'lg',
+									resolve: {
+										userDetails: function () {
+											return result;
+										}
+									}
+								});
+							
+								modalInstance.result.then(function (selectedUser) {                             
+	                          		$scope.selectedUsr = selectedUser;
+	                          		for(i in $scope.filteredItems)
+									{
+										if(empSalaryId== $scope.filteredItems[i].Id)
+										{
+											$scope.filteredItems[i].xcdhcm__Reviewer_1__c = selectedUser.Id;
+											$scope.filteredItems[i].xcdhcm__Reviewer_1__r = [];
+											$scope.filteredItems[i].xcdhcm__Reviewer_1__r.Name = selectedUser.Name;
+										}
+									}  					      
+	                          }); 
+	                        } else if (event.type === 'exception') {
+	                            alert('Error.....');
+	                        } else {
+	                        alert('Error.....22222');
+	                        }
+	                    }, 
+	                    {escape: false}
+	                );
+				}
+				
+				$scope.reviewerName2 = '';				
+				$scope.openReviewer2 = function(empSalaryId){			
+					Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.BulkNewSalaryReviewController.getReviewers}',$scope.reviewerName2,
+	                    function(result, event){
+	                        if (event.status) {
+				                    var modalInstance = $uibModal.open({
+									animation: $scope.animationsEnabled,
+									templateUrl: 'userContent.html',
+									controller: 'userModalInstanceCtrl2',	
+									size : 'lg',
+									resolve: {
+										userDetails: function () {
+											return result;
+										}
+									}
+								});
+							
+								modalInstance.result.then(function (selectedUser) {                             
+	                          		$scope.selectedUsr = selectedUser;
+	                          		for(i in $scope.filteredItems)
+									{
+										if(empSalaryId == $scope.filteredItems[i].Id)
+										{										
+											$scope.filteredItems[i].xcdhcm__Reviewer_2__c = selectedUser.Id;
+											$scope.filteredItems[i].xcdhcm__Reviewer_2__r = [];
+											$scope.filteredItems[i].xcdhcm__Reviewer_2__r.Name = selectedUser.Name;
+										}
+									}
+	                          });
+	                        } else if (event.type === 'exception') {
+	                            alert('Error.....');
+	                        } else {
+	                        alert('Error.....22222');
+	                        }
+	                    }, 
+	                    {escape: false}
+	                );
+				}
+				
+				$scope.reviewerName3 = '';				
+				$scope.openReviewer3 = function(empSalaryId){			
+					Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.BulkNewSalaryReviewController.getReviewers}',$scope.reviewerName3,
+	                    function(result, event){
+	                        if (event.status) {
+				                    var modalInstance = $uibModal.open({
+									animation: $scope.animationsEnabled,
+									templateUrl: 'userContent.html',
+									controller: 'userModalInstanceCtrl3',	
+									size : 'lg',
+									resolve: {
+										userDetails: function () {
+											return result;
+										}
+									}
+								});
+							
+								modalInstance.result.then(function (selectedUser) {                             
+	                          		$scope.selectedUsr = selectedUser;
+	                          		for(i in $scope.filteredItems)
+									{
+										if(empSalaryId== $scope.filteredItems[i].Id)
+										{				
+											$scope.filteredItems[i].xcdhcm__Reviewer_3__c = selectedUser.Id;
+											$scope.filteredItems[i].xcdhcm__Reviewer_3__r = [];
+											$scope.filteredItems[i].xcdhcm__Reviewer_3__r.Name = selectedUser.Name;
+										}
+									}  					      
+	                          });
+	                        } else if (event.type === 'exception') {
+	                            alert('Error.....');
+	                        } else {
+	                        alert('Error.....22222');
+	                        }
+	                    }, 
+	                    {escape: false}
+	                );
+				}
+				$scope.reviewerName4 = '';				
+				$scope.openReviewer4 = function(empSalaryId){			
+					Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.BulkNewSalaryReviewController.getReviewers}',$scope.reviewerName4,
+	                    function(result, event){
+	                        if (event.status) {
+				                    var modalInstance = $uibModal.open({
+									animation: $scope.animationsEnabled,
+									templateUrl: 'userContent.html',
+									controller: 'userModalInstanceCtrl4',	
+									size : 'lg',
+									resolve: {
+										userDetails: function () {
+											return result;
+										}
+									}
+								});
+							
+								modalInstance.result.then(function (selectedUser) {                             
+	                          		$scope.selectedUsr = selectedUser;
+	                          		for(i in $scope.filteredItems)
+									{
+										if(empSalaryId== $scope.filteredItems[i].Id)
+										{				
+											$scope.filteredItems[i].xcdhcm__Reviewer_4__c = selectedUser.Id;
+											$scope.filteredItems[i].xcdhcm__Reviewer_4__r = [];
+											$scope.filteredItems[i].xcdhcm__Reviewer_4__r.Name = selectedUser.Name;
+										}
+									}  					      
+	                          });
+	                        } else if (event.type === 'exception') {
+	                            alert('Error.....');
+	                        } else {
+	                        alert('Error.....22222');
+	                        }
+	                    }, 
+	                    {escape: false}
+	                );
+				}
+	              	
+		      	});
+		      	
+		      	myapp.controller('userModalInstanceCtrl', function ($scope,$uibModalInstance,reviewerName,userDetails) {
+		            $scope.AllUsers = JSON.parse(userDetails);
+		            $scope.searchUser = reviewerName;
+				  	$scope.totalItems = $scope.AllUsers.length;
+				  	$scope.currentPage = 1;
+				 	$scope.itemsPerPage = 10;
+				 	$scope.maxSize = 2;
+		            
+		            $scope.closePopUp = function()
+		            {
+		                $uibModalInstance.close();     
+		            }
+		            
+		            $scope.selectUserDetails = function(user)
+		            {
+		                $uibModalInstance.close(user);     
+		            }
+		        });    
+		        
+		        myapp.controller('userModalInstanceCtrl1', function ($scope,$uibModalInstance,userDetails) {
+		            $scope.AllUsers = JSON.parse(userDetails);
+				  	$scope.totalItems = $scope.AllUsers.length;
+				  	$scope.currentPage = 1;
+				 	$scope.itemsPerPage = 10;
+				 	$scope.maxSize = 2;
+		            			  
+		            
+		            $scope.selectUserDetails = function(user)
+		            {
+		                $uibModalInstance.close(user);     
+		            }
+		            
+		          	$scope.closePopUp = function()
+		            {
+		                $uibModalInstance.close();     
+		            }
+		      
+		        });    
+		        
+		        myapp.controller('userModalInstanceCtrl2', function ($scope,$uibModalInstance,userDetails) {
+		            $scope.AllUsers = JSON.parse(userDetails);
+				  	$scope.totalItems = $scope.AllUsers.length;
+				  	$scope.currentPage = 1;
+				 	$scope.itemsPerPage = 10;
+				 	$scope.maxSize = 2;
+		            			  
+		            
+		            $scope.selectUserDetails = function(user)
+		            {
+		                $uibModalInstance.close(user);     
+		            }
+		            
+		          	$scope.closePopUp = function()
+		            {
+		                $uibModalInstance.close();     
+		            }
+		            
+		        });  
+		        myapp.controller('userModalInstanceCtrl3', function ($scope,$uibModalInstance,userDetails) {
+		            $scope.AllUsers = JSON.parse(userDetails);
+				  	$scope.totalItems = $scope.AllUsers.length;
+				  	$scope.currentPage = 1;
+				 	$scope.itemsPerPage = 10;
+				 	$scope.maxSize = 2;
+		            			  
+		            
+		            $scope.selectUserDetails = function(user)
+		            {
+		                $uibModalInstance.close(user);     
+		            }
+		            
+		          	$scope.closePopUp = function()
+		            {
+		                $uibModalInstance.close();     
+		            }
+		            
+		        }); 
+		        
+		           myapp.controller('userModalInstanceCtrl4', function ($scope,$uibModalInstance,userDetails) {
+		            $scope.AllUsers = JSON.parse(userDetails);
+				  	$scope.totalItems = $scope.AllUsers.length;
+				  	$scope.currentPage = 1;
+				 	$scope.itemsPerPage = 10;
+				 	$scope.maxSize = 2;
+		            			  
+		            
+		            $scope.selectUserDetails = function(user)
+		            {
+		                $uibModalInstance.close(user);     
+		            }
+		            
+		          	$scope.closePopUp = function()
+		            {
+		                $uibModalInstance.close();     
+		            }
+		            
+		        }); 
+		        		         
+        </script>
+       <body class="slds-scope" ng-controller="ctrlRead">
+       	<apex:pageblock >
+       		<apex:pageBlockSection id="sec1" columns="3" collapsible="false">
+       			<apex:pageBlockSectionItem id="item1">
+      		   		<span class="css1">{!$Label.BulkViewSalaryReviewEmployeesearch}</span>
+	             	<input type="text" ng-model="query" ng-change="search()"  placeholder="Search"/>
+       			</apex:pageBlockSectionItem>
+       			
+       			<apex:pageBlockSectionItem id="item2">
+      		   		<span class="css1">{!$Label.BulkViewSalaryReviewReviewersearch}</span>
+					<input type="text" ng-model="reviewerName" placeholder="Reviewer name" ng-change="changeReviewer()"/>
+	                 <i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;margin-left: 3px;color: #00a6ed;border: 1px solid #00a6ed;padding: 3px;border-radius: 2px;cursor: pointer;" ng-click="openReviewer()"></i>       			</apex:pageBlockSectionItem>
+       			
+       			<apex:pageBlockSectionItem id="item3">
+      		   		<span class="css1">Filter by : </span>
+				    <select ng-model="selecteDropDown" ng-change="dropboxitemselected(selecteDropDown)" class="css1">
+			     		<option class="css1" value="--Select--">--Select--</option>
+						<option class="css1" value="Company">Company</option>
+						<option class="css1" value="Department">Department</option>
+					</select>
+					
+       				<select ng-model="selectedValue" ng-change="dropDownsearch()"  class="css1">
+			     		<option class="css1"  value="{{selectedValue}}">{{selectedValue}}</option>
+						<option class="css1" ng-if = "selecteDropDown ==  'Company'  &&  selecteDropDown !=  'Department' " ng-repeat="comp in companies | orderBy: comp " value="{{comp}}" >{{comp}}</option>
+						<option class="css1" ng-if = "selecteDropDown ==  'Department'  &&  selecteDropDown !=  'Company' " ng-repeat="dept in departments1 | orderBy: dept" value="{{dept}}" >{{dept}}</option>
+					</select>
+       			</apex:pageBlockSectionItem>
+       		</apex:pageBlockSection>
+       		
+	   
+	       		
+	       <table  class="table  table-hover">
+	       		<tr class="slds-text-title_caps" >
+       				<th>{!$ObjectType.Employee_Salary_Review__c.fields.Name.Label}</th>
+       				<th>{!$ObjectType.Employee_Salary_Review__c.fields.Reviewer_1__c.Label}</th>
+       				<th>{!$ObjectType.Employee_Salary_Review__c.fields.Reviewer_2__c.Label}</th>
+       				<th>{!$ObjectType.Employee_Salary_Review__c.fields.Reviewer_3__c.Label}</th>
+       				<th>{!$ObjectType.Employee_Salary_Review__c.fields.Reviewer_4__c.Label}</th>
+	       		</tr>
+	       		<tbody>
+	       			<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+	       				<td>    
+	       				<!-- Reg changes for link -->
+                     			<!-- <apex:outputLink target="_blank"  value="/{{item.Id}}"> {{item.Name }} </apex:OutputLink> -->
+                      			<a target="_blank" href="/one/one.app#/sObject/{{item.Id}}/view">{{ item.Name }}</a> 
+	       				<!-- Reg changes for link -->
+               			</td>
+               			 <td>    
+               				<input  type="text"  ng-model="item.xcdhcm__Reviewer_1__r.Name" />
+                   			<i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;margin-left: 3px;color: #00a6ed;border: 1px solid #00a6ed;padding: 3px;border-radius: 2px;cursor: pointer;" ng-click="openReviewer1(item.Id)"></i>
+               			</td>
+               			<td>    
+               				<input  type="text"  ng-model="item.xcdhcm__Reviewer_2__r.Name " id="Reviewer2Id"/>
+                   			<i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;margin-left: 3px;color: #00a6ed;border: 1px solid #00a6ed;padding: 3px;border-radius: 2px;cursor: pointer;" ng-click="openReviewer2(item.Id)"></i>
+               			</td>
+               			<td>    
+               				<input  type="text"  ng-model="item.xcdhcm__Reviewer_3__r.Name "/>
+               				<i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;margin-left: 3px;color: #00a6ed;border: 1px solid #00a6ed;padding: 3px;border-radius: 2px;cursor: pointer;" ng-click="openReviewer3(item.Id)"></i>
+               			</td>
+               			  <td>    
+               				<input  type="text"  ng-model="item.xcdhcm__Reviewer_4__r.Name "/>
+               				<i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;margin-left: 3px;color: #00a6ed;border: 1px solid #00a6ed;padding: 3px;border-radius: 2px;cursor: pointer;" ng-click="openReviewer4(item.Id)"></i>
+               			</td>
+	       			</tr>
+	       		</tbody>
+	      	</table>
+	      	  <!-- =========================================START Pagination================================================================================ -->
+			<table width="100%">
+			    <tfoot>
+				    <tr>
+			    			<td width="50%">
+				     		<ul uib-pagination ="x"  total-items="filteredItems.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxlength" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+						</td>        			
+						
+						<td style="text-align:right" width="50%">
+                            <apex:actionStatus id="saveStatus">
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >                                    
+                                        <apex:commandButton value="Back"  action="{!BulksalaryRedirect}"   immediate="true" styleclass="slds-button slds-button--neutral" style="padding: 5px;width: 90px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;" status="saveStatus" rerender="id_saveBtn"/>
+				      					<input type="button" ng-click="SaveData()" value="Save" class="slds-button slds-button--brand" style="padding: 5px;width: 90px;border: 1px solid #d8dde6;position: relative;display: inline-block;font-size: 1.2rem;"  /> 
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="height:150rem">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus>
+                        		
+	            			</td>
+	              		<apex:actionFunction name="saveMethod" action="{!saveReviewer}" oncomplete=""  reRender="errorId" status="saveStatus">  
+				              <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+				         </apex:actionFunction>
+	     			</tr> 
+	       		</tfoot>
+			</table>
+<!-- =========================================END Pagination================================================================================ -->
+	      	
+   			 </apex:pageblock>
+	      	<script type="text/ng-template" id="userContent.html"> 
+        		<div class="modal-body SignUpc" style="display:inline-block;paddin-bottom:5px;width: 100%;text-align: center;">
+            	<div class="col-md-12" style="float:none;margin:auto;"> 
+				<h4><i title="Close" class="fa fa-close" aria-hidden="true" style="color: #00a6ed;padding: 3px;border-radius: 2px;float:right;cursor:pointer;" ng-click="closePopUp()"></i></h4>
+                <h3 style="float: left;color:#00a6ed;width:90%;text-align: left;font-size: 20px;margin-top:0px;">Lookup <i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;    color: #00a6ed;      padding: 3px;    border-radius: 2px;"></i></h3>
+				
+                <div class="form-group" style="width:100%;float:left;">
+                	<input type="text" ng-model="searchUser" ng-change="filteredSearch()" placeholder="Reviewer Name"  class="ng-pristine ng-valid form-control ng-touched" style="width:80% !important;height: 35px !important;" > 
+                 </div>
+                <h3 style="float: left;color:#000;width: 100%;text-align: left;font-size: 16px;margin-bottom:0px;margin-top:10px;">Search Result</h3>
+                <div style="float:left;margin-top:5px;height:300px;overflow:auto;border: 1px solid #ccc;">
+                    <table class="table">
+                        <thead> 
+                            <tr> 
+                                <th style="width:30%;">Full name</th>
+								<th style="width:25%;">Title</th>
+								<th style="width:15%;">Department</th>
+								<th style="width:30%;">Profile name</th>
+                            </tr>
+                        </thead> 
+                        <tbody>
+                           <!-- <tr ng-repeat="usr in AllUsers.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter:searchUser"> -->
+						   <tr ng-repeat="usr in filterData = (AllUsers | filter:searchUser) | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)"> 
+                                <td style="text-align:left;"><a href="" ng-click="selectUserDetails(usr)">{{usr.Name}}</a></td>
+								<td style="text-align:left;">{{usr.Title}}</td>
+								<td style="text-align:left;">{{usr.Department}}</td>
+								<td style="text-align:left;">{{usr.Profile.Name}}</td>
+                            </tr>
+							<tr ng-if="filterData.length == 0">
+								<td></td>
+								<td style="text-align:center;font-weight: bold;font-size: 15px;width: 150px;padding-top: 100px;" ><i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color:#f88962;"></i> <br/>No record found</td>
+								<td></td><td></td>
+							</tr>                                                
+                        </tbody> 
+                    </table> 
+                </div>
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">		 		
+    				<ul uib-pagination total-items="filterData.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+					<!-- <ul uib-pagination total-items="filterData.length" ng-model="currentPage" items-per-page="itemsPerPage" ></ul>	-->		 	
+				</div>
+            </div>
+        </div> 
+        </script>
+        </body>
+ 	</html>
+ 	
+ </apex:form>
+</apex:page>

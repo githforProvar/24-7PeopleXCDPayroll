@@ -1,0 +1,475 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.EmployeeController" sidebar="false" showHeader="true">
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.Css,'Employeesubpagecss.css')}" /> -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important; 
+        font-weight: 500!important; 
+        } 
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: #ccc;
+        border-color: #ccc;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        border-radius: 4px;
+        color: #54698d!important;
+        font-size: 1.15em;
+        letter-spacing: .0625rem;
+        font-weight: 500;
+        }
+        body .bPageBlock .pbBody .labelCol, body .bPageBlock .pbBody .dataCol, body .bPageBlock .pbBody .data2Col, body .print .topics-label, body .print .topics-list 
+        {    
+        border: none;
+        }  
+        input[type='text'] 
+        {
+        width: 100%;
+        }  
+        textarea
+        {
+        width:100%;
+        } 
+        select
+        {
+        width:100%!important;
+        }
+        <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important;
+		   position: sticky !important;    
+		} 
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+		<!-- START :: 22-02-2018 Spring2018 NPPD-1564 Retain data if Mandatory fields missed and Double click check Added by Rahul S-->
+		.bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important; 
+        }
+        <!-- END :: 22-02-2018 Spring2018 NPPD-1564 Retain data if Mandatory fields missed and Double click check Added by Rahul S-->
+    </style>
+
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">
+            
+            <apex:form >
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelEditPersonal}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHPersonalEdit}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium">  
+                            <!-- ================================== Page content  ==========================================================    -->
+                            
+                            <apex:pagemessages id="error" />
+                            <apex:pageBlock >
+                                <apex:outputpanel rendered="{!PayrollEdit == false}">
+                                    <apex:pageBlocksection title="{!PersonalDetailTitle}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Personal_Detail_view}" var="a">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[a].Accessible}">
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(a.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(a.dbRequired,a.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!a.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[a].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[a].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <!-- START:: 14-06-2018 P1 Summer2018 NPPD-1531 Naming Modified by Rahul S -->
+                                                            <apex:inputField value="{!PersonalIns[a]}" required="{!OR(a.dbrequired,a.required)}"
+                                                                             rendered="{!NOT(OR(IF(a.fieldPath=='Middle_name__c',true ,false), IF(a.fieldPath=='Known_name__c',true ,false),
+                                                                                     IF(a.fieldPath=='Previous_name__c',true ,false), IF(a.fieldPath=='Legal_name__c',true ,false),
+                                                                                     IF(a.fieldPath=='Name',true ,false)))}" style="{!IF(a.label=='Blankspace','display:none;' ,'')}"/>
+                                                            <apex:outputField value="{!PersonalIns[a]}"
+                                                                             rendered="{!OR(IF(a.fieldPath=='Middle_name__c',true ,false), IF(a.fieldPath=='Known_name__c',true ,false),
+                                                                                     IF(a.fieldPath=='Previous_name__c',true ,false), IF(a.fieldPath=='Legal_name__c',true ,false),
+                                                                                     IF(a.fieldPath=='Name',true ,false))}" style="{!IF(a.fieldPath=='Blankspace','display:none;' ,'')}"/>
+                                                        	<!-- END:: 14-06-2018 P1 Summer2018 NPPD-1531 Naming Modified by Rahul S -->
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    
+                                    <apex:pageBlocksection title="{!ContactDetailsTitle}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Contact_Details_View}" var="b">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[b].Accessible}" > 
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(b.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(b.dbRequired,b.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!b.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[b].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[b].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[b]}" required="{!OR(b.dbrequired,b.required)}" style="{!IF(b.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    
+                                    <apex:pageBlocksection title="{!BankDetailsTitle}" rendered="{!Company.xcdhcm__Hide_Bank_Details__c==false}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Bank_Details}" var="c">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[c].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(c.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(c.dbRequired,c.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!c.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[c].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[c].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[c]}" required="{!OR(c.dbrequired,c.required)}" style="{!IF(c.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    
+                                    <apex:pageBlocksection title="{!PassportDetailsTitle}" Rendered="{!PersonalIns.xcdhcm__Hide_Passport_Details__c==false}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Passport_Details_View}" var="d">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[d].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(d.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(d.dbRequired,d.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!d.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[d].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[d].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[d]}" required="{!OR(d.dbrequired,d.required)}" style="{!IF(d.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    
+                                    <apex:pageBlocksection title="{!VisaDetailsTitle}"  Rendered="{!PersonalIns.xcdhcm__Hide_Visa_Details__c==false}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Visa}"  var="e">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[e].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(e.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(e.dbRequired,e.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!e.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[e].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[e].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[e]}" required="{!OR(e.dbrequired,e.required)}"  style="{!IF(e.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    
+                                    <!-- <apex:pageBlocksection title="{!VehicleDetailsTitle}" rendered="{!AND(Company.Hide_Vehicle_Details__c == false,PersonalIns.Hide_vehicle_details__c==false)}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.Personal__c.Fieldsets.Vehicle_Details_View}" var="f">
+                                            <apex:outputpanel >
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(f.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(f.dbRequired,f.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!f.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.Personal__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[f].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[f]}" required="{!OR(f.dbrequired,f.required)}" style="{!IF(f.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection> -->
+                                    
+                                    <apex:pageBlocksection title="{!SecurityDetailsTitle}" rendered="{!Company.xcdhcm__Hide_Security_Vetting__c == false}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__CRB_Disclosure_View}" var="g">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                           <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[g].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(g.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(g.dbRequired,g.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!g.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[g].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[g].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[g]}" required="{!OR(g.dbrequired,g.required)}" style="{!IF(g.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    
+                                    <apex:pageBlocksection title="{!equalityAndDiversityTitle}" rendered="{!Company.xcdhcm__Hide_equality_diversity__c == false}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Equality_and_Diversity}"  var="h">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[h].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(h.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(h.dbRequired,h.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!h.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[h].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[h].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[h]}" required="{!OR(h.dbrequired,h.required)}" style="{!IF(h.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                        <apex:pageBlockSectionItem id="et" rendered="{!Company.xcdhcm__Hide_Ethnicity__c == false}">                
+                                        	<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->                
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields['Ethnicity__c'].Accessible}" >
+                                            <!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                        <apex:outputLabel for="Ethnicity" value="Ethnicity"/>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:actionRegion >
+                                                                <apex:selectList id="Ethnicity" value="{!PersonalIns.xcdhcm__Ethnicity__c}" size="1" title="Manager"> 
+                                                                    <apex:selectOptions value="{!Ethn}"></apex:selectOptions>
+                                                                </apex:selectList>
+                                                            </apex:actionRegion>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                    </apex:pageBlocksection>
+                                    
+                                    <apex:pageBlocksection title="{!personalOtherSectionLabel}" rendered="{!PersonalOtherSection}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Other}" var="i">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[i].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(i.dbRequired,i.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[i]}" required="{!OR(i.dbrequired,i.required)}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    
+                                    <apex:pageBlocksection title="{!InformationSetion}" rendered="{!EmpInformationSectionAdminView}" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Information_View}" var="i">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[i].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(i.dbRequired,i.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[i]}" required="{!OR(i.dbrequired,i.required)}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection> 
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!PayrollEdit}">
+                                    <apex:pageBlocksection title="{!PayrollSetDetailTitle}" collapsible="false"
+                                                           rendered="{!AND(EmpPayrollSetSectionAdminView,OR(IF(Company.xcdhcm__Employer__c != null,Company.Employer__r.xcdhcm__Payroll_approach__c =='UK Net',false),IF(Company.xcdhcm__Parent_Company__c != null,Company.Parent_Company__r[0].Employer__r.Payroll_approach__c =='UK Net',false)))}">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Payroll_Setup}" var="i">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[i].Accessible}">
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(i.dbRequired,i.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[i]}" required="{!OR(i.dbrequired,i.required)}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    
+                                    <apex:pageBlocksection title="{!StarterDetailTitle}" collapsible="false"
+                                                           rendered="{!AND(EmpStarterDetailfromPreviousEmploymentSectionAdminView,OR(IF(Company.xcdhcm__Employer__c != null,Company.Employer__r.xcdhcm__Payroll_approach__c =='UK Net',false),IF(Company.xcdhcm__Parent_Company__c != null,Company.Parent_Company__r[0].Employer__r.Payroll_approach__c =='UK Net',false)))}">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Starter_Details_from_previous_Employment}" var="i">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[i].Accessible}">
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(i.dbRequired,i.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[i]}" required="{!OR(i.dbrequired,i.required)}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                    <apex:pageBlocksection title="{!PayrollAdministrationDetailTitle}" collapsible="false"
+                                                           rendered="{!AND(EmpPayrollAdministrationSectionAdminView,OR(IF(Company.xcdhcm__Employer__c != null,Company.Employer__r.xcdhcm__Payroll_approach__c =='UK Net',false),IF(Company.xcdhcm__Parent_Company__c != null,Company.Parent_Company__r[0].Employer__r.Payroll_approach__c =='UK Net',false)))}">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Payroll_Administration1}" var="i">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[i].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(i.dbRequired,i.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[i]}" required="{!OR(i.dbrequired,i.required)}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat><br/>
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__Payroll_Administration}" var="i">
+                            			<!-- START:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.fields[i].Accessible}" >
+                            			<!-- END:: 09/10/2018 hotfix for FLS issue modify by  Sabir-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(i.dbRequired,i.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Personal__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!PersonalIns[i]}" required="{!OR(i.dbrequired,i.required)}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlocksection>
+                                </apex:outputpanel>
+                                
+                            </apex:pageBlock>
+                            <apex:pageBlock rendered="false">
+                                <apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__Job_Role__c}" />
+                                <apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__User__c}" />
+                                <apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__Company__c}" />
+                                <apex:outputField value="{!xcdhcm__Employee_Detail__c.Job_Role__r.xcdhcm__Pattern_Type__c}" />
+                                <apex:outputField value="{!xcdhcm__Employee_Detail__c.Job_Role__r.xcdhcm__Employment_Type__c}" />
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__personaleditbcancel}" action="{!cancelEditPersonal}"  immediate="true" rerender="error,id_saveBtn" styleclass="slds-button slds-button--neutral" status="saveStatus"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__personaleditbsave}" action="{!saveEditPersonal}" rerender="error,id_saveBtn" styleclass="slds-button slds-button--brand" status="saveStatus" id="id_saveBtn"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

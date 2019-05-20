@@ -1,0 +1,475 @@
+<!-- 
+Name: Createusers_additional_info.page  
+* @author Praveen Murugesan
+* @date 14/11/2014 
+* @description this page is to get additional information on Personal, Employee, Jobrole, Compensation, Personal address, Leave year.
+*              And the fields are configurable.
+* @jira no NPPD-556 "Joiner page 2 and on boarding"  
+--> 
+
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.JoinerExtensionController" action="{!creatUserinit}"  sidebar="false" showHeader="true" >
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteJoinerSecond.css')}" />  
+    
+    <script>
+        function assignValue(buttonNum)
+        {
+            document.getElementById('{!$Component.theform.theblock.pSec.theField}').value = buttonNum;
+        }        
+    </script>
+   <!-- START :: 02-11-2017 Lightning 2 NPPD-1467 Joiner process - information messages Added by Rahul S -->
+    <style>
+        .infoM2 .msgIcon, .infoLarge 
+        {
+        display:none;
+        }
+        .infoM6, .infoM4, .infoM3, .infoM2, .infoS1 
+        {
+        width: 100%;
+        }
+        .LiteHelpText:hover span 
+        {
+        left:5% !important;
+        } 
+         <!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+        .popupBg
+        {
+        opacity: 4.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 60%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 150px;
+        width: 400px;
+        margin-left: -450px;
+        text-decoration: none;
+        font-weight: bold;
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;         
+        -moz-box-shadow: 4px 5px 10px #99ccff;
+        -webkit-box-shadow: 4px 5px 10px #99ccff;
+        box-shadow: 4px 5px 10px #99ccff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+        <!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+    </style>
+   <!-- END :: 02-11-2017 Lightning 2 NPPD-1467 Joiner process - information messages Added by Rahul S -->
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            
+            <apex:form id="theform">
+	<!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+		<apex:outputPanel id="popup3">
+	         <apex:outputpanel styleClass="popupBg" rendered="{!displayPopup}" style="opacity: 0.2;background-color: black;"/>
+	         <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopup}">
+	            <center>  
+	                <apex:outputtext value="{!validationPopupMsg}" rendered="{!displayPopup}"/>
+	                <br/><br/>
+	                <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!UpdateAdditionalInfo}" style="width: 100px;" rerender="theform" styleClass="butt" status="saveStatus"/>
+					<apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelPopup}" style="width: 100px;" onClick="disableButton(this);" styleClass="butt"/>
+	   			</center>
+	         </apex:outputPanel>
+	     </apex:outputPanel>
+	     <!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+<!-- START :: 07/10/2016 NPAY-196 Payroll dates and validations Added by Shiva -->
+                <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 20% 40%">
+                    <apex:outputPanel id="popup2">
+                        <apex:outputpanel id="popupSub2" styleClass="popupBg" rendered="{!displayPopupPayinPeriod}"/>
+                        <apex:outputPanel id="popup22" styleClass="customPopup" layout="block" rendered="{!displayPopupPayinPeriod}">
+                            <center>  
+                                <apex:outputtext id="oText22" value="{!validationMsg}" rendered="{!displayPopupPayinPeriodVal1}"/>
+                                <apex:outputtext id="oText2" value="{!validationMsg2}" rendered="{!displayPopupPayinPeriodVal2}"/>
+                                <br/>
+                                <!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                                <apex:commandButton id="okButton2" value="{!$Label.xcdhcm__payrollperiodbok}" action="{!closePopup}" style="width: 100px;" rerender="popup3,popup2" styleClass="butt"/>
+                            	<!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                            </center>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </div>
+                
+                <div style="float:left;margin-top:8px;margin-bottom: 10px;margin-left: 12px;"> 
+				        <h3 class="slds-text-heading--medium"> Setup information </h3>  
+				</div>
+				
+                <apex:pageBlock id="theblock"> 
+                    <!-- START :: 02-11-2017 Lightning 2 NPPD-1467 Joiner process - information messages Added by Rahul S -->
+                    <apex:pageMessage summary="{!$Label.xcdhcm__createusers_additional_infoimyouhavenowsuccessfully}" severity="info" strength="3"/>
+                    <!-- END:: 02-11-2017 Lightning 2 NPPD-1467 Joiner process - information messages Added by Rahul S -->
+                    <apex:pageMessages id="errorId" escape="false"/>
+                    
+                    <apex:actionStatus id="wait">                   
+                        <apex:facet name="start">
+                            <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </apex:facet>
+                        <apex:facet name="stop">
+                            <div class="slds-spinner_container slds-hide slds-is-fixed">
+                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </apex:facet>                                
+                    </apex:actionStatus>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__createusers_additional_infopersonal}" columns="2" rendered="{!IF(CONTAINS(NewJoinerAdditionalInformationSections , 'Personal'),true,false)}">
+                        <apex:repeat value="{!$objectType.xcdhcm__Personal__c.Fieldsets.xcdhcm__NewJoinerAdditionalInfo}" var="d">
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$objectType.xcdhcm__Personal__c.fields[d].Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                        <label class="slds-form-element__label" style="{!IF(d.label=='Blankspace','display:none;' ,'')}" >
+                                            <apex:outputPanel rendered="{!OR(d.Required,d.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                            {!d.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.Fields[d].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Personal__c.Fields[d].inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!Personal_add_info[d]}" required="{!OR(d.Required,d.DBRequired)}" style="{!IF(d.label=='Blankspace','display:none;' ,'')}"/> 
+                                        </div>                                                                                        
+                                    </div>
+                                </div>  
+                            </apex:outputpanel>
+                        </apex:repeat>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__createusers_additional_infocurrentaddress}" columns="2" rendered="{!IF(CONTAINS(NewJoinerAdditionalInformationSections , 'Personal address'),true,false)}">
+                        <apex:repeat value="{!$objectType.xcdhcm__Personal_address__c.Fieldsets.xcdhcm__NewJoinerAdditionalInfo}" var="d">
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$objectType.xcdhcm__Personal_address__c.fields[d].Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                        <label class="slds-form-element__label" style="{!IF(d.label=='Blankspace','display:none;' ,'')}" >
+                                            <apex:outputPanel rendered="{!OR(d.Required,d.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                            {!d.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal_address__c.Fields[d].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Personal_address__c.Fields[d].inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!PersonalAddress_add_info[d]}" required="{!OR(d.Required,d.DBRequired)}" style="{!IF(d.label=='Blankspace','display:none;' ,'')}"/> 
+                                        </div>                                                                                        
+                                    </div>
+                                </div>  
+                            </apex:outputpanel>
+                        </apex:repeat>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__createusers_additional_infonextofkin}" columns="2" rendered="{!IF(CONTAINS(NewJoinerAdditionalInformationSections , 'Next of kin'),true,false)}">
+                        <apex:repeat value="{!$objectType.xcdhcm__Next_of_kin_personal__c.Fieldsets.xcdhcm__NewJoinerAdditionalInfo}" var="d">
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$objectType.xcdhcm__Next_of_kin_personal__c.fields[d].Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                        <label class="slds-form-element__label" style="{!IF(d.label=='Blankspace','display:none;' ,'')}" >
+                                            <apex:outputPanel rendered="{!OR(d.Required,d.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                            {!d.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Next_of_kin_personal__c.Fields[d].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Next_of_kin_personal__c.Fields[d].inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!Next_of_kin_add_info[d]}" required="{!OR(d.Required,d.DBRequired)}" style="{!IF(d.label=='Blankspace','display:none;' ,'')}"/> 
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel> 
+                        </apex:repeat>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection id="pSec" title="{!$Label.xcdhcm__createusers_additional_infoemployee}" columns="2" rendered="{!IF(CONTAINS(NewJoinerAdditionalInformationSections , 'Employee'),true,false)}">
+                        <apex:repeat value="{!$objectType.xcdhcm__Employee_Detail__c.Fieldsets.xcdhcm__NewJoinerAdditionalInfo}" var="d">
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Detail__c.fields[d].Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                        <label class="slds-form-element__label" style="{!IF(d.label=='Blankspace','display:none;' ,'')}" >
+                                            <apex:outputPanel rendered="{!OR(d.Required,d.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                            {!d.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.Fields[d].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Employee_Detail__c.Fields[d].inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!EmpDetail_add_info[d]}" required="{!OR(d.Required,d.DBRequired)}" style="{!IF(d.label=='Blankspace','display:none;' ,'')}"/> 
+                                        </div>                                                                                        
+                                    </div>
+                                </div>  
+                            </apex:outputpanel>
+                        </apex:repeat>
+                        <apex:inputHidden value="{!varB}" id="theField" />
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__createusers_additional_infojobrole}" columns="2" rendered="{!IF(CONTAINS(NewJoinerAdditionalInformationSections , 'Job role'),true,false)}">
+                        <apex:repeat value="{!$objectType.xcdhcm__Job_Role__c.Fieldsets.xcdhcm__NewJoinerAdditionalInfo}" var="d">
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$objectType.xcdhcm__Job_Role__c.fields[d].Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                        <label class="slds-form-element__label" style="{!IF(d.label=='Blankspace','display:none;' ,'')}" >
+                                            <apex:outputPanel rendered="{!OR(d.Required,d.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                            {!d.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.Fields[d].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Job_Role__c.Fields[d].inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!Jobrole_add_info[d]}" required="{!OR(d.Required,d.DBRequired)}" style="{!IF(d.label=='Blankspace','display:none;' ,'')}"/> 
+                                        </div>                                                                                        
+                                    </div>
+                                </div>  
+                            </apex:outputpanel>
+                        </apex:repeat>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection id="Comsec" title="{!$Label.xcdhcm__createusers_additional_infocompensation}" columns="2" rendered="{!IF(CONTAINS(NewJoinerAdditionalInformationSections , 'Compensation'),true,false)}">	 
+                        <!-- START :: 19-09-2018 NPPD-1674 P1 Summer2018 Hybrid Joiner Process Modified by Rahul S -->
+                        <apex:pageBlocksectionitem rendered="{!DispayCompensationBasis}" >
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	 
+                                        <label class="slds-form-element__label" >
+                                            {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Compensation__c.fields.Compensation_basis__c.inlineHelpText}</span>
+                                            </span>
+                                        </label>
+                                        <apex:actionRegion >
+								               <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.label}" Value="{!Compensation_add_info.xcdhcm__Compensation_basis__c}" >
+							               		<!-- START :: 27/08/2018 NPPD-1701 Payroll Frequency on Joiner modified by Ranjeet -->
+							               		<apex:actionSupport event="onchange" action="{!resetPayrollFrequency}" rerender="Comsec" status="wait" /><br/>
+							               		<!-- END :: 27/08/2018 NPPD-1701 Payroll Frequency on Joiner modified by Ranjeet -->
+								               </apex:inputField>
+                                        </apex:actionRegion>
+                                    </div>  
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlocksectionitem>
+
+                        <apex:pageBlocksectionitem rendered="{!OR(Compensation_add_info.xcdhcm__Compensation_basis__c == 'Pay scale',Compensation_add_info.xcdhcm__Compensation_basis__c == 'Grade range')}" >
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	 
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Compensation__c.fields.Grade_L__c.inlineHelpText}</span>
+                                            </span>
+                                        </label>
+                                        <apex:actionRegion >
+							               <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.label}" Value="{!Compensation_add_info.xcdhcm__Grade_L__c}" required="true">
+							               		<apex:actionSupport event="onchange" action="{!onchangeGradePopulateSpinalpoint}" rerender="panelid" status="wait" />
+							               </apex:inputField>
+                                        </apex:actionRegion>
+                                    </div>  
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlocksectionitem>
+                        
+                        <apex:pageBlockSectionItem rendered="{!Compensation_add_info.xcdhcm__Compensation_basis__c == 'Pay scale'}">
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Compensation__c.fields.Spinal_point_L__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+								         <apex:outputPanel id="panelid">
+							               <apex:actionRegion >  
+									          <apex:selectList id="id_spinal_point" value="{!spinalPoint}"  size="1" Label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.label}">  
+									          	  <apex:selectOptions value="{!spinalPointList}" ></apex:selectoptions>
+									          </apex:selectList>
+										   </apex:actionRegion> 
+								        </apex:outputPanel> 
+                                    </div>  
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlocksectionitem>
+                        
+                        <apex:pageBlocksectionitem rendered="{!OR(Compensation_add_info.xcdhcm__Compensation_basis__c == 'Spot salary',Compensation_add_info.xcdhcm__Compensation_basis__c == 'Grade range')}" >
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.Accessible}">
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	 
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Compensation__c.fields.Monthly_salary_input__c.inlineHelpText}</span>
+                                            </span>
+                                        </label>
+								        <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.label}" Value="{!Compensation_add_info.xcdhcm__Monthly_salary_input__c}" required="true"/>
+                                    </div>  
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlocksectionitem>
+                        
+                        <apex:pageBlocksectionitem rendered="{!OR(Compensation_add_info.xcdhcm__Compensation_basis__c == 'Spot salary',Compensation_add_info.xcdhcm__Compensation_basis__c == 'Grade range')}" >
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.Accessible}">
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	 
+                                        <label class="slds-form-element__label" >
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Compensation__c.fields.Period__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+								        <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.label}" Value="{!Compensation_add_info.xcdhcm__Period__c}" required="true"/>
+                                    </div>  
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlocksectionitem>
+                        <!-- END :: 19-09-2018 NPPD-1674 P1 Summer2018 Hybrid Joiner Process Modified by Rahul S -->
+                        
+                        <apex:repeat value="{!$objectType.xcdhcm__Compensation__c.Fieldsets.xcdhcm__NewJoinerAdditionalInfo}" var="d"> 
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields[d].Accessible}">
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                        <label class="slds-form-element__label" style="{!IF(d.label=='Blankspace','display:none;' ,'')}" >
+                                            <apex:outputPanel rendered="{!OR(d.Required,d.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                            {!d.label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.Fields[d].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.Compensation__c.Fields[d].inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:inputField value="{!Compensation_add_info[d]}" required="{!OR(d.Required,d.DBRequired)}" style="{!IF(d.label=='Blankspace','display:none;' ,'')}"/>
+                                        </div>                                                                                        
+                                    </div>
+                                </div>  
+                            </apex:outputpanel>
+                        </apex:repeat>
+                        <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Payroll_Frequency__c.inlineHelpText}"
+                                                   rendered="{!AND(PayrollSetupSection,OR(IF(companyURLId.xcdhcm__Employer__c != null,companyURLId.Employer__r.xcdhcm__Payroll_approach__c =='UK Net',false),IF(companyURLId.xcdhcm__Parent_Company__c != null,companyURLId.Parent_Company__r[0].Employer__r.Payroll_approach__c =='UK Net',false)))}">
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Payroll_Frequency__c.Accessible}">
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	 
+                                        <apex:outputLabel value="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Payroll_Frequency__c.label}" styleclass="slds-form-element__label"/>
+                                        <span class="LiteHelpText">
+                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Payroll_Frequency__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                            <span>{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Payroll_Frequency__c.inlineHelpText}</span>
+                                        </span>
+                                        <apex:inputField id="type" value="{!Compensation_add_info.xcdhcm__Payroll_Frequency__c}" >
+                                            <apex:actionSupport event="onchange" action="{!payinStartChecked}" reRender="theform,popup2" />
+                                        </apex:inputField>
+                                    </div>
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection> 
+                    
+                    <apex:pageBlockSection id="paySetup" title="{!$Label.xcdhcm__createusers_additional_info_payrol_setup}" columns="2"
+                                           rendered="{!AND(PayrollSetupSection,OR(IF(companyURLId.xcdhcm__Employer__c != null,companyURLId.Employer__r.xcdhcm__Payroll_approach__c =='UK Net',false),IF(companyURLId.xcdhcm__Parent_Company__c != null,companyURLId.Parent_Company__r[0].Employer__r.Payroll_approach__c =='UK Net',false)))}">
+                        <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Pay_in_start_period__c.inlineHelpText}">
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Pay_in_start_period__c.Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	 
+                                        <apex:outputLabel value="{!$objectType.xcdhcm__Personal__c.fields.xcdhcm__Pay_in_start_period__c.label}" styleclass="slds-form-element__label"/>
+                                        <span class="LiteHelpText">
+                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Pay_in_start_period__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                            <span>{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Pay_in_start_period__c.inlineHelpText}</span>
+                                        </span>
+                                        <apex:inputField id="type" value="{!Personal_add_info.xcdhcm__Pay_in_start_period__c}" >
+                                            <apex:actionSupport event="onchange" action="{!payinStartChecked}" reRender="theform,popup2" />
+                                        </apex:inputField>
+                                    </div>
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__createusers_additional_infoleaveyear}" columns="2" rendered="{!IF(CONTAINS(NewJoinerAdditionalInformationSections , 'Leave year'),true,false)}">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputpanel >
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">	 
+                                        <apex:outputLabel value="Create leave year(s)" styleclass="slds-form-element__label"/>
+                                        <apex:inputCheckbox value="{!leaveyearcheckbox}" selected="true"/>
+                                    </div>
+                                </div>
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>	
+                    </apex:pageBlockSection>
+                    <apex:pageblockbuttons location="bottom" style="text-align: right!important;">
+                        <apex:actionStatus id="saveStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputPanel >
+                                	<!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                                    <apex:commandButton id="btn2" value="{!$Label.xcdhcm__createusers_additional_infobsave}" action="{!createIrregularOrCasualPopupInfo}" onClick="assignValue('1');this.style.color='#336699';this.value='Processing...';" rerender="popup3,errorId,btn2" styleclass="slds-button slds-button--neutral" status="saveStatus" />
+                                    <apex:commandButton id="btn4" value="{!$Label.xcdhcm__createusers_additional_infobsaveandaddbenefits}" action="{!createIrregularOrCasualPopupInfo}" onClick="assignValue('2');this.style.color='#336699';this.value='Processing...';" rerender="popup3,errorId,btn4" rendered="{!CompanyBenefitButtonView=True}" styleclass="slds-button slds-button--brand" status="saveStatus"/>
+                                	<!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                                </apex:outputPanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageblockbuttons>
+                </apex:pageBlock> 
+            </apex:form> 
+        </body> 
+    </html>
+</apex:page>

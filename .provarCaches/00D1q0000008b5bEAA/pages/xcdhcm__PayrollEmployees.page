@@ -1,0 +1,577 @@
+<!--  START 13/04/2017 NPAY-256 Payroll pagination  added by Jamil  -->
+<!-- START :: 07/03/2017 payroll5 issue CPU and Heap size error modified by Jamil/Farhan  -->
+<apex:page controller="xcdhcm.PayrollEmployeesController" sidebar="false" action="{!getEmployeeRecords}">
+<!-- END :: 07/03/2017 payroll5 issue CPU and Heap size error modified by Jamil/Farhan  -->
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+  <style>   
+ 
+ <!-- start:: added by Farhan  -->
+ .customPopup {
+    background-color: #1E90FF;
+    border-radius: 6px 6px 6px 6px;
+    border-style: hidden;
+    border-width: 2px;
+    left: 50%;
+    padding: 10px;
+    position: absolute;
+    z-index: 9999;
+    width: 500px;
+    margin-left: -250px;
+    top: 70px;
+}
+   #hlpbtn:hover .titlepopup
+    {
+        display: block !important;
+        background: #FEFDB9;
+        padding: 4px;
+        color: #000;
+        position: absolute;
+        z-index: 1;
+        border: 1px solid #FFA603;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;
+    
+    }
+	.select1 
+	{
+     width: 40px!important; 
+	} 
+	.topic { font-size: 10px; text-decoration: none; }
+	body .pbBody table.list tr.headerRow th 
+    {
+      width:1% !important;
+    }
+    <!-- START:: NPAY-2 class ng-cloak added by Farhan  -->
+    .ng-cloak 
+    {
+        display: none !important;
+    }
+    <!-- END:: NPAY-2 class ng-cloak added by Farhan  -->
+
+
+    <!-- end:: added by Farhan  -->
+
+</style>
+<html>
+<head>
+  
+  <title></title>
+  
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css"/>
+     
+
+     
+     <script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+     <script src="//code.angularjs.org/snapshot/angular.min.js"></script>
+     <link rel="stylesheet"  href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css"/>
+     
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+     
+</head>
+
+<body>
+  <apex:form > 
+ <div class="container" ng-app="myapp" ng-controller ="customerCtrl" style="width:99% !important">
+
+ <!-- START :: 04/05/2016 NPPD-1139 UserGuide Link Added by Namrata-->
+     <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;"
+          target="_blank" action="{!helpLinkManageEmployeesAdmin}" value="Help"
+           id="theCommandLink1" rendered="{!HelpManageEmployeesAdmin}"/>
+     <!-- END :: 04/05/2016 NPPD-1139 UserGuide Link Added by Namrata-->
+
+		<apex:pageBlock title="{!$Label.xcdhcm__phpayrollemployees}" id="rows"> 
+		</apex:pageBlock> 
+		<center style="margin-bottom:40px !important;">
+			<apex:commandButton value="{!$Label.xcdhcm__payrollemployeesbnewjoiner}" action="{!newJoiner}"/>
+			<apex:commandButton style="display:none;">
+            	<input type="button" ng-click="reviewAbsences()" value="{!$Label.PayrollEmployeesBReviewabsences}" class="btn"/>
+			</apex:commandButton>
+  		</center>
+		<table >
+ 			<tr>
+				<td>
+					<apex:outputLabel value="View" style="margin-right:10px;"/>
+				</td>
+				<td>
+					<!-- START:: NPAY-2 view filter box width modified by Farhan  -->
+				   <apex:actionRegion >  
+				       <apex:SelectList size="1" value="{!selectedEmpView}"  >
+				           <!-- START :: 07/03/2017 payroll5 issue CPU and Heap size error modified by Jamil/Farhan  --> 
+				           <apex:actionSupport event="onchange" action="{!getEmployeeRecords}" status="recordStatus"/>
+				           <!-- END :: 07/03/2017 payroll5 issue CPU and Heap size error modified by Jamil/Farhan  -->
+				           <apex:selectOptions value="{!empviewsList}" /> 
+				           <apex:actionStatus startText="Loading detail..." id="recordStatus"/>  
+				       </apex:SelectList>
+				   </apex:actionRegion>
+				  <span id="hlpbtn">
+				       <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+				       <span style="display: none; width: 320px; left:230px; " class="titlepopup">
+				           <p> Current Employees : On payroll this month </p>
+				           <p> Joiners : Joins payroll this month </p>
+				           <p> Leavers : Leaves payroll this month </p>
+				           <p> All Employees : On payroll this tax year </p>
+				           <p> Payroll setup : Payroll setup not completed </p>
+				       </span>
+				   </span>
+				<!-- END:: NPAY-2 view filter box width modified by Farhan  -->
+				</td>
+             
+                 <td>
+                     <span class="" style="margin-right:250px;width:160px !important;"></span><apex:outputLabel value="Search" style="margin-right:10px;"/>
+                 </td>
+                 
+                 <td>
+                   <!-- START :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil   -->
+                     <input  id="myInput" type="text" ng-model="criteria.searchtext" ng-change="search()" placeholder="Search" style = "width: 250px !important;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC); 
+                              background-repeat: no-repeat;background-position: 235px 8px;"/>
+                   <!--  END :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil   -->           
+                                                               
+                 </td>
+           </tr>
+		</table>                             
+  <div>
+  </div>
+   <!-- <div class="panel panel-default" style="width:100% !important"> -->
+      <!-- Default panel contents -->
+     
+
+      <!-- Table --> 
+	<table class="table  table-hover data-table myTable " >
+      
+	     <thead>
+	                <tr>
+		                    <th class="Employer"> <a href="#" ng-click="sort_by('edRec.Name')">Employee
+                         <span class="{{Header[0]}}"></span></a>
+                    </th>
+		                    <th class="Payrollno">  <a  href="#"  ng-click="sort_by('edRec.xcdhcm__Payroll_no__c')">Payroll no
+                         <span class="{{Header[1]}}"></span></a>
+                    </th>
+		                    <th class="DOB"> <a  href="#" ng-click="sort_by('edRec.xcdhcm__Personal_L__r.xcdhcm__DOB__c')">Date of birth
+                             <span class="{{Header[2]}}"></span></a>
+                    </th>
+                    <!--   END::  27/02/2017 In Manage employee page the DOB is showing incorrect data. Payroll5 issues list added by Jamil  -->
+                   
+		                    <th class="NInumber"> <a  href="#" ng-click="sort_by('edRec.xcdhcm__Personal_L__r.xcdhcm__National_insurance_number__c')">NI number
+                         <span class="{{Header[3]}}"></span></a>
+                    </th>
+                            <!--   START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->
+                             <th class="Employer"> <a  href="#" ng-click="sort_by('payrollName')">Payroll
+                     <span class="{{Header[4]}}"></span></a>
+                    </th>
+                           <!--  START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->
+                            <th class="Company"> <a  href="#" ng-click="sort_by('company')">Company
+                           <!--  END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues  -->
+                     <span class="{{Header[5]}}"></span></a>
+                    </th>
+		                   <th class="Start_Date"> <a  href="#" ng-click="sort_by('edRec.xcdhcm__Start_Date__c')">{!$ObjectType.Employee_Detail__c.Fields.Start_Date__c.Label}
+                     <span class="{{Header[6]}}"></span></a>
+                    </th>
+		                    <th class="Payroll_start_date__c"> <a  href="#" ng-click="sort_by('edRec.xcdhcm__Payroll_start_date__c')">{!$ObjectType.Employee_Detail__c.Fields.Payroll_start_date__c.Label} 
+                     <span class="{{Header[7]}}"></span></a>
+                    </th>
+                   
+                    <!-- START :: 20/12/2016 NPAY-204 Presentation for Payments and for Gross Payroll Clients added  by Farhan  -->
+                    <!--   START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->
+                            <th class="Start_Date"> <a  href="#" ng-click="sort_by('payday')">Last pay day 
+                             <span class="{{Header[8]}}"></span></a>
+                     <!--   END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->        
+                    </th>
+                   	<!-- END :: 20/12/2016 NPAY-204 Presentation for Payments and for Gross Payroll Clients added  by Farhan  -->
+                   	
+		                   <th class="Leaving_Date__c"> <a  href="#" ng-click="sort_by('edRec.xcdhcm__Leaving_Date__c')">Leaving date
+		                      <span class="{{Header[9]}}"></span></a>
+                    </th>
+		                  <th class="Payroll_end_date__c"> <a  href="#" ng-click="sort_by('edRec.xcdhcm__Payroll_end_date__c')">{!$ObjectType.Employee_Detail__c.Fields.Payroll_end_date__c.Label}
+		                     <span class="{{Header[10]}}"></span></a>
+                    </th>
+                     <!-- END 22/08/2016 NPAY-193 for tagging Payroll4 issues list added by Jamil  -->
+                   
+                    <th class="Payroll_set_up__c"> <a href="#">{!$ObjectType.Employee_Detail__c.Fields.Payroll_set_up__c.Label}  </a> 
+                       <span id="hlpbtn">
+                            <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+                            <span style="display: none; width: 620px; right : 40px" class="titlepopup">
+                                <p> Payroll set up is true,</p>
+                                <P> For starters current compensation is true and payroll start date not equal to null </p>
+                                <p> If Payroll approach is UK Net then DOB,Gender,NI category are not equal to null  </p>
+                                <p> If employee has P45 from previous employer then Employer PAYE reference,Tax code,Tax basis,NI number,Taxable pay to date,Tax to date and Starter declaration are not equal to null </p>
+                                <p> For leavers leaving date for payroll not equal to null </p>
+                            </span>
+                        </span>
+                    </th> 
+                     <!-- START 22/08/2016 NPAY-193 for tagging Payroll4 issues list added by Jamil  -->
+                    
+                             <th class="Employer"> <a  href="#" ng-click="sort_by('payrollName')">Latest pay summary
+                                  <span class="{{Header[11]}}"></span></a>
+                    </th> 
+                     <!-- END 22/08/2016 NPAY-193 for tagging Payroll4 issues list added by Jamil  -->
+                </tr>
+            </thead>
+            <tbody>
+	     
+				<tr  ng-repeat="item in customers | orderBy:sortingOrder:reverse" class="ng-cloak">
+				        <td><a ng-href="/{{item.edRec.Id}}" ng-bind="item.edRec.Name"></a></td>               
+				        <td ng-bind="item.edRec.xcdhcm__Payroll_no__c"></td>
+				        <td ng-bind="item.edRec.xcdhcm__Personal_L__r.xcdhcm__DOB__c | date:'dd-MM-yyyy'"></td>
+				        <td ng-bind="item.edRec.xcdhcm__Personal_L__r.xcdhcm__National_insurance_number__c"></td>
+				        <!--  // START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->
+                        <!-- <td ng-bind="item.payperiod.xcdhcm__XCD_PAY_Period__r.xcdhcm__XCD_PAY_Payroll__r.Name"></td> -->
+                        <td ng-bind="item.payrollName"></td>
+                        <td><a ng-href="/{{item.edRec.xcdhcm__Job_Role__r.xcdhcm__Companies__r.Id}}" ng-bind="item.company"></a></td> 
+				        <!--  // END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->
+				        <td ng-bind="item.edRec.xcdhcm__Start_Date__c | date:'dd-MM-yyyy'"></td>
+				        <td ng-bind="item.edRec.xcdhcm__Payroll_start_date__c | date:'dd-MM-yyyy'"></td>
+                        <!--   START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->
+                       <!--  <td ng-bind="item.payperiod.xcdhcm__Pay_day__c | date:'dd-MM-yyyy'"></td> -->
+                       <td ng-bind="item.payday | date:'dd-MM-yyyy'"></td>
+                        <!--   END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->
+				        <td ng-bind="item.edRec.xcdhcm__Leaving_Date__c | date:'dd-MM-yyyy'"></td>
+				        <td ng-bind="item.edRec.xcdhcm__Payroll_end_date__c | date:'dd-MM-yyyy'"></td>
+				        
+				                    
+                    <td >
+					        <div ng-if="item.edRec.xcdhcm__Payroll_set_up__c==true">
+					               <span class="glyphicon glyphicon-ok" style="color:#00FF00;"></span>
+					            <!--   <apex:image id="theImage" value="{!$Resource.true_tick}" width="23" height="29"/> -->
+					         </div>   
+					        <div ng-if="item.edRec.xcdhcm__Payroll_set_up__c==false">
+					             <span class="glyphicon glyphicon-remove" style="color:#FF0000;"></span>
+					              <!--<apex:image id="theImage1" value="{!$Resource.false_tick}" width="16" height="22"/> -->
+					        </div>
+                    </td>  
+                     <td> 
+                             <!--   START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues -->
+                             <!-- <a ng-href="/{{item.payperiod.Id}}" ng-bind="item.payperiod.Name"></a> -->
+                             <a ng-href="/{{item.periodId}}" ng-bind="item.name"></a>
+                              <!--   END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues --> 
+                        </td> 
+                </tr>
+            </tbody>
+        </table>
+    <!-- Dropdown Style -->
+    <table  style="width:99% !important"> 
+    <tr> 
+    <td width="50%">
+       
+            <span class="ng-cloak" ng-if="criteria.page > 0"> {{(criteria.page -1) * criteria.pagesize + 1}} - 
+                     {{ ((criteria.page -1) * criteria.pagesize + paging.showing)}} of {{paging.total}} records.</span>
+                      Select page size. <select class="select1" ng-model="criteria.pagesize"              
+                           ng-options="obj as obj for obj in paging.pagingOptions" />                                      
+      </td>
+      <td  width="25%"> 
+ 	
+			<ul class="pagination" > 
+	            <li ng-class="{active:0}"><a href="#" ng-click="First()"><span class="glyphicon glyphicon-step-backward"></span></a>
+				</li>   
+	            <li ng-class="{'active': item === criteria.page}" ng-repeat='item in paging.pagearray'>
+	               <!-- 
+	            	<a class="topic" ng-if="item == 'Prev'" ng-click="Prev()">Previous</a>
+	        	 	<a class="topic" ng-if="item == 'Next'" ng-click="Next()">Next</a>
+	        	 	-->
+	        	 	<a class="topic" href="#" ng-if="item == 'Prev'" ng-click="Prev()">Previous</a>
+	        	 	<a class="topic" href="#" ng-if="item == 'Next'" ng-click="Next()">Next</a>
+	      		</li>
+				<li>
+	      			<a href="#" ng-click="Last()"><span class="glyphicon glyphicon-step-forward"></span></a>
+            </li>
+        </ul>
+	 </td>
+	 <td width="15%"></td>
+       <td width="20%">   
+		                          
+            	Page  <input class="ng-cloak" type='number' name="input"  id="num" 
+                         ng-model='criteria.page'  
+                         min="1"
+                         max="{{paging.totalpages}}"
+                         ng-maxlength="5"
+                         style='width:40px;' 
+                           />
+                        of {{paging.totalpages}}
+          		<span  ng-if="criteria.page =='undefined'" ng-click="Max()"> </span>   
+          
+    </td>
+    </tr>
+</table>		
+ </div>
+ 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular-animate.min.js'></script>
+
+<script type="text/javascript"> 
+		      function stopRKey(evt) { 
+		      var evt = (evt) ? evt : ((event) ? event : null); 
+		      var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+		      if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+		     } 
+		    document.onkeypress = stopRKey; 
+		    
+		    $('#test').bind('keydown', function(e) {
+    		if (e.keyCode == 13) {
+       		 e.preventDefault();
+   			 }
+		});
+		    </script>
+		    
+		    <script> 
+		    
+		angular.module('myapp', [])
+		.controller('customerCtrl',['$scope', '$filter', function($scope, $filter){
+		 var sortingOrder = 'edRec.Name';
+		 var  new_sorting_order =''; 
+		  
+		  $scope.criteria={
+		    searchtext:'',
+		    page: 1,
+		    pagesize: 40,
+		    sort: 'edRec.Name',
+		    desc : false 
+		  };
+		  $scope.paging ={
+		    total : 0,
+		    totalpages: 0,
+		    showing: 0,
+		    pagearray: [],
+		    
+		    filteredList : 0,
+		    pagingOptions: [10,20,30,40,50]
+		  }
+		
+		  
+		 
+		     $scope.search = function(){   
+        			$scope.customers = ($filter('filter')(customers,
+	        			function (item)
+	        			 {
+	           			 	return searchUtil(item, $scope.criteria.searchtext);
+	       				 }
+       				 ));
+		     
+		     // Define Sorting Order
+		    if ($scope.sortingOrder !== '') {
+		        $scope.customers = $filter('orderBy')($scope.customers , $scope.sortingOrder, $scope.reverse);
+		    };
+		
+		
+		     
+		     $scope.paging.total = $scope.customers.length;    
+		     var a = ($scope.criteria.page - 1) * $scope.criteria.pagesize;
+		     var b = $scope.criteria.page  * $scope.criteria.pagesize;
+		    
+		     $scope.customers = $scope.customers.slice( a, b );   
+		     $scope.paging.showing = $scope.customers.length;
+		     paging($scope.criteria.page, $scope.criteria.pagesize,$scope.paging.total);
+		     
+		     if($scope.criteria.page > $scope.paging.total)
+		      {
+		      //console.log('true ->'+$scope.criteria.page);
+		          $scope.criteria.page = 1;
+		      }
+		      else
+		      {
+		      
+		          $scope.criteria.page = $scope.criteria.page;
+		      }
+		      
+		  }
+		  
+		  function paging(current, pagesize, total)
+		  {
+		    var totalpages = Math.ceil(total/pagesize);
+		    $scope.paging.totalpages = totalpages;
+		    // clear it before playing
+		    $scope.paging.pagearray = [];
+		    if(totalpages <=1) 
+		    { 
+		       return;
+		    }
+		    if(totalpages >=1) 
+		    {
+		        //$scope.paging.pagearray.push('First');
+		        $scope.paging.pagearray.push('Prev');
+		        $scope.paging.pagearray.push('Next');
+		        //$scope.paging.pagearray.push('Last');
+		    }
+		    /* 
+		    if(totalpages - current <=3){
+		        $scope.paging.pagearray.push('Prev');
+		     }
+		     */             
+		  }  
+		  
+		  $scope.$watch('criteria', function(newValue, oldValue){
+		   
+		    if(!angular.equals(newValue, oldValue)){
+		        $scope.search();
+		    }
+		  }, true);
+		  
+		  $scope.Prev = function(){
+		    if($scope.criteria.page > 1)      
+		      $scope.criteria.page--;
+		    else if($scope.criteria.page == 1)
+		    {
+		    	$scope.criteria.page=1;
+		    }  
+		  }
+		  
+		  $scope.Next = function(){
+		    if($scope.criteria.page < $scope.paging.totalpages)      
+		      $scope.criteria.page++;
+		  }
+		  
+		  $scope.Last= function(){
+		    
+		      $scope.criteria.page = $scope.paging.totalpages;
+		      
+		  }
+		   $scope.First= function(){
+		    
+		      $scope.criteria.page = 1;
+		      
+		  }
+		 
+		  $scope.CheckMax= function(){
+		    console.log('Jamil111--->'+$scope.criteria.page);
+		   if($scope.criteria.page == null || $scope.criteria.page == undefined || $scope.criteria.page == "" ||    $scope.criteria.page.lenght == 0)
+		   {
+
+				$scope.criteria.page = 1;
+				}
+				else{
+				console.log("test is defined ",$scope.criteria.page);
+				 $scope.criteria.page ; 
+				}
+		  }
+		  
+		  // change sorting order
+		  $scope.sort_by = function(newSortingOrder) {
+		    if ($scope.sortingOrder == newSortingOrder){
+		      $scope.reverse = !$scope.reverse;
+		    }
+		    $scope.sortingOrder = newSortingOrder;
+		    //$scope.sortingOrder = sortBy;
+		    // icon setup
+		    
+		    /*
+		    $('th i').each(function(){
+		        // icon reset
+		        $(this).removeClass().addClass('icon-sort');
+		    });
+		    if ($scope.reverse){
+		      $('th.'+newSortingOrder+' i').removeClass().addClass('icon-chevron-up');
+		    }else{
+		      $('th.'+newSortingOrder+' i').removeClass().addClass('icon-chevron-down');
+		    }
+		    */
+		    
+		    if ($scope.reverse) iconName = 'glyphicon glyphicon-chevron-up';
+		        else iconName = 'glyphicon glyphicon-chevron-down';
+		        
+		        
+		
+		        if (newSortingOrder === 'edRec.Name') {
+            $scope.Header[0] = iconName;
+        } else if (sortBy === 'edRec.xcdhcm__Payroll_no__c') {
+            $scope.Header[1] = iconName;
+         //START :: 27/02/2017 In Manage employee page the DOB is showing incorrect data. Payroll5 issues list added by Jamil   
+         }else if(sortBy==='edRec.xcdhcm__Personal_L__r.xcdhcm__DOB__c'){
+             $scope.Header[2] = iconName;
+         //END :: 27/02/2017 In Manage employee page the DOB is showing incorrect data. Payroll5 issues list added by Jamil     
+        } else if (sortBy === 'edRec.xcdhcm__Personal_L__r.xcdhcm__National_insurance_number__c'){
+            $scope.Header[3] = iconName;
+        }
+         //END :: 27/02/2017 In Manage employee page the DOB is showing incorrect data. Payroll5 issues list added by Jamil 
+         // START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues   
+        else if (sortBy === 'payrollName')
+         // END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues 
+        {
+            $scope.Header[4] = iconName;
+        }
+       else if (sortBy === 'company'){
+            $scope.Header[5]= iconName;
+        } 
+      else if (sortBy === 'edRec.xcdhcm__Payroll_start_date__c'){
+            $scope.Header[6]= iconName;
+        } 
+      else if (sortBy === 'edRec.xcdhcm__Leaving_Date__c'){
+            $scope.Header[7]= iconName;
+        }
+      else if (sortBy === 'payday'){
+            $scope.Header[8]= iconName;
+        } 
+        else if (sortBy === 'payrollName'){
+            $scope.Header[11]= iconName;
+        } 
+        
+        
+
+        $scope.reverse = !$scope.reverse;
+
+    };
+
+    
+		 $scope.resetAll = function () {
+		       // $scope.filteredList = $scope.allItems;
+		         $scope.customers =  ($filter('filter')(customers, $scope.criteria.searchtext ));
+		         $scope.Header = ['', '', '','','','','','','','',''];
+		        
+		       
+		       
+		    };
+	//START :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil 	    
+    /*
+			 function searchUtil(item, toSearch) 
+			    {
+				     Search Text in following fields 
+				   return (item.edRec.Name.toLowerCase().indexOf(toSearch.toLowerCase()) > -1)? true : false;
+			    }	   
+			*/	   
+			function searchUtil(item, toSearch) 
+		      {
+			    /* Search Text in following fields */
+			  return (item.edRec.Name.toLowerCase().indexOf(toSearch.toLowerCase()) > -1     
+			  // START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues    
+		      //|| item.edRec.xcdhcm__Company__r.Name.toLowerCase().indexOf(toSearch.toLowerCase()) > -1)? true : false;
+              || item.company.toLowerCase().indexOf(toSearch.toLowerCase()) > -1)? true : false;
+		      // END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues
+		
+		  
+		}
+		 var input = document.getElementById('myInput');
+		
+		     input.onkeydown = function() {
+		    var key = event.keyCode || event.charCode;
+		
+		    if( key == 8 || key == 46 )
+		    {
+		        $scope.criteria.page =1;
+		        return true;
+		    }    
+		};
+		input.onkeydown = function() {
+        $scope.criteria.page =1;
+		        return true;
+     };     	 
+		//END :: 20/02/108 NPAY-427 Payroll7 Patch 2 regression issues added by Jamil   		    
+		    
+		 
+}]); // end of .controller('customerCtrl',['$scope', '$filter', function($scope, $filter)
+		
+		var customers = {!conListJSON};
+
+ </script>
+ </apex:form>
+</body>
+</html>
+</apex:page>
+<!--  END 13/04/2017 NPAY-256 Payroll pagination  added by Jamil  -->

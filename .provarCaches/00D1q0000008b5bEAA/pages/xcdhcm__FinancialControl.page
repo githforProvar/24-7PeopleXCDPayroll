@@ -1,0 +1,388 @@
+<!-- START :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+<apex:page standardController="xcdhcm__Financial_Control__c" extensions="xcdhcm.FinancialController" sidebar="false" tabStyle="Financial_Control__tab" action="{!getFinancialRecords}">
+<!-- END :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Sublineremovecss.css')}" />
+	<style>
+		.pbBody .headerRow 
+		{
+			color:#999999;
+			border-bottom: 2px solid #63a4c5!important;"
+			white-space: normal;
+		}
+		.list .headerRow th 
+		{
+		    /*border-bottom: 2px solid #ccc;*/
+		    white-space: normal;
+		}
+		/*START :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan */
+		#hlptxt img
+		{
+		    height: 12px;
+		    margin-left: 3px;
+		    margin-top: -1px;
+		    opacity:0.50;
+		}
+		#hlptxt img:hover
+		{
+		    opacity:1.0;
+		    
+		}
+		img[title]
+		{
+		font-size:19px;
+		}
+		/* END :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan */
+	</style>
+	<script>
+		var financialControlTypes='';
+		function disableButton(objBtn) 
+		{
+		    objBtn.disabled = true;
+		    objBtn.style.color='#336699';
+		    objBtn.value='Processing...';
+		}
+		function confirmRecordDeletion() 
+	    {
+	      var isCancel = confirm("Do you want to delete this record?");
+	      if (isCancel) return true;
+	      return false;
+	    }
+	    
+		function setupReportParameter(typeVal)
+		{
+			console.log('typeVal '+typeVal);
+			if(financialControlTypes == '')
+			{
+				financialControlTypes = typeVal;
+			}
+			else
+			{
+				financialControlTypes = financialControlTypes +',' + typeVal;
+			}
+			console.log('financialControlTypes '+financialControlTypes);
+		}
+		function sendFilterValue()
+		{
+			console.log('passing parameter as'+financialControlTypes);
+			updateMethod(financialControlTypes);
+		}
+		function resetType()
+		{
+			financialControlTypes = '';
+			console.log('Reset the type value as '+financialControlTypes);
+		}
+	</script>
+	<apex:form id="theform">
+	
+		<!-- START :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+		<apex:actionstatus id="counterStatus">
+        	<apex:facet name="start">
+               	<div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb !important; height:100%;opacity:0.65;width:100%;">
+                   	<div class="waitingHolder" style="top: 100px; width: 91px;">
+                   		<img class="waitingImage" src="/img/loading.gif"/>
+                   		<span class="waitingDescription" style="color:#353535;">Loading...</span>
+                   	</div>
+               </div>
+           	</apex:facet>
+       	</apex:actionstatus>
+       	
+		<apex:pageBlock title="{!$Label.xcdhcm__phfinancialcontrol_1}" mode="edit" id="pageViewId" rendered="{!AND(viewMode == true,OR(selectedFilter == 'Benefits',selectedFilter == 'Other Payments'))}">
+			<apex:pageMessages escape="false"/>
+			<table>
+        		<tr>
+		            <td><apex:outputLabel value="View:" style="margin-right:10px;color: #999999;font-weight: bold;"/></td>
+		            <td>
+               			<apex:actionRegion >  
+           					<apex:SelectList size="1" value="{!selectedFilter}"  style="margin-right:150px;"> 
+		                        <apex:actionSupport event="onchange" action="{!getFinancialRecords}" status="counterStatus" reRender="theform"/>
+		                        <apex:selectOptions value="{!FinancialControlviewsList}" /> 
+           					</apex:SelectList>
+               			</apex:actionRegion> 
+           			</td>
+       			</tr>                      
+        	</table> 
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton action="{!createNewFinancialControl}" value="{!$Label.xcdhcm__financialcontrolbnew}" onClick="disableButton(this);" reRender="theform"/>
+				<apex:commandButton action="{!editFinancialControlList}" value="{!$Label.xcdhcm__financialcontrolbedit}" onClick="disableButton(this); resetType();" immediate="true" rendered="{! financialControlList.size != 0}" reRender="theform"/>
+			<!-- END :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+			</apex:pageBlockButtons><br/>
+			<apex:pageBlockTable value="{!financialControlList}" var="sub" id="table" >
+				<apex:column headervalue="Action" >
+					<apex:outputPanel rendered="{! financialControlList.size != 0}">
+						<apex:commandLink action="{!editFinancialControlRecord}" value="Edit" style="margin-right:3px;">
+							<apex:param value="{!sub.id}" name="recordId" assignTo="{!recordId}"></apex:param>
+						</apex:commandLink>
+						<span style="margin-right: 4px;">|</span>
+						<apex:commandLink action="{!deleteFinancialControlRecord}" value="Del" onClick="return confirmRecordDeletion();">
+							<apex:param value="{!sub.id}" name="recordId" assignTo="{!recordId}"></apex:param>
+						</apex:commandLink>
+					</apex:outputPanel>
+				</apex:column>   
+				<apex:repeat value="{! $ObjectType.Financial_Control__c.Fieldsets.Financial_control}" var="f">
+					<!-- START :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->
+					<apex:column >
+						<apex:facet name="header">
+                    		<span  class="label" style="pointer-events: visible;"> {!f.label} 
+								<span id="hlptxt"> 
+									<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Financial_Control__c.Fields[f].inlineHelpText}"
+				              		style="{!IF($ObjectType.Financial_Control__c.Fields[f].inlineHelpText == null, 'display:none','')}" />
+				    			</span>
+							</span>  
+                     	</apex:facet>
+                     	<!-- END :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->
+                     <!-- <apex:column headervalue="{!f.Label}">  -->
+                    	<apex:outputField value="{!sub[f]}"/>
+                    </apex:column>  
+           		</apex:repeat> 
+			</apex:pageBlockTable>
+			<br/>
+			<!-- START :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 added by Farhan -->
+			<center>
+				<apex:outputText Value="No records to display" rendered="{! financialControlList.size == 0}" style="font-size:14px;"/>
+			</center>
+		</apex:pageBlock>
+		
+		
+		
+		<!-- START :: 11/06/2018  NPAY-510 Split Post Costs on Employer NI and Apprentice Levy modified by Farhan -->
+		<apex:pageBlock title="{!$Label.xcdhcm__phfinancialcontrol_1}" mode="edit" id="pagePaymentViewId" rendered="{!AND(viewMode == true,OR(selectedFilter == 'Employee HMRC Payments',selectedFilter == 'Pay Run Totals'))}">
+		<!-- END :: 11/06/2018  NPAY-510 Split Post Costs on Employer NI and Apprentice Levy modified by Farhan -->
+			<apex:pageMessages escape="false"/>
+			<table>
+        		<tr>
+		            <td><apex:outputLabel value="View:" style="margin-right:10px;color: #999999;font-weight: bold;"/></td>
+		            <td>
+               			<apex:actionRegion >  
+           					<apex:SelectList size="1" value="{!selectedFilter}"  style="margin-right:150px;"> 
+		                        <apex:actionSupport event="onchange" action="{!getFinancialRecords}" status="counterStatus" reRender="theform"/>
+		                        <apex:selectOptions value="{!FinancialControlviewsList}" /> 
+           					</apex:SelectList>
+               			</apex:actionRegion> 
+           			</td>
+       			</tr>                      
+        	</table> 
+
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton action="{!createNewFinancialControl}" value="{!$Label.xcdhcm__financialcontrolbnew}" onClick="disableButton(this);" reRender="theform"/>
+				<apex:commandButton action="{!editFinancialControlList}" value="{!$Label.xcdhcm__financialcontrolbedit}" onClick="disableButton(this); resetType();" immediate="true" rendered="{! financialControlList.size != 0}" reRender="theform"/>
+			</apex:pageBlockButtons><br/>
+			<apex:pageBlockTable value="{!financialControlList}" var="sub" id="table" >
+				<apex:column headervalue="Action" >
+					<apex:outputPanel rendered="{! financialControlList.size != 0}">
+						<apex:commandLink action="{!editFinancialControlRecord}" value="Edit" style="margin-right:3px;">
+							<apex:param value="{!sub.id}" name="recordId" assignTo="{!recordId}"></apex:param>
+						</apex:commandLink>
+						<span style="margin-right: 4px;">|</span>
+						<apex:commandLink action="{!deleteFinancialControlRecord}" value="Del" onClick="return confirmRecordDeletion();">
+							<apex:param value="{!sub.id}" name="recordId" assignTo="{!recordId}"></apex:param>
+						</apex:commandLink>
+					</apex:outputPanel>
+				</apex:column>   
+				<apex:repeat value="{! $ObjectType.Financial_Control__c.Fieldsets.Payment_pay_codes}" var="f">
+					<!-- START :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->
+					<apex:column >  
+						<apex:facet name="header">
+                    		<span  class="label" style="pointer-events: visible;"> {!f.label} 
+								<span id="hlptxt"> 
+									<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Financial_Control__c.Fields[f].inlineHelpText}"
+				              		style="{!IF($ObjectType.Financial_Control__c.Fields[f].inlineHelpText == null, 'display:none','')}" />
+				    			</span>
+							</span>  
+                     	</apex:facet> 
+                     	<!-- END :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->                                               
+                    	<apex:outputField value="{!sub[f]}"/>
+                    </apex:column>  
+           		</apex:repeat> 
+			</apex:pageBlockTable>
+			<!-- END :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 added by Farhan -->
+			<br/>
+			<center>
+				<apex:outputText Value="No records to display" rendered="{! financialControlList.size == 0}" style="font-size:14px;"/>
+			</center>
+		</apex:pageBlock>
+         <!--  START :: 10/10/2017 NPAY-334 Financial Control Phase 3 added by wasim -->
+        <apex:pageBlock title="{!$Label.xcdhcm__phfinancialcontrol_1}" mode="edit" id="expenseViewId" rendered="{!AND(viewMode == true,selectedFilter ='Expense')}">
+            <apex:pageMessages escape="false"/>
+            <table>
+                <tr>
+                    <td><apex:outputLabel value="View:" style="margin-right:10px;color: #999999;font-weight: bold;"/></td>
+                    <td>
+                        <apex:actionRegion >  
+                            <apex:SelectList size="1" value="{!selectedFilter}"  style="margin-right:150px;"> 
+                                <apex:actionSupport event="onchange" action="{!getFinancialRecords}" status="counterStatus" reRender="theform"/>
+                                <apex:selectOptions value="{!FinancialControlviewsList}" /> 
+                            </apex:SelectList>
+                        </apex:actionRegion> 
+                    </td>
+                </tr>                      
+            </table> 
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!createNewFinancialControl}" value="{!$Label.xcdhcm__financialcontrolbnew}" onClick="disableButton(this);" reRender="theform"/>
+                <apex:commandButton action="{!editFinancialControlList}" value="{!$Label.xcdhcm__financialcontrolbedit}" onClick="disableButton(this); resetType();" immediate="true" rendered="{! financialControlList.size != 0}" reRender="theform"/>
+            </apex:pageBlockButtons><br/>
+            <apex:pageBlockTable value="{!financialControlList}" var="sub" id="table"  >
+                <apex:column headervalue="Action" >
+                    <apex:outputPanel rendered="{! financialControlList.size != 0}">
+                        <apex:commandLink action="{!editFinancialControlRecord}" value="Edit" style="margin-right:3px;">
+                            <apex:param value="{!sub.id}" name="recordId" assignTo="{!recordId}"></apex:param>
+                        </apex:commandLink>
+                        <span style="margin-right: 4px;">|</span>
+                        <apex:commandLink action="{!deleteFinancialControlRecord}" value="Del" onClick="return confirmRecordDeletion();">
+                            <apex:param value="{!sub.id}" name="recordId" assignTo="{!recordId}"></apex:param>
+                        </apex:commandLink>
+                    </apex:outputPanel>
+                </apex:column>   
+                <apex:repeat value="{! $ObjectType.Financial_Control__c.Fieldsets.Expense_cost_code}" var="f" >
+                    <apex:column >
+                        <apex:facet name="header">
+                            <span  class="label" style="pointer-events: visible;"> {!f.label} 
+                                <span id="hlptxt"> 
+                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Financial_Control__c.Fields[f].inlineHelpText}"
+                                    style="{!IF($ObjectType.Financial_Control__c.Fields[f].inlineHelpText == null, 'display:none','')}" />
+                                </span>
+                            </span>  
+                        </apex:facet>
+                       
+                        <apex:outputField value="{!sub[f]}"/>
+                    </apex:column>  
+                </apex:repeat> 
+            </apex:pageBlockTable>
+            <br/>
+            <center>
+                <apex:outputText Value="No records to display" rendered="{! financialControlList.size == 0}" style="font-size:14px;"/>
+            </center>
+        </apex:pageBlock>
+         <!--  END :: 10/10/2017 NPAY-334 Financial Control Phase 3 added by wasim -->
+		<!-- START :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab modified by Farhan -->		
+		<apex:pageBlock title="{!$Label.xcdhcm__phfinancialcontrol_1}" mode="edit" id="pageEditId" rendered="{!AND(viewMode == false,OR(selectedFilter == 'Benefits',selectedFilter == 'Other Payments'))}">
+		<!-- END :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab modified by Farhan -->
+			<apex:pageMessages />
+			<apex:pageBlockButtons location="top">
+			<!-- START :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 added by Farhan -->
+				<apex:commandButton value="{!$Label.xcdhcm__financialcontrolbsave}" onClick="disableButton(this); sendFilterValue();" rendered="{! financialControlList.size != 0}"/>
+				<apex:commandButton action="{!back}" value="{!$Label.xcdhcm__financialcontrolbcancel}" onClick="disableButton(this);" immediate="true" reRender="theform" />
+			</apex:pageBlockButtons><br/>
+			<!-- 
+			<table>
+        		<tr>
+		            <td><apex:outputLabel value="View:" style="margin-right:10px;color: #999999;font-weight: bold;"/></td>
+		            <td>
+               			<apex:actionRegion >  
+           					<apex:SelectList size="1" value="{!selectedFilter}"  style="margin-right:150px;"> 
+		                        <apex:actionSupport event="onchange" action="{!getFinancialRecords}" status="counterStatus" reRender="theform"/>
+		                        <apex:selectOptions value="{!FinancialControlviewsList}" /> 
+           					</apex:SelectList>
+               			</apex:actionRegion> 
+           			</td>
+       			</tr>                      
+        	</table> 
+        	-->
+			<!-- END :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 added by Farhan -->
+			<apex:pageBlockTable value="{!financialControlList}" var="sub" id="table" >   
+				<apex:repeat value="{! $ObjectType.Financial_Control__c.Fieldsets.Financial_control}" var="f">
+					<!-- START :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->
+					<apex:column > 
+						<apex:facet name="header">
+                    		<span  class="label" style="pointer-events: visible;"> {!f.label} 
+								<span id="hlptxt"> 
+									<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Financial_Control__c.Fields[f].inlineHelpText}"
+				              		style="{!IF($ObjectType.Financial_Control__c.Fields[f].inlineHelpText == null, 'display:none','')}" />
+				    			</span>
+							</span>         
+                     	</apex:facet>     
+                     	<!-- END :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->                                            
+                    	<apex:InputField value="{!sub[f]}" required="{!f.Required}" onchange="setupReportParameter('{!sub.xcdhcm__Type__c}');"/>
+                    </apex:column>  
+           		</apex:repeat> 
+			</apex:pageBlockTable>
+			<br/>
+			<!-- START :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+			<center>
+				<apex:outputText Value="No records to edit" rendered="{! financialControlList.size == 0}" style="font-size:14px;"/>
+			<!-- END :: 27/04/2017 NPAY-250 Benefit/Award Record Characteristics - Phase 2 modified by Farhan -->
+			</center>
+		</apex:pageBlock>
+		
+		<!-- START :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->
+		<!-- START :: 11/06/2018  NPAY-510 Split Post Costs on Employer NI and Apprentice Levy modified by Farhan -->
+		<apex:pageBlock title="{!$Label.xcdhcm__phfinancialcontrol_1}" mode="edit" id="pageEdit" rendered="{!AND(viewMode == false,OR(selectedFilter == 'Employee HMRC Payments',selectedFilter == 'Pay Run Totals'))}">
+		<!-- END :: 11/06/2018  NPAY-510 Split Post Costs on Employer NI and Apprentice Levy modified by Farhan -->
+			<apex:pageMessages />
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton action="{!updateFinancialControlList}" value="{!$Label.xcdhcm__financialcontrolbsave}" onClick="disableButton(this);" rendered="{! financialControlList.size != 0}" reRender="theform"/>
+				<apex:commandButton action="{!back}" value="{!$Label.xcdhcm__financialcontrolbcancel}" onClick="disableButton(this);" immediate="true" reRender="theform" />
+			</apex:pageBlockButtons><br/>
+			<!--
+			<table>
+        		<tr>
+		            <td><apex:outputLabel value="View:" style="margin-right:10px;color: #999999;font-weight: bold;"/></td>
+		            <td>
+               			<apex:actionRegion >  
+           					<apex:SelectList size="1" value="{!selectedFilter}"  style="margin-right:150px;"> 
+		                        <apex:actionSupport event="onchange" action="{!getFinancialRecords}" status="counterStatus" reRender="theform"/>
+		                        <apex:selectOptions value="{!FinancialControlviewsList}" /> 
+           					</apex:SelectList>
+               			</apex:actionRegion> 
+           			</td>
+       			</tr>                     
+        	</table> 
+        	-->
+			<apex:pageBlockTable value="{!financialControlList}" var="sub" id="table" >   
+				<apex:repeat value="{! $ObjectType.Financial_Control__c.Fieldsets.Payment_pay_codes}" var="f">
+					<apex:column > 
+						<apex:facet name="header">
+                    		<span  class="label" style="pointer-events: visible;"> {!f.label} 
+								<span id="hlptxt"> 
+									<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Financial_Control__c.Fields[f].inlineHelpText}"
+				              		style="{!IF($ObjectType.Financial_Control__c.Fields[f].inlineHelpText == null, 'display:none','')}" />
+				    			</span>
+							</span>         
+                     	</apex:facet>     
+                    	<apex:InputField value="{!sub[f]}" required="{!f.Required}"/>
+                    </apex:column>  
+           		</apex:repeat> 
+			</apex:pageBlockTable>
+			<br/>
+			<center>
+				<apex:outputText Value="No records to edit" rendered="{! financialControlList.size == 0}" style="font-size:14px;"/>
+			</center>
+		</apex:pageBlock>
+		<!-- END :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->
+		
+        <!--  START :: 10/10/2017 NPAY-334 Financial Control Phase 3 added by wasim -->
+          <apex:pageBlock title="{!$Label.xcdhcm__phfinancialcontrol_1}" mode="edit" id="expenseEditId" rendered="{!AND(viewMode == false,selectedFilter ='Expense')}">
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="{!$Label.xcdhcm__financialcontrolbsave}" onClick="disableButton(this); sendFilterValue();" rendered="{! financialControlList.size != 0}"/>
+                <apex:commandButton action="{!back}" value="{!$Label.xcdhcm__financialcontrolbcancel}" onClick="disableButton(this);" immediate="true" reRender="theform" />
+            </apex:pageBlockButtons><br/>
+            <apex:pageBlockTable value="{!financialControlList}" var="sub" id="table" >   
+                <apex:repeat value="{! $ObjectType.Financial_Control__c.Fieldsets.Expense_cost_code}" var="f">
+                    <!-- START :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->
+                    <apex:column > 
+                        <apex:facet name="header">
+                            <span  class="label" style="pointer-events: visible;"> {!f.label} 
+                                <span id="hlptxt"> 
+                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Financial_Control__c.Fields[f].inlineHelpText}"
+                                    style="{!IF($ObjectType.Financial_Control__c.Fields[f].inlineHelpText == null, 'display:none','')}" />
+                                </span>
+                            </span>         
+                        </apex:facet>     
+                        <!-- END :: 13/06/2017 NPAY-309 Display field helptext links on Financial Control tab added by Farhan -->                                            
+                        <apex:InputField value="{!sub[f]}" required="{!f.Required}" onchange="setupReportParameter('{!sub.xcdhcm__Type__c}');"/>
+                    </apex:column>  
+                </apex:repeat> 
+            </apex:pageBlockTable>
+            <br/>
+            <center>
+                <apex:outputText Value="No records to edit" rendered="{! financialControlList.size == 0}" style="font-size:14px;"/>
+            </center>
+        </apex:pageBlock>
+       <!--  END :: 10/10/2017 NPAY-334 Financial Control Phase 3 added by wasim -->
+		<apex:actionFunction name="updateMethod" action="{!updateFinancialControlList}" reRender="theform" oncomplete="" >
+			<apex:param assignTo="{!reportFilterValue}" name="reportFilterValue" value="x"/>
+        </apex:actionFunction>
+	</apex:form>
+	 <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+</apex:page>

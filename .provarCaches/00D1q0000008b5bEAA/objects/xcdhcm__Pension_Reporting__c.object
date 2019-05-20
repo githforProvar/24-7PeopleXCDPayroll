@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Pension Reporting records for the period one per Employee-Post reference.</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <fields>
+        <fullName>xcdhcm__AE_qualifying_earnings__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Auto enrolment earnings for the Employee in the period.</inlineHelpText>
+        <label>AE qualifying earnings</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__AVC_EAVC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>AVC (EAVC)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Added_years__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Added years</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Additional_regular_cont_ARC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Additional regular cont (ARC)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Address_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Address 1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Address_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Address 2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Address_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Address 3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Address_4__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Address 4</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Annual_pensionable_salary__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Pensionable_salary__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Annual pensionable salary</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Compensation__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Comp linked to Pay Detail for main ER/EE pension contribution.</description>
+        <externalId>false</externalId>
+        <label>Compensation</label>
+        <referenceTo>xcdhcm__Compensation__c</referenceTo>
+        <relationshipLabel>Pension Reportings</relationshipLabel>
+        <relationshipName>Pension_Reportings</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Compensation_created_date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field is used in report.</description>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.CreatedDate</formula>
+        <label>Compensation created date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Compensation_effective_from__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Effective_from__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Compensation effective from</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__EE_additional_cont_EAPC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>EE additional cont (EAPC)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__EE_cont_rate_50_50_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>EE cont rate - 50/50 scheme</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__EE_cont_rate_main_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>EE cont rate - main scheme</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__EE_contribution_50_50_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>EE contribution - 50/50 scheme</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__EE_contribution_main_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>EE contribution - main scheme</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ER_additional_cont_RAPC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ER additional cont (RAPC)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ER_cont_rate_main_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ER cont rate - main scheme</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ER_contribution_main_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ER contribution - main scheme</label>
+        <precision>17</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Effective_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Effective_from__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Date on which employee started on current salary.</inlineHelpText>
+        <label>Effective date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_pension_contribution__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Employee_contribution_per_period__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Employee pension contribution</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employer_pension_contribution__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Employer_contribution_per_period__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Employer pension contribution</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__FTE__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__FTEpercent__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>FTE%</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Firstname__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Firstname</label>
+        <length>30</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Full_time_equivalent_hours__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Role_L__r.xcdhcm__Companies__r.xcdhcm__Total_Hours_Per_Day__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Full time equivalent hours</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Job_title__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Role_L__r.Name</formula>
+        <label>Job title</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Lastname__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Lastname</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leave_request_created__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field is used in the Pension Changes - Absences report filter.</description>
+        <externalId>false</externalId>
+        <label>Leave request created</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Main_scheme__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Main scheme</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Marital_status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Marital status</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__NIable_earnings__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total NIable earnings for the Employee in the period.</inlineHelpText>
+        <label>NIable earnings</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__National_insurance_no__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Pay_Summary__r.xcdhcm__National_insurance_number__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>National insurance no</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Notes</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Opt_in_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Opt in date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Opt_out_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Opt out date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Other_additional_EE_cont__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Other additional EE cont</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Other_additional_ER_cont__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Other additional ER cont</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Other_contributions_scheme_name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Other contributions - scheme name</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Part_time_hours__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(xcdhcm__Compensation__r.xcdhcm__FTEpercent__c  = 1, null, xcdhcm__Compensation__r.xcdhcm__Contractual_hours_fr__c)</formula>
+        <inlineHelpText>Records weekly contractual hours for part time employees; blank where employee works full time.</inlineHelpText>
+        <label>Part time hours</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Part_time_hours_effective_from__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(OR(xcdhcm__Compensation__r.xcdhcm__FTEpercent__c = 1, AND(NOT(ISBLANK(xcdhcm__Compensation__r.xcdhcm__Previous_compensation__c)), xcdhcm__Compensation__r.xcdhcm__Previous_compensation__r.xcdhcm__FTEpercent__c = 1)),null,xcdhcm__Compensation__r.xcdhcm__Effective_from__c)</formula>
+        <inlineHelpText>Where employee works part time, or has changed working hours, records date of starting current hours.</inlineHelpText>
+        <label>Part time hours effective from</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Part_time_indicator__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF( xcdhcm__Compensation__r.xcdhcm__Role_L__r.xcdhcm__FTE_Ratio__c  &lt; 1 ,
+&apos;Y&apos;, null)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Part time indicator</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Pay_Summary__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Pay Summary</label>
+        <referenceTo>xcdhcm__Pay_Summary__c</referenceTo>
+        <relationshipLabel>Pension Reportings</relationshipLabel>
+        <relationshipName>Pension_Reportings</relationshipName>
+        <relationshipOrder>1</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>true</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Pay_period_end_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Pay_Summary__r.xcdhcm__XCD_PAY_Period__r.xcdhcm__Effective_to__c</formula>
+        <label>Pay period end date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Pay_run_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>CASESAFEID(xcdhcm__Pay_Summary__r.xcdhcm__XCD_PAY_Period__c)</formula>
+        <label>Pay run ID</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Pension_Reporting_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Pension Reporting YTD</label>
+        <referenceTo>xcdhcm__Pension_Reporting_YTD__c</referenceTo>
+        <relationshipLabel>Pension Reportings</relationshipLabel>
+        <relationshipName>Pension_Reportings</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>true</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Post_leaving_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the employee left this Post.</inlineHelpText>
+        <label>Post leaving date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Post_pensionable_earnings_50_50_scheme__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Pensionable earnings for the Post reference in the period - where Employee paying into 50/50 scheme.</inlineHelpText>
+        <label>Post pensionable earnings - 50/50 scheme</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Post_pensionable_earnings__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Post_pensionable_earnings_main_scheme__c  +  xcdhcm__Post_pensionable_earnings_50_50_scheme__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Post pensionable earnings</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Post_pensionable_earnings_main_scheme__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Pensionable earnings for the Post reference in the period - where Employee paying into main scheme.</description>
+        <externalId>false</externalId>
+        <label>Post pensionable earnings - main scheme</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Postcode__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Postcode</label>
+        <length>20</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Previous_compensation_pension_start_date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field is used in report.</description>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Previous_compensation__r.xcdhcm__Pension_start_date__c</formula>
+        <label>Previous compensation pension start date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__SMP_indicator__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates Y if unpaid absence was as a result of parenting leave.</inlineHelpText>
+        <label>SMP indicator</label>
+        <length>1</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Shared_cost_AVC_RAVC__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Shared cost AVC (RAVC)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Suspension_end__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Denotes end of period of unpaid absence where no contributions are made.</inlineHelpText>
+        <label>Suspension end</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Suspension_start__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Denotes start of period of unpaid absence where no contributions are made.</inlineHelpText>
+        <label>Suspension start</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Taxable_earnings__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Total taxable earnings for the Employee in the period.</inlineHelpText>
+        <label>Taxable earnings</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Title__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Title</label>
+        <length>20</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_address_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Work address 1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_address_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Work address 2</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_address_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Work address 3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_address_4__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Work address 4</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_postcode__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Work postcode</label>
+        <length>20</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Workplace_name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Workplace name</label>
+        <length>200</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Pension Reporting</label>
+    <nameField>
+        <displayFormat>PR-{0000}</displayFormat>
+        <label>Pension Reporting Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Pension Reporting</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>xcdhcm__Pension_report_edit_before_final_pay_run</fullName>
+        <active>true</active>
+        <errorConditionFormula>AND(NOT(ISNEW()), xcdhcm__Pay_Summary__r.xcdhcm__Payroll_status__c  &lt;&gt; &quot;Final&quot;)</errorConditionFormula>
+        <errorMessage>The Pay Run is not yet made final. Any manual changes to Reporting records will be overwritten when the Pay Run is finalised.</errorMessage>
+    </validationRules>
+    <visibility>Public</visibility>
+</CustomObject>

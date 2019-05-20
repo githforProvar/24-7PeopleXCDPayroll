@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <fields>
+        <fullName>xcdhcm__Additional_CLE__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Additional Leave entitlement for employee which differs from Company standard entitlement - updates annually from master record on Job Role.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional leave entitlement as a result of the Employee&apos;s individual contractual terms</inlineHelpText>
+        <label>(+) Contractual</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Additional_JRS__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Records any additional leave entitlement which accrues to the employee because of their Job Role or seniority in the organisation.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional leave entitlement which accrues to the employee because of their Job Role or seniority in the organisation</inlineHelpText>
+        <label>(+) Seniority</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Annual_Entitlement__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Sets annual entitlement for the Employee based on Company rules</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Company standard entitlement based on full year service</inlineHelpText>
+        <label>Standard entitlement</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Days_in_role__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>MAX( (  xcdhcm__To__c  -  xcdhcm__From__c  ) + 1 ,0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Populate days in role based on To and From dates</inlineHelpText>
+        <label>Days in role</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Leave_Summary__r.xcdhcm__Employee_Details__c</formula>
+        <label>Employee</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__From__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Start date of the role</description>
+        <externalId>false</externalId>
+        <formula>IF(  xcdhcm__Job_Role__r.xcdhcm__Start_Date__c  &gt;=   xcdhcm__Leave_Summary__r.xcdhcm__Leave_year_start_date__c  ,  xcdhcm__Job_Role__r.xcdhcm__Start_Date__c ,  xcdhcm__Leave_Summary__r.xcdhcm__Leave_year_start_date__c )</formula>
+        <label>From</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Job_Role__c</fullName>
+        <deleteConstraint>Restrict</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Job Role</label>
+        <referenceTo>xcdhcm__Job_Role__c</referenceTo>
+        <relationshipLabel>Role Entitlements</relationshipLabel>
+        <relationshipName>Role_Entitlements</relationshipName>
+        <required>true</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Job_title__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Title of the Job Role</description>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(&quot;/&quot; &amp; Id, xcdhcm__Job_Role__r.Name)</formula>
+        <label>Job title</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leave_Summary__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Leave year</label>
+        <referenceTo>xcdhcm__Leave_Summary__c</referenceTo>
+        <relationshipLabel>Role Entitlements</relationshipLabel>
+        <relationshipName>Role_Entitlements</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leaves_on_length_of_service__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Records additional leave on completion of a period of years&apos; service.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional leave entitlement based on the employee&apos;s length of service</inlineHelpText>
+        <label>(+) Length of service</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Part_time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(OR( ISPICKVAL(xcdhcm__Job_Role__r.xcdhcm__Pattern_Type__c, &quot;Regular work pattern - hours&quot;),ISPICKVAL(xcdhcm__Job_Role__r.xcdhcm__Pattern_Type__c, &quot;Irregular shift pattern&quot;),ISPICKVAL(xcdhcm__Job_Role__r.xcdhcm__Pattern_Type__c, &quot;Work cycle - hours&quot;)), TEXT( ROUND(xcdhcm__Job_Role__r.xcdhcm__FTE__c * 100,0)) + &quot;%&quot;, IF(OR(ISPICKVAL(xcdhcm__Job_Role__r.xcdhcm__Pattern_Type__c, &quot;Regular work pattern - days&quot;),ISPICKVAL(xcdhcm__Job_Role__r.xcdhcm__Pattern_Type__c, &quot;Flexible working days&quot;),ISPICKVAL(xcdhcm__Job_Role__r.xcdhcm__Pattern_Type__c, &quot;Work cycle - days&quot;)), TEXT( ROUND((xcdhcm__Job_Role__r.xcdhcm__Working_Days_Week__c /  xcdhcm__Job_Role__r.xcdhcm__Companies__r.xcdhcm__Normal_working_week_days__c) * 100,0)) + &quot;%&quot;, null))</formula>
+        <inlineHelpText>For employees recording leave in hours equals FTE%; for employees recording leave in days, equals proportion of days in the week worked by the employee - e.g. for an employee working Mondays and Tuesdays equals 40% regardless of hours worked each day</inlineHelpText>
+        <label>FTE%</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Public_Holidays__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Updates public holiday allowance</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Where an Employee normally works public holidays, an additional entitlement is given</inlineHelpText>
+        <label>(+) Public holidays</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(AND(  xcdhcm__From__c  &lt;= TODAY(),  xcdhcm__To__c  &gt;= TODAY()), &quot;Current&quot;,  IF(AND(  xcdhcm__From__c  &lt; TODAY(),  xcdhcm__To__c  &lt; TODAY()), &quot;Previous&quot;,  
+IF(AND(  xcdhcm__From__c  &gt; TODAY(),  xcdhcm__To__c  &gt; TODAY()), &quot;Future&quot;, &quot;Cancelled&quot;)))</formula>
+        <label>Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__System_Run_entitlement_WF__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>This field is used to invoke workflow: Update entitlements</description>
+        <externalId>false</externalId>
+        <label>System: Run entitlement WF</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__To__c</fullName>
+        <deprecated>false</deprecated>
+        <description>End date of the role</description>
+        <externalId>false</externalId>
+        <formula>IF( xcdhcm__Job_Role__r.xcdhcm__End_Date__c  &lt;=  xcdhcm__Leave_Summary__r.xcdhcm__Leave_year_end_date__c , xcdhcm__Job_Role__r.xcdhcm__End_Date__c, xcdhcm__Leave_Summary__r.xcdhcm__Leave_year_end_date__c)</formula>
+        <label>To</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Total_entitlement__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Sum of all entitlements - rounded up to the next half day</description>
+        <externalId>false</externalId>
+        <formula>CEILING( 2 * (xcdhcm__Additional_CLE__c  +  xcdhcm__Leaves_on_length_of_service__c  +  xcdhcm__Public_Holidays__c  +  xcdhcm__Additional_JRS__c  +  xcdhcm__Annual_Entitlement__c)) /2</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Sum of all entitlements - rounded up to the next half day</inlineHelpText>
+        <label>(=) Total entitlement</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>1</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Role Entitlement</label>
+    <listViews>
+        <fullName>xcdhcm__All</fullName>
+        <columns>xcdhcm__Job_title__c</columns>
+        <columns>xcdhcm__Job_Role__c</columns>
+        <columns>xcdhcm__Leave_Summary__c</columns>
+        <columns>xcdhcm__Days_in_role__c</columns>
+        <columns>xcdhcm__From__c</columns>
+        <columns>xcdhcm__To__c</columns>
+        <columns>xcdhcm__Part_time__c</columns>
+        <columns>xcdhcm__Status__c</columns>
+        <columns>xcdhcm__Annual_Entitlement__c</columns>
+        <columns>xcdhcm__Additional_CLE__c</columns>
+        <columns>xcdhcm__Additional_JRS__c</columns>
+        <columns>xcdhcm__Leaves_on_length_of_service__c</columns>
+        <columns>xcdhcm__Public_Holidays__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <label>Role title</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Role Entitlements</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

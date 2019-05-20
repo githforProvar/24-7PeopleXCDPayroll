@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Sets overtime reasons or categories and corresponding payment amounts or rates</description>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>xcdhcm__Allowed_Overlapping_Overtime_Requests__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Specified which all overtime categories can be overlapped.</description>
+        <externalId>false</externalId>
+        <label>Allowed Overlapping Overtime Requests</label>
+        <length>254</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Amount__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Amount based on reasons.</description>
+        <externalId>false</externalId>
+        <label>Amount</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Rate__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Rate corresponding to overtime category.</description>
+        <externalId>false</externalId>
+        <label>Rate</label>
+        <precision>4</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reason__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Configure the overtime categories.</description>
+        <externalId>false</externalId>
+        <label>Reason</label>
+        <length>50</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reduces_working_time__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>It should affect the Standard payable hours, and Daily flex balance columns in real time.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>It should affect the Standard payable hours, and Daily flex balance columns in real time.</inlineHelpText>
+        <label>Reduces working time</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Related_Compensation_API__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Related Compensation API</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Overtime_Reason_Rate</label>
+    <listViews>
+        <fullName>View_Rates</fullName>
+        <columns>NAME</columns>
+        <columns>xcdhcm__Amount__c</columns>
+        <columns>xcdhcm__Rate__c</columns>
+        <columns>xcdhcm__Reason__c</columns>
+        <columns>xcdhcm__Related_Compensation_API__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>View Rates</label>
+        <language>en_GB</language>
+        <sharedTo>
+            <group>HR_Administrator</group>
+            <group>OvertimeApprovers</group>
+            <group>Payroll_Administrators</group>
+        </sharedTo>
+    </listViews>
+    <visibility>Public</visibility>
+</CustomObject>

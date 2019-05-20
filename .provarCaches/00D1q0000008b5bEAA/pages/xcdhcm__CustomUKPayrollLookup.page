@@ -1,0 +1,46 @@
+<apex:page controller="xcdhcm.CustomUKPayrollLookupController"  
+  title="Search" 
+  showHeader="false" 
+  sideBar="false" 
+  tabStyle="Account" 
+  id="pg">
+
+  <apex:form >
+  <apex:outputPanel id="page" layout="block" style="margin:5px;padding:10px;padding-top:2px;">
+    <apex:tabPanel switchType="client" selectedTab="name1" id="tabbedPanel">
+
+      <!-- SEARCH TAB -->
+      <apex:tab label="{!$Label.xcdhcm__customukpayrolllookupstsearch}" name="tab1" id="tabOne">
+
+        <apex:actionRegion >  
+          <apex:outputPanel id="top" layout="block" style="margin:5px;padding:10px;padding-top:2px;">
+            <apex:outputLabel value="Search" style="font-weight:Bold;padding-right:10px;" for="txtSearch"/>
+            <apex:inputText id="txtSearch" value="{!searchString}" />
+              <apex:commandButton id="btnGo" value="{!$Label.xcdhcm__customukpayrolllookupbgo}" action="{!Search}" rerender="searchResults"></apex:commandButton>
+          </apex:outputPanel>
+
+          <apex:outputPanel id="pnlSearchResults" style="margin:10px;height:350px;overflow-Y:auto;" layout="block">
+            <apex:pageBlock id="searchResults"> 
+              <apex:pageBlockTable value="{!results}" var="a" id="tblResults">
+             
+                <apex:column >
+                  <apex:facet name="header">
+                    <apex:outputPanel >Payroll</apex:outputPanel>
+                  </apex:facet>
+                   <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!a.XCD_PAY_Payroll__r.Id}','{!a.XCD_PAY_Payroll__r.Name}', false)" rendered="{!NOT(ISNULL(a.XCD_PAY_Payroll__r.Id))}">{!a.XCD_PAY_Payroll__r.Name}</apex:outputLink>           
+                </apex:column>
+                
+               
+                
+                <apex:column headerValue="{!$ObjectType.xcdhcm__XCD_PAY_Payroll__c.Fields.xcdhcm__Pay_Frequency__c.Label}" value="{!a.XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c}"/>
+              
+              </apex:pageBlockTable>
+            </apex:pageBlock>
+          </apex:outputPanel>
+        </apex:actionRegion>
+
+      </apex:tab>
+    </apex:tabPanel>
+  </apex:outputPanel>
+  </apex:form>
+</apex:page>

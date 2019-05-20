@@ -1,0 +1,290 @@
+<apex:page standardController="xcdhcm__Applicant__c" extensions="xcdhcm.ApplicationViewController" showHeader="true" sidebar="false" wizard="false" >
+<!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  -->  
+ <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Application.css')}"/>  
+ <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal -->
+ <!-- START :: 02/09/2015 NPPD-827 New change  -->
+ <style>
+ html body.sfdcBody {
+    overflow: hidden!important;
+}
+   .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette {
+      background-color: #FFFFFF!important;   
+    }
+   body .bPageBlock .pbTitle h2 {
+      font-weight: normal!important;
+    }
+   body .bRelatedList .bPageBlock .pbHeader, body .listRelatedObject .bPageBlock .pbHeader {
+       border-top: 2px solid #402014!important;
+    }   
+   .listRelatedObject .userDefinedImage {
+       display: none!important;
+    }
+ <!-- START :: Regression issue list -Payroll4/Summer2016 modified by kamal (businiess card alignment)  -->    
+.imgg .popp
+{
+    background: none repeat scroll 0 0 rgba(000,000,000,.60);
+    font-size: 1em;
+    height: 1.6em;
+    line-height: 1.6em;
+    margin-top: 128px;
+    width: 150px;
+    position: absolute;
+    text-align: center;
+    z-index: 3;
+    display:none;
+}  
+
+.imgg:hover .popp {
+    display:block !important;
+}
+ <!-- END :: Regression issue list -Payroll4/Summer2016 modified by kamal (businiess card alignment)  --> 
+ </style>
+ 
+  <!--  END :: 02/09/2015 New change  -->  
+  <!-- START :: 07/18/2016 NPPD-1116 business card added by kamal  -->
+  <apex:outputPanel >    
+    <table style="width:100%" border="0" >
+      <tr>   
+        <apex:outputpanel id="op1"  rendered="{!BusinessCard}">         
+         <td valign="Top" width="15%" style="height: 800px;padding-top: 2%;">
+            <apex:outputpanel styleClass="pic" id="image" layout="block" >
+             <div class="imgg">
+                <apex:form >
+                    <div class="popp">                
+                        <apex:commandLink action="{!imageupload}"  value="Add photo" rendered="{!AND(ImageUpload!=false,imageRender!=true)}" style="color:#fff;text-decoration:none;margin-left:4px;"/>
+                        <apex:commandLink action="{!imageupload}"  value="Update | Delete" rendered="{!AND(ImageUpload!=false,imageRender=true)}" style="color:#fff;text-decoration:none;margin-left:4px;"/>
+                    </div> 
+      
+                    <apex:commandLink rendered="{!AND(ImageUpload=true,imageRender=true)}">
+                        <span class="blur"></span>
+                        <apex:image value="{!ImageURL}" width="150px" height="150px" rendered="{!imageRender}" />
+                    </apex:commandLink>
+                    <apex:commandLink rendered="{!AND(ImageUpload=true,imageRender!=true)}">
+                        <span class="blur"></span>
+                        <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Employee_Default_Image.png')}" width="150px" height="150px" rendered="{!imageRender!=true}" />
+                    </apex:commandLink>
+            
+                </apex:form>
+              </div>                
+                <apex:form style="margin-bottom:1px;" rendered="{!ImageUpload=false}">
+                    <apex:image value="{!ImageURL}" width="150px" height="150px" rendered="{!AND(ImageUpload=false,imageRender=true)}"/>
+                    <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Employee_Default_Image.png')}" width="150px" height="150px" rendered="{!AND(ImageUpload=false,imageRender!=true)}"/>
+                </apex:form>           
+              <br/><br/>  
+              <apex:outputText style="font-weight:bold;font-size:150%;padding-top:15px;" value="{!name}" /><br/><br/>
+                <apex:outputLabel value="{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Notes__c.Label}" style="color: #999;" /><br/>
+                <div style="word-wrap:break-word; width:180px;" >
+                   <apex:outputText value="{!ApplicantIns.xcdhcm__Notes__c}" style="padding-top:15px;" />   
+                </div>                           
+              </apex:outputpanel>    
+        </td>
+         
+      </apex:outputpanel>   
+       
+       <td valign="Top" width="{!IF(BusinessCard,'85%','95%')}"  > 
+        <!-- END :: 07/18/2016 NPPD-1116 business card added by kamal  -->
+          <apex:tabPanel id="ApplicationTabPanel" value="{!SelectedTab}" switchType="client"  tabClass="activeTab" inactiveTabClass="inactiveTab" width="90%"  headerAlignment="center" style="background:#000; border-radius:5px;background-image:url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/goldribbon.png')}');margin-top:2%;{!IF(BusinessCard,'margin-left:2%;','margin-left:5%;')};"  >       
+            <!-- START :: 02/09/2015 NPPD-827 XCDTabName converted in to comman class  -->
+             <apex:tab label="{!$Label.xcdhcm__applicationviewpagestcandidate}" name="Candidate" style="font-size:14px" rendered="{!(CandidateTab == true)}" >  
+              <!-- START:: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    -->
+                <apex:detail subject="{!ApplicantIns.xcdhcm__Candidate__c}" relatedList="true" title="false " />                
+                   <div style="border-bottom: 2px solid #402014!important;"></div>
+                <!-- END:: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    -->   
+             </apex:tab>       
+             
+             <apex:tab label="{!$Label.xcdhcm__applicationviewpagestapplication}" name="Application" id="tabdetails1" style="font-size:14px"  >  
+                <apex:detail relatedList="false" title="false " />
+                <div style="border-bottom: 2px solid #402014!important;"></div> 
+                <apex:outputpanel rendered="{!ApplicantIns.xcdhcm__Cover_letter__c!=null}" >
+                <!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> 
+                 <br/><h3 style='color: #402014 !important;  font-size: 12pt !important;  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;  font-weight: normal;' >Cover letter</h3><br/>  
+                 <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  -->  
+                   <apex:form style="margin-left:5%!important;" > <br/> 
+                         <apex:outputText Value="No records to display" rendered="{!ApplicantIns.xcdhcm__Cover_letter__c==null}" />  
+                         <!--  <apex:outputText value="{!$ObjectType.Applicant__c.Fields.Cover_letter__c.Label}"  /> <br/>   -->    
+                         <apex:outputpanel >
+                         <apex:outputField value="{!ApplicantIns.xcdhcm__Cover_letter__c}" style="width:60%;" />       
+                         </apex:outputpanel><br/><br/>                                                     
+                   </apex:form>
+                   <div style="border-bottom: 2px solid #402014!important;"></div> 
+                </apex:outputpanel>             
+            </apex:tab>
+            <!-- END :: 02/09/2015 NPPD-827 New change  -->
+            <apex:tab label="{!$Label.xcdhcm__applicationviewpagestcv}" name="CV"  style="font-size:14px" id="CVtab" rendered="{!(CVTab == true)}">
+                <br/><h3 style='color: #402014 !important;  font-size: 12pt !important;  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;  font-weight: normal;margin-left: 10px;' >CV</h3>     
+               <apex:outputpanel id="cv1">  
+                <apex:form >   
+                      <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestcvbuploadcv}" action="{!UploadCV}"  styleclass="formbutton" style="display:inline!important;margin-left: 40%!important;" />                             
+                      <apex:pageBlock id="pbcv">
+                         <apex:outputText Value="No records to display" rendered="{!attch==null}"  />       
+                        <apex:pageblockTable value="{!attch}" var="at" width="100%" rendered="{!attch!=null}" >  
+                           <apex:column headervalue="{!$ObjectType.Attachment.Fields.Name.Label}">
+                                <apex:outputText value="{!at.Name}"  />                                                                                         
+                           </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Attachment.Fields.Description.label}">
+                               <apex:outputText value="{!at.Description}"  />                                                                                         
+                           </apex:column>
+                           <!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> 
+                          
+                           <apex:column headervalue="{!$ObjectType.Attachment.Fields.CreatedDate.label}">
+                               <apex:outputField value="{!at.CreatedDate}"  />                                                                                         
+                           </apex:column>
+                           <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> 
+                           <apex:column >  
+                               <apex:commandLink action="{!Download}"  value="Download" rendered="{!showlink==false}" reRender="CVtab" target="_top" style="color:#336699;"> 
+                               <apex:param name="D" value="Download" assignTo="{!DownView}" />
+                               </apex:commandLink> 
+                               
+                               <apex:commandLink action="{!Download}" value="View" rendered="{!showlink==true}" reRender="pbcv,pbcv1" target="_top" style="color:#336699;" >                                                                                                                                 
+                              <apex:param name="V" value="View" assignTo="{!DownView}"/> 
+                              </apex:commandLink>
+                           </apex:column>    
+                        </apex:pageblockTable>
+                      </apex:pageBlock>   
+                 </apex:form>
+                 <apex:pageBlock id="pbcv1">   
+                      <apex:outputpanel id="cv" rendered="{!showframe==true}" >  
+                        <apex:form style="height:900px!important;" id="frm2" >          
+                            <iframe src="{!ApplicantIns.View_CV__c}" scrolling="true"  style='border:1px solid #ccc!important; right: 2%;left: 2%;position:absolute; top:15%;  width:95%; height:80%; z-index:999;'/>                                  
+                        </apex:form>
+                      </apex:outputpanel> 
+                </apex:pageBlock>
+             </apex:outputpanel>                                   
+            <div style="border-bottom: 2px solid #402014!important;"></div><br/>   
+           </apex:tab>
+          
+           <apex:tab label="{!$Label.xcdhcm__applicationviewpagestassessment}" name="Interviewrecords"  style="font-size:14px" rendered="{!(InterviewTab == true)}" >    
+              <apex:form >     
+                <!-- START:: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    -->
+                   <apex:pageBlock title="{!$Label.xcdhcm__applicationviewpageassessmentassessment}">
+                       <apex:pageBlockButtons location="top">   
+                          <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestassessmentbedit}" action="{!EditAssessment}"  styleclass="formbutton" style="display:inline!important" />                                    
+                        </apex:pageBlockButtons>                       
+                        <apex:pageBlockSection columns="1">                        
+                           <apex:repeat value="{!ApplicantIns}" >                                           
+                                 <apex:repeat value="{!$ObjectType.xcdhcm__Applicant__c.Fieldsets.xcdhcm__Assessment}" var="a">                                 
+                                    <apex:outputField value="{!ApplicantIns[a]}" />                                  
+                                </apex:repeat>  
+                           </apex:repeat>                            
+                     </apex:pageblocksection>                       
+                  </apex:pageBlock>     
+                  <div style="border-bottom: 2px solid #402014!important;"></div>   
+               <!-- END :: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    -->   
+                  <apex:pageBlock title="{!$Label.xcdhcm__applicationviewpageassessmentinterviews}"> 
+                       <apex:pageBlockButtons location="top">   
+                          <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestassessmentbnewinterview}" action="{!newInterview}" styleclass="formbutton" style="display:inline!important" />                                    
+                        </apex:pageBlockButtons>
+                       <apex:outputText Value="No records to display" rendered="{!InterviewRecord.Size==0}" />       
+                       <apex:pageblockTable value="{!InterviewRecord}" var="IR" width="100%" >  
+                         <!-- START :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                         
+                         <apex:column headervalue="{!$ObjectType.xcdhcm__Interview_record__c.Fields.Name.label}">
+                         <!-- END :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+							<!-- START:: 02/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil -->
+                            <apex:outputLink target="_top" title="{!IR.Name}" value="/one/one.app#/alohaRedirect/{!IR.id}"  >{!IR.Name}</apex:OutputLink> 
+          					<!-- END:: 02/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil -->
+                                                                                                                 
+                         </apex:column>
+                      
+                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Interview_record__c.Fieldsets.xcdhcm__Application_detail}">
+                            <apex:column value="{!IR[f]}" />
+                        </apex:repeat>
+                        
+                        <!-- START :: 25-04-2017 summer2017 NPPD-1233 Interview attachment Added by Rahul S -->
+                        <apex:column headervalue="{!$Label.xcdhcm__applicationviewpageassessmentinterviewschinterview}">
+                            <apex:outputText value="" rendered="{!IF(CONTAINS(interviewVsAttachment[IR.id],'No attachment'), True,False)}" />                                                                                    
+                            <apex:outputLink target="_blank" title="{!IR.Name}" value="{!interviewVsAttachment[IR.id]}" rendered="{!IF(CONTAINS(interviewVsAttachment[IR.id],'No attachment'),False,True)}">{!$Label.xcdhcm__applicationviewpageassessmentinterviewsinterviewlviewnote}</apex:OutputLink>                                                                                      
+                        </apex:column>
+                        <!-- END :: 25-04-2017 summer2017 NPPD-1233 Interview attachment Added by Rahul S -->
+                     </apex:pageblockTable>
+                  </apex:pageBlock>     
+                  <div style="border-bottom: 2px solid #402014!important;"></div><br/>       
+             </apex:form>  
+           </apex:tab>
+            
+           <apex:tab label="{!$Label.xcdhcm__applicationviewpagestreferences}" name="References"  style="font-size:14px" rendered="{!(ReferencesTab == true)}" >    
+              <apex:form >     
+                <apex:pageBlock title="{!$Label.xcdhcm__applicationviewpagereferencesreference}">   
+                    <apex:pageBlockButtons location="top">   
+                          <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestreferencesbnewreference}" action="{!newReference}" styleclass="formbutton" style="display:inline!important" />                                    
+                   </apex:pageBlockButtons>
+                        
+                   <apex:outputText Value="No records to display" rendered="{!ReferenceRecord.Size==0}" />       
+                   <apex:pageblockTable value="{!ReferenceRecord}" var="RF" width="100%" >  
+                         <!-- START :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                         <apex:column headervalue="{!$ObjectType.xcdhcm__Reference__c.Fields.Name.label}">
+                          <!-- END :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                          <!-- START:: 02/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil -->
+                           <apex:outputLink target="_top" title="{!RF.Name}" value="/one/one.app#/alohaRedirect/{!RF.id}"  >{!RF.Name}</apex:OutputLink>
+                           <!-- END:: 02/03/2018  NPPD-1623 Lightning regression patch-1 issue added by Anil -->                                                                                      
+                         </apex:column>
+                         <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Reference__c.Fieldsets.xcdhcm__Application_detail}">  
+                             <apex:column value="{!RF[f]}" />
+                         </apex:repeat>
+                   </apex:pageblockTable>
+               </apex:pageBlock>     
+              <div style="border-bottom: 2px solid #402014!important;"></div><br/>          
+             </apex:form>  
+          </apex:tab>
+           <!-- START :: 02/09/2015 NPPD-827 New change  -->               
+          <apex:tab label="{!$Label.xcdhcm__applicationviewpagestactions}" name="Administration"  style="font-size:14px"  rendered="{!AdministrationTab==true}"  > 
+              <apex:form >   
+              <!-- START:: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    -->
+                 <apex:pageBlock title="{!$Label.xcdhcm__applicationviewpageactionsofferdetails}">
+                       <apex:pageBlockButtons location="top">   
+                          <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestactionsbedit}"  action="{!EditOfferDetails}" styleclass="formbutton" style="display:inline!important" />  
+                          <!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> 
+                          <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestactionsbemailapplicant}"  action="{!EmailApplicant}" rendered="{!Emailbuttons==true}" styleclass="formbutton" style="display:inline!important" /> 
+                          <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestactionsbemailagency}"  action="{!EmailAgency}" rendered="{!EmailAgencybuttons==true}" styleclass="formbutton" style="display:inline!important" />    
+                          <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> 
+                        <!-- START :: 26/2/16 NPPD-1087 relabel custom setting added by Kamal    -->
+                          <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestactionsbcreateofferletter}"  action="{!Offer}" rendered="{!OfferButton==true}" styleclass="formbutton" style="display:inline!important" />                                                                 
+                          <!-- START :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal -->
+                          <apex:commandButton value="{!$Label.xcdhcm__applicationviewpagestactionsbdocusign}"  action="{!docusign}" rendered="{!docusignbtn}" styleclass="formbutton" style="display:inline!important" />
+                          <!-- END :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal -->
+                        <!-- END :: 26/2/16 NPPD-1087 relabel custom setting added by Kamal    -->
+                        </apex:pageBlockButtons>                     
+                        <apex:pageBlockSection columns="2">                        
+                           <apex:repeat value="{!ApplicantIns}" >                                           
+                                 <apex:repeat value="{!$ObjectType.xcdhcm__Applicant__c.Fieldsets.xcdhcm__Offer_details}" var="a">                                  
+                                    <apex:outputField value="{!ApplicantIns[a]}" />                                  
+                                </apex:repeat>  
+                           </apex:repeat>                              
+                     </apex:pageblocksection>                       
+                  </apex:pageBlock>                   
+                                     
+                 </apex:form>                   
+                   <apex:relatedList id="onb" title="On boarding" list="On_boarding_documnents__r"/>                    
+                   <apex:relatedList list="OpenActivities"/>                             
+                   <apex:relatedList subject="{!xcdhcm__Applicant__c}" list="ActivityHistories" />    
+                   <!-- START :: 10-07-2017 Summer17 NPPD-1456 Display approval history under application action tab Added By Rahul S-->
+                   <apex:relatedList subject="{!xcdhcm__Applicant__c}" list="ProcessSteps" rendered="{!ApprovalHistory}"/>        
+                   <!-- END :: 10-07-2017 Summer17 NPPD-1456 Display approval history under application action tab Added By Rahul S-->                      
+                   <apex:relatedList subject="{!xcdhcm__Applicant__c}" list="CombinedAttachments" />
+                   <div style="border-bottom: 2px solid #402014!important;"></div><br/> 
+               <!-- END :: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    -->      
+               
+             <!-- <apex:form >     
+                <apex:pageBlock title="On boarding" >
+                    <apex:pageBlockButtons location="top">   
+                      <apex:commandButton value="On board candidate" action="{!Onboardcandidate}" styleclass="formbutton" style="display:inline!important" />                                   
+                    </apex:pageBlockButtons>
+                    <apex:outputText Value="No records to display" rendered="{!Onboarding.Size==0}" />       
+                    <apex:pageblockTable value="{!Onboarding}" var="OB" width="100%" >  
+                        <apex:column headervalue="Name">
+                          <apex:outputLink target="_top" title="{!OB.Name}" value="/{!OB.id}"  >{!OB.Name}</apex:OutputLink>                                                                                      
+                        </apex:column>
+                        <apex:repeat var="f" value="{!$ObjectType.On_boarding_checklist__c.Fieldsets.Application_detail}">  
+                            <apex:column value="{!OB[f]}" />
+                        </apex:repeat>    
+                    </apex:pageblockTable>
+                 </apex:pageBlock>                           
+            </apex:form>  -->
+          </apex:tab>
+         <!-- END :: 02/09/2015 NPPD-827 New change  --> 
+        </apex:tabPanel>
+      </td>
+    </tr>
+   </table>
+ </apex:outputPanel>  
+</apex:page>

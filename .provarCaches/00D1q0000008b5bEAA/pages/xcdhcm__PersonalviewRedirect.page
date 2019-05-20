@@ -1,0 +1,3 @@
+<apex:page standardController="xcdhcm__Personal__c" showheader="true" action="{!init}" setup="false" cache="false" 
+extensions="xcdhcm.PersonalviewRedirect" standardStylesheets="true">
+</apex:page>

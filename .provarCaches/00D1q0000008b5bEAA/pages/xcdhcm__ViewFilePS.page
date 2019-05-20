@@ -1,0 +1,88 @@
+<apex:page Controller="xcdhcm.ViewFileControllerPS" title="View documents" sidebar="false">
+ <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Employeesubpagecss.css')}" />  
+ <style>
+  .titlestyle{
+    color:#999999!important;
+    font-size: 11pt !important; 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    padding-bottom: 6px; 
+  }
+  body .bRelatedList .pbBody table.list, body .apexp .pbBody table.list{
+    border-bottom: 1px solid #cde2f5 !important;
+    border-top: 1px solid #cde2f5 !important;  
+ } 
+ </style>
+ 
+    <apex:form id="frm">
+        <apex:pageBlock title="{!$Label.xcdhcm__phviewfileps}">  
+            <table>
+                 <tr>
+                    <td style="padding-bottom: 6px!important;"> <apex:outputLabel Value="Employee" for="empname" styleclass="titlestyle" /></td>
+                    <td style="padding-bottom: 6px!important;"><apex:inputText Value="{!employeeName}" id="empname" disabled="true" style="background-color:#cccccc;" /></td>
+                 </tr>               
+                 <tr>
+                   <td style="padding-bottom: 6px!important;"><apex:outputLabel Value="Search" styleclass="titlestyle" /> </td>
+                   <td style="padding-bottom: 6px!important;"><input type="text" id="fileName" onkeyup="doSearch();"/>
+                        <apex:actionFunction name="searchServer" action="{!runSearch}" rerender="sec1">
+                        <apex:param name="fileName" value="" />
+                   </apex:actionFunction>
+                   </td>
+                 </tr>   
+                 <tr> 
+                    <td style="padding-bottom: 6px!important;"><apex:outputLabel Value="Filter" for="selList" styleclass="titlestyle"/></td>
+                    <td style="padding-bottom: 6px!important;"><apex:selectList value="{!objectName}" size="1" id="selList">
+                     <apex:actionSupport event="onchange" action="{!reloadWrapper}" status="loadingStatus" reRender="sec1"/>
+                     <apex:selectOptions value="{!ObjectOtion}"/>  
+                   </apex:selectList>
+                   <br/>
+                   <apex:actionStatus startText="Please wait... " id="loadingStatus"/>
+                   </td>
+                 </tr>
+            </table>                    
+                <apex:pageBlockSection columns="1" id="sec1" >
+                    <apex:pageBlockTable Value="{!fileViewWrapperList}" var="file">
+                            <apex:column headerValue="Record" >
+                                  <apex:outputLink target="_blank" title="View attachment file" value="/{!file.file.ParentId}">{!file.objectName}</apex:OutputLink>
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.Attachment.fields.Name.label}">
+                                <apex:outputText Value="{!file.file.Name}"/>
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.Attachment.fields.Description.label}">
+                                <apex:outputText Value="{!file.file.Description}"/>
+                            </apex:column> 
+                            <apex:column headerValue="Confidential" rendered="{!viewConfDoc}">
+                                <apex:image value="/img/checkbox_unchecked.gif" rendered="{!file.file.IsPrivate=false}"/>
+                                <apex:image value="/img/checkbox_checked.gif" rendered="{!file.file.IsPrivate=true}"/>
+                            </apex:column> 
+                            <apex:column headerValue="{!$ObjectType.Attachment.fields.createdDate.label}"> 
+                                <apex:outputField Value="{!file.file.createdDate}"/>
+                            </apex:column> 
+                             <apex:column headervalue="Action">
+                                <apex:commandLink action="/servlet/servlet.FileDownload?file={!file.file.id}" value="View" target="_blank"/>
+                             </apex:column>  
+                    </apex:pageBlockTable> 
+                </apex:pageBlockSection>
+                          
+                 <apex:pageBlockButtons location="bottom">
+              <!-- <apex:commandButton Value="Attach document" action="{!attachFiles}"/>-->
+                    <apex:commandButton Value="{!$Label.xcdhcm__viewfilepsbback}" action="{!cancel}"/>
+                 </apex:pageBlockButtons>                 
+                 <apex:pageBlockButtons location="bottom" style="width:150px;margin:auto;position:relative;" >  
+                   <apex:commandButton action="{!Beginning}" title="Previous" value=" " reRender="frm" disabled="{!DisablePrevious}"  rendered="{!AND(total_size!=null,total_size>50)}" style="background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/first.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;"/>
+                    <apex:commandButton action="{!Previous}" title="Previous" value=" " reRender="frm" disabled="{!DisablePrevious}" rendered="{!AND(total_size!=null,total_size>50)}"  style="background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/prev.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;"/>        
+                    <apex:commandButton action="{!Next}" title="Next" value=" " reRender="frm" disabled="{!DisableNext}"   rendered="{!AND(total_size!=null,total_size>50)}" style="background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/next.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;"/> 
+                    <apex:commandButton action="{!End}" title="Previous" value=" " reRender="frm" disabled="{!DisableNext}"  rendered="{!AND(total_size!=null,total_size>50)}" style="background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/last.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;" />
+                </apex:pageBlockButtons>                                               
+            </apex:pageBlock>
+            <div style="border-bottom: 2px solid #63a4c5!important;"></div> 
+         </apex:form>
+    
+    <script type="text/javascript">
+          function doSearch() {
+                      searchServer(
+                      document.getElementById("fileName").value
+                      );
+                  }
+    </script>   
+</apex:page>

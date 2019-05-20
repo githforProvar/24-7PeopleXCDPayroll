@@ -1,0 +1,15 @@
+<apex:page >
+<script type="text/javascript">
+	var url = window.location.href;
+	var baseURL = new URL(url);
+	var empId = baseURL.searchParams.get("id");
+	var newJobRoleID = baseURL.searchParams.get("jobRoleId");
+	var oldJobRoleID = baseURL.searchParams.get("oldjrid");
+	var needComp = baseURL.searchParams.get("redirectToCompensationPage");
+	var parentPage = baseURL.searchParams.get("parentPage");
+	var perLevel = baseURL.searchParams.get("permissionLevel");
+	var tab = baseURL.searchParams.get("tab");
+	var isResetBackToLYRequired = baseURL.searchParams.get("isResetBackToLY");
+    sforce.one.navigateToURL('/lightning/n/xcdhcm__Reset_Leave_Year?id='+empId+'&jobRoleId='+newJobRoleID+'&redirectToCompensationPage='+needComp+'&oldjrid='+oldJobRoleID+'&parentPage='+parentPage+'&permissionLevel='+perLevel+'&tab=JobRole'+'&isResetBackToLeaveYear='+isResetBackToLYRequired);	          
+</script>
+</apex:page>

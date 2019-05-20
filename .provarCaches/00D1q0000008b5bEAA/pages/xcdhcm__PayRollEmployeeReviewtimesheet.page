@@ -1,0 +1,473 @@
+<!-- START :: 03/07/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality modified by Farhan -->
+<apex:page controller="xcdhcm.PayRollEmployeeReviewtimesheetController" action="{!getTimesheetRecords}" sidebar="false" >
+<!-- END :: 03/07/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality modified by Farhan -->
+ <!--  <apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+  <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+    
+    <style>
+    body .pbBody table.list tr.headerRow th 
+    {
+      width:1% !important;
+    }
+    <!-- START:: NPAY-2 class ng-cloak added by Farhan  -->
+    .ng-cloak 
+    {
+        display: none !important;
+    }
+    <!-- END:: NPAY-2 class ng-cloak added by Farhan  -->
+    </style>
+
+     <apex:form id="theForm"> 
+        <apex:PageMessages id="errId" />
+    
+   <html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+        <head>
+            <meta charset="utf-8"/>
+           
+            
+            <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet"/>
+            
+            <link rel="stylesheet" href="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css" />
+            <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet"/>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+            
+            <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+            
+            <script type="text/javascript"> 
+              function stopRKey(evt) { 
+              var evt = (evt) ? evt : ((event) ? event : null); 
+              var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+              if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+             } 
+                document.onkeypress = stopRKey; 
+            </script>
+ 
+            <style>
+                .input-mysize { width: 550px }
+                .search-query {
+                padding-left: 469px;
+                background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC);
+                background-repeat: no-repeat;
+                background-position: 562px 8px;
+                }
+                
+                
+            </style>
+        </head>
+       <!--- Javascript -->
+        <script type="text/javascript">
+        <!-- Name your application -->
+            var myapp = angular.module('hello', []);
+        var sortingOrder = 'ot.xcdhcm__Employee_Details__r.Name';
+       
+        
+        <!-- Define Controller  -->
+            var contrl=myapp.controller('ctrlRead', function ($scope, $filter) {
+                <!--- Initialize Scope Variables --->
+                    $scope.sortingOrder = sortingOrder;
+                $scope.numLimit = 4;
+                $scope.totalPrice=0; 
+               
+                $scope.reverse = false;
+                $scope.filteredItems = [];
+                $scope.groupedItems = [];
+                $scope.itemsPerPage = 15;
+                $scope.pagedItems = [];
+                $scope.currentPage = 0;
+                $scope.items ={!conListJSON };
+				//START :: 21/09/2017 Heapsize issue modified by Jamil/Farhan
+                $scope.selectedAll = false;
+                $scope.Math = window.Math;
+
+                     $scope.sel = {};
+                     $scope.checkAll =( function()
+                     {
+                     console.log("select all initaited with value as "+$scope.selectedAll);
+		                     if($scope.selectedAll)
+		                     {
+		                        for(i in $scope.items)
+		                        {
+		                          $scope.items[i].selected = true;
+		                          //$scope.sel[$scope.items[i].ot.Id]=true;
+		                        }
+		                     }
+		                     else
+		                     {
+		                        for(i in $scope.items)
+		                        {
+		                        	$scope.items[i].selected = false;
+		                          //$scope.sel[$scope.items[i].ot.Id]=false;
+		                        }
+		                     }   
+		                     
+                      });
+                	 //END :: 21/09/2017 Heapsize issue modified by Jamil/Farhan
+                               
+                var searchMatch = function (haystack, needle) {
+                    if (!needle) {
+                        return true;
+                    }
+                    return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+                };
+                
+                //Initialize the Search Filters 
+                $scope.search = function () {
+                    $scope.filteredItems = $filter('filter')($scope.items, function (item) {
+                        for (var attr in item) {
+                            if (searchMatch(item.ot.xcdhcm__Employee_Details__r.Name , $scope.query))
+                                return true;
+                        }
+                        return false;
+                    });
+                    // Define Sorting Order
+                    if ($scope.sortingOrder !== '') {
+                        $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+                    }
+                    $scope.currentPage = 0;
+                    
+                    // Group by pages
+                    $scope.groupToPages();
+                };
+                
+                // Calculate Total Number of Pages based on Records Queried 
+                $scope.groupToPages = function () {
+                    $scope.pagedItems = [];
+                    for (var i = 0; i < $scope.filteredItems.length; i++) {
+                        if (i % $scope.itemsPerPage === 0) {
+                            $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [$scope.filteredItems[i]];
+                        } else {
+                            $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i]);
+                        }
+                    }
+                };
+                
+                $scope.range = function (start, end) {
+                    var ret = [];
+                    if (!end) {
+                        end = start;
+                        start = 0;
+                    }
+                    for (var i = start; i < end; i++) {
+                        ret.push(i);
+                    }
+                    return ret;
+                };
+                
+                $scope.prevPage = function () {
+                    if ($scope.currentPage > 0) {
+                        $scope.currentPage--;
+                    }
+                };
+                
+                $scope.nextPage = function () {
+                    if ($scope.currentPage < $scope.pagedItems.length - 1) {
+                        $scope.currentPage++;
+                    }
+                };
+                $scope.setPage = function () {
+                    $scope.currentPage = this.n;
+                };
+                // functions have been describe process the data for display
+                $scope.search();
+                
+                // change sorting order
+                $scope.sort_by = function (newSortingOrder) {
+                    if ($scope.sortingOrder == newSortingOrder)
+                        $scope.reverse = !$scope.reverse;
+                    $scope.sortingOrder = newSortingOrder;
+                    
+                    // icon setup
+                    $('th i').each(function () {
+                        // icon reset
+                        $(this).removeClass().addClass('icon-sort');
+                    });
+                    if ($scope.reverse)
+                        $('th.' + new_sorting_order + ' i').removeClass().addClass('icon-chevron-up');
+                    else
+                        $('th.' + new_sorting_order + ' i').removeClass().addClass('icon-chevron-down');
+                };
+                //START :: 26/7/2016 NPAY-188 Review timesheet - editable records added by Farhan
+                $scope.sendData = function()
+                {
+                    saveMethod(JSON.stringify($scope.items));
+                };
+                //END :: 26/7/2016 NPAY-188 Review timesheet - editable records added by Farhan
+                               
+            });
+            
+        
+        
+        contrl.$inject = ['$scope', '$filter'];
+        
+        
+ 
+        </script>
+       
+        <body>
+ 
+        <apex:pageBlock title="{!$Label.xcdhcm__phpayrollemployeereviewtimesheet}" id="rows1"> 
+        </apex:pageBlock>             
+            
+            <!-- =========== Binding Controller to Body of Page ============= -->
+            <div ng-controller="ctrlRead">
+                <table>
+                      
+                        <tr>
+                          <td>
+                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+                           </td>    
+                           <td>
+                                <apex:outputLabel value=" Requests:" />
+                            </td>
+                            <td>
+                               <apex:selectList value="{!selectedFilter}" size="1" style="margin-left:10px;">
+                               		<!-- START :: 03/07/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality modified by Farhan -->
+                                    <apex:actionSupport event="onchange" action="{!getTimesheetRecords}"  status="wait"/>
+                                    <!-- END :: 03/07/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality modified by Farhan -->
+                                    <apex:selectOptions value="{!overtimeFilters}" />
+                                </apex:selectList> 
+                            </td>
+                        </tr>
+                        
+                    
+                       <tr> 
+                        <td>
+                             &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 
+                        </td>   
+                        <td>
+                                <apex:outputLabel value="Search employee:" />
+                            </td>
+                         <td>  
+                            
+                            <input type="text" ng-model="query" ng-change="search()"  placeholder="Search"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table  table-hover">
+                    <thead>
+                        <tr>
+                            <th class="paySummary">
+                                 <input type="checkbox"  ng-model="selectedAll" ng-click="checkAll()"/> 
+                             </th>
+                           
+                            <!--  START::04/07/2016 NPAY-145 Overtime and Timesheet/Regression modified by Farhan(added field labels and helptext)-->
+                            <th class="Employee_Details__r.Name">{!$ObjectType.Overtime_Record__c.Fields.Employee_Details__c.Label}
+                            	<span id="hlpbtn"> 
+                            		<!--  <img src="{!$Resource.Help_icon}"   title="{!$ObjectType.Overtime_Record__c.Fields.Employee_Details__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Employee_Details__c.inlineHelpText == null, 'display:none','')}" /> -->
+                                    
+                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields.Employee_Details__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Employee_Details__c.inlineHelpText == null, 'display:none','')}" />
+                            	</span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Employee_Details__r.Name ')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <th class="Name">{!$ObjectType.Overtime_Record__c.Fields.Name.Label}
+                            	<span id="hlpbtn"> 
+                            	 <!--  	<img src="{!$Resource.Help_icon}"   title="{!$ObjectType.Overtime_Record__c.Fields.Name.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Name.inlineHelpText == null, 'display:none','')}" />-->
+                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"    title="{!$ObjectType.Overtime_Record__c.Fields.Name.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Name.inlineHelpText == null, 'display:none','')}" />
+                            	</span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Leave_Month__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                           <!--  <th class="Time_sheet_approach__c">Time sheet approach&nbsp;<a ng-click="sort_by('ot.xcdhcm__Time_sheet_approach__c')"><i class="icon-sort" style="color:black"></i></a></th> -->
+                            <th class="Number_of_days__c">{!$ObjectType.Overtime_Record__c.Fields.Number_of_days__c.Label}
+                            	<span id="hlpbtn"> 
+                            		<!-- <img src="{!$Resource.Help_icon}"   title="{!$ObjectType.Overtime_Record__c.Fields.Number_of_days__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Number_of_days__c.inlineHelpText == null, 'display:none','')}" /> -->
+                                    
+                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields.Number_of_days__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Number_of_days__c.inlineHelpText == null, 'display:none','')}" />
+                                    
+                            	</span>
+                                <a ng-click="sort_by('ot.xcdhcm__Worked_hours__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <th class="Payable_days__c">{!$ObjectType.Overtime_Record__c.Fields.Payable_days__c.Label}
+                            	<span id="hlpbtn"> 
+                            		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields.Payable_days__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Payable_days__c.inlineHelpText == null, 'display:none','')}" />
+                            	</span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Payable_days__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <th class="Rate_of_pay__r.Daily_rate_of_pay_input__c">{!$ObjectType.Compensation__c.Fields.Daily_rate_of_pay_input__c.Label}
+                            	<span id="hlpbtn"> 
+                            		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Compensation__c.Fields.Daily_rate_of_pay_input__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Compensation__c.Fields.Daily_rate_of_pay_input__c.inlineHelpText == null, 'display:none','')}" />
+                            	</span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Rate_of_pay__r.xcdhcm__Daily_rate_of_pay_input__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <th class="Total_hours_worked__c">{!$ObjectType.Overtime_Record__c.Fields.Total_hours_worked__c.Label}
+                            	<span id="hlpbtn"> 
+                            		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields.Total_hours_worked__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Total_hours_worked__c.inlineHelpText == null, 'display:none','')}" />
+                            	</span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Total_hours_worked__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <th class="Number_of_hours__c">{!$ObjectType.Overtime_Record__c.Fields.Number_of_hours__c.Label}
+                            	<span id="hlpbtn"> 
+                            		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields.Number_of_hours__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Number_of_hours__c.inlineHelpText == null, 'display:none','')}" />
+                            	</span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Hours_Worked__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                           <!-- <th class="Rate_of_pay__r.Daily_rate_of_pay_input__c">Daily rate of pay&nbsp;<a ng-click="sort_by('ot.Rate_of_pay__r.Daily_rate_of_pay_input__c')"><i class="icon-sort" style="color:black"></i></a></th> -->
+                            <th class="Rate_of_pay__r.Hourly_rate_of_pay__c">{!$ObjectType.Compensation__c.Fields.Hourly_rate_of_pay__c.Label}
+                            	<span id="hlpbtn"> 
+                            		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Compensation__c.Fields.Hourly_rate_of_pay__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Compensation__c.Fields.Hourly_rate_of_pay__c.inlineHelpText == null, 'display:none','')}" />
+                            	</span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Rate_of_pay__r.xcdhcm__Hourly_rate_of_pay__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <th class="Payment_amount__c">{!$ObjectType.Overtime_Record__c.Fields.Payment_amount__c.Label}
+                            	<span id="hlpbtn"> 
+                            		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields.Payment_amount__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Payment_amount__c.inlineHelpText == null, 'display:none','')}" />
+                            	</span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Payment_amount__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <th class="Notes__c">{!$ObjectType.Overtime_Record__c.Fields.Adjustment_Notes__c.Label}
+                            <span id="hlpbtn"> 
+                            		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields.Adjustment_Notes__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Adjustment_Notes__c.inlineHelpText == null, 'display:none','')}" />
+                            </span>
+                            	<a ng-click="sort_by('ot.xcdhcm__Notes__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <th class="Approval_Status__c">{!$ObjectType.Overtime_Record__c.Fields.Approval_Status__c.Label}
+                            <span id="hlpbtn"> 
+                            		<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields.Approval_Status__c.inlineHelpText}"
+                                    style="{!IF($ObjectType.Overtime_Record__c.Fields.Approval_Status__c.inlineHelpText == null, 'display:none','')}" />
+                            </span>
+                            <a ng-click="sort_by('ot.xcdhcm__Approval_Status__c')"><i class="icon-sort" style="color:black"></i></a>&nbsp;</th>
+                            <!--  END::04/07/2016 NPAY-145 Overtime and Timesheet/Regression modified by Farhan(added field labels and helptext)-->
+                             
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <td colspan="6">
+                            <div class="pagination pagination-large pull-left">
+                                <ul>
+                                    <li ng-class="{disabled: currentPage == 0}">
+                                        <a ng-click="prevPage()">Prev</a>
+                                    </li>
+                                    <li ng-repeat="n in range(pagedItems.length)"
+                                    ng-class="{active: n == currentPage}"
+                                    ng-click="setPage()">
+                                        <a ng-bind="n + 1">1</a>
+                                    </li>
+                                    <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                        <a ng-click="nextPage()">Next</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>                       
+                    </tfoot>
+                     <tbody>
+                        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse" class="ng-cloak">
+                            <td>
+ 				    				<!-- START :: 21/09/2017 Heapsize issue modified by Jamil/Farhan -->
+                                   <input type="checkbox"  ng-model="item.selected" />
+         				    		<!-- END :: 21/09/2017 Heapsize issue modified by Jamil/Farhan -->                   
+                           </td>
+                         
+                            
+                            <td style="text-align:left"> 
+                            <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->  
+                                 <!--  <apex:outputLink target="_top"
+                                     value="/{{item.ot.Employee_Details__r.Id}}"> {{ item.ot.Employee_Details__r.Name }}
+                                   </apex:OutputLink>
+                                 -->
+                                  <a href="/one/one.app#/alohaRedirect/{{item.ot.xcdhcm__Employee_Details__r.Id}}" >{{item.ot.xcdhcm__Employee_Details__r.Name}}</a>
+                                 <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->   
+                           </td>
+                         
+                            
+                            <div>
+                            
+                            <td>
+                            <!-- START :: 16/08/2018 NPAY-580 Allow all timesheet approaches into payroll modified by Farhan -->
+                            <div ng-if="item.ot.xcdhcm__Time_sheet_approach__c=='Days' && (item.ot.xcdhcm__Timesheet_frequency__c == 'Monthly' || item.ot.xcdhcm__Timesheet_frequency__c == '')">
+                            	<a target="_blank" href="/one/one.app#/alohaRedirect/apex/xcdhcm__TimesheetDays?empid={{item.ot.xcdhcm__Employee_Details__r.Id}}&jobroleID={{item.ot.xcdhcm__Job_Role__c}}&tssumID={{item.ot.xcdhcm__Leave_Month__c}}-{{item.ot.xcdhcm__Leave_Year__c}}&detailView=yes&approach=Days"> {{item.ot.xcdhcm__Leave_Month__c}} - {{item.ot.xcdhcm__Leave_Year__c}}</a> 
+                           	</div>
+                             
+                             <div ng-if="item.ot.xcdhcm__Time_sheet_approach__c=='Days' && item.ot.xcdhcm__Timesheet_frequency__c != '' && item.ot.xcdhcm__Timesheet_frequency__c != 'Monthly'">
+                               <a target="_blank" href="/one/one.app#/alohaRedirect/apex/xcdhcm__TimesheetDays?empid={{item.ot.xcdhcm__Employee_Details__r.Id}}&jobroleID={{item.ot.xcdhcm__Job_Role__c}}&tssumID={{item.ot.xcdhcm__Leave_Month__c}}&detailView=yes&approach=Days"> {{item.ot.xcdhcm__Leave_Month__c}}</a> 
+                            </div>
+                            
+                            <div ng-if="item.ot.xcdhcm__Time_sheet_approach__c=='Project' && (item.ot.xcdhcm__Timesheet_frequency__c == 'Monthly' || item.ot.xcdhcm__Timesheet_frequency__c == '')">
+                            	<a target="_blank" href="/one/one.app#/alohaRedirect/apex/xcdhcm__TimesheetProject?empid={{item.ot.xcdhcm__Employee_Details__r.Id}}&jobroleID={{item.ot.xcdhcm__Job_Role__c}}&tssumID={{item.ot.xcdhcm__Leave_Month__c}}-{{item.ot.xcdhcm__Leave_Year__c}}&detailView=yes&approach=Days"> {{item.ot.xcdhcm__Leave_Month__c}} - {{item.ot.xcdhcm__Leave_Year__c}}</a> 
+                           	</div>
+                             
+                             <div ng-if="item.ot.xcdhcm__Time_sheet_approach__c=='Project' && item.ot.xcdhcm__Timesheet_frequency__c != '' && item.ot.xcdhcm__Timesheet_frequency__c != 'Monthly'">
+                               <a target="_blank" href="/one/one.app#/alohaRedirect/apex/xcdhcm__TimesheetProject?empid={{item.ot.xcdhcm__Employee_Details__r.Id}}&jobroleID={{item.ot.xcdhcm__Job_Role__c}}&tssumID={{item.ot.xcdhcm__Leave_Month__c}}&detailView=yes&approach=Days"> {{item.ot.xcdhcm__Leave_Month__c}}</a> 
+                            </div>
+                             
+                             <!-- START :: 29/11/2017 NPPD-1513 Modular timesheet modified by Farhan -->
+                             <div ng-if="(item.ot.xcdhcm__Time_sheet_approach__c != 'Days' && item.ot.xcdhcm__Time_sheet_approach__c != 'Project') && (item.ot.xcdhcm__Timesheet_frequency__c == 'Monthly' || item.ot.xcdhcm__Timesheet_frequency__c == '')">
+                                <a target="_blank" href="/one/one.app#/alohaRedirect/apex/xcdhcm__ModularTimesheet?empid={{item.ot.xcdhcm__Employee_Details__r.Id}}&jobroleID={{item.ot.xcdhcm__Job_Role__c}}&tssumID={{item.ot.xcdhcm__Leave_Month__c}}-{{item.ot.xcdhcm__Leave_Year__c}}&detailView=yes&approach=Hours"> {{item.ot.xcdhcm__Leave_Month__c}} - {{item.ot.xcdhcm__Leave_Year__c}}</a>
+                            </div>
+                            
+                            <div ng-if="(item.ot.xcdhcm__Time_sheet_approach__c != 'Days' && item.ot.xcdhcm__Time_sheet_approach__c != 'Project') && item.ot.xcdhcm__Timesheet_frequency__c != '' && item.ot.xcdhcm__Timesheet_frequency__c != 'Monthly'">
+                                <a target="_blank" href="/one/one.app#/alohaRedirect/apex/xcdhcm__ModularTimesheet?empid={{item.ot.xcdhcm__Employee_Details__r.Id}}&jobroleID={{item.ot.xcdhcm__Job_Role__c}}&tssumID={{item.ot.xcdhcm__Leave_Month__c}}&detailView=yes&approach=Hours"> {{item.ot.xcdhcm__Leave_Month__c}} </a>
+                            </div>
+                            <!-- END :: 16/08/2018 NPAY-580 Allow all timesheet approaches into payroll modified by Farhan -->
+                            
+                            
+                             </td>
+                             </div>
+                             <!-- <td style="text-align:left">{{item.ot.Time_sheet_approach__c}}</td> -->
+                            <td>
+                             {{item.ot.xcdhcm__Number_of_days__c}}
+                             </td>
+                             
+                             <td>
+                             <!-- START :: 26/7/2016 NPAY-188 Review timesheet - editable records modified by Farhan -->
+                             <div ng-if="item.ot.xcdhcm__Time_sheet_approach__c == 'Days'">
+                             	<input type="number" id="payableDays_{{item.count}}" ng-model="item.ot.xcdhcm__Payable_days__c" ng-change="item.ot.xcdhcm__Payment_amount__c = item.ot.xcdhcm__Payable_days__c * item.ot.xcdhcm__Overtime__r.records[0].xcdhcm__Rate_of_pay__r.xcdhcm__Daily_rate_of_pay_input__c " style="width: 60%;"/>
+                             </div>
+                             <div ng-if="item.ot.xcdhcm__Time_sheet_approach__c != 'Days'">
+                             {{item.ot.xcdhcm__Payable_days__c}}
+                             </div>
+                             <!-- END :: 26/7/2016 NPAY-188 Review timesheet - editable records modified by Farhan -->
+                             
+                             </td> 
+                             
+                           
+                             <td style="text-align:left">{{ item.ot.xcdhcm__Overtime__r.records[0].xcdhcm__Rate_of_pay__r.xcdhcm__Daily_rate_of_pay_input__c | number : 2}}</td> 
+                             <td style="text-align:left">{{ item.ot.xcdhcm__Total_hours_worked__c}}</td>
+                            
+                            <!-- START :: 26/7/2016 NPAY-188 Review timesheet - editable records modified by Farhan -->
+                            <td> 
+                            	<!-- START :: 16/08/2018 NPAY-580 Allow all timesheet approaches into payroll modified by Farhan -->
+	                            <div ng-if="item.ot.xcdhcm__Time_sheet_approach__c != 'Days'">
+	                            <!-- END :: 16/08/2018 NPAY-580 Allow all timesheet approaches into payroll modified by Farhan -->
+	                            	<input type="number" ng-model="item.ot.xcdhcm__Number_of_hours__c" ng-change="item.ot.xcdhcm__Payment_amount__c = item.ot.xcdhcm__Number_of_hours__c * item.ot.xcdhcm__Overtime__r.records[0].xcdhcm__Rate_of_pay__r.xcdhcm__Hourly_rate_of_pay__c" style="width: 60%;"/> 
+	                            </div>
+	                            <div ng-if="item.ot.xcdhcm__Time_sheet_approach__c == 'Days'">
+	                            	{{ item.ot.xcdhcm__Number_of_hours__c }}
+	                            </div>
+                            </td>
+                          
+                            <!-- END :: 26/7/2016 NPAY-188 Review timesheet - editable records modified by Farhan -->
+                          
+                          <td> {{item.ot.xcdhcm__Overtime__r.records[0].xcdhcm__Rate_of_pay__r.xcdhcm__Hourly_rate_of_pay__c | number : 2}}</td>
+                        
+                            <td style="text-align:left">{{item.ot.xcdhcm__Payment_amount__c | number : 2}}</td>
+                            <td style="text-align:left">{{item.ot.xcdhcm__Adjustment_Notes__c}}</td>
+                            <td style="text-align:left">{{item.ot.xcdhcm__Approval_status__c}}</td>
+                           
+                            
+                        </tr>
+                    </tbody>
+                </table>
+              
+                   <div style="margin-top: -40px;">   
+                     <center> 
+                     	<!-- START :: 26/7/2016 NPAY-188 Review timesheet - editable records modified by Farhan  -->
+                       <apex:commandButton style="display:none;">
+                       		<input type="button" ng-click="sendData()" value="{!$Label.PayRollEmployeeReviewtimesheetBSaveandconfirmpayment}" class="btn"/>
+                       </apex:commandButton>
+                      	<!-- END :: 26/7/2016 NPAY-188 Review timesheet - editable records modified by Farhan  -->
+                       <apex:commandButton value="{!$Label.xcdhcm__payrollemployeereviewtimesheetbback}" action="{!backPayrollEmployees}" rerender="errorId"/>
+                     </center>  
+                   </div> 
+                   <!-- START :: 26/7/2016 NPAY-188 Review timesheet - editable records added by Farhan  -->
+                   <apex:actionFunction name="saveMethod" action="{!processSelected}" oncomplete="" >
+                            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                   </apex:actionFunction>
+                   <!-- END :: 26/7/2016 NPAY-188 Review timesheet - editable records added by Farhan  -->
+               
+            </div>
+        </body>
+    </html>
+    </apex:form>
+</apex:page>

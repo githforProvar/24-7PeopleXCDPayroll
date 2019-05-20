@@ -1,0 +1,26 @@
+<apex:page title="{!$ObjectType.xcdhcm__Overtime_Record__c.labelPlural}">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lite_HR_Request.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}"/>
+   
+    <style>
+        select{
+        width:10%!important;
+        }
+        .listViewportWrapper .listViewport .topNav, .listViewportWrapper.individualPalette .listViewport .topNav {
+            background-color: rgba(221, 219, 218, 0.18);
+            hight: 50px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            border-radius: 4px;
+        }   
+    </style> 
+        
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head> 
+          <body class="slds-scope"> 
+    <apex:enhancedList type="Overtime_Record__c" height="600" />
+   </body>
+</html>
+</apex:page>

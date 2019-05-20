@@ -1,0 +1,28 @@
+<apex:page standardController="xcdhcm__Company_Holidays__c" extensions="xcdhcm.RecalculateLeaveRequestController" sidebar="false">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form >
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header"> 
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageMessages />
+                            
+                            <center>
+                                <h1>  Records are recalculated successfully</h1>
+                                <apex:commandButton value="{!$Label.xcdhcm__recalculationsuccessbok}" action="{!ok}" styleclass="slds-button slds-button--neutral"/>
+                            </center> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

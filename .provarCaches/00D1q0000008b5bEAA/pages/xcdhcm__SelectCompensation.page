@@ -1,0 +1,176 @@
+<!-- START :: 30/06/2016 NPPD-1031 Display claim overtime button only where employee is authorised to claim Created by Rahul S. -->
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.OvertimeExtensionController" sidebar="false" showHeader="true" wizard="false">
+    <!--     <apex:stylesheet value="{!URLFOR($Resource.XCD_static_resources,'Css/Sublineremovecss.css')}" /> -->
+    <style type="text/css"> 
+        input[type='text']{
+        width:175px!important;
+        }
+        select{ 
+        width:178px!important;
+        }          
+        <!--Start: PopUp window to display the Compensation Records -->
+        .custPopup
+        {
+        background: #fff url(/img/alohaSkin/lookup_bg.png) repeat-x;
+        border-width: 2px;
+        border-style: inset;
+        z-index: 9999;
+        left: 50%;
+        padding:10px;
+        position: absolute;
+        /* These are the 3 css properties you will need to change so the popup 
+        displays in the center of the screen. First set the width. Then set 
+        margin-left to negative half of what the width is. You can add 
+        the height property for a fixed size pop up if you want.*/
+        width: 650px;
+        margin-left: -250px;
+        top:100px;
+        }
+        .popupBackground
+        {
+        //background-color:black;
+        opacity: 0.20;
+        filter: alpha(opacity = 20);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .pageTitleIcon
+        {
+        background-image: url(/img/sprites/master.png);
+        background-position: 0 -1202px;
+        width: 32px;
+        height: 32px;
+        }    
+        <!--End: PopUp window to display the Compensation Records -->
+    </style>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" /> 
+        
+    <style>
+        .slds-scope .slds-section-title--divider {   
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .slds-modal__header, .slds-modal__content {
+        background: #fdfdfd;
+        } 
+        .slds-form-element__label {
+        padding-left: 6%!important;
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">    
+            <apex:form >
+                
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelToEmpDetail2}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>  
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHSelectCompensation}</h2> 
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            
+                            <!-- START :: 30/09/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                            <apex:pageBlock >
+                                <!-- END:: 30/0892016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                <apex:PageMessages id="errorid"/>
+                                <apex:outputPanel style="Display :none"> 
+                                    <apex:inputField value="{!overtimeRequest[0].Employee_Details__c}" />
+                                </apex:outputPanel>
+                                <apex:pageBlockSection >
+                                    <!--Start: Custom LookUp Field -->
+                                    <apex:pageBlockSectionItem id="info" >
+								<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+								<apex:outputPanel rendered="{!$ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Rate_of_pay__c.Accessible}">
+								<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.Overtime__c.Fields.Rate_of_pay__c.Label}
+                                                    </label> 
+                                                    <div class="slds-form-element__control" width="150%">
+                                                        <apex:outputPanel >
+                                                            <apex:inputText size="30" value="{!CompenName}" style="width:175px;margin-left:15px" tabindex="1"/>       
+                                                            <apex:actionStatus startText="Loading detail..." id="recordStatus" />
+                                                            <apex:commandLink action="{!ShowCompenListPopup}"  type="image/png" rerender="tstpopup" style="text-decoration:none" tabindex="1">
+                                                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/lookup.png')}" class="ClookupIcon" title="Compensation Lookup (New Window)"/>
+                                                            </apex:commandlink>
+                                                        </apex:outputPanel>
+                                                    </div>                                                                                         
+                                                </div>
+                                            </div>  
+                                        </apex:outputPanel>
+                                    </apex:pageBlockSectionItem>
+                                    <!--End: Custom LookUp Field -->
+                                    
+                                    <!--Start: PopUp window to display the compensation Records -->
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputPanel id="tstpopup" > 
+                                            <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayCompenListPopup}"/>
+                                            <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayCompenListPopup}">
+                                                <apex:commandLink action="{!CloseCompenListPopup}"  type="image/png" rerender="tstpopup" style="float:right;text-decoration:none">
+                                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                                                </apex:commandlink>
+                                                <div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" /><h1 style="font-size: 1.8em;color: #333435;">Lookup</h1></div>
+                                                <br/>  <br/> <br/>      
+                                                <div style="height:360px;overflow:auto;">
+                                                    <h1 style="font-size: 1.2em;color: #333435;">Active Compensations</h1>  <br/>  <br/> 
+                                                    <apex:pageBlockTable value="{!Compenlist}" var="compen"> 
+                                                        <apex:column headerValue="{!$ObjectType.xcdhcm__Compensation__c.Fields.Name.Label}">
+                                                            <apex:commandLink value="{!compen.Name}" action="{!CompenSelected}" reRender="info,errorId"> 
+                                                                <apex:param name="CompenSel" value="{!compen.id}" />
+                                                            </apex:commandLink>  
+                                                        </apex:column>
+                                                        <apex:repeat var="v1" value="{!$ObjectType.xcdhcm__Compensation__c.fieldSets.xcdhcm__Compensation_popup_summary_columns}" >
+                                                        	<!-- START :: 07/11/2018 NPAY-639 Overtime presentation modified by Farhan -->
+                                                        	<!-- Job role field from field set should not be a hyper link in the pop up-->
+                                                            <apex:column >
+                                                            	<apex:facet name="header">
+                                                            		{!v1.label}
+                                                            	</apex:facet>
+                                                            	<apex:outputField value="{!compen[v1]}" rendered="{! v1 != 'xcdhcm__Role_L__c' }"/>
+                                                            	<apex:outputLabel value="{!compen.Role_L__r.Name}" rendered="{! v1 == 'xcdhcm__Role_L__c' }"/>
+                                                            </apex:column>
+							    <!-- END :: 07/11/2018 NPAY-639 Overtime presentation modified by Farhan -->
+                                                        </apex:repeat>
+                                                    </apex:pageBlockTable>   
+                                                </div> <br/>
+                                                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                                
+                                                <center><apex:commandButton value="{!$Label.xcdhcm__selectcompensationbclose}" action="{!CloseCompenListPopup}" rerender="tstpopup" styleclass="slds-button slds-button--neutral"/></center>
+                                                <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+                                    </apex:pageBlockSectionItem>
+                                    <!--End: PopUp window to display the Compensation Records --> 
+                                </apex:pageBlockSection>
+                                
+                                
+                                
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>
+<!-- END :: 30/06/2016 NPPD-1031 Display claim overtime button only where employee is authorised to claim Created by Rahul S. -->

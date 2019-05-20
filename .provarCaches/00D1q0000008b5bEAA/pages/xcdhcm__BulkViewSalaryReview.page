@@ -1,0 +1,2486 @@
+<!-- Author:Sabir Khan ;Description: Migrate with angular js and bootstrap-->
+<apex:page standardcontroller="xcdhcm__Salary_Review__c"  extensions="xcdhcm.BulkNewSalaryReviewController" 
+ sidebar="false" showHeader="true" wizard="false" cache="false" readOnly="false" docType="html-5.0">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />       
+ <style type="text/css">
+ body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+			{
+				font-family:Salesforce Sans,Arial,sans-serif!important;
+				font-size: 1.4rem!important;
+	    			color: #16325c;
+				margin-left: 1mm;
+			}
+
+		/*column header*/
+			.table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>th 
+			{
+	       		font-size: 1.1rem!important;;
+    				color: #54698d;
+    				font-weight: normal;
+    				font-family: 'Salesforce Sans',Arial,sans-serif;
+    				line-height: 1.25; 
+    				letter-spacing:.0625rem;
+    				text-transform: uppercase;
+			}
+		/*column data*/
+			.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+	        		font-size: 1.2rem!important;
+    				color: #16325c;
+    				font-weight: normal;
+    				font-family: 'Salesforce Sans',Arial,sans-serif;
+    				
+			}
+ .helpbub {
+    background-image: url({!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')});
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 15px;
+}
+
+	input[type="text"] {
+		    width: 110px !important;
+		}
+		input[type="float"] {
+		    width: 80px !important;
+		}
+		input[type="text"] {
+		    height: 20px !important;
+		}
+		input[type="float"] {
+		    height: 20px !important;
+		}
+		
+		
+		.effectiveDateBold{
+			font-size: 12px;
+			font-weight:bold;
+		}
+		.effectiveDateNormal{
+			font-size: 12px;
+		}
+		.fa 
+		{
+   		 font-size: 8pt!important;
+		}
+		
+		.slds-scope button, .slds-scope input, .slds-scope optgroup, .slds-scope select, .slds-scope textarea 
+		{
+    			font-size: 12px;
+		}
+		.slds-scope table 
+		{
+		    font-size: 13px;
+		}
+		.modal-content 
+		{
+    			width: 80%;
+		}
+		  .slds-scope .slds-truncate 
+	    {
+	    		white-space: normal;
+	    		width:180px;
+	    		word-break: break-all;
+		}
+</style>
+<apex:form id="theForm">
+	<div style=" width: 50%;height: 1%;">
+		<apex:pageMessages id="errorId" escape="false"/>
+  	</div>
+
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="hello" lang="en">
+		 <head>
+			<meta charset="utf-8"/>
+			<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
+			<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+			<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+			<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+			<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+			<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+		<apex:slds />
+		</head>
+		<!--- Stop Enter -->  
+        <script type="text/javascript"> 
+              function stopRKey(evt) { 
+              var evt = (evt) ? evt : ((event) ? event : null); 
+              var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+              if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+             } 
+            document.onkeypress = stopRKey; 
+        </script>
+        <!--- Stop Enter -->
+		 <!--- -------------------START AngularJs----------------------------------------- -->
+   		<script type="text/javascript">
+		   		<!-- Name your application -->
+		        var myapp = angular.module('hello', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+		        <!-- Define Controller  -->
+		        var contrl=myapp.controller('ctrlRead', function ($scope, $filter ,$uibModal) {
+		        <!--- Initialize Scope Variables --->
+		        $scope.filteredItems = [];
+		        $scope.itemsPerPage = 25;
+		        $scope.currentPage = 1;
+        		$scope.maxlength = 5;
+        		$scope.selectedAll = false;
+        		
+        		 <!--- JSON from apex controller --->
+		        $scope.items ={!ConListJSON};
+		        $scope.itemset ={!fieldsetJSON};
+				$scope.userDefaultCurrency ={!userDefaultCurrencyJson};
+				
+				//td aligment
+				var fieldsetSize = {!fieldsetJSONSize};
+        			$scope.getEmptyCells = function(){
+			    var emptyCells = [];
+			    for(var i = 0; i < fieldsetSize; i++){
+			        emptyCells.push(i);
+			    }        
+			    return emptyCells;
+				}
+		       
+				//Total calculation for set 1 proposed 
+		        $scope.totalPropIncPer1 = {!totalPropIncPer1};
+		        $scope.totalPropInc1 = {!totalPropInc1};
+		        $scope.totalPropSal1 = {!totalPropSal1};
+		        $scope.totalPropBonusAmnt1 = {!totalPropBonusAmnt1};          
+		        
+		        //Total calculation for set 2 proposed 
+		        $scope.totalPropIncPer2 = {!totalPropIncPer2};
+		        $scope.totalPropInc2 = {!totalPropInc2};
+		        $scope.totalPropSal2 = {!totalPropSal2};
+		        $scope.totalPropBonusAmnt2 = {!totalPropBonusAmnt2};          
+		         
+		        //Total calculation for set 3 proposed 
+		        $scope.totalPropIncPer3 = {!totalPropIncPer3};
+		        $scope.totalPropInc3 = {!totalPropInc3};
+		        $scope.totalPropSal3 = {!totalPropSal3};
+		        $scope.totalPropBonusAmnt3 = {!totalPropBonusAmnt3};   
+		        
+		        //Total calculation for set 4 proposed 
+		        $scope.totalPropIncPer4 = {!totalPropIncPer4};
+		        $scope.totalPropInc4 = {!totalPropInc4};
+		        $scope.totalPropSal4 = {!totalPropSal4};
+		        $scope.totalPropBonusAmnt4 = {!totalPropBonusAmnt4};       
+		       
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+		         // set decimal
+				$scope.setDecimal=function()
+		        {
+                    	for(var i=0; i<$scope.items.length; i++)
+		           	{ 
+			          	if($scope.items[i].employeeSalary.xcdhcm__Status__c === "New" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 1" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 1 submitted")
+			           	{
+			           		if($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_1__c != null)
+			           		{
+			          			$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_1__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_1__c).toFixed(2);	
+			          		}
+			          		if($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c != null)
+			          		{
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c).toFixed(2);		
+			        			}   
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c).toFixed(2);	
+			        			}	  
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c).toFixed(2);	
+			        			}	  
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c).toFixed(2);	
+			        			}	           		
+			           	}  
+		              	
+		              	if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 2" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 2 submitted")
+			           	{
+			           		if($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_2__c !=null)
+			           		{
+			          			$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_2__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_2__c).toFixed(2);	
+			          		}
+			          		if($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c != null)
+			          		{
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c).toFixed(2);		
+			        			}   
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c).toFixed(2);	
+			        			}	
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c).toFixed(2);	
+			        			}	  
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c).toFixed(2);	
+			        			}	                  		
+			           	}  
+		              	
+		              	if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 3" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 3 submitted")
+			           	{
+			           		if($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_3__c !=null)
+			           		{
+			          			$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_3__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_3__c).toFixed(2);	
+			          		}
+			          		if($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c != null)
+			          		{
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c).toFixed(2);		
+			        			}   
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c).toFixed(2);	
+			        			}	
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c).toFixed(2);	
+			        			}	  
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c).toFixed(2);	
+			        			}	                  		
+			           	}  
+			           	
+		              	if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 4" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 4 submitted" || $scope.items[i].employeeSalary.xcdhcm__Status__c === "Final" 
+		              	|| $scope.items[i].employeeSalary.xcdhcm__Status__c === "Published")
+			           	{
+			           		if($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_4__c !=null)
+			           		{
+			          			$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_4__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_4__c).toFixed(2);	
+			          		}
+			          		if($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c != null)
+			          		{
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c).toFixed(2);		
+			        			}   
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c).toFixed(2);	
+			        			}	
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c).toFixed(2);	
+			        			}	  
+			        			if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c != null)
+			        			{        		
+			        				$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c = parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c).toFixed(2);	
+			        			}	       
+			           	}  
+		      		}     	
+		        };
+		       	$scope.setDecimal();
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+		        // change Proposed increase percentage
+				$scope.changePercentage=(function($event,propIncPer)
+		        {
+		     		$scope.totalPropInc1 = 0;
+		     		$scope.totalPropSal1 = 0;
+		     		$scope.totalPropInc2 = 0;
+		     		$scope.totalPropSal2 = 0;
+		     		$scope.totalPropInc3 = 0;
+		     		$scope.totalPropSal3 = 0;
+		     		$scope.totalPropInc4 = 0;
+		     		$scope.totalPropSal4 = 0;
+		     				     		
+		       		for(i in $scope.items)
+		           	{           	   
+			            //==================================stage 1=================================================== 
+		           		if($scope.items[i].employeeSalary.xcdhcm__Status__c === "New" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 1" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 1 submitted")
+		           		{
+		           			if(propIncPer === $scope.items[i].employeeSalary.Id)
+		           			{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+		             			$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c = (parseFloat(( $scope.items[i].employeeSalary.xcdhcm__Current_salary__c * $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_1__c )/100)).toFixed(2);
+			                 	$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c = (parseFloat($scope.items[i].employeeSalary.xcdhcm__Current_salary__c )+ parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c )).toFixed(2) ;
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			                } 	
+			                
+			                //Total calculation for set 1 proposed 
+			       	     	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c))
+			       	     	{
+			       	      		$scope.totalPropInc1 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c);   
+			       	      	}
+			       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c))
+			       	     	{
+			       	      		$scope.totalPropSal1 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c);             
+			       	      	}
+		              	}  
+						//==================================stage1===================================================== 
+						
+						//==================================stage2===================================================== 
+						
+		              	if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 2" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 2 submitted")
+		           		{
+		           			if(propIncPer === $scope.items[i].employeeSalary.Id)
+		           			{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			             		$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c = (parseFloat(( $scope.items[i].employeeSalary.xcdhcm__Current_salary__c * $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_2__c )/100)).toFixed(2);
+			                 	$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c = (parseFloat($scope.items[i].employeeSalary.xcdhcm__Current_salary__c )+ parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c )).toFixed(2) ;
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			                } 	
+			                
+			                //Total calculation for set 2 proposed 
+			       	     	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c))
+			       	     	{
+			       	      		$scope.totalPropInc2 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c);   
+			       	      	}
+			       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c))
+			       	     	{
+			       	      		$scope.totalPropSal2 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c);             
+			       	      	}
+		              	}   
+		              	//==================================stage2===================================================== 
+		              
+		              	//==================================stage3===================================================== 
+		              	if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 3" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 3 submitted")
+		           		{
+		           			if(propIncPer === $scope.items[i].employeeSalary.Id)
+		           			{	
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			             		$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c = (parseFloat(( $scope.items[i].employeeSalary.xcdhcm__Current_salary__c * $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_3__c )/100)).toFixed(2);
+			                 	$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c = (parseFloat($scope.items[i].employeeSalary.xcdhcm__Current_salary__c )+ parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c )).toFixed(2) ;
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			               }
+			                //Total calculation for set 3 proposed 
+			       	     	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c))
+			       	     	{
+			       	      		$scope.totalPropInc3 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c);   
+			       	      	}
+			       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c))
+			       	     	{
+			       	      		$scope.totalPropSal3 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c);             
+			       	      	}
+		              	}   
+		              	//==================================stage3==========================================================
+		            		
+		            		//==================================stage4===================================================== 
+		              	if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 4" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 4 submitted" || $scope.items[i].employeeSalary.xcdhcm__Status__c === "Final")
+		           		{
+		           			if(propIncPer === $scope.items[i].employeeSalary.Id)
+		           			{	
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			             		$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c = (parseFloat(( $scope.items[i].employeeSalary.xcdhcm__Current_salary__c * $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_4__c )/100)).toFixed(2);
+			                 	$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c = (parseFloat($scope.items[i].employeeSalary.xcdhcm__Current_salary__c )+ parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c )).toFixed(2) ;
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			               }
+			                //Total calculation for set 4 proposed 
+			       	     	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c))
+			       	     	{
+			       	      		$scope.totalPropInc4 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c);   
+			       	      	}
+			       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c))
+			       	     	{
+			       	      		$scope.totalPropSal4 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c);             
+			       	      	}
+		              	}   
+		              	//==================================stage4==========================================================
+		             } 
+		    	});
+		    	
+		     	 // change  Proposed increase
+					$scope.changeProposedIncrease= (function($event,propIncrease) 
+		      		{
+			      		$scope.totalPropInc1 = 0;
+			     		$scope.totalPropSal1 = 0;
+			     		
+			     		$scope.totalPropInc2 = 0;
+			     		$scope.totalPropSal2 = 0;
+			     		
+			     		$scope.totalPropInc3 = 0;
+			     		$scope.totalPropSal3 = 0;
+			     		
+			     		$scope.totalPropInc4 = 0;
+			     		$scope.totalPropSal4 = 0;
+			     		
+		            		for(i in $scope.items)
+		               	{
+							//==================================stage1==========================================================               		
+		               		if($scope.items[i].employeeSalary.xcdhcm__Status__c === "New" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 1" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 1 submitted")
+		           			{
+		           				if(propIncrease === $scope.items[i].employeeSalary.Id)
+		           				{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+									$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_1__c =  (parseFloat(( $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c / $scope.items[i].employeeSalary.xcdhcm__Current_salary__c )*100)).toFixed(2) ;
+				                  	$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c =  (parseFloat($scope.items[i].employeeSalary.xcdhcm__Current_salary__c) + parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c)).toFixed(2);
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+				               } 	
+				               	//Total calculation for set 1 proposed 
+			       	     		if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c))
+				       	     	{
+				       	      		$scope.totalPropInc1 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c);   
+				       	      	}
+				       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c))
+				       	     	{
+				       	      		$scope.totalPropSal1 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c);             
+				       	      	}
+			                }
+							//==================================stage1==========================================================               		
+							
+							//==================================stage2==========================================================               		
+			                if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 2" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 2 submitted")
+		           			{
+		           				if(propIncrease === $scope.items[i].employeeSalary.Id)
+		           				{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			                  		$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_2__c =  (parseFloat(( $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c / $scope.items[i].employeeSalary.xcdhcm__Current_salary__c )*100)).toFixed(2) ;
+				                  	$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c =  (parseFloat($scope.items[i].employeeSalary.xcdhcm__Current_salary__c) + parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c)).toFixed(2);
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+			                	}
+			                	//Total calculation for set 2 proposed 
+			       	     		if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c))
+				       	     	{
+				       	      		$scope.totalPropInc2 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c);   
+				       	      	}
+				       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c))
+				       	     	{
+				       	      		$scope.totalPropSal2 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c);             
+				       	      	}
+			                }
+							//==================================stage2==========================================================               		
+							
+							//==================================stage3==========================================================               		
+			               
+			                if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 3" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 3 submitted")
+		           			{
+		           				if(propIncrease === $scope.items[i].employeeSalary.Id)
+		           				{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+		           					$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_3__c =  (parseFloat(( $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c / $scope.items[i].employeeSalary.xcdhcm__Current_salary__c )*100)).toFixed(2) ;
+				                  	$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c =  (parseFloat($scope.items[i].employeeSalary.xcdhcm__Current_salary__c) + parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c)).toFixed(2);
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+				                }	
+				                //Total calculation for set 3 proposed 
+			       	     		if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c))
+				       	     	{
+				       	      		$scope.totalPropInc3 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c);   
+				       	      	}
+				       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c))
+				       	     	{
+				       	      		$scope.totalPropSal3 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c);             
+				       	      	}
+			                }
+							//==================================stage3==========================================================     
+							          		
+		      				//==================================stage4==========================================================               		
+			                if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 4" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 4 submitted" || $scope.items[i].employeeSalary.xcdhcm__Status__c === "Final")
+		           			{
+		           				if(propIncrease === $scope.items[i].employeeSalary.Id)
+		           				{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+		           					$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_4__c =  (parseFloat(( $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c / $scope.items[i].employeeSalary.xcdhcm__Current_salary__c )*100)).toFixed(2) ;
+				                  	$scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c =  (parseFloat($scope.items[i].employeeSalary.xcdhcm__Current_salary__c) + parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c)).toFixed(2);
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+				                }	
+				                //Total calculation for set 4 proposed 
+			       	     		if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c))
+				       	     	{
+				       	      		$scope.totalPropInc4 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c);   
+				       	      	}
+				       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c))
+				       	     	{
+				       	      		$scope.totalPropSal4 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c);             
+				       	      	}
+			                }
+							//==================================stage4==========================================================               		
+		      			}  
+		          	});
+		                 
+		   			// change Proposed Salary
+					$scope.changeProposedSalary= (function($event,propSalary) 
+		        	{
+		        		$scope.totalPropInc1 = 0;
+			     		$scope.totalPropSal1 = 0;
+			     		
+			     		$scope.totalPropInc2 = 0;
+			     		$scope.totalPropSal2 = 0;
+			     		
+			     		$scope.totalPropInc3 = 0;
+			     		$scope.totalPropSal3 = 0;
+			     		
+			     		$scope.totalPropInc4 = 0;
+			     		$scope.totalPropSal4 = 0;
+			     		
+		            		for(i in $scope.items)
+		               	{
+							//==================================stage1============================================================
+							              		
+		               		if($scope.items[i].employeeSalary.xcdhcm__Status__c === "New" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 1" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 1 submitted") 
+		           			{
+		           				if(propSalary === $scope.items[i].employeeSalary.Id)
+		           				{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+  									$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_1__c=(parseFloat((($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c / $scope.items[i].employeeSalary.xcdhcm__Current_salary__c) - 1)*100)).toFixed(2);
+				                  	$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c= (parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c - $scope.items[i].employeeSalary.xcdhcm__Current_salary__c )).toFixed(2);
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+				             	} 
+				             	
+				               //Total calculation for set 1 proposed 
+				       	     	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c))
+				       	     	{
+				       	      		$scope.totalPropInc1 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_1__c);   
+				       	      	}
+				       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c))
+				       	     	{
+				       	      		$scope.totalPropSal1 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_1__c);             
+				       	      	}
+			                 }    
+							//==================================stage1============================================================
+			               
+							//==================================stage2============================================================
+			                if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 2" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 2 submitted") 
+		           			{
+		           				if(propSalary === $scope.items[i].employeeSalary.Id)
+		           				{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+		           					$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_2__c=(parseFloat((($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c / $scope.items[i].employeeSalary.xcdhcm__Current_salary__c) - 1)*100)).toFixed(2);
+				                  	$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c= (parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c - $scope.items[i].employeeSalary.xcdhcm__Current_salary__c )).toFixed(2);
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+				            		}
+				            	
+				            	//Total calculation for set 2 proposed 
+				       	     	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c))
+				       	     	{
+				       	      		$scope.totalPropInc2 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_2__c);   
+				       	      	}
+				       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c))
+				       	     	{
+				       	      		$scope.totalPropSal2 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_2__c);             
+				       	      	}
+		           			} 
+							//==================================stage2============================================================
+							
+							//==================================stage3============================================================
+		           			if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 3" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 3 submitted")
+		           			{
+		           				if(propSalary === $scope.items[i].employeeSalary.Id)
+		           				{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+		           				  	$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_3__c=(parseFloat((($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c / $scope.items[i].employeeSalary.xcdhcm__Current_salary__c) - 1)*100)).toFixed(2);
+				                   	$scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c= (parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c - $scope.items[i].employeeSalary.xcdhcm__Current_salary__c )).toFixed(2);
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+				                 }   
+				                
+				                //Total calculation for set 3 proposed 
+				       	     	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c))
+				       	     	{
+				       	      		$scope.totalPropInc3 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_3__c);   
+				       	      	}
+				       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c))
+				       	     	{
+				       	      		$scope.totalPropSal3 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_3__c);             
+				       	      	}
+		           			} 
+							//==================================stage3============================================================
+		            			
+		            			//==================================stage4============================================================
+		           			if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 4" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 4 submitted" || $scope.items[i].employeeSalary.xcdhcm__Status__c === "Final")
+		           			{
+		           				if(propSalary === $scope.items[i].employeeSalary.Id)
+		           				{
+		        //START:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+		           					 $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_per_4__c=(parseFloat((($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c / $scope.items[i].employeeSalary.xcdhcm__Current_salary__c) - 1)*100)).toFixed(2);
+				                      $scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__4= (parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c - $scope.items[i].employeeSalary.xcdhcm__Current_salary__c )).toFixed(2);
+		        //END:: 12/12/17 ::NPPD 1584 Salary Review Bug fixes and imporvements by Sabir
+				                 }   
+				                
+				                //Total calculation for set 4 proposed 
+				       	     	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c))
+				       	     	{
+				       	      		$scope.totalPropInc4 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_increase_4__c);   
+				       	      	}
+				       	      	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c))
+				       	     	{
+				       	      		$scope.totalPropSal4 +=  parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_salary_4__c);             
+				       	      	}
+		           			} 
+							//==================================stage4============================================================
+		            
+		            	}  
+		         	});
+		                 
+		        	// change bonus change Proposed Bonus Per
+		   			$scope.changeProposedBonusPer= (function($event,PropBonusPer) 
+		         	{
+		       			$scope.totalPropBonusAmnt1 = 0;
+		       	        $scope.totalPropBonusAmnt2 = 0;
+		       	        $scope.totalPropBonusAmnt3 = 0;
+		       	       	$scope.totalPropBonusAmnt4 = 0;
+		            	
+		            		for(i in $scope.items)
+		                {
+							//==================================stage1============================================================
+		                		if($scope.items[i].employeeSalary.xcdhcm__Status__c === "New" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 1" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 1 submitted") 
+		           			{
+		           				if(PropBonusPer === $scope.items[i].employeeSalary.Id)
+		           				{
+					           		if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c !=0)
+					               	{
+					                       $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c= (parseFloat(($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c / 100)*($scope.items[i].employeeSalary.xcdhcm__Current_salary__c/$scope.items[i].employeeSalary.xcdhcm__Conversion_rate__c))).toFixed(2);
+					                }
+					                else
+					              	{
+					                        $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c=0;
+					                 }
+					        	}
+					        	//Total calculation
+					        	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c ))
+		                   	 	{
+		                       		$scope.totalPropBonusAmnt1 += parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c );             
+		                    	}                
+				        	}
+							//==================================stage1============================================================
+							
+							//==================================stage2============================================================
+				        	if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 2" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 2 submitted") 
+		           			{
+		           				if(PropBonusPer === $scope.items[i].employeeSalary.Id)
+		           				{
+			           				if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c !=0)
+					               	{
+					                       $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c = (parseFloat(($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c / 100)*($scope.items[i].employeeSalary.xcdhcm__Current_salary__c/$scope.items[i].employeeSalary.xcdhcm__Conversion_rate__c))).toFixed(2);
+					                }
+					                else
+					              	{
+					                        $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c = 0;
+					                 }
+					        	}  
+					        	//Total calculation
+					        	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c ))
+		                   	 	{
+		                       		$scope.totalPropBonusAmnt2 += parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c );             
+		                    	}               
+			           		}
+							//==================================stage2============================================================
+							
+							//==================================stage3============================================================
+			           		if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 3" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 3 submitted")
+			           		{
+			           			if(PropBonusPer === $scope.items[i].employeeSalary.Id)
+			           			{
+			           				if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c !=0)
+					               	{
+					                       $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c= (parseFloat(($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c / 100)*($scope.items[i].employeeSalary.xcdhcm__Current_salary__c/$scope.items[i].employeeSalary.xcdhcm__Conversion_rate__c))).toFixed(2);
+					                }
+					                else
+					              	{
+					                        $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c=0;
+					                 } 
+						   		}      
+						        //Total calculation
+						        	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c ))
+			                   	 {
+			                       		$scope.totalPropBonusAmnt3 += parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c );             
+			                    	}       
+			           		}
+							//==================================stage3============================================================
+							
+								//==================================stage4============================================================
+			           		if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 4" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 4 submitted" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c === "Final")
+			           		{
+			           			if(PropBonusPer === $scope.items[i].employeeSalary.Id)
+			           			{
+			           				if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c !=0)
+					               	{
+					                       $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c= (parseFloat(($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c / 100)*($scope.items[i].employeeSalary.xcdhcm__Current_salary__c/$scope.items[i].employeeSalary.xcdhcm__Conversion_rate__c))).toFixed(2);
+					                }
+					                else
+					              	{
+					                        $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c=0;
+					                 } 
+						   		}      
+						        //Total calculation
+						        	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c ))
+			                   	 {
+			                       		$scope.totalPropBonusAmnt4 += parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c );             
+			                    	}       
+			           		}
+							//==================================stage4============================================================
+			        		}  
+			        	});
+			      		// change bonus change Proposed Bonus Amount 
+			           	$scope.changeProposedBonusAmount= (function($event,PropBonusAmount) 
+			        		{
+			        	         $scope.totalPropBonusAmnt1 = 0;
+			        	         $scope.totalPropBonusAmnt2 = 0;
+			        	         $scope.totalPropBonusAmnt3 = 0;
+			        	         $scope.totalPropBonusAmnt4 = 0;
+			        	         
+				           		for(i in $scope.items)
+				             	{
+				             		if($scope.items[i].employeeSalary.xcdhcm__Status__c === "New" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 1" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 1 submitted") 
+				           			{
+				           				if(PropBonusAmount === $scope.items[i].employeeSalary.Id)
+				           				{
+					                      	if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c !=0)
+					                      	{
+					                          	$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c = (parseFloat(($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c / ($scope.items[i].employeeSalary.xcdhcm__Current_salary__c/$scope.items[i].employeeSalary.xcdhcm__Conversion_rate__c))*100)).toFixed(2);
+				                       		}
+				                       		else
+				                       		{
+				                          	 	$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c = 0;
+				                       		}  
+				                 		}  
+				                 		if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c ))
+				                   	 	{
+				                       		$scope.totalPropBonusAmnt1 += parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_1__c );             
+				                    	}          
+				                 	}
+				          			if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 2" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 2 submitted") 
+			           				{
+				           				if(PropBonusAmount === $scope.items[i].employeeSalary.Id)
+				           				{
+					           				  if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c !=0)
+						                      {
+						                          $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c = (parseFloat(($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c / ($scope.items[i].employeeSalary.xcdhcm__Current_salary__c/$scope.items[i].employeeSalary.xcdhcm__Conversion_rate__c))*100)).toFixed(2);
+						                       }
+						                       else
+						                       {
+						                           $scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c=0;
+						                       }
+						            	}    
+					            	
+						            	if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c ))
+				                   	 	{
+				                       		$scope.totalPropBonusAmnt2 += parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_2__c );             
+				                    	}            
+			           				} 
+			           			
+				           			if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 3" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 3 submitted")
+				           			{
+				           				if(PropBonusAmount === $scope.items[i].employeeSalary.Id)
+				           				{
+				           				  	if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c !=0)
+					                      	{
+					                          	$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c = (parseFloat(($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c / ($scope.items[i].employeeSalary.xcdhcm__Current_salary__c/$scope.items[i].employeeSalary.xcdhcm__Conversion_rate__c))*100)).toFixed(2);
+					                       	}
+					                       	else
+					                       	{
+					                           	$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c=0;
+					                       	}
+					                		}   
+					                		if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c ))
+				                   	 	{
+				                       		$scope.totalPropBonusAmnt3 += parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_3__c );             
+				                    		}      
+				           			}
+				           			
+				           			if($scope.items[i].employeeSalary.xcdhcm__Status__c === "Review 4" ||  $scope.items[i].employeeSalary.xcdhcm__Status__c ==="Review 4 submitted" || $scope.items[i].employeeSalary.xcdhcm__Status__c === "Final")
+				           			{
+				           				if(PropBonusAmount === $scope.items[i].employeeSalary.Id)
+				           				{
+				           				  	if($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c !=0)
+					                      	{
+					                          	$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c = (parseFloat(($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c / ($scope.items[i].employeeSalary.xcdhcm__Current_salary__c/$scope.items[i].employeeSalary.xcdhcm__Conversion_rate__c))*100)).toFixed(2);
+					                       	}
+					                       	else
+					                       	{
+					                           	$scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c=0;
+					                       	}
+					                		}   
+					                		if(!isNaN($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c ))
+				                   	 	{
+				                       		$scope.totalPropBonusAmnt4 += parseFloat($scope.items[i].employeeSalary.xcdhcm__Proposed_bonus_amount_4__c );             
+				                    		}      
+				           			}
+				             	}  
+		           		});
+		           		
+		           		//For select and select all from check box
+			           	
+			           	$scope.deleteAll = false;
+			    			$scope.deleteSeleted = function(){
+				    		$scope.items.forEach(function(x) {
+				    		});
+			  			}
+		
+				  		$scope.selectedAll = function(){
+				    		$scope.items.forEach(function(x) {
+				          		if($scope.deleteAll){
+				            		x.selected = true;
+				        		}
+				        		else{
+				            		x.selected = false;
+				        		}
+				       		});
+				  		};
+				  	
+				  		//Initialize the Search Filters 
+				  		var searchMatch = function (haystack, needle) {
+		                  if (!needle) {
+		                      return true;
+		                  }
+		                  return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+		              	};
+              
+		              	$scope.search = function () {
+		                  	$scope.filteredItems = $filter('filter')($scope.items, function (item) {
+		                      	for (var attr in item) {
+		                          if (searchMatch(item.employeeSalary.Name , $scope.query))
+		                              return true;
+		                      	}
+		                      	return false;
+		                  	});
+		              	};
+		              	
+		              	// functions have been describe process the data for display
+              			$scope.search();
+              			
+		              	//for reviwer serach
+		              	$scope.changeReviewer = function()
+		            	{
+		                 	if($scope.reviewerName == '')
+		                 	{
+		                 	 	$scope.search();
+		                 	}
+		            	};
+              			
+
+					//For all bottom buttons 
+					$scope.sendData = function()
+					{
+				      	saveMethod(JSON.stringify($scope.items));
+				 	};
+	              
+		           	$scope.deleteData = function()
+		           	{
+		                  deleteMethod(JSON.stringify($scope.items));
+		           	};
+		              
+	              	$scope.confirmStageData = function()
+	              	{
+	                	confirmMethod(JSON.stringify($scope.items));
+	              	};
+	              
+	              	$scope.submitData = function()
+	              	{
+	                	submitMethod(JSON.stringify($scope.items));
+	              	};
+	              
+	              	$scope.publishData = function()
+	              	{
+	                	publishMethod(JSON.stringify($scope.items));
+	              	};
+
+				//================================================ Reviewer Pop-up Functionality =================================
+	            $scope.animationsEnabled = true;
+	            $scope.reviewerName = '';
+				$scope.openReviewer = function(){			
+				Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.BulkNewSalaryReviewController.getReviewers}',$scope.reviewerName,
+                    function(result, event){
+                        if (event.status) {
+			                    var modalInstance = $uibModal.open({
+								animation: $scope.animationsEnabled,
+								templateUrl: 'userContent.html',
+								controller: 'userModalInstanceCtrl',	
+								size : 'lg',
+								resolve: {
+										reviewerName: function () {
+										return $scope.reviewerName;
+									},
+									userDetails: function () {
+										return result;
+									}
+								}
+							});
+							
+							modalInstance.result.then(function (selectedUser) {                                                              
+                                       $scope.selectedUsr = selectedUser;
+						               $scope.reviewerName =   selectedUser.Name; 
+
+							            $scope.filteredItems = $filter('filter')($scope.items, function (item){
+								            for (var attr in item)
+								            {
+								            	if(item.employeeSalary.xcdhcm__Reviewer_1__c != null && searchMatch(item.employeeSalary.xcdhcm__Reviewer_1__c , $scope.selectedUsr.Id) || item.employeeSalary.xcdhcm__Reviewer_2__c != null && searchMatch(item.employeeSalary.xcdhcm__Reviewer_2__c , $scope.selectedUsr.Id)
+								            	|| item.employeeSalary.xcdhcm__Reviewer_3__c != null && searchMatch(item.employeeSalary.xcdhcm__Reviewer_3__c , $scope.selectedUsr.Id) 	|| item.employeeSalary.xcdhcm__Reviewer_4__c != null && searchMatch(item.employeeSalary.xcdhcm__Reviewer_4__c , $scope.selectedUsr.Id))
+								            	{
+									            	return true;
+								            	}
+								            }
+								            return false;
+								        });
+                               }, function () {
+                                     //$log.info('Modal dismissed at: ' + new Date());
+                               });
+                
+		                        } else if (event.type === 'exception') {
+		                            alert('Error.....');
+		                        } else {
+		                        alert('Error.....22222');
+		                        }
+		                    }, 
+		                    {escape: false}
+		                );
+					}
+			
+			$scope.showCompensation = function(){			
+				Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.BulkNewSalaryReviewController.getCompensation}',$scope.reviewerName,
+                    function(result, event){
+                        if (event.status) {
+			                    var modalInstance = $uibModal.open({
+								animation: $scope.animationsEnabled,
+								templateUrl: 'compContent.html',
+								controller: 'userModalInstanceCtrl1',	
+								size : 'lg',
+								resolve: {
+										reviewerName: function () {
+										return $scope.reviewerName;
+									},
+									userDetails: function () {
+										return result;
+									}
+								}
+								
+							});
+		                        } else if (event.type === 'exception') {
+		                            alert('Error.....');
+		                        } else {
+		                        alert('Error.....22222');
+		                        }
+		                    }, 
+		                    	{escape: false}
+		                );
+					}	
+       			 });       
+
+					myapp.controller('userModalInstanceCtrl', function ($scope,$uibModalInstance,reviewerName,userDetails) {
+		            $scope.AllUsers = JSON.parse(userDetails);
+		            $scope.searchUser = reviewerName;
+				  	$scope.totalItems = $scope.AllUsers.length;
+				  	$scope.currentPage = 1;
+				 	$scope.itemsPerPage = 10;
+				 	$scope.maxSize = 2;
+		            
+		            $scope.closePopUp = function()
+		            {
+		                $uibModalInstance.close();     
+		            }
+		            
+		            $scope.selectUserDetails = function(user)
+		            {
+		                $uibModalInstance.close(user);     
+		            }
+		        });    
+		        
+		        myapp.controller('userModalInstanceCtrl1', function ($scope,$uibModalInstance,reviewerName,userDetails) {
+		            $scope.AllComp = JSON.parse(userDetails);
+		          	$scope.searchUser = reviewerName;
+		            
+				  	$scope.totalItems = $scope.AllComp.length;
+				  	$scope.currentPage = 1;
+				 	$scope.itemsPerPage = 10;
+				 	$scope.maxSize = 2;
+		            $scope.CompenIdVsClass = '';
+		            $scope.closeCompPopUp = function()
+		            {
+		                $uibModalInstance.close();     
+		            }
+		            
+		            $scope.selectCompDetails = function(comp)
+		            {
+		            $scope.searchUser = comp.Name;
+		            $scope.CompenIdVsClass = comp.Id;
+		               // $uibModalInstance.close(user);     
+		            }
+		            
+		           $scope.addEmployeeRecords = function(){
+		           	if($scope.searchUser == '')
+		           	{
+		           		alert('Please select employee record');
+		           	}
+		           	else
+		           	{		
+							Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.BulkNewSalaryReviewController.getAddEmployeeSalary}',
+							$scope.compensationId1=$scope.CompenIdVsClass,salaryReviewId='{!$CurrentPage.parameters.salaryid}',compId='{!$CurrentPage.parameters.compId}', 
+			                 function(result, event){
+	                        if (event.status) {
+	                        var modalInstance = $uibModal.open({
+									animation: $scope.animationsEnabled,
+									templateUrl: 'compContent.html',
+								});
+	                       
+			                        } else if (event.type === 'exception') {
+			                            alert('Error.....');
+			                        } else {
+			                        alert('Error.....22222');
+			                        }
+			                    }, 
+			                    {escape: false}
+			                );
+			            //START :: 14/11/2017 NPPD-1560 Salary Review Bug Fix 2 Modified by Sabir  
+					 	reloadPage1();
+											
+        					//END :: 14/11/2017 NPPD-1560 Salary Review Bug Fix 2 Modified by Sabir  
+						}
+					}
+		        });    
+		        
+		     // ======================================================================================   		
+		        
+		                //For Date format 
+              			myapp.filter('toDayMonthYear', function ($filter) {
+					    	return function (dateString) {
+						    	var dateObject = new Date(dateString);
+						    	var result;
+						    	if(!isNaN(dateObject))
+						    	{
+							        var dispayDate = $filter('date')(dateObject, 'dd');
+							        var displayMonth = $filter('date')(dateObject, 'MM');
+							        var displayYear = dateObject.getFullYear();
+						        	 result = dispayDate+'/'+displayMonth+'/'+displayYear;
+						        }
+						        else
+						        {
+						        	result ='';
+						        }
+				        		return result;
+			    			};
+			 			});
+			 			
+	 					//For percentage format 
+					    myapp.filter('percentage', function($filter) {
+							 return function(input) {
+							  var check;
+							   if(!isNaN(input)){
+							  		check = input + '%';
+							   }
+							   else
+							   {
+							   		check ='';
+							   }
+							    return check;
+							  };
+							});
+							
+						//Convert currency format
+						myapp.filter('convertedCurrenyFormat', function($filter) {
+						 return function(input,esrValue) {
+						  var check;
+						   if(!isNaN(input)){
+						  		check = input + '%';
+						   }
+						   else
+						   {
+						   		check ='';
+						   }
+						    return check;
+						  };
+					});
+				
+   			
+   		</script>
+ <body>
+ <div ng-controller="ctrlRead"  class="slds-scope">
+	<!-- =========================================START :: Top Information========================================================================================= -->
+	<!--START :: 14/11/2017 NPPD-1560 Salary Review Bug Fix 2 Modified by Sabir   -->
+    <apex:actionFunction name="reloadPage1" action="{!reloadPage}" />
+	<!--END :: 14/11/2017 NPPD-1560 Salary Review Bug Fix 2 Modified by Sabir   -->
+    <apex:pageBlock title="{!$Label.xcdhcm__phbulkviewsalaryreview}"  > 
+       <!--   <apex:outputPanel style="float:right;" rendered="{!HelpEmployeeSalaryReviewAdmin}" >
+     <apex:commandLink style="float:right; margin-right:5px;font-size:14px;text-decoration:none;font-weight:bold;color: #555;"
+              target="_blank" action="{!helpLinkEmployeeSalaryReviewAdmin}" value="Help"
+              id="theCommandLink1" />
+     </apex:outputPanel>
+            
+     <apex:outputPanel style="float:right;" rendered="{!HelpEmployeeSalaryReview}">
+            <apex:commandLink style="float:right; margin-right:5px;font-size:14px;text-decoration:none;font-weight:bold;color: #555;"
+                target="_blank" action="{!helpLinkEmployeeSalaryReview}" value="Help"
+                id="theCommandLink2" />
+    </apex:outputPanel-->
+
+    <table width="100%">
+        <tr>
+            <td width="20%" >
+                    <span style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">{!$Label.BulkViewSalaryReviewSalaryreview}</span>&nbsp;&nbsp;&nbsp;
+                    <apex:outputLink style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;" rendered="{!SalaryReviewNameLinkAdminView=true}" target="_parent"  title="{!salReview.Name}" value="/{!salReview.id}">{!salReview.Name}</apex:OutputLink>
+                    <apex:outputText rendered="{!SalaryReviewNameLinkAdminView=false}" style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">{!salReview.Name}</apex:outputText>
+            </td>
+            
+            <td width="23%" >
+                    <span style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">{!$Label.BulkViewSalaryReviewReviewstatus} </span>
+                    <apex:outputText value="{!salReview.xcdhcm__Review_status__c}" style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;"></apex:outputText>
+            </td>
+            <!-- START :: 11/05/2017 NPPD-1381 Reports and links value changes done by Namrata --> 
+			<td width="15%" style="font-size: 12px;">
+                <apex:commandLink action="{!generateSalaryReviewReports}" value="{!$Label.xcdhcm__bulkviewsalaryreviewlviewsalaryreviewdetails}" styleclass="rowrightalign" target="_blank">
+                <apex:param name="contIdParam" value="View_salary_review_details" assignTo="{!reportnames}"/>   
+                </apex:commandLink>
+            </td>
+           
+            <apex:outputPanel rendered="{!views == 'adminview'}">
+	           	<td width="15%" style="font-size: 12px;">
+	                   <apex:commandLink action="{!generateSalaryReviewReports}" value="{!$Label.xcdhcm__bulkviewsalaryreviewlviewreviewemployees}" styleclass="rowrightalign" target="_blank" rendered="{!Views == 'adminview'}">
+	                   <apex:param name="viewReviewEmp" value="View_review_employees" assignTo="{!reportNames}"/>  
+	                   </apex:commandLink>
+	           	</td>
+			</apex:outputPanel>
+			
+         	<apex:outputPanel rendered="{!AND(views == 'adminview',SalaryReviewCommonCurrency)}">
+	            <td width="15%" align="center">
+	                   <span style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">{!$Label.BulkViewSalaryReviewCurrencyexchangerate}</span>                
+	            </td>
+	           
+	            <td width="12%" style="font-size: 12px;">
+	                    <apex:commandLink action="{!generateSalaryReviewReports}" value="{!$Label.xcdhcm__bulkviewsalaryreviewcurrencyexchangeratelink}" styleclass="rowrightalign" target="_blank">
+	                    <apex:param name="contIdParam" value="Currency_conversion_rates" assignTo="{!reportnames}"/>   
+	                    </apex:commandLink>                
+	             </td>
+	    	</apex:outputPanel>
+	    	 <!-- END:: 11/05/2017 NPPD-1381 Reports and links value changes done by Namrata -->
+         </tr>   
+    </table>
+    <table width="100%" >
+        <tr>
+      	 <!-- START :: 14/11/2017 NPPD-1560 Salary Review Bug Fix 2 Modified by Sabir   -->
+                <td width="20%" style="font-size: 12px;">    
+                   <span style="font-size: 13px;color: #6e7277; !important;">{!$Label.BulkViewSalaryReviewEmployeesearch}</span>
+                    <input type="text" ng-model="query" ng-change="search()"  placeholder="Search"/>
+                </td>
+                <td width="23%" style="font-size: 12px;padding-bottom: 8px;">
+                    <apex:outputPanel rendered="{!views == 'adminview'}">
+                        <span style="font-size: 13px;color: #6e7277; !important;">{!$Label.BulkViewSalaryReviewReviewersearch}</span>
+           				<input type="text" ng-model="reviewerName" placeholder="Reviewer name" ng-change="changeReviewer()"/>
+                   		<i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;margin-left: 3px;color: #00a6ed;border: 1px solid #00a6ed;padding: 3px;border-radius: 2px;cursor: pointer;" ng-click="openReviewer()"></i>
+                    </apex:outputPanel>               
+                </td>
+      	 <!-- END :: 14/11/2017 NPPD-1560 Salary Review Bug Fix 2 Modified by Sabir   -->
+                <apex:outputPanel rendered="{!views == 'adminview'}">
+  				<apex:outputPanel rendered="{!AND(salReview.xcdhcm__Review_status__c <> 'Final')}">
+                <td width="15%" style="font-size: 12px;">
+                        <apex:commandLink action="{!generateSalaryReviewReports}" value="{!$Label.xcdhcm__bulkviewsalaryreviewlviewreviewprogress}" styleclass="rowrightalign" target="_blank" rendered="{!Views == 'adminview'}">  
+                        <apex:param name="viewReviewProg" value="View_review_progress" assignTo="{!reportNames}"/>
+                        </apex:commandLink>             
+                </td> 
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!AND(salReview.xcdhcm__Review_status__c == 'Final')}">
+                     <td width="15%" style="font-size: 12px;">
+                        <apex:commandLink action="{!generateSalaryReviewReports}" value="{!$Label.xcdhcm__bulkviewsalaryreviewviewreviewfinal}" styleclass="rowrightalign" target="_blank" rendered="{!Views == 'adminview'}">  
+                        <apex:param name="viewReviewFinal" value="View_review_final" assignTo="{!reportNames}"/>
+                        </apex:commandLink>             
+                	</td>
+                </apex:outputPanel>
+                <td width="15%" style="font-size: 12px;">
+                        <apex:commandLink action="{!generateSalaryReviewReports}" value="{!$Label.xcdhcm__bulkviewsalaryreviewviewpublishedsalaryreviewresults}"  styleclass="rowrightalign" target="_blank" rendered="{!Views == 'adminview'}">
+                        <apex:param name="viewReviewEmp" value="Published_salary_review_results" assignTo="{!reportNames}"/>  
+                        </apex:commandLink>
+                </td>
+               </apex:outputPanel>
+                 <!-- END:: 11/05/2017 NPPD-1381 Reports and links value changes done by Namrata -->
+                <td width="15%" >
+                    <span style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">{!$ObjectType.Salary_Review__c.Fields.Salary_increase_effective_from__c.Label} :</span>
+                </td>
+                
+                <td width="12%" style="font-size: 12px;">
+                    <apex:outputField value="{!salReview.xcdhcm__Salary_increase_effective_from__c}" />
+                </td>
+        </tr>
+     </table>
+  <!-- =========================================END :: Top Information================================================================================ -->
+      
+ <!-- =========================================START :: Block 1 Admin view=================================================================================== -->
+ <apex:outputPanel id="blockid1" rendered="{!IF(views == 'adminview' && (salReview.xcdhcm__Review_status__c == 'New' || salReview.xcdhcm__Review_status__c == 'Review 1'), true, false)}">
+    <table   class="table  table-hover;"> 
+    	<tr> 
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /></th>
+       		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+          		<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>                    
+		 	
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_1__c.inlineHelpText}" 
+            				style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_1__c.inlineHelpText == null, 'display:none','')}"/></th>		
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_1__c.inlineHelpText}" 
+            				style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_1__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_1__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_1__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_1__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_1__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+    			</apex:outputPanel> 
+           
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_1__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td><input type="checkbox"  ng-model="item.selected"/></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+               	
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+		       	
+		       	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	                	<!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>
+	                <td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+		       	</apex:outputPanel>
+                
+                <td style="font-size: 12px;"> 
+                	<input  type="float"  id="id_Proposed_increase_per_1"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_1__c" />
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  type="float"  id="id_Proposed_increase_1" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_1__c" />
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input  type="float"  id="id_IProposed_salary_1" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_1__c" />
+				</td>
+				 
+				 <apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input type="float"  id="id_Proposed_bonus_per_salary_1" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c" />
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_amount_1" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_1__c" />
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input  type="float"  id="id_Proposed_next_year_target_bonus_1"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_1__c" />
+               </td>
+             	</apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input  type="text"  id="id_Reviewnotes1"  ng-model="item.employeeSalary.xcdhcm__Review_notes_1__c" />
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+	 		<tr>    	        	
+	 			   <td ng-repeat="emptyCell in getEmptyCells()">
+	 			   </td>
+                  	<td >Totals</td>
+                  	<td>{{ totalPropInc1 / (totalPropSal1 - totalPropInc1)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc1 | number:2}}</td>
+                  	<td>{{totalPropSal1 | number:2}}</td>  
+				<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td> </td>
+                  	<td>{{totalPropBonusAmnt1 | number:2}}</td>  
+                  	</apex:outputPanel>
+               </tr>
+          </tfoot>
+ 	</table>
+</apex:outputPanel>
+
+<!-- =========================================END :: Block 1 Admin view=================================================================================== -->
+
+<!-- =========================================START:: Block2  Admin view=================================================================================== -->
+ <apex:outputPanel id="blockid2" rendered="{!IF(views == 'adminview' && salReview.xcdhcm__Review_status__c == 'Review 2', true, false)}">
+        <table   class="table  table-hover">
+    	<tr>
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /> </th>
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+  				<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>
+					                      
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_2__c.inlineHelpText == null, 'display:none','')}"/></th>  
+        	
+        	<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                                   
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_2__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_2__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_2__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            		<th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+           	</apex:outputPanel>
+           
+            	<th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td><input type="checkbox"  ng-model="item.selected"/></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+		       	
+		       	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	                	<!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+				       		<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>      
+	                     
+	                <td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+		       	</apex:outputPanel>
+                
+               
+                <td style="font-size: 12px;"> 
+                	<input  type="float"  id="id_Proposed_increase_per_2"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_2__c" />
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  type="float"  id="id_Proposed_increase_2" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_2__c" />
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input  type="float"  id="id_IProposed_salary_2" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_2__c" />
+				</td>
+				
+				<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_per_salary_2" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c" />
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_amount_2" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_2__c" />
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input  type="float"  id="id_Proposed_next_year_target_bonus_2"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_2__c" />
+               </td>
+           		</apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input  type="text"  id="id_Reviewnotes2"  ng-model="item.employeeSalary.xcdhcm__Review_notes_2__c" />
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+               <tr>
+	 			   <td ng-repeat="emptyCell in getEmptyCells()">
+	 			   </td>
+                  	<td>Totals</td>
+                  	<td>{{ totalPropInc2 / (totalPropSal2 - totalPropInc2)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc2 | number:2}}</td>
+                  	<td>{{totalPropSal2 | number:2}}</td>  
+                  	<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td></td>
+                  	<td>{{totalPropBonusAmnt2 | number:2}}</td> 
+                  	</apex:outputPanel> 
+               </tr>
+          </tfoot>
+ 	</table>
+ </apex:outputPanel>
+ <!-- =========================================END:: Block2  Admin view=================================================================================== -->
+ 
+ <!-- =========================================START:: Block3  Admin view=================================================================================== -->
+ <apex:outputPanel id="blockid3" rendered="{!IF(views == 'adminview' && salReview.xcdhcm__Review_status__c == 'Review 3', true, false)}" >
+   <table   class="table  table-hover">
+    	<tr>
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /> </th>
+       		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+  				<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>
+					                      
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+          	<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_3__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_3__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_3__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            		<th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+          	</apex:outputPanel>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td><input type="checkbox"  ng-model="item.selected"/></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+               	
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+               
+               	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	               <!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+			<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>
+	                <td style="font-size: 12px;"> 
+			<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+		       	</apex:outputPanel>
+               
+                <td style="font-size: 12px;"> 
+                	<input  type="float"  id="id_Proposed_increase_per_3"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_3__c" />
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  type="float"  id="id_Proposed_increase_3" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_3__c" />
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input  type="float"  id="id_IProposed_salary_3" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_3__c" />
+				</td>
+				<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_per_salary_3" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c" />
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_amount_3" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_3__c" />
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input type="float"  id="id_Proposed_next_year_target_bonus_3"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_3__c" />
+               </td>
+             	</apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input  type="text"  id="id_Reviewnotes3"  ng-model="item.employeeSalary.xcdhcm__Review_notes_3__c" />
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+               <tr>
+	 			   <td ng-repeat="emptyCell in getEmptyCells()">
+	 			   </td>                  	
+	 			   	<td>Totals</td>
+                  	<td>{{ totalPropInc3 / (totalPropSal3 - totalPropInc3)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc3 | number:2}}</td>
+                  	<td>{{totalPropSal3 | number:2}}</td>  
+					<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td></td>
+                  	<td>{{totalPropBonusAmnt3 | number:2}}</td>  
+                  	</apex:outputPanel>
+               </tr>
+          </tfoot>
+ 	</table>
+ </apex:outputPanel>
+ <!-- =========================================END:: Block3  Admin view=================================================================================== -->
+ 
+ <!-- =========================================START:: Block4  Admin view=================================================================================== -->
+ <apex:outputPanel id="blockid14" rendered="{!IF(views == 'adminview' && salReview.xcdhcm__Review_status__c == 'Review 4', true, false)}" >
+   <table   class="table  table-hover">
+    		<tr>
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /> </th>
+       		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+  				<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>
+					                      
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+          	<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            
+            		<th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            </apex:outputPanel>
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td><input type="checkbox"  ng-model="item.selected"/></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+               	
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+               
+               	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	              <!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+					<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>
+	                <td style="font-size: 12px;"> 
+			<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+		       	</apex:outputPanel>
+               
+                <td style="font-size: 12px;"> 
+                	<input  type="float"  id="id_Proposed_increase_per_4"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_4__c" />
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  type="float"  id="id_Proposed_increase_4" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_4__c" />
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input  type="float"  id="id_IProposed_salary_4" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_4__c" />
+				</td>
+				<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_per_salary_4" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c" />
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_amount_4" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_4__c" />
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input type="float"  id="id_Proposed_next_year_target_bonus_4"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_4__c" />
+               </td>
+                </apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input  type="text"  id="id_Reviewnotes4"  ng-model="item.employeeSalary.xcdhcm__Review_notes_4__c" />
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+               <tr>
+	 			   	<td ng-repeat="emptyCell in getEmptyCells()">
+	 			   	</td>                  	
+	 			   	<td>Totals</td>
+                  	<td>{{ totalPropInc4 / (totalPropSal4 - totalPropInc4)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc4 | number:2}}</td>
+                  	<td>{{totalPropSal4 | number:2}}</td>  
+					<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td></td>
+                  	<td>{{totalPropBonusAmnt4 | number:2}}</td>  
+                  	</apex:outputPanel>
+               </tr>
+          </tfoot>
+ 	</table>
+ </apex:outputPanel>
+ <!-- =========================================END:: Block4  Admin view=================================================================================== -->
+ 
+ <!-- =========================================START:: Final Block Admin view=================================================================================== -->
+ <apex:outputPanel id="blockidFinal" rendered="{!IF(views == 'adminview' && (salReview.xcdhcm__Review_status__c == 'Final' || salReview.xcdhcm__Review_status__c == 'Published'), true, false)}">
+   <table   class="table  table-hover">
+    		<tr>
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /> </th>
+       		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+  				<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>
+					                      
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+          	<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		<th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            </apex:outputPanel>
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td ><input type="checkbox"  ng-model="item.selected" ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " /></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+               	
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+               
+               	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	              <!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>
+	                <td style="font-size: 12px;"> 
+			<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+		       	</apex:outputPanel>
+               
+                <td style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_increase_per_3A"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_4__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published'">{{item.employeeSalary.xcdhcm__Proposed_increase_per_4__c  | number:2 | percentage}}</span>
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_increase_3A" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_4__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode"> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_increase_4__c | number :2}}</span>
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode">{{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_increase_4__c | number :2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedProposedIncrease4 | number:2}})</span>
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="float"  id="id_IProposed_salary_3A" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_4__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode"> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_salary_4__c | number :2}}</span>
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode">{{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_salary_4__c | number :2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedProposedSalary4 | number:2}})</span>
+				</td>
+				<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_bonus_per_salary_3A" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c" />
+	                   	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c | number:2 | percentage}} </span>
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_bonus_amount_3A" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_4__c" />
+	                   	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_bonus_amount_4__c | number:2}} </span>
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="float"  id="id_Proposed_next_year_target_bonus_3A"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_4__c" />
+               	    <span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_4__c | number:2 | percentage}} </span>
+               </td>
+                </apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="text"  id="id_Reviewnotes3A"  ng-model="item.employeeSalary.xcdhcm__Review_notes_4__c" />
+                	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Review_notes_4__c }} </span>
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+               <tr>
+	 			   <td ng-repeat="emptyCell in getEmptyCells()">
+	 			   </td>                  	
+	 			   	<td>Totals</td>
+                  	<td>{{ totalPropInc4 / (totalPropSal4 - totalPropInc4)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc4 | number:2}}</td>
+                  	<td>{{totalPropSal4 | number:2}}</td>  
+					<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td></td>
+                  	<td>{{totalPropBonusAmnt4 | number:2}}</td>  
+                  	</apex:outputPanel>
+               </tr>
+          </tfoot>
+ 	</table>
+ </apex:outputPanel>
+ <!-- =========================================END:: Final Block Admin view=================================================================================== -->
+
+ <!-- =========================================START:: Block4  Manager view=================================================================================== -->
+  <apex:outputPanel id="blockid4"  rendered="{!AND(views == 'manview',salReview.xcdhcm__Review_status__c == 'Review 1')}" >
+  <table   class="table  table-hover">
+    	<tr>
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /></th>
+       		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+          		<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>                    
+		 	
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_1__c.inlineHelpText}" 
+            				style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+            				
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_1__c.inlineHelpText}" 
+            				style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_1__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_1__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_1__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_1__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_1__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            </apex:outputPanel>
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_1__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_1__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_1__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td><input type="checkbox"  ng-model="item.selected"/></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+               	
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+		       	
+		       	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	               <!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>
+	                <td style="font-size: 12px;"> 
+			<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+		       	</apex:outputPanel>
+                
+                <td style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_increase_per_1"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_1__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published'">{{item.employeeSalary.xcdhcm__Proposed_increase_per_1__c  | number:2 | percentage}}</span>
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_increase_1" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_1__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode"> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_increase_1__c | number :2}}</span>
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode">{{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_increase_1__c | number :2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedProposedIncrease1 | number:2}})</span>
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="float"  id="id_IProposed_salary_1" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_1__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode"> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_salary_1__c | number :2}}</span>
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode">{{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_salary_1__c | number :2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedProposedSalary1 | number:2}})</span>
+				</td>
+				 
+				 <apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_bonus_per_salary_1" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c" />
+	                   	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_1__c | number:2 | percentage}} </span>
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_bonus_amount_1" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_1__c" />
+	                   	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_bonus_amount_1__c | number:2}} </span>
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="float"  id="id_Proposed_next_year_target_bonus_1"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_1__c" />
+               	    <span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_1__c | number:2 | percentage}} </span>
+               </td>
+                </apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="text"  id="id_Reviewnotes1"  ng-model="item.employeeSalary.xcdhcm__Review_notes_1__c" />
+                	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Review_notes_1__c }} </span>
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+               <tr>
+	 			   <td ng-repeat="emptyCell in getEmptyCells()">
+	 			   </td>                  	
+	 			   <td>Totals</td>
+                  	<td>{{ totalPropInc1 / (totalPropSal1 - totalPropInc1)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc1 | number:2}}</td>
+                  	<td>{{totalPropSal1 | number:2}}</td>
+					<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td></td>
+                  	<td>{{totalPropBonusAmnt1 | number:2}}</td>  
+                  	</apex:outputPanel>
+               </tr>
+          </tfoot>
+ 	</table>
+ </apex:outputPanel>
+ <!-- =========================================END:: Block4  Manager view=================================================================================== -->
+
+ <!-- =========================================START:: Block5  Manager view=================================================================================== -->
+   <apex:outputPanel id="blockid5"  rendered="{!AND(views == 'manview',salReview.xcdhcm__Review_status__c == 'Review 2')}">
+   <table   class="table  table-hover">
+   	 	<tr>
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /> </th>
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+  				<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>
+					                      
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_2__c.inlineHelpText == null, 'display:none','')}"/></th>  
+        	
+        		<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                                   
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_2__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_2__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_2__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+           	
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+           	</apex:outputPanel>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_2__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_2__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_2__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td><input type="checkbox"  ng-model="item.selected"/></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+		       	
+		       	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	                 <!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>
+	                <td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	  
+		       	</apex:outputPanel>
+                
+               
+                <td style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_increase_per_2"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_2__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published'">{{item.employeeSalary.xcdhcm__Proposed_increase_per_2__c  | number:2 | percentage}}</span>
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_increase_2" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_2__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode"> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_increase_2__c | number :2}}</span>
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode">{{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_increase_2__c | number :2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedProposedIncrease2 | number:2}})</span>
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="float"  id="id_IProposed_salary_2" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_2__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode"> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_salary_2__c | number :2}}</span>
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode">{{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_salary_2__c | number :2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedProposedSalary2 | number:2}})</span>
+				</td>
+				
+				<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_bonus_per_salary_2" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c" />
+	                   	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_2__c | number:2 | percentage}} </span>
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_bonus_amount_2" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_2__c" />
+	                   	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_bonus_amount_2__c | number:2}} </span>
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="float"  id="id_Proposed_next_year_target_bonus_2"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_2__c" />
+               	    <span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_2__c | number:2 | percentage}} </span>
+               </td>
+                </apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="text"  id="id_Reviewnotes2"  ng-model="item.employeeSalary.xcdhcm__Review_notes_2__c" />
+                	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Review_notes_2__c }} </span>
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+               <tr>
+	 			   <td ng-repeat="emptyCell in getEmptyCells()">
+	 			   </td>                  	
+	 			   <td>Totals</td>
+                  	<td>{{ totalPropInc2 / (totalPropSal2 - totalPropInc2)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc2 | number:2}}</td>
+                  	<td>{{totalPropSal2 | number:2}}</td>  
+					<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td></td>
+                  	<td>{{totalPropBonusAmnt2 | number:2}}</td>  
+                  	</apex:outputPanel>
+               </tr>
+          </tfoot>
+ 	</table>
+ </apex:outputPanel>
+ <!-- =========================================END:: Block5  Manager view=================================================================================== -->
+
+ <!-- =========================================START:: Block6  Manager view=================================================================================== -->
+ <apex:outputPanel id="blockid6"  rendered="{!AND(views == 'manview',salReview.xcdhcm__Review_status__c == 'Review 3')}">   
+<table   class="table  table-hover">
+    	<tr>
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /> </th>
+       		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+  				<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>
+					                      
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+          	<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_3__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_3__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_3__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            
+            		<th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+            </apex:outputPanel>
+            
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_3__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_3__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_3__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td><input type="checkbox"  ng-model="item.selected"/></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+               	
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+               
+               	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	                 <!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>
+	                <td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	  
+		       	</apex:outputPanel>
+               
+                <td style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_increase_per_3"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_3__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published'">{{item.employeeSalary.xcdhcm__Proposed_increase_per_3__c  | number:2 | percentage}}</span>
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_increase_3" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_3__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode"> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_increase_3__c | number :2}}</span>
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode">{{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_increase_3__c | number :2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedProposedIncrease3 | number:2}})</span>
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="float"  id="id_IProposed_salary_3" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_3__c" />
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode"> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_salary_3__c | number :2}}</span>
+                	<span  style="font-size: 12px;" ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode">{{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary.xcdhcm__Proposed_salary_3__c | number :2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedProposedSalary3 | number:2}})</span>
+				</td>
+				<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_bonus_per_salary_3" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c" />
+	                   	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_3__c | number:2 | percentage}} </span>
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' "  type="float"  id="id_Proposed_bonus_amount_3" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_3__c" />
+	                   	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_bonus_amount_3__c | number:2}} </span>
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="float"  id="id_Proposed_next_year_target_bonus_3"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_3__c" />
+               	    <span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_3__c | number:2 | percentage}} </span>
+               </td>
+                </apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input ng-if = "item.employeeSalary.xcdhcm__Status__c != 'Published' " type="text"  id="id_Reviewnotes3"  ng-model="item.employeeSalary.xcdhcm__Review_notes_3__c" />
+                	<span  ng-if = "item.employeeSalary.xcdhcm__Status__c == 'Published' ">{{item.employeeSalary.xcdhcm__Review_notes_3__c }} </span>
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+               <tr>
+	 			   <td ng-repeat="emptyCell in getEmptyCells()">
+	 			   </td>                  	
+	 			   <td>Totals</td>
+                  	<td>{{ totalPropInc3 / (totalPropSal3 - totalPropInc3)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc3 | number:2}}</td>
+                  	<td>{{totalPropSal3 | number:2}}</td>  
+					<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td></td>
+                  	<td>{{totalPropBonusAmnt3 | number:2}}</td>
+                  	</apex:outputPanel>  
+               </tr>
+          </tfoot>
+ 	</table>
+ </apex:outputPanel>
+ <!-- =========================================END:: Block6  Manager view=================================================================================== -->
+ 
+ <!-- =========================================START:: Block7  Manager view=================================================================================== -->
+ <apex:outputPanel id="blockid7"  rendered="{!AND(views == 'manview',salReview.xcdhcm__Review_status__c == 'Review 4')}">   
+   <table   class="table  table-hover">
+    	<tr>
+       		<th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /> </th>
+       		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Name.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Name.inlineHelpText == null, 'display:none','')}"/></th>
+
+          	<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Salary_Review__c.FieldSets.xcdhcm__ViewSalaryReview}" > 
+  				<th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!f.label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText}" 
+            			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields[f].inlineHelpText == null, 'display:none','')}"/></th>
+			</apex:repeat>
+			
+			<apex:outputPanel rendered="{!BulkSalaryaward}" >		
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Performance_rating__c.inlineHelpText == null, 'display:none','')}"/></th>
+	         			
+				 <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText}" 
+	         			style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_meeting_date__c.inlineHelpText == null, 'display:none','')}"/></th>
+		 	</apex:outputPanel>
+					                      
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_per_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;" >{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_increase_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_salary_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+          	<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_per_salary_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+	            		
+	            <th style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c .Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c.inlineHelpText}" 
+	            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_bonus_amount_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Proposed_next_year_target_bonus_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+            </apex:outputPanel>
+            		
+            <th  style="color:#808080;white-space: pre-wrap;font-size: 12px;">{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.Label}<img src="/s.gif" Class="helpbub" title="{!$ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.inlineHelpText}" 
+            		style="{!IF($ObjectType.Employee_Salary_Review__c.Fields.Review_notes_4__c.inlineHelpText == null, 'display:none','')}"/></th>
+  		</tr>
+        <tbody>
+        	<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+           		<td><input type="checkbox"  ng-model="item.selected"/></td>
+
+               	 <td style="font-size: 12px;">    
+                      <a target="_blank" href="/one/one.app#/sObject/{{item.employeeSalary.Id}}/view">{{ item.employeeSalary.Name }}</a>                      
+                </td>
+               	
+		       	<td ng-repeat="item1 in itemset"  ng-class = "(item1.fieldPath == 'xcdhcm__Effective_from__c'  &&  item.employeeSalary.xcdhcm__Calculate_date_difference__c < 365 )  ?  'effectiveDateBold' : 'effectiveDateNormal'  " >
+		       	 	<span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' && item1.fieldPath !=  'xcdhcm__Current_salary__c' ">{{item.employeeSalary[item1.fieldPath] }}</span> 
+		       	 	<span ng-if = "item1.type ==  'date' "> {{item.employeeSalary[item1.fieldPath]  | toDayMonthYear}}</span>
+		       	 	<span ng-if = "item1.type ==  'percent' "> {{item.employeeSalary[item1.fieldPath] | number:2 | percentage}}</span>
+		       	 	<span ng-if = "item1.type ==  'double' "> {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency == item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}}</span>
+		       	 	<span ng-if = "item1.fieldPath ==  'xcdhcm__Current_salary__c' && userDefaultCurrency != item.employeeSalary.CurrencyIsoCode "> {{item.employeeSalary.CurrencyIsoCode }} {{item.employeeSalary[item1.fieldPath] | number:2}} ({{userDefaultCurrency}} {{item.employeeSalary.ConvertedCurrentSalary | number:2}})</span>
+		       	</td>
+               
+               	<apex:outputPanel rendered="{!BulkSalaryaward}" >			                
+	                 <!-- START:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	     
+	               	<td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Performance_rating__c}} </span>
+	                </td>
+	                <td style="font-size: 12px;"> 
+			       		<span>{{item.employeeSalary.xcdhcm__Review_meeting_date__c  | toDayMonthYear}} </span>
+	                </td>
+		       	<!-- END:: 19-01-2018 NPPD-1593 Salary Review Column Headers Incorrect modify by Sabir-->	  
+		       	</apex:outputPanel>
+               
+                <td style="font-size: 12px;"> 
+                	<input  type="float"  id="id_Proposed_increase_per_4"  ng-change="changePercentage($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_per_4__c" />
+                </td>
+                
+                <td  style="font-size: 12px;">
+                 	<input  type="float"  id="id_Proposed_increase_4" ng-change="changeProposedIncrease($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_increase_4__c" />
+               </td>
+               
+                <td  style="font-size: 12px;"> 
+                	<input  type="float"  id="id_IProposed_salary_4" ng-change="changeProposedSalary($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_salary_4__c" />
+				</td>
+				<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_per_salary_4" ng-change="changeProposedBonusPer($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_per_salary_4__c" />
+	                </td>
+	               
+	                <td  style="font-size: 12px;"> 
+	                	<input  type="float"  id="id_Proposed_bonus_amount_4" ng-change="changeProposedBonusAmount($event,item.employeeSalary.Id);"  ng-model="item.employeeSalary.xcdhcm__Proposed_bonus_amount_4__c" />
+	                </td>
+                <td  style="font-size: 12px;"> 
+                	<input type="float"  id="id_Proposed_next_year_target_bonus_4"   ng-model="item.employeeSalary.xcdhcm__Proposed_next_year_target_bonus_4__c" />
+               </td>
+                </apex:outputPanel>
+               
+               <td  style="font-size: 12px;"> 
+                	<input  type="text"  id="id_Reviewnotes4"  ng-model="item.employeeSalary.xcdhcm__Review_notes_4__c" />
+               </td>
+      		</tr>
+     	</tbody>
+     	  <tfoot>
+               <tr>
+	 			   <td ng-repeat="emptyCell in getEmptyCells()">
+	 			   </td>                  	
+	 			   <td>Totals</td>
+                  	<td>{{ totalPropInc4 / (totalPropSal4 - totalPropInc4)*100 | number:2}}%</td>     
+                  	<td>{{totalPropInc4 | number:2}}</td>
+                  	<td>{{totalPropSal4 | number:2}}</td>  
+					<apex:outputPanel rendered="{!SalaryreviewNoBonus}" >		                            
+                  	<td></td>
+                  	<td>{{totalPropBonusAmnt4 | number:2}}</td>  
+                  	</apex:outputPanel>
+               </tr>
+          </tfoot>
+ 	</table>
+ </apex:outputPanel>
+
+ <!-- =========================================END:: Block7  Admin view=================================================================================== -->
+      <apex:outputLabel style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;"
+            value="{!$Label.xcdhcm__bulkviewsalaryreviewmsgbox}"  escape="false"/>
+            
+<!-- =========================================START All Bottom Button================================================================================ -->
+	<table width="100%">
+		<tfoot>
+	    		<tr>
+				<td width="40%">
+			      	 <ul uib-pagination ="x"  total-items="filteredItems.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxlength" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+				</td>
+	      		
+	      		<apex:outputPanel rendered="{!salReview.xcdhcm__Review_status__c <> 'Published'}" >
+		      		<td width="5%">
+		      			<input type="button" ng-click="sendData()" value="{!$Label.BulkViewSalaryReviewBSaveall}"  class="slds-button slds-button--neutral" 
+		      			style="padding: 5px;width: 80px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/> 
+		              <apex:actionFunction name="saveMethod" action="{!saveDraft}" oncomplete=""  reRender="errorId" status="mySaveStatus">  
+		              	<apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+		             </apex:actionFunction>
+		            </td>
+	             </apex:outputPanel>
+	             
+	             <apex:outputPanel rendered="{!views == 'manview'}">
+		            <td width="10%">
+		      			<input type="button" ng-click="submitData()" value="{!$Label.BulkViewSalaryReviewBSubmitcheckedemployees}" class="slds-button slds-button--neutral" 
+		      			style="padding: 5px;width: 110px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/>
+		            </td>
+		              <apex:actionFunction name="submitMethod" action="{!submit}" oncomplete=""  reRender="errorId" status="mySaveStatus">  
+		              	<apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+		             </apex:actionFunction>
+	             </apex:outputPanel> 
+	             
+	             <apex:outputPanel rendered="{!AND(views == 'adminview',salReview.xcdhcm__Review_status__c <> 'Published')}">
+					<td width="10%">
+		      			<input type="button" ng-click="showCompensation()"  value="{!$Label.BulkViewSalaryReviewBAddemployees}" class="slds-button slds-button--neutral" 
+		      			style="padding: 5px;width: 115px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/> 
+					</td>
+				</apex:outputPanel>
+				 
+				 <apex:outputPanel rendered="{!AND(views == 'adminview',salReview.xcdhcm__Review_status__c <> 'Published')}">
+		           	<td width="10%">
+		      			<apex:commandButton value="View/edit reviewers" action="{!salaryReviewerRedirect}"  styleclass="slds-button slds-button--neutral" 
+		      			style="padding: 5px;width: 110px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/> 
+		            </td>
+	             </apex:outputPanel>
+	             
+	             <apex:outputPanel rendered="{!AND(views == 'adminview',salReview.xcdhcm__Review_status__c <> 'Published')}">
+		             <td width="10%">
+		      			<input type="button" ng-click="deleteData()" value="{!$Label.BulkViewSalaryReviewBRemovecheckedemployees}" class="slds-button slds-button--neutral" 
+		      				style="padding: 5px;width: 115px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/>  
+		            </td>
+	              <apex:actionFunction name="deleteMethod" action="{!removeSelectedRecords}" oncomplete=""  reRender="errorId"  status="mySaveStatus">  
+	              <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+	             </apex:actionFunction>
+	             </apex:outputPanel>
+	             <apex:outputPanel rendered="{!AND(views == 'adminview',salReview.xcdhcm__Review_status__c <> 'Published',salReview.xcdhcm__Review_status__c <> 'Final')}" >
+		             <td width="10%"> 
+		      			<input type="button" ng-click="confirmStageData()" value="{!$Label.BulkViewSalaryReviewBConfirmstageandprogress}" class="slds-button slds-button--neutral" 
+		      				style="padding: 5px;width: 110px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/>
+		            </td>
+		             <apex:actionFunction name="confirmMethod" action="{!confirmStageProg}" oncomplete=""  reRender="errorId" status="mySaveStatus">  
+		             <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+		             </apex:actionFunction>
+	             </apex:outputPanel>
+	             <apex:outputPanel rendered="{!AND(views == 'adminview',salReview.xcdhcm__Review_status__c <> 'Published')}">
+		             <td width="10%">
+						<input type="button" ng-click="publishData()" value="{!$Label.BulkViewSalaryReviewBPublishcheckedemployees}" class="slds-button slds-button--neutral" 
+		      			style="padding: 5px;width: 110px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/> 
+	                       	<!--START :: 14/11/2017 NPPD-1560 Salary Review Bug Fix 2 Modified by Sabir   -->		                       	
+		                       	<apex:actionFunction name="publishMethod" action="{!Publish}" oncomplete=""  reRender="errorId"  status="mySaveStatus">  
+	                       	<!--END :: 14/11/2017 NPPD-1560 Salary Review Bug Fix 2 Modified by Sabir   -->
+		            					<apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+		           				 </apex:actionFunction>   
+		           	</td>
+		        </apex:outputPanel>   	
+	      		<td width="5%">
+	                <apex:commandButton value="{!$Label.xcdhcm__bulkviewsalaryreviewbback}" action="{!Back}" reRender="errorId" status="mySaveStatus" Styleclass="slds-button slds-button--neutral" 
+		      			style="padding: 5px;width: 90px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/>
+	            </td>
+	      	</tr>      
+	      </tfoot>	
+    </table>
+     <apex:actionStatus id="mySaveStatus">
+           <apex:facet name="start">
+               <div class="slds-spinner_container slds-show" style="height:200rem">
+                   <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                       <div class="slds-spinner__dot-a"></div>
+                       <div class="slds-spinner__dot-b"></div>
+                   </div> 
+               </div>                    
+           </apex:facet>                                
+       </apex:actionStatus>
+      <!-- =========================================END All Bottom Button================================================================================ -->
+	</apex:pageBlock>
+	</div>
+	   <script type="text/ng-template" id="userContent.html"> 
+		     
+        <div class="modal-body SignUpc" style="display:inline-block;paddin-bottom:5px;width: 100%;text-align: center;">
+            <div class="col-md-12" style="float:none;margin:auto;"> 
+				<h4><i title="Close" class="fa fa-close" aria-hidden="true" style="color: #00a6ed;padding: 3px;border-radius: 2px;float:right;cursor:pointer;" ng-click="closePopUp()"></i></h4>
+                <h3 style="float: left;color:#00a6ed;width:90%;text-align: left;font-size: 20px;margin-top:0px;">Lookup <i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;    color: #00a6ed;      padding: 3px;    border-radius: 2px;"></i></h3>
+				
+                <div class="form-group" style="width:100%;float:left;">
+                	<input type="text" ng-model="searchUser" ng-change="filteredSearch()" placeholder="Reviewer Name"  class="ng-pristine ng-valid form-control ng-touched" style="width:80% !important;height: 35px !important;" > 
+                 </div>
+                <h3 style="float: left;color:#000;width: 100%;text-align: left;font-size: 16px;margin-bottom:0px;margin-top:10px;">Search Result</h3>
+                <div style="float:left;margin-top:5px;height:300px;overflow:auto;border: 1px solid #ccc;">
+                    <table class="table">
+                        <thead> 
+                            <tr> 
+                                <th style="width:30%;">Full name</th>
+								<th style="width:25%;">Title</th>
+								<th style="width:15%;">Department</th>
+								<th style="width:30%;">Profile name</th>
+                            </tr>
+                        </thead> 
+                        <tbody>
+                           <!-- <tr ng-repeat="usr in AllUsers.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter:searchUser"> -->
+						   <tr ng-repeat="usr in filterData = (AllUsers | filter:searchUser) | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)"> 
+                                <td style="text-align:left;"><a href="" ng-click="selectUserDetails(usr)">{{usr.Name}}</a></td>
+								<td style="text-align:left;">{{usr.Title}}</td>
+								<td style="text-align:left;">{{usr.Department}}</td>
+								<td style="text-align:left;">{{usr.Profile.Name}}</td>
+                            </tr>
+							<tr ng-if="filterData.length == 0">
+								<td></td>
+								<td style="text-align:center;font-weight: bold;font-size: 15px;width: 150px;padding-top: 100px;" ><i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color:#f88962;"></i> <br/>No record found</td>
+								<td></td><td></td>
+							</tr>                                                
+                        </tbody> 
+                    </table> 
+                </div>
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">		 		
+    				<ul uib-pagination total-items="filterData.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+					<!-- <ul uib-pagination total-items="filterData.length" ng-model="currentPage" items-per-page="itemsPerPage" ></ul>	-->		 	
+				</div>
+            </div>
+        </div> 
+        </script>
+        
+     	<script type="text/ng-template" id="compContent.html"> 
+        <div class="modal-body SignUpc" style="display:inline-block;paddin-bottom:5px;width: 100%;text-align: center;">
+
+            <div class="col-md-12" style="float:none;margin:auto;"> 
+				<h4><i title="Close" class="fa fa-close" aria-hidden="true" style="color: #00a6ed;padding: 3px;border-radius: 2px;float:right;cursor:pointer;" ng-click="closeCompPopUp()"></i></h4>
+                <h3 style="float: left;color:#00a6ed;width:90%;text-align: left;font-size: 20px;margin-top:0px;">Lookup <i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;    color: #00a6ed;      padding: 3px;    border-radius: 2px;"></i></h3>
+				
+                <div class="form-group" style="width:100%;float:left;">
+                	<input type="text" ng-model="searchUser" ng-change="filteredSearch()" placeholder="Reviewer Name"  class="ng-pristine ng-valid form-control ng-touched" style="width:60% !important;height: 35px !important;" >
+				</div>
+				<h3 style="float: left;color:#000;width: 100%;text-align: left;font-size: 16px;margin-bottom:0px;margin-top:10px;">Search Result</h3>
+                <div style="float:left;margin-top:5px;height:300px;overflow:auto;border: 1px solid #ccc;">
+                    <table class="table">
+                        <thead> 
+                            <tr> 
+                                <th style="width:30%;">Employee name</th>
+								<th style="width:25%;">Comp</th>
+								<th style="width:15%;">Job role</th>
+								<th style="width:30%;">Effective from</th>
+                            </tr>
+                        </thead> 
+						   <tr ng-repeat="comp in filterData = (AllComp | filter:searchUser) | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)"> 
+                                <td style="text-align:left;"><a href="" ng-click="selectCompDetails(comp)">{{comp.xcdhcm__Employee__r.Name}}</a></td>
+								<td style="text-align:left;">{{comp.Name}}</td>
+								<td style="text-align:left;">{{comp.xcdhcm__Role_L__r.Name}}</td>
+								<td style="text-align:left;">{{comp.xcdhcm__Effective_from__c}}</td>
+								<td style="text-align:left;">{{comp.xcdhcm__Current__c}}</td>
+                            </tr>
+							<tr ng-if="filterData.length == 0">
+								<td></td>
+								<td style="text-align:center;font-weight: bold;font-size: 15px;width: 150px;padding-top: 100px;" ><i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color:#f88962;"></i> <br/>No record found</td>
+								<td></td><td></td>
+							</tr>                                                
+                        </tbody> 
+                    </table> 
+                </div>
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">		 		
+    				<ul uib-pagination total-items="filterData.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+					<!-- <ul uib-pagination total-items="filterData.length" ng-model="currentPage" items-per-page="itemsPerPage" ></ul>	-->		
+					<br />
+					<input type="button" ng-click="addEmployeeRecords()" value="Save" class="slds-button slds-button--neutral" 
+		      			style="padding: 5px;width: 80px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/> 
+					
+					<input type="button"  ng-click="closeCompPopUp()" value="Cancel" class="slds-button slds-button--neutral" 
+		      			style="padding: 5px;width: 80px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;white-space :normal;"/> 
+				</div>
+            </div>
+        </div> 
+        </script>
+   </body>
+</html>
+</apex:form>
+</apex:page>

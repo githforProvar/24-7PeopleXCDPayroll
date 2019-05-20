@@ -1,0 +1,123 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.RewardExtensionController" sidebar="false" showHeader="true" wizard="false">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        .bEditBlock .pbSubheader .pbSubExtra 
+        {
+        color: #54698d;
+        letter-spacing: .0625rem;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        }  
+        .requiredLegend 
+        {
+        display: none;
+        }
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        font-family: "Salesforce Sans",Arial,sans-serif!important;
+        background-color: #ccc;
+        border-color: #ccc;
+        padding: .75rem 1rem;
+        background: white;
+        color: #54698d!important;
+        letter-spacing: .0625rem;
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important;
+        } 
+        <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important;
+		   position: sticky !important;    
+		} 
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S--> 
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form id="myForm">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!backToRewardTab}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>  
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Equity_Awards}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageBlock mode="edit" id="pageId">
+                                <apex:pageMessages id="erMsg"/>	
+                                <apex:pageBlockSection title="{!$Label.xcdhcm__new_equity_awardsequitydetail}" columns="2">
+                                    <apex:repeat value="{!EquityAwards}" var="equity" rows="1" id="outerRepeat">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Equity_Award__c.fieldsets.xcdhcm__New_Equity_Award}" var="i">
+                                         <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Equity_Award__c.fields[i].Accessible}">
+                                           <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->      
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Equity_Award__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Equity_Award__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!equity[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div>  
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:repeat>
+                                </apex:pageBlockSection>
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <!-- START :: 22-02-2018 Spring2018 NPPD-1564 Retain data if Mandatory fields missed and Double click check Modified by Rahul S-->
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_equity_awardsbcancel}" action="{!backToRewardTab}" immediate="true" styleclass="slds-button slds-button--neutral" reRender="id_saveBtn" status="saveStatus" id="id_saveBtn"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_equity_awardsbsave}" action="{!saveEquityAwards}" styleclass="slds-button slds-button--brand" status="saveStatus" rerender="id_saveBtn,erMsg"/>
+                                        <!-- END :: 22-02-2018 Spring2018 NPPD-1564 Retain data if Mandatory fields missed and Double click check Added by Rahul S-->
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:10%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form> 
+        </body> 
+    </html>
+</apex:page>

@@ -1,0 +1,275 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.EmployeeController" sidebar="false" standardStylesheets="true">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />   
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        input[type='text']  
+        {
+        width: 50%;
+        }  
+        textarea
+        {
+        width:50%;
+        } 
+        select
+        {
+        width:50% !important;
+        } 
+        <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important;
+		   position: sticky !important;    
+		} 
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S--> 
+    </style>
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">        
+            <apex:form >
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelEmploymentEdit}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHEmployeeEdit}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageBlock >
+                            	<apex:outputpanel id="pSec1" rendered="{!OR(displaylastPayRunVal1,displaylastPayRunVal2,displaylastPayRunVal3)}" > 
+                                    <div class="slds-grid slds-wrap">
+                                        <apex:pageMessage id="pMsg1" summary="{!validationMsg}" severity="info" strength="1" rendered="{!displaylastPayRunVal1}"/>
+								   		<apex:pageMessage id="pMsg2" summary="{!validationMsg2}" severity="info" strength="1" rendered="{!displaylastPayRunVal2}"/>
+								   		<apex:pageMessage id="pMsg3" summary="{!validationMsg3}" severity="info" strength="1" rendered="{!displaylastPayRunVal3}"/>
+                                    </div>
+                                </apex:outputpanel>
+                                <apex:PageMessages id="errormsg" escape="false"/>
+                                <h3 class="slds-section-title--divider">{!$Label.xcdhcm__employeeeditemploymentdetails}</h3>
+                                <!--START :: 06-02-2018 Lightning regression issue patch-1.81 Modified by Rahul S. 
+                                changed the reference from Employee_Detail__c[s] to empDetail[s] --> 
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Detail__c.Fieldsets.xcdhcm__Employment_edit}" var="s">
+                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        	<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Detail__c.fields[s].Accessible}">
+                                        	<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-form-element slds-p-around--small">
+                                                <label class="slds-form-element__label" style="{!IF(s.label=='Blankspace','display:none;' ,'')}" >
+                                                    <apex:outputPanel rendered="{!OR(s.dbRequired,s.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                    {!s.label}
+                                                    <span class="LiteHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.fields[s].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Employee_Detail__c.fields[s].inlineHelpText}</span>
+                                                    </span>
+                                                </label>
+                                                <div class="slds-form-element__control">
+                                                    <apex:inputField value="{!empDetail[s]}" required="{!OR(s.dbrequired,s.required)}" style="{!IF(s.label=='Blankspace','display:none;' ,'')}"/> 
+                                                </div>
+                                            </div>
+	                                        <!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:outputpanel>
+                                            <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </div>
+                                    </apex:repeat>
+                                </div>
+                                <br/>
+                                
+                                <!--  Do Not Delete :: Rahul S
+                                <apex:outputpanel rendered="{!SkillsAndAttributeSection}" > 
+                                    <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!SkillsAndAttributeSectionTitle}</h3>
+                                    <div class="slds-grid slds-wrap">
+                                        <apex:repeat value="{!$ObjectType.Employee_Detail__c.Fieldsets.Skills_and_attributes}" var="sa">
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--medium">
+                                                    <label class="slds-form-element__label" style="{!IF(sa.label=='Blankspace','display:none;' ,'')}" >
+                                                        <apex:outputPanel rendered="{!OR(sa.dbRequired,sa.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                        {!sa.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.Employee_Detail__c.fields[sa].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Employee_Detail__c.fields[sa].inlineHelpText}</span>
+                                                        </span>
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!Employee_Detail__c[sa]}" required="{!OR(sa.dbrequired,sa.required)}"  style="{!IF(sa.label=='Blankspace','display:none;' ,'')}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </apex:repeat>
+                                    </div>
+                                </apex:outputpanel> -->
+                                
+                                <apex:outputpanel rendered="{!ServiceAndNoticePeriodsSection}" > 
+                                    <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!$Label.xcdhcm__employeeeditserviceandnoticeperiod}</h3>
+                                    <div class="slds-grid slds-wrap">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Detail__c.Fieldsets.xcdhcm__Service_and_notice_periods}" var="s" >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                            <!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                           	<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Detail__c.fields[s].Accessible}">
+                                           	<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                                <div class="slds-form-element slds-p-around--small">
+                                                    <label class="slds-form-element__label" style="{!IF(s.label=='Blankspace','display:none;' ,'')}" >
+                                                        <apex:outputPanel rendered="{!OR(s.dbRequired,s.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                        {!s.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.fields[s].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Employee_Detail__c.fields[s].inlineHelpText}</span>
+                                                        </span>
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!empDetail[s]}" required="{!OR(s.dbrequired,s.required)}"  style="{!IF(s.label=='Blankspace','display:none;' ,'')}"/>
+                                                    </div>
+                                                </div>
+                                               <!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:outputpanel>
+                                            <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                           </div>
+                                        </apex:repeat>
+                                    </div>
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!AND(EmpLeaverSectionAdminView,xcdhcm__Employee_Detail__c.xcdhcm__Leaving_Date__c!=null)}" > 
+                                    <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!$Label.xcdhcm__employeeeditleaverdetails}</h3>
+                                    <div class="slds-grid slds-wrap">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Detail__c.Fieldsets.xcdhcm__Payroll_information}" var="s">
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+	                                            	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+		                                        	<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Detail__c.fields[s].Accessible}">
+		                                        	<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                                <div class="slds-form-element slds-p-around--small">
+                                                    <label class="slds-form-element__label">
+                                                        <apex:outputPanel rendered="{!OR(s.dbRequired,s.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel> 
+                                                        {!s.label}
+                                                    </label>
+                                                    <span class="LiteHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Detail__c.fields[s].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Employee_Detail__c.fields[s].inlineHelpText}</span>
+                                                    </span>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!empDetail[s]}" required="{!OR(s.dbrequired,s.required)}" style="{!IF(s.label=='Blankspace','display:none;' ,'')}"> 
+                        <!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+					<apex:actionSupport event="onchange" action="{!leaverInfoOnEmployeEditPage}" reRender="pSec1" />
+                                                        </apex:inputField>
+		 <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->                                                                                                                                             		
+                                                    </div>
+                                                </div>
+                                                 	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+		                                            </apex:outputpanel>
+		                                            <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+	                                            </div>
+                                        </apex:repeat>
+                                    </div>
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!EmployeeOtherSection}" > 
+                                    <h3 class="slds-section-title--divider" style="display: inline-block; width: 100%;">{!EmployeeOtherSectionLabel}</h3>
+                                    <div class="slds-grid slds-wrap">
+                                        <!-- START :: 27-02-2018 NPPD-1623 Lightning 1 Patch 1 Issues Modified by Rahul S -->
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Detail__c.Fieldsets.xcdhcm__Other_details_edit}" var="i">
+                                        <!-- END :: 27-02-2018  NPPD-1623 Lightning 1 Patch 1 Issues Modified by Rahul S -->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+	                                        	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+		                                     	<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Detail__c.fields[i].Accessible}">
+		                                     	<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                                <div class="slds-form-element slds-p-around--small">
+                                                    <label class="slds-form-element__label">
+                                                        {!i.label}
+                                                    </label>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!empDetail[i]}" required="{!OR(i.dbrequired,i.required)}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                    </div>
+                                                </div>
+		                                            <!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+		                                         </apex:outputpanel>
+		                                         <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </div>
+                                        </apex:repeat>
+                                    </div>
+                                </apex:outputpanel> 
+                                
+                                <apex:outputpanel rendered="false">
+                                    <apex:outputField value="{!empDetail.xcdhcm__User__c}"/>
+                                    <apex:outputField value="{!empDetail.xcdhcm__Leaving_Date__c}"/>
+                                    <apex:outputField value="{!empDetail.xcdhcm__Job_Role__c}"/>
+                                    <apex:outputField value="{!empDetail.xcdhcm__Company__c}"/>
+                                    <apex:outputField value="{!empDetail.Job_Role__r.xcdhcm__Pattern_Type__c}"/>
+                                    <apex:outputField value="{!empDetail.Job_Role__r.xcdhcm__Employment_Type__c}"/>
+                                </apex:outputpanel>
+                                <!--END :: 06-02-2018 Lightning regression issue patch-1.81 Modified by Rahul S. -->
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton styleclass="slds-button slds-button--neutral" value="{!$Label.xcdhcm__employeeeditbcancel}" action="{!cancelEmploymentEdit}" immediate="true" rerender="errormsg,id_saveBtn" status="saveStatus"/>
+                                        <apex:commandButton styleclass="slds-button slds-button--brand" value="{!$Label.xcdhcm__employeeeditbsave}" action="{!Save}" rerender="errormsg,id_saveBtn" status="saveStatus" id="id_saveBtn"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+            
+        </body> 
+    </html>
+    <!--START :: 06-02-2018 not used anywhere so commenting this JS  Commented by Rahul S-->  
+    <!-- <script type='text/javascript'>
+    
+    function displayfield(fieldtype)
+    {
+        if(fieldtype)
+        {
+            console.log('input =>'+fieldtype);
+            return true;
+        }
+        return false;
+    }
+    
+    function displayfield1(fieldtype)
+    {
+        if(fieldtype)
+        {
+            console.log('input1 =>'+fieldtype);
+            //return true;
+        }
+        return false;
+    }
+    
+    function displayfield2(fieldtype)
+    {
+        if(fieldtype)
+        {
+            console.log('input 2=>'+fieldtype);
+            //return true;
+        }
+        return false;
+    }
+    </script>    -->
+    <!--END :: 06-02-2018 not used anywhere so commenting this JS  Commented by Rahul S-->  
+</apex:page>

@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>Private</externalSharingModel>
+    <fields>
+        <fullName>xcdhcm__Build_approach__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Build approach</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Config</fullName>
+                    <default>false</default>
+                    <label>Config</label>
+                </value>
+                <value>
+                    <fullName>Code</fullName>
+                    <default>false</default>
+                    <label>Code</label>
+                </value>
+                <value>
+                    <fullName>Product</fullName>
+                    <default>false</default>
+                    <label>Product</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Business_consultant_actual_effort_hrs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Business consultant actual effort (hrs)</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Business_consultant_effort_req_hrs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Business consultant effort req. (hrs)</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Business_consultant_effort_to_date_hrs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Business consultant effort to date (hrs)</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Business_consultant_email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Business consultant email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Business_requirement__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Please describe the requirement that is driving this change request, including the benefit(s) the business is hoping to achieve</inlineHelpText>
+        <label>Business requirement</label>
+        <length>32768</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Client_approver_email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Client approver email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Further_change_details__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Further change details</label>
+        <length>32768</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Implementation_approach__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Implementation approach</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Low risk - configure directly into live</fullName>
+                    <default>false</default>
+                    <label>Low risk - configure directly into live</label>
+                </value>
+                <value>
+                    <fullName>Medium/high risk - UAT in sandbox</fullName>
+                    <default>false</default>
+                    <label>Medium/high risk - UAT in sandbox</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Live_timescale__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Live timescale</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Module__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Module</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>XCD HRMS</fullName>
+                    <default>false</default>
+                    <label>XCD HRMS</label>
+                </value>
+                <value>
+                    <fullName>XCD Payroll</fullName>
+                    <default>false</default>
+                    <label>XCD Payroll</label>
+                </value>
+                <value>
+                    <fullName>XCD Recruitment</fullName>
+                    <default>false</default>
+                    <label>XCD Recruitment</label>
+                </value>
+                <value>
+                    <fullName>XCD Learning</fullName>
+                    <default>false</default>
+                    <label>XCD Learning</label>
+                </value>
+                <value>
+                    <fullName>XCD Documents</fullName>
+                    <default>false</default>
+                    <label>XCD Documents</label>
+                </value>
+                <value>
+                    <fullName>XCD Expenses</fullName>
+                    <default>false</default>
+                    <label>XCD Expenses</label>
+                </value>
+                <value>
+                    <fullName>XCD Performance Management</fullName>
+                    <default>false</default>
+                    <label>XCD Performance Management</label>
+                </value>
+                <value>
+                    <fullName>XCD Timesheets</fullName>
+                    <default>false</default>
+                    <label>XCD Timesheets</label>
+                </value>
+                <value>
+                    <fullName>XCD Overtime</fullName>
+                    <default>false</default>
+                    <label>XCD Overtime</label>
+                </value>
+                <value>
+                    <fullName>XCD Gross Payroll</fullName>
+                    <default>false</default>
+                    <label>XCD Gross Payroll</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Name</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Notes_for_release__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Notes for release</label>
+        <length>32768</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Outline_solution_approach__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Outline solution approach</label>
+        <length>32768</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Potential_to_impact_upgrades__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Potential to impact upgrades?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Priority__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Priority</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>1 - must have</fullName>
+                    <default>false</default>
+                    <label>1 - must have</label>
+                </value>
+                <value>
+                    <fullName>2 - should have</fullName>
+                    <default>false</default>
+                    <label>2 - should have</label>
+                </value>
+                <value>
+                    <fullName>3 - could have</fullName>
+                    <default>false</default>
+                    <label>3 - could have</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Signed_off_by__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Please record the person who agreed to this work (client-side)</inlineHelpText>
+        <label>Signed off by</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Status</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>New</fullName>
+                    <default>true</default>
+                    <label>New</label>
+                </value>
+                <value>
+                    <fullName>Estimated by XCD</fullName>
+                    <default>false</default>
+                    <label>Estimated by XCD</label>
+                </value>
+                <value>
+                    <fullName>Estimate Approved</fullName>
+                    <default>false</default>
+                    <label>Estimate Approved</label>
+                </value>
+                <value>
+                    <fullName>Estimate Rejected</fullName>
+                    <default>false</default>
+                    <label>Estimate Rejected</label>
+                </value>
+                <value>
+                    <fullName>In Progress</fullName>
+                    <default>false</default>
+                    <label>In Progress</label>
+                </value>
+                <value>
+                    <fullName>Complete</fullName>
+                    <default>false</default>
+                    <label>Complete</label>
+                </value>
+                <value>
+                    <fullName>No longer required</fullName>
+                    <default>false</default>
+                    <label>No longer required</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Test_consultant_actual_effort_hrs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Test consultant actual effort (hrs)</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Test_consultant_effort_required_hrs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Test consultant effort required (hrs)</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Test_consultant_effort_to_date_hrs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Test consultant effort to date (hrs)</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Test_consultant_email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Test consultant email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Test_plan_approach__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Test plan approach</label>
+        <length>32768</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Test_plan_expected_results__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Test plan expected results</label>
+        <length>32768</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Testing_timescale__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Testing timescale</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Timescale_notes__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Timescale notes</label>
+        <length>32768</length>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Total_actual_effort_hrs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Business_consultant_actual_effort_hrs__c + xcdhcm__Test_consultant_actual_effort_hrs__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total actual effort (hrs)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Total_effort_estimate_hrs__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Business_consultant_effort_to_date_hrs__c + xcdhcm__Test_consultant_effort_to_date_hrs__c + xcdhcm__Business_consultant_effort_req_hrs__c + xcdhcm__Test_consultant_effort_required_hrs__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total effort estimate (hrs)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Type_of_request__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Type of request</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Change to existing functionality</fullName>
+                    <default>false</default>
+                    <label>Change to existing functionality</label>
+                </value>
+                <value>
+                    <fullName>Brand new functionality required</fullName>
+                    <default>false</default>
+                    <label>Brand new functionality required</label>
+                </value>
+                <value>
+                    <fullName>An idea for exploring in the UAT environment</fullName>
+                    <default>false</default>
+                    <label>An idea for exploring in the UAT environment</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_completed_by__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Please record the person who completed the work</inlineHelpText>
+        <label>Work completed by</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Change Request</label>
+    <listViews>
+        <fullName>xcdhcm__All</fullName>
+        <columns>NAME</columns>
+        <columns>xcdhcm__Name__c</columns>
+        <columns>xcdhcm__Status__c</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>xcdhcm__Signed_off_by__c</columns>
+        <columns>xcdhcm__Work_completed_by__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>CR-{0000}</displayFormat>
+        <label>CR Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Change Requests</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>xcdhcm__Name__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>xcdhcm__Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CREATED_DATE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>xcdhcm__Signed_off_by__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>xcdhcm__Work_completed_by__c</customTabListAdditionalFields>
+        <excludedStandardButtons>OpenListInQuip</excludedStandardButtons>
+        <excludedStandardButtons>Accept</excludedStandardButtons>
+        <excludedStandardButtons>MassChangeOwner</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <lookupDialogsAdditionalFields>xcdhcm__Name__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>xcdhcm__Type_of_request__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>xcdhcm__Status__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>xcdhcm__Signed_off_by__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>xcdhcm__Work_completed_by__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATED_DATE</lookupDialogsAdditionalFields>
+        <searchResultsAdditionalFields>xcdhcm__Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>xcdhcm__Type_of_request__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CREATED_DATE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>xcdhcm__Signed_off_by__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>xcdhcm__Work_completed_by__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Private</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

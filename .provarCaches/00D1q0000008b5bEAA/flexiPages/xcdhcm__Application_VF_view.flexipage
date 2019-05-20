@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata"
+   >
+ <fullName>xcdhcm__Application_VF_view</fullName>
+  <flexiPageRegions>
+    <componentInstances>
+   <componentInstanceProperties>
+    <name>height</name>
+        <value>1200</value>
+   </componentInstanceProperties>
+   <componentInstanceProperties>
+    <name>pageName</name>
+        <value>xcdhcm__ApplicationViewPage</value>
+   </componentInstanceProperties>
+   <componentName>flexipage:visualforcePage</componentName>
+     </componentInstances>
+    <name>right</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <masterLabel>Application VF view</masterLabel>
+    <sobjectType>xcdhcm__Applicant__c</sobjectType>
+ <template>
+  <name>xcdhcm:VisualForce_Template</name>
+ </template>
+ <type>RecordPage</type>
+</FlexiPage>

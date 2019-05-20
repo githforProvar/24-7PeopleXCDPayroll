@@ -1,0 +1,173 @@
+<apex:page standardController="xcdhcm__Internal_Vacancy__c" extensions="xcdhcm.InternalPositionDetailsController" showheader="true" sidebar="false" tabStyle="Vacant_Positions__tab"  >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock 
+        {
+        border-top: 4px solid #fff!important; 
+        border:none!important; 
+        }
+        body .bPageBlock .pbBody .labelCol, body .bPageBlock .pbBody .dataCol, body .bPageBlock .pbBody .data2Col, body .print .topics-label, body .print .topics-list 
+        {          
+        padding:0!important; 
+        }
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: #ccc;
+        border-color: #ccc;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        border-radius: 4px;
+        color: #54698d!important;
+        font-size: 1.15em;
+        letter-spacing: .0625rem;
+        font-weight: 500;
+        }   
+        .pbSubheader 
+        {
+        background-color: #ccc;
+        border-color: #ccc;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        border-radius: 4px;
+        color: #54698d!important;
+        font-size: 1.15em;
+        letter-spacing: .0625rem;
+        font-weight: 500;
+        }
+        body .bEditBlock .pbBody .pbSubheader, body .bWizardBlock .pbBody .pbSubheader
+        {
+        font-size: 1.0em!important;
+        line-height: 1.25!important;
+        color: #54698d!important;
+        letter-spacing: .0625rem!important; 
+        font-weight: normal!important;
+        }
+        .bPageBlock .detailList .data2Col 
+        {
+        border:none!important;
+        }
+        body .bEditBlock .pbHeader>table, .apexp .bPageBlock.apexDefaultPageBlock .pbHeader>table, #ep.bLayoutBlock .pbHeader>table 
+        {          
+        border: none!important;
+        }
+        body .bEditBlock .pbBottomButtons, body .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons 
+        {
+        border:none!important;
+        }
+        .slds-scope .slds-p-around--small, .slds-scope .slds-p-around_small 
+        {
+        padding: .50rem;
+        } 
+        .slds-scope body, .slds-scope:not(html) 
+        {
+        background: #fff!important;
+        }
+        body .bPageBlock .pbBody .labelCol, body .bPageBlock .pbBody .dataCol, body .bPageBlock .pbBody .data2Col, body .print .topics-label, body .print .topics-list
+        {
+        padding:0!important;
+        border: none!important;
+        }
+        body .bPageBlock .pbBody .dataCol
+        {
+        border: #fff!important;
+        border: none!important;
+        }
+        #intMain
+        {
+        background: #fff!important; 
+        } 
+        .pbButtonb 
+        {
+        float:right!important;
+        }
+        .apexp .bPageBlock .detailList {
+		    width: 95%;
+		    margin-left: 5%;
+		} 
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form >
+                <div ><br/>
+                    <h2 class="slds-text-heading--medium" style="margin-left:15px;" >{!$Label.PHInternalPositionDetails}</h2>
+                    <apex:pageBlock id="theBlock" >
+                        <apex:PageMessages />   
+                        <apex:pageBlockSection title="{!Vacancydetailstitle}" columns="1"  collapsible="false">
+                            <apex:repeat value="{!vacancy}" var="vac" rows="1">
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Internal_Vacancy__c.Fieldsets.xcdhcm__Vacancy_details}" var="a">
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">
+                                                    <label class="slds-form-element__label">
+                                                        {!a.label}
+                                                    </label>
+                                                    <apex:outputField value="{!vac[a]}" />
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:repeat>
+                                </div>
+                            </apex:repeat>    
+                        </apex:pageBlockSection>           
+                        <apex:pageBlockSection title="{!Jobdescriptiondetailstitle}" columns="1" collapsible="false">
+                            <apex:repeat value="{!vacancy}" var="vac" rows="1">
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Internal_Vacancy__c.Fieldsets.xcdhcm__Job_description_details}" var="b">
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">
+                                                    <label class="slds-form-element__label">
+                                                        {!b.label}
+                                                    </label>
+                                                    <apex:outputField value="{!vac[b]}" />
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:repeat>
+                                </div>
+                            </apex:repeat>  
+                        </apex:pageBlockSection>  
+                        <apex:pageBlockSection title="{!Compensationdetailstitle}"  columns="1"  collapsible="false"
+                                               rendered="{!AND(xcdhcm__Internal_Vacancy__c.xcdhcm__Publish_salary_external__c==true,xcdhcm__Internal_Vacancy__c.xcdhcm__Vacancy__c!=null)}">
+                            <apex:repeat value="{!vacancy}" var="vac" rows="1">  
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Internal_Vacancy__c.Fieldsets.xcdhcm__Compensation_detail}" var="c" >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-medium-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">
+                                                    <label class="slds-form-element__label">
+                                                        {!c.label}
+                                                    </label>
+                                                    <apex:outputField value="{!vac[c]}"/>
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:repeat>  
+                                </div>
+                            </apex:repeat>      
+                        </apex:pageBlockSection>      
+                        <apex:pageBlockButtons location="bottom">
+                            <apex:commandButton value="{!$Label.xcdhcm__internalpositiondetailsbback}" action="{!back}" styleclass="slds-button slds-button--neutral"/>       
+                            <apex:commandButton value="{!$Label.xcdhcm__internalpositiondetailsbapply}" action="{!applyPositionForm}" styleclass="slds-button slds-button--neutral"/>
+                        </apex:pageBlockButtons>
+                    </apex:pageBlock>
+                    <div style="border-bottom:1px solid #ccc!important;"></div>    
+                </div>
+            </apex:form>
+        </body>
+    </html>
+    <div Class="line"></div>
+</apex:page>

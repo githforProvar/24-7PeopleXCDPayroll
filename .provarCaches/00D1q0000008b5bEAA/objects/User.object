@@ -1,0 +1,921 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>CallHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>DeleteBannerPhotoAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EditUserAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EmailHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>FreezeUserAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>LinkToSetupUserDetailAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ManagePermSetsAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>PasswordUnlockAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ResetPasswordAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SmsHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>UpdateBannerPhotoAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>UserActivationAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>true</enableFeeds>
+    <externalSharingModel>Private</externalSharingModel>
+    <fieldSets>
+        <fullName>xcdhcm__Change_name</fullName>
+        <availableFields>
+            <field>AboutMe</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>AccountId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Alias</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Allow_Name_Change__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>BadgeText</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>BannerPhotoUrl</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CallCenterId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>City</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CommunityNickname</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CompanyName</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>ContactId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Country</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CurrencyIsoCode</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>DefaultCurrencyIsoCode</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>DefaultGroupNotificationFrequency</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>DelegatedApproverId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Department</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Department_ID__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>DigestFrequency</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Division</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Email</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>EmailEncodingKey</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>EmployeeNumber</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__End_Date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Extension</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Fax</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>FederationIdentifier</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>ForecastEnabled</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>FullPhotoUrl</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Generate_new_password__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>GeocodeAccuracy</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Has_reportees__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Id</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__In_my_department__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__In_my_team__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>IsActive</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>IsExtIndicatorVisible</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>IsProfilePhotoActive</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LanguageLocaleKey</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastLoginDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastPasswordChangeDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastReferencedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastViewedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Latitude</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LocaleSidKey</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Longitude</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>ManagerId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Manager_detail__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>MediumBannerPhotoUrl</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>MediumPhotoUrl</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>MobilePhone</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__My_reportees_user_ids__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Name</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>OfflinePdaTrialExpirationDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>OfflineTrialExpirationDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>OutOfOfficeMessage</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Phone</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>PostalCode</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>ProfileId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Profile_image__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>ReceivesAdminInfoEmails</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>ReceivesInfoEmails</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SenderEmail</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SenderName</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Signature</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SmallBannerPhotoUrl</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SmallPhotoUrl</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Start_Date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>State</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>StayInTouchNote</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>StayInTouchSignature</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>StayInTouchSubject</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Street</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SystemModstamp</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>TimeZoneSidKey</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Title</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Upward_reporting_line__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>UserRoleId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__UserRole__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>UserType</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__User__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Username</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Work_mobile__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__empDetail_Id__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <description>Change Name single screen</description>
+        <displayedFields>
+            <field>FirstName</field>
+            <isFieldManaged>true</isFieldManaged>
+            <isRequired>true</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>LastName</field>
+            <isFieldManaged>true</isFieldManaged>
+            <isRequired>true</isRequired>
+        </displayedFields>
+        <label>Change name</label>
+    </fieldSets>
+    <fields>
+        <fullName>ManagerId</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Hierarchy</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Allow_Name_Change__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Allow Name Change</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Approver__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>xApprover</label>
+        <relationshipName>HolidayApprover</relationshipName>
+        <restrictedAdminField>false</restrictedAdminField>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Hierarchy</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Department_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Department ID</label>
+        <length>18</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Employee&apos;s last working day or leaving date - after this date the record will no longer show on the team chart</description>
+        <externalId>false</externalId>
+        <label>End Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Generate_new_password__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Checking this box sends the User an email with login details. Note these login details will expire after 72 hours</inlineHelpText>
+        <label>Generate new password and notify user</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Has_reportees__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Has reportees</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__In_my_department__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK($User.xcdhcm__Department_ID__c)),
+$User.xcdhcm__Department_ID__c=xcdhcm__Department_ID__c,
+FALSE
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>In my department?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__In_my_team__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>OR(ManagerId=$User.ManagerId,Id=$User.ManagerId)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>In my team?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Location__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Records Employee location from Job role.  Used in Calendar filter</description>
+        <externalId>false</externalId>
+        <label>Location</label>
+        <length>40</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Manager_detail__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Records Manager name to provide a record without a hyperlink</description>
+        <externalId>false</externalId>
+        <formula>Manager.FirstName&amp;&quot; &quot;&amp;Manager.LastName</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Manager</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__My_reportees_user_ids__c</fullName>
+        <deprecated>false</deprecated>
+        <description>used for Manager circular loop, 
+
+stores the user id of all the users who report to me.</description>
+        <externalId>false</externalId>
+        <label>My reportees user ids</label>
+        <length>131072</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>LongTextArea</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Profile_image__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This will store employee Profile image.</description>
+        <externalId>false</externalId>
+        <label>Profile image</label>
+        <length>32768</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Html</type>
+        <visibleLines>25</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Records start date - after this point User appears in Team chart</description>
+        <externalId>false</externalId>
+        <label>Start Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Upward_reporting_line__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(ISBLANK(Manager.Id),&quot;&quot;, 
+IF(ISBLANK(Manager.Manager.Id ), xcdhcm__Manager_detail__c, 
+IF(ISBLANK(Manager.Manager.Manager.Id ),xcdhcm__Manager_detail__c &amp; &quot;, &quot;&amp; Manager.xcdhcm__Manager_detail__c, 
+IF(ISBLANK( Manager.Manager.Manager.Id),xcdhcm__Manager_detail__c &amp; &quot;, &quot;&amp; Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.xcdhcm__Manager_detail__c, 
+IF(ISBLANK( Manager.Manager.Manager.Manager.Id),xcdhcm__Manager_detail__c &amp; &quot;, &quot;&amp; Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.xcdhcm__Manager_detail__c, 
+IF(ISBLANK( Manager.Manager.Manager.Manager.Manager.Id),xcdhcm__Manager_detail__c &amp; &quot;, &quot;&amp; Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c, 
+IF(ISBLANK( Manager.Manager.Manager.Manager.Manager.Manager.Id),xcdhcm__Manager_detail__c &amp; &quot;, &quot;&amp; Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c, 
+IF(ISBLANK( Manager.Manager.Manager.Manager.Manager.Manager.Manager.Id),xcdhcm__Manager_detail__c &amp; &quot;, &quot;&amp; Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c, 
+IF(ISBLANK( Manager.Manager.Manager.Manager.Manager.Manager.Manager.Manager.Id),xcdhcm__Manager_detail__c &amp; &quot;, &quot;&amp; Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c, 
+IF(ISBLANK( Manager.Manager.Manager.Manager.Manager.Manager.Manager.Manager.Manager.Id),xcdhcm__Manager_detail__c &amp; &quot;, &quot;&amp; Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c&amp; &quot;, &quot;&amp; Manager.Manager.Manager.Manager.Manager.Manager.Manager.Manager.xcdhcm__Manager_detail__c, 
+&quot;More than 10 management tiers - formula needs updating&quot; 
+))))))))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Upward reporting line</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__UserRole__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Records the profile name, which is then presented on Job role</description>
+        <externalId>false</externalId>
+        <formula>Profile.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Profile name</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__User__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Field is used to designate whether an Employee record is visible in the Team Chart and in other controllers. Normally this field value will be active when a User has an active licence.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Use field to designate whether a User record is visible in the Team Chart and in other controllers</inlineHelpText>
+        <label>HR user status</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Active</fullName>
+                    <default>true</default>
+                    <label>Active</label>
+                </value>
+                <value>
+                    <fullName>InActive</fullName>
+                    <default>false</default>
+                    <label>InActive</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Work_mobile__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Display mobile no from user</description>
+        <externalId>false</externalId>
+        <label>Work mobile</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__empDetail_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <description>empDetail_Id stores this users employee detail record id (Record  identifier value). This value is used in team chart page.</description>
+        <externalId>false</externalId>
+        <label>empDetail_Id</label>
+        <length>20</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <listViews>
+        <fullName>ActiveUsers</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>CORE.USERS.EMAIL</columns>
+        <columns>CORE.PROFILE.NAME</columns>
+        <columns>CORE.USERS.ACTIVE</columns>
+        <columns>CORE.USERS.LAST_LOGIN</columns>
+        <columns>PASSWORD_EXPIRES</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CORE.USERS.ACTIVE</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <filters>
+            <field>FULL_NAME</field>
+            <operation>notContain</operation>
+            <value>Test</value>
+        </filters>
+        <label>Active Users</label>
+        <language>en_GB</language>
+        <sharedTo>
+            <group>HR_Administrator</group>
+            <group>Payroll_Administrators</group>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>AdminUsers</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>CORE.USERS.EMAIL</columns>
+        <columns>CORE.USERS.LAST_LOGIN</columns>
+        <columns>CORE.USERS.ACTIVE</columns>
+        <columns>CORE.PROFILE.NAME</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CORE.PROFILE.NAME</field>
+            <operation>contains</operation>
+            <value>Admin</value>
+        </filters>
+        <filters>
+            <field>FULL_NAME</field>
+            <operation>notContain</operation>
+            <value>Test</value>
+        </filters>
+        <label>Admin Users</label>
+        <language>en_GB</language>
+        <sharedTo>
+            <group>HR_Administrator</group>
+            <group>Payroll_Administrators</group>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>AllUsers</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>xcdhcm__Manager_detail__c</columns>
+        <columns>CORE.USERS.EMAIL</columns>
+        <columns>CORE.USERS.LAST_LOGIN</columns>
+        <columns>CORE.USERS.ACTIVE</columns>
+        <columns>CORE.PROFILE.NAME</columns>
+        <columns>PASSWORD_EXPIRES</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Users</label>
+        <language>en_GB</language>
+        <sharedTo>
+            <group>HR_Administrator</group>
+            <group>Payroll_Administrators</group>
+        </sharedTo>
+    </listViews>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>FULL_NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CORE.USERS.TITLE</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CORE.USERS.DEPARTMENT</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>xcdhcm__UserRole__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CORE.USERS.ACTIVE</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>FULL_NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CORE.USERS.PHONE</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CORE.USERS.CELL</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>FULL_NAME</searchFilterFields>
+        <searchFilterFields>CORE.USERS.DEPARTMENT</searchFilterFields>
+        <searchFilterFields>CORE.USERS.COMPANY_NAME</searchFilterFields>
+        <searchFilterFields>xcdhcm__UserRole__c</searchFilterFields>
+        <searchResultsAdditionalFields>FULL_NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.TITLE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.DEPARTMENT</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.PHONE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.EMAIL</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Read</sharingModel>
+    <validationRules>
+        <fullName>xcdhcm__Change_In_Name</fullName>
+        <active>true</active>
+        <description>User&apos;s first and last names should be changed using Change Name button on Personal.</description>
+        <errorConditionFormula>CONTAINS(Profile.Name,&apos;HRMS&apos;) &amp;&amp; NOT(xcdhcm__Allow_Name_Change__c) &amp;&amp; NOT(ISNEW()) &amp;&amp;  (PRIORVALUE( FirstName)&lt;&gt;FirstName ||  PRIORVALUE(  LastName )&lt;&gt;LastName )</errorConditionFormula>
+        <errorMessage>Change names for HR users using the Change name button from personal.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>xcdhcm__Only_Admins_can_change_User_record</fullName>
+        <active>true</active>
+        <description>Validation rule prevents Employees, Team Leaders and Managers from changing their own User record.Only HR Admins and Payroll Managers and Admins can do this</description>
+        <errorConditionFormula>and( 
+$Profile.Name  &lt;&gt;  &quot;HRMS Admin&quot;,
+$Profile.Name  &lt;&gt;  &quot;System Administrator&quot;,
+$Profile.Name  &lt;&gt;  &quot;HRMS System Admin&quot;, 
+$Profile.Name &lt;&gt; &quot;HRMS Payroll Manager&quot;, 
+$Profile.Name &lt;&gt; &quot;HRMS Payroll Administrator&quot;,
+or( 
+ISCHANGED( Alias ) , 
+ISCHANGED( IsActive ) ,  
+ISCHANGED( City ) , 
+ISCHANGED( Country ) ,  
+ISCHANGED( Email ) , 
+ISCHANGED( xcdhcm__empDetail_Id__c ) , 
+ISCHANGED( EmployeeNumber ) , 
+ISCHANGED( xcdhcm__End_Date__c ) , 
+ISCHANGED( EndDay ) , 
+ISCHANGED( Extension ) , 
+ISCHANGED( Fax ) , 
+ISCHANGED( xcdhcm__Generate_new_password__c ) , 
+ISCHANGED( xcdhcm__User__c ) , 
+ISCHANGED( xcdhcm__Manager_detail__c ) , 
+ISCHANGED( CommunityNickname ) , 
+ISCHANGED( ProfileId ) , 
+ISCHANGED( xcdhcm__Start_Date__c ) , 
+ISCHANGED( State ) , 
+ISCHANGED( StartDay ) , 
+ISCHANGED( Street ) , 
+ISCHANGED( Title ) , 
+ISCHANGED( Id ) , 
+ISCHANGED( Username ) , 
+ISCHANGED( UserType ) , 
+ISCHANGED( CompanyName ), 
+ISCHANGED( Department ), 
+ISCHANGED( Division ), 
+ISCHANGED( Email ), 
+ISCHANGED( xcdhcm__empDetail_Id__c ),
+/* NPPD-1773
+ISCHANGED( FirstName ), 
+ISCHANGED( LastName ), */
+ISCHANGED( xcdhcm__Manager_detail__c ), 
+ISCHANGED( CommunityNickname ), 
+ISCHANGED( Phone ), 
+ISCHANGED( Title )) 
+
+)</errorConditionFormula>
+        <errorMessage>You may change your mobile phone number but other fields may only be changed by Administrators. If you would like to change a value please contact one of the HR team</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>xcdhcm__Only_SystemAdmin_can_create_admin_record</fullName>
+        <active>true</active>
+        <description>Prevent admin profile from processing joiner for HRMS Admin or  HRMS system admin</description>
+        <errorConditionFormula>AND
+(
+OR
+(
+$User.xcdhcm__UserRole__c = &apos;HRMS Admin&apos;,
+$User.xcdhcm__UserRole__c = &apos;HRMS Payroll Administrator&apos;,
+$User.xcdhcm__UserRole__c = &apos;HRMS Recruitment Administrator&apos;,
+$User.xcdhcm__UserRole__c = &apos;HRMS Training Adminstrator&apos;,
+$User.xcdhcm__UserRole__c = &apos;HRMS Trial Admin&apos;
+),
+OR
+(
+xcdhcm__UserRole__c = &apos;HRMS Admin&apos;,
+xcdhcm__UserRole__c = &apos;HRMS Payroll Administrator&apos;,
+xcdhcm__UserRole__c = &apos;HRMS Recruitment Administratorr&apos;,
+xcdhcm__UserRole__c = &apos;HRMS System Admin&apos;,
+xcdhcm__UserRole__c = &apos;HRMS Training Adminstrator&apos;,
+xcdhcm__UserRole__c = &apos;HRMS Trial Admin&apos;,
+xcdhcm__UserRole__c = &apos;System Administrator&apos;
+)
+)</errorConditionFormula>
+        <errorMessage>Only HRMS System Administrators or System Administrators may create a user with an Administrator profile</errorMessage>
+    </validationRules>
+</CustomObject>

@@ -1,0 +1,1138 @@
+<apex:page standardController="xcdhcm__Employee_Review__c" extensions="xcdhcm.ReviewEditController"  sidebar="false" showHeader="true" wizard="false" >
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style type="text/css">  
+        .bEditBlock .pbHeader>table, .apexp .bPageBlock.apexDefaultPageBlock .pbHeader>table, #ep.bLayoutBlock .pbHeader>table {  
+           border: none;
+        }
+        body .bPageBlock .detailList tr td, body .bPageBlock .detailList tr th, body table.list tr td, body table.list tr th, body .hoverDetail .bPageBlock .detailList tr td, body .hoverDetail .bPageBlock .detailList tr th {
+            border: none;
+        }
+        .slds-scope .slds-table--bordered, .slds-scope .slds-table_bordered {
+                border: none;
+                background: #fff;
+            } 
+            
+       body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader {
+            color: #000;
+            font-size: 1.3em;
+            font-family: "Salesforce Sans",Arial,sans-serif!important;
+            font-weight: normal;
+            display: inline-block;
+            color: #54698d;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-right: .75rem;
+            margin-bottom: .25rem;
+            text-transform: uppercase;
+        }       
+                  
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: #ccc;
+        border-color: #ccc;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        border-radius: 4px;
+        color: #54698d!important;
+        font-size: 1.15em;
+        letter-spacing: .0625rem;
+        font-weight: 500;
+        }
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        .closeIcon
+        {
+        display:none!important;
+        }
+        input[type='text'] 
+        {
+        width: 100%;
+        }  
+        textarea
+        {
+        width:100%;
+        } 
+        select
+        {
+        width:100%!important;
+        }
+        .columnWidth
+        {
+        width: 10%;
+        }
+        .firstcolumn
+        {
+        padding-left: 1% !important;
+        width: 10%;
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form >
+                <apex:pageBlock title="{!$Label.xcdhcm__phreviewedit_1}" rendered="{!rt='Performance Review'}">
+                    <apex:PageMessages id="errmsgper"/> 
+                    <div Class="line"></div> 
+                    <apex:pageBlockButtons location="bottom" style="float:right">
+                        <apex:actionStatus id="waitStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputpanel >
+                                    <apex:commandButton value="{!$Label.xcdhcm__revieweditbback}" action="{!back}" immediate="true" rerender="errmsgper,id_save" styleclass="slds-button slds-button--neutral" status="waitStatus"/>
+                                    <apex:commandButton value="{!$Label.xcdhcm__revieweditbsave}" action="{!savePerformanceReviewEdit}" rerender="errmsgper,id_save" styleclass="slds-button slds-button--brand" status="waitStatus" id="id_save"/> 
+                                </apex:outputpanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageBlockButtons> 
+                    
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditreviewdetails}" columns="2" rendered="{!rt=='Performance Review'}" id="perf">
+                        <apex:repeat value="{!reviewEdit}" var="pr" rows="1">
+                            <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__ER_Confidential_Set}" var="o">
+								<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+								<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[o].Accessible}">
+								<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(o.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!o.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!o.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[o].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[o].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!pr[o]}" required="{!o.Required}" style="{!IF(o.label=='Blankspace','display:none;' ,'')}"/>  
+                                            </div>                                                                                        
+                                        </div>
+                                    </div> 
+                                </apex:outputpanel>
+                            </apex:repeat>
+                        </apex:repeat> 
+                    </apex:pageBlockSection>
+                    
+                    <div Class="line"></div>
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditobjectives}" columns="1"> 
+                        <!-- <apex:pageBlockTable align="center" value="{!ObjectiveEdit}" var="c" >                  
+<apex:column headervalue="{!$ObjectType.Objective__c.Fields.Name.Label}" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+</apex:InputField>
+</apex:column>
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__PerformanceObjectiveEdit}">
+<apex:column >
+<apex:facet name="header"> 
+<span>{!f.label}<img src="/s.gif" Class="helpbub" 
+title="{!$ObjectType.Objective__c.Fields[f].inlineHelpText}" 
+style="{!IF($ObjectType.Objective__c.Fields[f].inlineHelpText == null, 'display:none','')}" /> </span>                  
+</apex:facet>
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat>         
+</apex:pageBlockTable> -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields.Name.Accessible}">
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate">{!$ObjectType.Objective__c.Fields.Name.Label}</div>
+                                        </th>
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__PerformanceObjectiveEdit}">
+											<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+											<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Objective__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Objective__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Objective__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+											</apex:outputpanel>
+											<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!ObjectiveEdit}" var="c" >
+                                        <tr> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    <apex:InputField value="{!c.Name}" required="true" />
+                                                </div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__PerformanceObjectiveEdit}">
+												<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+												<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+												</apex:outputpanel>
+												<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection> 
+                    
+                    <apex:pageBlockSection collapsible="false" columns="1" id="perfObj" > 
+                        <apex:variable value="{!0}" var="rowNum" />
+                        
+                        <!-- <apex:pageBlockTable align="center" value="{!newObjectiveList }" var="c" id="rows" >      
+<apex:column headervalue="" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+<apex:variable value="{!rowNum+1}" var="rowNum" />
+</apex:InputField>
+</apex:column>
+
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__PerformanceObjectiveEdit}">
+<apex:column >
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;"/>
+</apex:column>
+</apex:repeat> 
+
+<apex:column headervalue="" rendered="{!newObjectiveList.size >=1}" style="width:1%;">
+<apex:commandlink action="{!deleteObjective}"  immediate="true" rerender="perfObj">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!$Resource.Remove_Cross_Symbol}" alt="Remove"/>
+</apex:commandlink>
+</apex:column>                         
+</apex:pageBlockTable> -->
+                        <apex:outputpanel id="rows" >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate"></div>
+                                        </th>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__PerformanceObjectiveEdit}">
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate"></div>
+                                            </th> 
+									</apex:outputpanel>
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                        <th scope="col" class="columnWidth" >
+                                            <div class="slds-truncate"></div>
+                                        </th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!newObjectiveList }" var="c" >
+                                        <tr> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                    </apex:InputField>
+                                                </div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__PerformanceObjectiveEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:commandlink action="{!deleteObjective}"  immediate="true" rerender="perfObj" rendered="{!newObjectiveList.size >=1}">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </div>
+                                            </th>
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                        <apex:commandButton value="{!$Label.xcdhcm__revieweditbaddrow}" styleclass="slds-button slds-button--neutral" action="{!addObjective}" rerender="perfObj,errmsgper" immediate="true" style="float:right;"/>
+                    </apex:pageBlockSection>  
+                    <div Class="line"></div>
+                    
+                    <apex:pageBlock rendered="{!EditValueSection==true}">
+                        <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditvalues}" columns="1" > 
+                            <!-- <apex:pageBlockTable align="center" value="{!ValueEdit}" var="c" >                  
+
+<apex:column headervalue="{!$ObjectType.Values__c.Fields.Name.Label}" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+</apex:InputField>
+</apex:column>
+
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__ValueEdit}">
+<apex:column >
+<apex:facet name="header"> 
+<span>{!f.label}<img src="/s.gif" Class="helpbub" 
+title="{!$ObjectType.Values__c.Fields[f].inlineHelpText}" 
+style="{!IF($ObjectType.Values__c.Fields[f].inlineHelpText == null, 'display:none','')}" /> </span>                 
+</apex:facet>
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat>         
+
+</apex:pageBlockTable> -->
+                            <apex:outputpanel >
+                                <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                    <thead>
+                                        <tr class="slds-text-title--caps"> 
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Values__c.Fields.Name.Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Values__c.Fields.Name.Label}</div>
+                                            </th>
+									</apex:outputpanel>
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__ValueEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Values__c.fields[f].Accessible}">
+                                                <th scope="col" class="columnWidth">
+                                                    <div class="slds-truncate">{!$ObjectType.Values__c.Fields[f].label}</div>
+                                                    <span class="LiteHelpText">
+                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Values__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                        <span>{!$ObjectType.Values__c.fields[f].inlineHelpText}</span>
+                                                    </span>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat>
+                                        </tr> 
+                                    </thead>
+                                    <tbody>
+                                        <apex:repeat value="{!ValueEdit}" var="c" >
+                                            <tr> 
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        <apex:InputField value="{!c.Name}" required="true"  />
+                                                    </div>
+                                                </th>
+                                                <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__ValueEdit}">
+											<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+											<apex:outputpanel rendered="{!$objectType.xcdhcm__Values__c.fields[f].Accessible}">
+                                                    <th scope="row" class="columnWidth">
+                                                        <div class="slds-truncate" >
+                                                            <apex:inputField value="{!c[f]}"/>
+                                                        </div>
+                                                    </th> 
+											</apex:outputpanel>
+											<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                                </apex:repeat> 
+                                            </tr> 
+                                        </apex:repeat>
+                                    </tbody>
+                                </table>
+                            </apex:outputpanel>
+                        </apex:pageBlockSection>            
+                        
+                        <apex:pageBlockSection collapsible="false" columns="1" id="perfVal" > 
+                            <apex:variable value="{!0}" var="rowNum" />
+                            
+                            <!-- <apex:pageBlockTable align="center" value="{!newValueList }" var="c" id="rows" >      
+<apex:column headervalue="" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+<apex:variable value="{!rowNum+1}" var="rowNum" />
+</apex:InputField>
+</apex:column>
+
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__ValueEdit}">
+<apex:column >
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;"/>
+</apex:column>
+</apex:repeat>             
+
+<apex:column headervalue="" rendered="{!newValueList.size >=1}" style="width:1%;">
+<apex:commandlink action="{!deleteValue}"  immediate="true" rerender="perfVal">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!$Resource.Remove_Cross_Symbol}" alt="Remove"/>
+</apex:commandlink>
+</apex:column>                         
+</apex:pageBlockTable> -->
+                            <apex:outputpanel id="rows" >
+                                <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                    <thead>
+                                        <tr class="slds-text-title--caps"> 
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate"></div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__ValueEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Values__c.fields[f].Accessible}">
+                                                <th scope="col" class="columnWidth">
+                                                    <div class="slds-truncate"></div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat>
+                                            <th scope="col" class="columnWidth" >
+                                                <div class="slds-truncate"></div>
+                                            </th>
+                                        </tr> 
+                                    </thead>
+                                    <tbody>
+                                        <apex:repeat value="{!newValueList }" var="c">
+                                            <tr> 
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        <apex:InputField value="{!c.Name}" required="true" >
+                                                            <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                        </apex:InputField>
+                                                    </div>
+                                                </th>
+                                                <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__ValueEdit}">
+											<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+											<apex:outputpanel rendered="{!$objectType.xcdhcm__Values__c.fields[f].Accessible}">
+                                                    <th scope="row" class="columnWidth">
+                                                        <div class="slds-truncate" >
+                                                            <apex:inputField value="{!c[f]}"/>
+                                                        </div>
+                                                    </th> 
+											</apex:outputpanel>
+											<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                                </apex:repeat> 
+                                                <apex:outputpanel rendered="{!newValueList.size >=1}">
+                                                    <th scope="row" class="columnWidth">
+                                                        <div class="slds-truncate" >
+                                                            <apex:commandlink action="{!deleteValue}"  immediate="true" rerender="perfVal" rendered="{!newValueList.size >=1}">
+                                                                <apex:param name="rownumber" value="{!rowNum}"/>
+                                                                <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                            </apex:commandlink>
+                                                        </div>
+                                                    </th>
+                                                </apex:outputpanel>
+                                            </tr> 
+                                        </apex:repeat>
+                                    </tbody>
+                                </table>
+                            </apex:outputpanel>
+                            <apex:commandButton value="{!$Label.xcdhcm__revieweditbaddrow}" styleclass="slds-button slds-button--neutral" action="{!addValue}" rerender="perfVal,errmsgper" immediate="true" style="float:right;"/>
+                        </apex:pageBlockSection>  
+                        <div Class="line"></div>
+                    </apex:pageBlock>
+                    
+                    <apex:pageBlockSEction collapsible="false" title="{!$Label.xcdhcm__revieweditassessment}" columns="1">
+                        <!-- <apex:pageBlockTable align="center" value="{!reviewEdit}" var="c">
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+<apex:column headervalue="{!f.label}">
+<apex:inputField value="{!c[f]}"  style="width:150px;height:25px;"/>
+</apex:column>
+</apex:repeat> 
+</apex:pageBlockTable> -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Employee_Review__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+									</apex:outputpanel>
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!reviewEdit}" var="c" >
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection> 
+                    
+                    <div Class="line"></div>
+                    
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditpersonaldevelopmentplan}"  rendered="{!AND(rt == 'Performance Review',ReviewEditPDPSection = true)}" columns="1">
+                        <!-- <apex:pageBlockTable align="center" value="{!PDPEdit}" var="c" >      
+<apex:column headervalue="{!$ObjectType.Personal_development_plan__c.Fields.Name.Label}" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+</apex:InputField>
+</apex:column>
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__PerformancePDPEdit}">
+<apex:column >
+<apex:facet name="header"> 
+<span>{!f.label}<img src="/s.gif" Class="helpbub" 
+title="{!$ObjectType.Personal_development_plan__c.Fields[f].inlineHelpText}" 
+style="{!IF($ObjectType.Personal_development_plan__c.Fields[f].inlineHelpText == null, 'display:none','')}" /> </span>                  
+</apex:facet>
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat>                       
+</apex:pageBlockTable> -->  
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fields.Name.Accessible}">
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate">{!$ObjectType.Personal_development_plan__c.Fields.Name.Label}</div>
+                                        </th>
+									</apex:outputpanel>
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__PerformancePDPEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Personal_development_plan__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Personal_development_plan__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal_development_plan__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Personal_development_plan__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!PDPEdit}" var="c"  >
+                                        <tr> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    <apex:InputField value="{!c.Name}" required="true"  />
+                                                </div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__PerformancePDPEdit}">
+											<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+											<apex:outputpanel rendered="{!$objectType.xcdhcm__Personal_development_plan__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+											</apex:outputpanel>
+											<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection>  
+                    
+                    <apex:pageBlockSection collapsible="false" columns="1" id="pdp" > 
+                        <apex:variable value="{!0}" var="rowNum" />
+                        <!-- <apex:pageBlockTable align="center" value="{!newPDPList }" var="c" id="rows" >             
+<apex:column headervalue="" style="width:100px;">
+<apex:InputField value="{!c.Name}" required="true" >
+<apex:variable value="{!rowNum+1}" var="rowNum" />
+</apex:InputField> 
+</apex:column>
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__PerformancePDPEdit}">
+<apex:column >
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat> 
+<apex:column headervalue="" rendered="{!newPDPList.size >=1}" style="width:1%;">
+<apex:commandlink action="{!deletePdp}"  immediate="true" rerender="pdp">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!$Resource.Remove_Cross_Symbol}" alt="Remove"/>
+</apex:commandlink>
+</apex:column>                         
+</apex:pageBlockTable> -->
+                        <apex:outputpanel id="rows" >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate"></div>
+                                        </th>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__PerformancePDPEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Personal_development_plan__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate"></div>
+                                            </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                        <th scope="col" class="columnWidth" >
+                                            <div class="slds-truncate"></div>
+                                        </th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!newPDPList }" var="c" >
+                                        <tr> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                    </apex:InputField> 
+                                                </div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__PerformancePDPEdit}">
+											<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+											<apex:outputpanel rendered="{!$objectType.xcdhcm__Personal_development_plan__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+											</apex:outputpanel>
+											<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:commandlink action="{!deletePdp}" immediate="true" rerender="pdp" rendered="{!newPDPList.size >=1}">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </div>
+                                            </th>
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                        <!-- START :: 06-08-2018 NPPD-1703 Standard Performance review VF page issue Modified by Anil -->
+                        <apex:commandButton value="{!$Label.xcdhcm__revieweditbaddrow}" styleclass="slds-button slds-button--neutral" action="{!addPdp}" rendered="{!AND(rt == 'Performance Review',ReviewEditPDPSection = true)}" immediate="true" rerender="pdp,errmsgper"  style="float:right;"/>
+                        <!-- <apex:commandButton value="{!$Label.xcdhcm__revieweditbaddrow}" styleclass="slds-button slds-button--neutral" action="{!addPdp}" immediate="true" rerender="pdp,errmsgper"  style="float:right;"/> -->
+                        <!-- END :: 06-08-2018 NPPD-1703 Standard Performance review VF page issue Modified by Anil -->
+                    </apex:pageBlockSection> 
+                </apex:pageBlock>  
+                
+                <apex:pageBlock title="{!$Label.xcdhcm__phreviewedit_3}" rendered="{!rt='One to One Review'}">
+                    <apex:PageMessages id="errmsgonetoone"/> 
+                    <apex:pageBlockButtons location="bottom" style="float:right;">
+                        <apex:actionStatus id="waitStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputpanel >
+                                    <apex:commandButton value="{!$Label.xcdhcm__revieweditbback}" action="{!back}" immediate="true" rerender="errmsgonetoone,id_save" styleclass="slds-button slds-button--neutral" status="waitStatus"/>
+                                    <apex:commandButton value="{!$Label.xcdhcm__revieweditbsave}" action="{!savePerformanceReviewEdit}" rerender="errmsgonetoone,id_save" styleclass="slds-button slds-button--brand" status="waitStatus" id="id_save"/> 
+                                </apex:outputpanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageBlockButtons> 
+                    
+                    <div Class="line"></div>
+                    
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditreviewdetails}" columns="2" id="one">  
+                        <apex:repeat value="{!reviewEdit}" var="pr" rows="1">
+                            <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Confidential_Review_Summary_Columns}" var="o" >
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[o].Accessible}">
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(o.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!o.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!o.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[o].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[o].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!pr[o]}" required="{!o.Required}" style="{!IF(o.label=='Blankspace','display:none;' ,'')}"/> 
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>  
+                                </apex:outputpanel>
+                            </apex:repeat>
+                        </apex:repeat> 
+                    </apex:pageBlockSection>    
+                    <div Class="line"></div>
+                    
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditobjectives}"  columns="1" > 
+                        <!-- <apex:pageBlockTable align="center" value="{!ObjectiveEdit}" var="c" >                  
+<apex:column headervalue="{!$ObjectType.Objective__c.Fields.Name.Label}" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+</apex:InputField>
+</apex:column>
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjectiveEdit}">
+<apex:column >
+<apex:facet name="header"> 
+<span>{!f.label}<img src="/s.gif" Class="helpbub" 
+title="{!$ObjectType.Objective__c.Fields[f].inlineHelpText}" 
+style="{!IF($ObjectType.Objective__c.Fields[f].inlineHelpText == null, 'display:none','')}" /> </span>                  
+</apex:facet>
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat>         
+</apex:pageBlockTable> -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+								<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+								<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields.Name.Accessible}">
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate">{!$ObjectType.Objective__c.Fields.Name.Label}</div>
+                                        </th>
+								</apex:outputpanel>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjectiveEdit}">
+									<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Objective__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Objective__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Objective__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+									</apex:outputpanel>
+                                        </apex:repeat>
+								<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!ObjectiveEdit}" var="c"  >
+                                        <tr> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    <apex:InputField value="{!c.Name}" required="true"  />
+                                                </div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjectiveEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection> 
+                    
+                    <apex:pageBlockSection collapsible="false" columns="1" id="onetooneObj" > 
+                        <apex:variable value="{!0}" var="rowNum" />
+                        <!--  <apex:pageBlockTable align="center" value="{!newObjectiveList }" var="c" id="rows" >      
+<apex:column headervalue="" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+<apex:variable value="{!rowNum+1}" var="rowNum" />
+</apex:InputField>
+</apex:column>
+
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjectiveEdit}">
+<apex:column >
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;"/>
+</apex:column>
+</apex:repeat> 
+
+<apex:column headervalue="" rendered="{!newObjectiveList.size >=1}" style="width:1%;">
+<apex:commandlink action="{!deleteObjective}"  immediate="true" rerender="onetooneObj">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!$Resource.Remove_Cross_Symbol}" alt="Remove"/>
+</apex:commandlink>
+</apex:column>                         
+</apex:pageBlockTable> -->
+                        <apex:outputpanel id="rows" >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate"></div>
+                                        </th>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjectiveEdit}">
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate"></div>
+                                            </th> 
+									</apex:outputpanel>
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                        <th scope="col" class="columnWidth" >
+                                            <div class="slds-truncate"></div>
+                                        </th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!newObjectiveList }" var="c" >
+                                        <tr> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" />
+                                                    </apex:InputField>
+                                                </div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__OnetoOneObjectiveEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:commandlink action="{!deleteObjective}"  rendered="{!newObjectiveList.size >=1}" immediate="true" rerender="onetooneObj">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </div>
+                                            </th>
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                        <apex:commandButton value="{!$Label.xcdhcm__revieweditbaddrow}" styleclass="slds-button slds-button--neutral" action="{!addObjective}" immediate="true" rerender="onetooneObj,errmsgonetoone" style="float:right;" />
+                    </apex:pageBlockSection> 
+                    
+                    <div Class="line"></div>
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditassessment}"  columns="1" id="assessment">
+                        <!-- <apex:pageBlockTable align="center" value="{!reviewEdit}" var="c">
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+<apex:column headervalue="{!f.label}">
+<apex:inputField value="{!c[f]}"  style="width:150px;height:25px;"/>
+</apex:column>
+</apex:repeat> 
+</apex:pageBlockTable> -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Employee_Review__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+									</apex:outputpanel>
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!reviewEdit}" var="c" >
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection>            
+                </apex:pageBlock>
+                
+                <apex:pageBlock title="{!$Label.xcdhcm__phreviewedit_2}" rendered="{!rt='Probationary Review'}">
+                    <div Class="line"></div> 
+                    <apex:PageMessages id="errmsgProf"/> 
+                    
+                    <apex:pageBlockButtons location="bottom" style="float:right;">
+                        <apex:actionStatus id="waitStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputpanel >
+                                    <apex:commandButton value="{!$Label.xcdhcm__revieweditbback}" action="{!back}" immediate="true" rerender="errmsgProf,id_save" styleclass="slds-button slds-button--neutral" status="waitStatus"/>
+                                    <apex:commandButton value="{!$Label.xcdhcm__revieweditbsave}" action="{!savePerformanceReviewEdit}" rerender="errmsgProf,id_save" styleclass="slds-button slds-button--brand" status="waitStatus" id="id_save"/>
+                                </apex:outputpanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageBlockButtons>
+                    
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditreviewdetails}" columns="2" id="prob"> 
+                        <apex:repeat value="{!reviewEdit}" var="pr" rows="1">
+                            <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__OnetoOne_Review_Summary_Columns}" var="o" >
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[o].Accessible}">
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(o.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!o.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!o.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[o].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[o].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!pr[o]}" required="{!o.Required}" style="{!IF(o.label=='Blankspace','display:none;' ,'')}"/> 
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>  
+                                </apex:outputpanel>
+                            </apex:repeat>                       
+                        </apex:repeat> 
+                    </apex:pageBlockSection>  
+                    <div Class="line"></div> 
+                    
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditobjectives}"  columns="1" > 
+                        <!-- <apex:pageBlockTable align="center" value="{!ObjectiveEdit}" var="c" >                  
+<apex:column headervalue="{!$ObjectType.Objective__c.Fields.Name.Label}" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+</apex:InputField>
+</apex:column>
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__NewprobationaryObjectiveEdit}">
+<apex:column >
+<apex:facet name="header"> 
+<span>{!f.label}<img src="/s.gif" Class="helpbub" 
+title="{!$ObjectType.Objective__c.Fields[f].inlineHelpText}" 
+style="{!IF($ObjectType.Objective__c.Fields[f].inlineHelpText == null, 'display:none','')}" /> </span>                  
+</apex:facet>
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat>                  
+</apex:pageBlockTable> -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+								<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+								<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.Fields.Name.Accessible}">
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate">{!$ObjectType.Objective__c.Fields.Name.Label}</div>
+                                        </th>
+								</apex:outputpanel>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__NewprobationaryObjectiveEdit}">
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Objective__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Objective__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Objective__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+									</apex:outputpanel>
+                                        </apex:repeat>
+								<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!ObjectiveEdit}" var="c"  >
+                                        <tr> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    <apex:InputField value="{!c.Name}" required="true"  />
+                                                </div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__NewprobationaryObjectiveEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection> 
+                    
+                    <apex:pageBlockSection collapsible="false" columns="1" id="probObj" > 
+                        <apex:variable value="{!0}" var="rowNum" />     
+                        <!-- <apex:pageBlockTable align="center" value="{!newObjectiveList }" var="c" id="rows" >      
+<apex:column headervalue="" style="width:10%;">
+<apex:InputField value="{!c.Name}" required="true" >
+<apex:variable value="{!rowNum+1}" var="rowNum" /> 
+</apex:InputField>
+</apex:column>
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__NewprobationaryObjectiveEdit}">
+<apex:column >
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;"/>
+</apex:column>
+</apex:repeat> 
+<apex:column headervalue="" rendered="{!newObjectiveList.size >=1}" style="width:1%;">
+<apex:commandlink action="{!deleteObjective}"  immediate="true" rerender="probObj">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!$Resource.Remove_Cross_Symbol}" alt="Remove"/>
+</apex:commandlink>
+</apex:column>                         
+</apex:pageBlockTable> -->
+                        <apex:outputpanel id="rows" >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate"></div>
+                                        </th>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__NewprobationaryObjectiveEdit}">
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+										<th scope="col" class="columnWidth"></th>
+									</apex:outputpanel>
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                        <th scope="col" class="columnWidth" >
+                                            <div class="slds-truncate"></div>
+                                        </th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!newObjectiveList }" var="c">
+                                        <tr> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                    <apex:InputField value="{!c.Name}" required="true" >
+                                                        <apex:variable value="{!rowNum+1}" var="rowNum" /> 
+                                                    </apex:InputField>
+                                                </div>
+                                            </th>
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__NewprobationaryObjectiveEdit}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Objective__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:commandlink action="{!deleteObjective}" rendered="{!newObjectiveList.size >=1}" immediate="true" rerender="probObj">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </div>
+                                            </th>
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                        <apex:commandButton value="{!$Label.xcdhcm__revieweditbaddrow}" styleclass="slds-button slds-button--neutral" action="{!addObjective}" immediate="true" rerender="probObj,errmsgProf" style="float:right;" />
+                    </apex:pageBlockSection>   
+                    <div Class="line"></div>
+                    
+                    <apex:pageBlockSection collapsible="false" title="{!$Label.xcdhcm__revieweditassessment}"  columns="1" id="assessment">
+                        <!-- <apex:pageBlockTable align="center" value="{!reviewEdit}" var="c">
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+<apex:column headervalue="{!f.label}">
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat> 
+</apex:pageBlockTable> -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+									<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+									<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[f].Accessible}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Employee_Review__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+									</apex:outputpanel>
+									<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </apex:repeat>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!reviewEdit}" var="c" >
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__Assessment}">
+										<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+										<apex:outputpanel rendered="{!$objectType.xcdhcm__Employee_Review__c.fields[f].Accessible}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+										</apex:outputpanel>
+										<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection> 
+                </apex:pageBlock>        
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

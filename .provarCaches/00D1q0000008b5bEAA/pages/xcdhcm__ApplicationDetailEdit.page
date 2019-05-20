@@ -1,0 +1,60 @@
+<apex:page standardController="xcdhcm__Applicant__c" extensions="xcdhcm.ApplicationViewController" showHeader="true" sidebar="false" wizard="false" >
+<!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  -->
+ <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Applicationsub.css')}"/>
+ <style>   
+   textarea{
+	  width: 450px!important;
+	 }
+ </style>
+<!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> 
+  <apex:form id="theForm"> 
+    <apex:pageBlock title="{!$Label.xcdhcm__applicationdetailediteditassessment}" rendered="{!view='ass'}"> 
+    <apex:PageMessages id="errorMsg"/>
+     <apex:pageBlockButtons >
+        <apex:commandButton value="{!$Label.xcdhcm__applicationdetaileditbsave}" action="{!saveAssessment}" reRender="errorMsg"/>
+        <apex:commandButton value="{!$Label.xcdhcm__applicationdetaileditbcancel}" action="{!cancelAssessment}" immediate="true"/>
+     </apex:pageBlockButtons>
+    
+     <apex:pageBlockSection columns="2" collapsible="false">
+        <apex:repeat value="{!updateApplication}" var="a" rows="1">
+            <apex:repeat value="{!$ObjectType.xcdhcm__Applicant__c.Fieldsets.xcdhcm__Assessment}" var="i">          
+                <apex:inputField value="{!a[i]}"  required="{!OR(i.dbRequired,i.Required)}" />                                                                                                                                              
+            </apex:repeat>
+        </apex:repeat>
+     </apex:pageBlockSection>       
+   </apex:pageBlock>   
+     
+   <apex:pageBlock title="{!$Label.xcdhcm__applicationdetailediteditofferdetails}" rendered="{!view='od'}" > 
+    <apex:PageMessages id="errorMsg"/>
+     <apex:pageBlockButtons >
+        <apex:commandButton value="{!$Label.xcdhcm__applicationdetaileditbsave}" action="{!saveofferdetails}" reRender="errorMsg"/>
+        <apex:commandButton value="{!$Label.xcdhcm__applicationdetaileditbcancel}" action="{!cancelofferdetails}" immediate="true"/>
+     </apex:pageBlockButtons>
+    
+     <apex:pageBlockSection columns="2" collapsible="false" id="ofd">
+      <!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal   -->
+        <apex:pageBlocksectionitem rendered="{!Spinalpointview}"  >  
+             <apex:outputLabel value="Spinal point" for="List"  />
+               <apex:outputPanel id="panelid">    
+	           <div class="requiredInput">
+                <div class="requiredBlock"></div>
+	              <apex:SelectList id="List" label="Spinal Point"  value="{!spinalPoint}" required="true" size="1">
+	                     <apex:selectOptions value="{!spinalPointList}" ></apex:selectoptions>
+	                     <apex:actionSupport event="onchange" action="{!spinalPointvalue}" reRender="ofd"  />    
+	              </apex:SelectList> 
+	            </div>                                       
+             </apex:outputPanel>
+        </apex:pageBlocksectionitem>         
+       <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal   -->    
+        <apex:repeat value="{!updateApplication}" var="a" rows="1">
+            <apex:repeat value="{!$ObjectType.xcdhcm__Applicant__c.Fieldsets.xcdhcm__Offer_details_edit}" var="i">          
+                <apex:inputField value="{!a[i]}"  required="{!OR(i.dbRequired,i.Required)}" />                                                                                                                                              
+            </apex:repeat>
+        </apex:repeat>
+     </apex:pageBlockSection>
+       
+   </apex:pageBlock>
+   
+   <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+    </apex:form>
+</apex:page>

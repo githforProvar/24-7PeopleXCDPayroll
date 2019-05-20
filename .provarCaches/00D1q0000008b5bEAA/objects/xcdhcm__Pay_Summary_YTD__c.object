@@ -1,0 +1,1187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Payroll
+Records cumulative pay for tax year to date</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>Private</externalSharingModel>
+    <fields>
+        <fullName>xcdhcm__Above_UEL_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Earnings above UEL for 2016/2017 YTD.</description>
+        <externalId>false</externalId>
+        <label>Above UEL pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Above_UEL_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Earnings above UEL for 2016/2017 YTD.</description>
+        <externalId>false</externalId>
+        <label>Above UEL pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Above_UEL_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Earnings above UEL for 2016/2017 YTD.</description>
+        <externalId>false</externalId>
+        <label>Above UEL pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Benefits_Taxed_via_Payroll_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Benefits Taxed via Payroll YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__C1ANICtermination_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>C1ANICtermination-YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Director_s_pro_rata_NI_able_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Director&apos;s pro-rata NI able YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Effective_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Effective date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_NI1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee NI1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_NI2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee NI2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_NI_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Calculate employee NI yearlly</description>
+        <externalId>false</externalId>
+        <label>Employee NI0 - YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_NI_due_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Employee_NI_YTD__c + xcdhcm__Employee_NI1_YTD__c + xcdhcm__Employee_NI2_YTD__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Employee NI due YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_NI_paid1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee NI paid1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_NI_paid2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee NI paid2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_NI_paid_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee NI paid0 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_NI_sum_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Employee_NI_paid_YTD__c  +  xcdhcm__Employee_NI_paid1_YTD__c  +  xcdhcm__Employee_NI_paid2_YTD__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Employee NI-YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee</label>
+        <referenceTo>xcdhcm__Employee_Detail__c</referenceTo>
+        <relationshipName>Pay_Summary_YTDs</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_leaving_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Employee__r.xcdhcm__Leaving_Date__c</formula>
+        <label>Employee leaving date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_pension_contributions_NPA_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee pension contributions NPA YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_pension_contributions_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee pension contributions - YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_pension_not_NPA_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee pension not NPA YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employer_NI1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employer NI1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employer_NI2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employer NI2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employer_NI_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employer NI0-YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employer_NI_sum_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Employer_NI_YTD__c + xcdhcm__Employer_NI1_YTD__c + xcdhcm__Employer_NI2_YTD__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Employer NI-YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employer_pension_contributions_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employer pension contributions - YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__LEL_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>LEL pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__LEL_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>LEL pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__LEL_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>LEL pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__LEL_to_PT_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>LEL to PT pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__LEL_to_PT_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>LEL to PT pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__LEL_to_PT_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>LEL to PT pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leaver_before_data_retention_period__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If( 
+not(isblank( xcdhcm__Employee__r.xcdhcm__Company__r.xcdhcm__GDPR_data_retention_threshold__c)), 
+xcdhcm__Employee_leaving_date__c &lt; xcdhcm__Employee__r.xcdhcm__Company__r.xcdhcm__GDPR_data_retention_threshold__c, 
+xcdhcm__Employee_leaving_date__c &lt; xcdhcm__Employee__r.xcdhcm__Company__r.xcdhcm__HMRC_data_retention_threshold__c  
+)</formula>
+        <label>Leaver before data retention period</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leaving_date_on_P45__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Leaving date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__NI_able_pay0_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>NI-able pay0 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__NI_able_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>NI-able pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__NI_able_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>NI-able pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__NI_able_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>this field is used for calculate sum of NI-able pay in every tax year.</description>
+        <externalId>false</externalId>
+        <label>NI-able pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__NI_outstanding_carry_forward__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Manual input field for adjustment NI outstanding.</description>
+        <externalId>false</externalId>
+        <label>NI outstanding carry forward</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__P45_tax_paid_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>P45 tax paid YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__P45_taxable_pay_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>P45 taxable pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__P60EmployeeId__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>P60EmployeeId</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__P60email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>P60email</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__P6_9_tax_paid_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>P6/9 tax paid YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__P6_9_taxable_pay_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>P6/9 taxable pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_ST_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>PT to ST pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_ST_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>PT to ST pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_ST_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>PT to ST pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_UAP_pay1_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>NULLVALUE(xcdhcm__PT_to_ST_pay1_YTD__c, 0.00) + NULLVALUE(xcdhcm__ST_to_UAP_pay1_YTD__c, 0.00)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PT to UAP pay1 YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_UAP_pay2_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>NULLVALUE(xcdhcm__PT_to_ST_pay2_YTD__c, 0.00) + NULLVALUE(xcdhcm__ST_to_UAP_pay2_YTD__c, 0.00)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PT to UAP pay2 YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_UAP_pay_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>NULLVALUE(xcdhcm__PT_to_ST_pay_YTD__c, 0.00) + NULLVALUE(xcdhcm__ST_to_UAP_pay_YTD__c, 0.00)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PT to UAP pay YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_UEL_pay1_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>NULLVALUE(xcdhcm__PT_to_ST_pay1_YTD__c , 0.00) + NULLVALUE(xcdhcm__ST_to_UEL_pay1_YTD__c, 0.00)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PT to UEL pay1 YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_UEL_pay2_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>NULLVALUE(xcdhcm__PT_to_ST_pay2_YTD__c , 0.00) + NULLVALUE(xcdhcm__ST_to_UEL_pay2_YTD__c, 0.00)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PT to UEL pay2 YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__PT_to_UEL_pay_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>NULLVALUE(xcdhcm__PT_to_ST_pay_YTD__c, 0.00) + NULLVALUE(xcdhcm__ST_to_UEL_pay_YTD__c, 0.00)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PT to UEL pay YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Payroll_setup_tax_paid_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Payroll setup tax paid YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Payroll_setup_taxable_pay_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Payroll setup taxable pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Payroll_start_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Payroll start date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Postgraduate_loan_YTD__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Postgraduate loan YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ST_to_UAP_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ST to UAP pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ST_to_UAP_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ST to UAP pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ST_to_UAP_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ST to UAP pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ST_to_UEL_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Earnings above ST up to and include UEL for 2016/2017 YTD.</description>
+        <externalId>false</externalId>
+        <label>ST to UEL pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ST_to_UEL_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Earnings above ST up to and include UEL for 2016/2017 YTD.</description>
+        <externalId>false</externalId>
+        <label>ST to UEL pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__ST_to_UEL_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Earnings above ST up to and include UEL for 2016/2017 YTD.</description>
+        <externalId>false</externalId>
+        <label>ST to UEL pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Statutory_adoption_pay_YTD__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Statutory adoption pay YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Statutory_maternity_pay_YTD__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Statutory maternity pay YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Statutory_parental_pay_YTD__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Statutory parental pay YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Statutory_paternity_pay_YTD__c</fullName>
+        <defaultValue>0.0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Statutory paternity pay YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Student_loan_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Student loan YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Tax_paid_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Current employment tax paid YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Tax_paid_YTD_on_setup__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Latest figure received from HMRC for prior employment
+The Payroll start date section was used where XCD took over payroll, but has a bug whereby this information is not submitted on the FPS correctly, so should not be used - instead create a dummy Pay Summary</description>
+        <externalId>false</externalId>
+        <formula>IF(
+  AND(
+    NOT(ISNULL(xcdhcm__Effective_date__c)),
+    xcdhcm__Effective_date__c &gt;= BLANKVALUE(xcdhcm__Payroll_start_date__c, xcdhcm__Effective_date__c),
+    xcdhcm__Effective_date__c &gt;= BLANKVALUE(xcdhcm__Leaving_date_on_P45__c, xcdhcm__Effective_date__c)),
+  xcdhcm__P6_9_tax_paid_YTD__c,
+
+IF(
+  AND(
+    NOT(ISNULL(xcdhcm__Payroll_start_date__c)),
+    xcdhcm__Payroll_start_date__c &gt;= BLANKVALUE(xcdhcm__Leaving_date_on_P45__c, xcdhcm__Payroll_start_date__c),
+    xcdhcm__Payroll_start_date__c &gt;= BLANKVALUE(xcdhcm__Effective_date__c, xcdhcm__Payroll_start_date__c)),
+  xcdhcm__Payroll_setup_tax_paid_YTD__c,
+
+IF(
+  AND(
+    NOT(ISNULL(xcdhcm__Leaving_date_on_P45__c)),
+    xcdhcm__Leaving_date_on_P45__c &gt;= BLANKVALUE(xcdhcm__Effective_date__c, xcdhcm__Leaving_date_on_P45__c),
+    xcdhcm__Leaving_date_on_P45__c &gt;= BLANKVALUE(xcdhcm__Payroll_start_date__c, xcdhcm__Leaving_date_on_P45__c)),
+  xcdhcm__P45_tax_paid_YTD__c,
+
+0)))</formula>
+        <inlineHelpText>Received by the Employee before joining XCD Payroll</inlineHelpText>
+        <label>Tax paid on setup YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Tax_payable_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Tax payable YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Tax_year__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Tax year</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>2012/2013</fullName>
+                    <default>false</default>
+                    <label>2012/2013</label>
+                </value>
+                <value>
+                    <fullName>2013/2014</fullName>
+                    <default>false</default>
+                    <label>2013/2014</label>
+                </value>
+                <value>
+                    <fullName>2014/2015</fullName>
+                    <default>false</default>
+                    <label>2014/2015</label>
+                </value>
+                <value>
+                    <fullName>2015/2016</fullName>
+                    <default>false</default>
+                    <label>2015/2016</label>
+                </value>
+                <value>
+                    <fullName>2016/2017</fullName>
+                    <default>false</default>
+                    <label>2016/2017</label>
+                </value>
+                <value>
+                    <fullName>2017/2018</fullName>
+                    <default>false</default>
+                    <label>2017/2018</label>
+                </value>
+                <value>
+                    <fullName>2018/2019</fullName>
+                    <default>false</default>
+                    <label>2018/2019</label>
+                </value>
+                <value>
+                    <fullName>2019/2020</fullName>
+                    <default>false</default>
+                    <label>2019/2020</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Taxable_pay_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Current employment taxable pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Taxable_pay_YTD_on_setup__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Latest figure received from HMRC for prior employment
+The Payroll start date section was used where XCD took over payroll, but has a bug whereby this information is not submitted on the FPS correctly, so should not be used - instead create a dummy Pay Summary</description>
+        <externalId>false</externalId>
+        <formula>IF(
+  AND(
+    NOT(ISNULL(xcdhcm__Effective_date__c)),
+    xcdhcm__Effective_date__c &gt;= BLANKVALUE(xcdhcm__Payroll_start_date__c, xcdhcm__Effective_date__c),
+    xcdhcm__Effective_date__c &gt;= BLANKVALUE(xcdhcm__Leaving_date_on_P45__c, xcdhcm__Effective_date__c)),
+  xcdhcm__P6_9_taxable_pay_YTD__c,
+
+IF(
+  AND(
+    NOT(ISNULL(xcdhcm__Payroll_start_date__c)),
+    xcdhcm__Payroll_start_date__c &gt;= BLANKVALUE(xcdhcm__Leaving_date_on_P45__c, xcdhcm__Payroll_start_date__c),
+    xcdhcm__Payroll_start_date__c &gt;= BLANKVALUE(xcdhcm__Effective_date__c, xcdhcm__Payroll_start_date__c)),
+  xcdhcm__Payroll_setup_taxable_pay_YTD__c,
+
+IF(
+  AND(
+    NOT(ISNULL(xcdhcm__Leaving_date_on_P45__c)),
+    xcdhcm__Leaving_date_on_P45__c &gt;= BLANKVALUE(xcdhcm__Effective_date__c, xcdhcm__Leaving_date_on_P45__c),
+    xcdhcm__Leaving_date_on_P45__c &gt;= BLANKVALUE(xcdhcm__Payroll_start_date__c, xcdhcm__Leaving_date_on_P45__c)),
+  xcdhcm__P45_taxable_pay_YTD__c,
+
+0)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Received by the Employee before joining XCD Payroll</inlineHelpText>
+        <label>Taxable pay on setup YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Total_gross_pay_YTD__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Total gross pay - YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Total_tax_paid_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Tax_paid_YTD_on_setup__c + xcdhcm__Tax_paid_YTD__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Tax paid YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Total_taxable_pay_YTD__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Taxable_pay_YTD_on_setup__c + xcdhcm__Taxable_pay_YTD__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Taxable pay YTD</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__UAP_to_UEL_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>UAP to UEL pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__UAP_to_UEL_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>UAP to UEL pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__UAP_to_UEL_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>UAP to UEL pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__UST_pay1_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>UST pay1 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__UST_pay2_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>UST pay2 YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__UST_pay_YTD__c</fullName>
+        <defaultValue>0.00</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>UST pay YTD</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__p60status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>P60 Form summary status</description>
+        <externalId>false</externalId>
+        <label>p60status</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__zPayroll_eligibility__c</fullName>
+        <defaultValue>&quot;Secure&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>zPayroll eligibility</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Pay Summary YTD</label>
+    <nameField>
+        <displayFormat>PYTD-{0000}</displayFormat>
+        <label>Pay YTD</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Pay Summary YTDs</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>Private</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

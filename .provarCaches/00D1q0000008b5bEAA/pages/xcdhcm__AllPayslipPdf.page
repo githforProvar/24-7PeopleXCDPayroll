@@ -1,0 +1,483 @@
+<!-- START :: 09/07/2018 NPAY-461 Leaver Payslips - Bugs and Usability  added by Jamil -->  
+<!--   START :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window -->
+<apex:page standardStylesheets="false" sidebar="false"  
+    showHeader="false" applyBodyTag="false" applyHtmlTag="false"
+     renderas="pdf"  controller="xcdhcm.PayrollController" >
+ 
+  <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/EmpDetPageCSS.css')}" />
+    <head>
+    <!--  START:: 05/05/2015 NPPD-803  PCC Payslip - YTD and other fields Modify by Sabir -->
+<style>
+@page {
+    margin-left: 2cm;
+    margin-right: 2cm;
+	/*START :: 13/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan*/
+	/*START :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip modified by Farhan to support top margin in Adobe pdf reader*/
+	margin-top: 4.4cm;
+	/*END :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip modified by Farhan to support top margin in Adobe pdf reader*/
+	/*END :: 13/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan*/
+}
+	/*START :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan to support top margin in Adobe pdf reader*/
+    @page :first 
+    {
+    	margin-top: 4.2cm;
+    }
+    /*END :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan to support top margin in Adobe pdf reader*/
+tr.css1 {
+    font-size: 14px;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #6e7277;
+}
+
+ tr.css2 {
+    font-size: 12px;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #6e7277;
+}
+
+td.css3 {
+    font-size: 12px;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    Text-align: right;
+}
+
+td.css4 {
+    font-size: 12px;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #6e7277;
+}
+
+th.css6 {
+    font-size: 14px;
+    color: #6e7277;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+th.css7 {
+    font-size: 14px;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    Text-align: right;
+}
+th.css9 {
+    font-size: 13px;
+    color: #6e7277;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+th.css10 {
+    font-size: 13px;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    Text-align: right;
+}
+div.css15 {
+    z-index:-10;
+    position:absolute;
+    top:50%;
+    left:38%;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size:22px;
+    color:#024f9f;
+    width: 200px;
+    height: 100px;   
+}
+ .page-break {
+                display:block;
+                page-break-after:always;
+            }
+ .print:last-child {
+     page-break-after: auto;
+}     
+/*START :: 13/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan*/
+.addressContainer
+{
+    line-height: 0.5;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+/*END :: 13/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan*/
+</style>
+
+    </head>
+  <apex:variable var="cnt" value="{!0}" />   
+  <apex:repeat value="{!PaySlips}" var="paysummary" id="theList">
+  <!-- <div style="page-break-after:always;"> -->
+  <div style="{!if(cnt < 1, 'page-break-before:avoid;','page-break-before:always;')}">
+  	<apex:variable var="cnt" value="{!cnt+1}"/> 
+  	
+  	<!--START :: 13/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan-->
+  	<div style="width:100%;display:inline;height:130px;">
+  		<!-- START :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip modified by Farhan to support top margin in Adobe pdf reader -->
+        <div style="width:304px;height:130px;padding-left:23px;">
+        <!-- END :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip modified by Farhan to support top margin in Adobe pdf reader -->
+	        <div style="width:304px;height:130px;padding-left:23px;">
+        
+	        <div style="{!IF(showAddress==false,'display: none ','')}">
+	        <!--  <p class="addressContainer">{!paysummary.paysumm.Employee__r.Name}</p> -->
+	        <p class="addressContainer">{!paysummary.paysumm.xcdhcm__Employee_name__c}</p>
+	        <p class="addressContainer">{!paysummary.paysumm.Personal__r.Address_1__c}</p>
+	        <p class="addressContainer">{!paysummary.paysumm.Personal__r.Address_2__c}</p>
+	        <p class="addressContainer">{!paysummary.paysumm.Personal__r.Address_3__c}</p>
+	        <p class="addressContainer">{!paysummary.paysumm.Personal__r.Postcode__c}</p>
+	       </div> 
+        </div>
+        </div>
+        
+    	<div style="position:absolute;margin-top:-130px;right:15px">
+    		<apex:image url="{!paysummary.imageURL}" width="110px" style="max-height:110px;"/>
+    	</div>
+    </div>
+    <!--END :: 13/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan-->
+    
+    <!--START NPAY-56 12/08/2015 :: Payslip - enhancements added by sabir -->
+    <!--  START :: 21/03/2017 NPAY-228 Display general payslip data from Pay Summary added by Jamil -->
+    <!--  <div class="css15" style="{!IF(OR(paysummary.paysumm.XCD_PAY_Period__r.Payroll_status__c=='Final',paysummary.paysumm.XCD_PAY_Period__r.Payroll_status__c=='New'),'display: none ','')}">
+     <img src="{!URLFOR($Resource.Watermark)}" style=""/></div> -->
+     <div class="css15" style="{!IF(OR(paysummary.paysumm.Payslip_payroll_status__c=='Final',paysummary.paysumm.Payslip_payroll_status__c=='New'),'display: none ','')}">
+     <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/watermark.png')}" style=""/></div>
+     <!--  END :: 21/03/2017 NPAY-228 Display general payslip data from Pay Summary added by Jamil -->
+     <!--START :: 13/02/2018 NPAY-418 Add Name and Address to Printed Payslip commented by Farhan-->
+     <!-- 
+    <div style="width:110px;height:110px;border:1px solid #f5f5f5;vertical-align:middle;display:table-cell;text-align:center;">
+		<apex:image url="{!paysummary.imageURL}" width="110"  alt="no image" 
+		 style="max-height:110px;"/></div>
+	 -->
+	 <!--END :: 13/02/2018 NPAY-418 Add Name and Address to Printed Payslip commented by Farhan -->
+		<br />
+    <!--END 12/08/2015 NPAY-56:: Payslip - enhancements added by sabir -->
+        <!--START 12/08/2015 NPPD-862:: Fields on payslip to come from Pay Summary object Modify by sabir -->
+        <!-- START :: 12/10/2015 NPPD-946 All fields on payslip to come from Pay Summary object Modified by Farhan -->
+        <!-- START :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan to support top margin in Adobe pdf reader -->
+		<div style="padding-left:17px;">	
+		<!-- END :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan to support top margin in Adobe pdf reader -->
+		<div style="border-bottom: 4px solid #63a4c5; margin-top: 20px;"></div>
+		<table style="width: 100%;table-layout: fixed;">
+			<tr class="css1">
+                <th style="padding-left:7px;"><apex:outputLabel value="{!$ObjectType.xcdhcm__Pay_Summary__c.Fields.xcdhcm__Employee_name__c.Label}" /></th>
+                <th style="padding-left:20px;width:30%"><apex:outputText value="{!paysummary.paysumm.xcdhcm__Employee_name__c}" /></th>
+                <th style="padding-left:8px;"><apex:outputLabel value="{!$ObjectType.xcdhcm__Pay_Summary__c.Fields.xcdhcm__Employer__c.Label}" /></th>
+                <th style="width:30%"><apex:outputField value="{!paysummary.paysumm.xcdhcm__Employer__c}" /></th>
+            </tr> 
+            <tr class="css2" style="height:12px;">
+                <td style="padding-left:7px;"></td>
+                <td style="padding-left:20px;width:30%"></td>
+            </tr>
+        
+            <!--  START:: 12/10/2015 NPPD-946  All fields on payslip to come from Pay Summary object added by Farhan -->
+            <tr class="css2">
+                <td colspan="4">
+                    <apex:repeat value="{!$ObjectType.xcdhcm__Pay_Summary__c.FieldSets.xcdhcm__PayslipEmployeeDetail}" var="field">
+                        <div class="css2" style="width:25%;float:left;padding-bottom:2px;padding-top:2px">
+                            <apex:outputText style="padding-left:7px;" value="{!field.label}"></apex:outputText>
+                          </div>
+                          <div class="css2" style="width:25%;float:left;padding-bottom:2px;padding-top:2px">        
+                           
+                            <apex:outputField style="padding-right:50px; padding-top:4px; float: right; width:30%" rendered="{!paysummary.paysumm[field] != Null}" value="{!paysummary.paysumm[field]}" />
+              				<apex:outputText style="padding-right:50px; padding-top:4px; float: right; width:30%" rendered="{!paysummary.paysumm[field] == null }" value="{!paysummary.paysumm[field]}" />
+                           
+                        </div> 
+                    </apex:repeat>
+                </td>
+            </tr>          
+            <!--  END:: 12/10/2015 NPPD-946  All fields on payslip to come from Pay Summary object added by Farhan -->
+      
+        </table>
+        <div style="border-bottom: 2px solid #63a4c5; margin-Top: 10px;"></div>
+        <table style="width: 100%;table-layout: fixed;">
+            <tr class="css2" style="height:12px;">
+                <td style="padding-left:7px;"></td>
+                <td style="padding-left:20px;width:30%"></td>
+            </tr>
+            <tr class="css2">
+                <td style="padding-left:7px;"><apex:outputField value="{!paysummary.paysumm.CurrencyIsoCode}" /></td>
+                <td style="padding-left:20px;width:30%"></td>
+            </tr>
+        </table>        
+        <table style="width: 100%; table-layout: fixed;" border="0">
+			<tr>
+				<td>
+					<table style="float: left; width: 49%;">
+						<!-- START :: 12/10/2018 NPAY-634 Payslip Presentation - Consolidate Back Pay modified by Shiva -->
+						<!--  START:: 18/07/2017 NPPD-305 Presentation of Statutory and Other Leave Payments added by Shiva style="{!IF(OR(paysummary.paysumm.Occupational_pay__c==null,occupationalPay==false),'display: none ','')}"-->
+						<tr style="{!IF(AND(paysummary.paysumm.Occupational_pay__c!=null,paysummary.paysumm.Base_salary_occupational__c!=0,paysummary.occupationalPay==true),'','display: none ')}">
+							<td style="padding-left:7px;Text-align: left" class="css4"><apex:outputText value="{!paysummary.baseSalaryLabel}" /></td>
+							<td class="css3" style="Text-align: right"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+									<apex:param value="{!paysummary.paysumm.xcdhcm__Base_salary_occupational__c}" />
+								</apex:outputText></td>
+						</tr>
+						
+						<tr style="{!IF(AND(paysummary.paysumm.Occupational_pay__c!=null,paysummary.occupationalPay==true),'','display: none ')}">
+							<td style="padding-left:7px;Text-align: left" class="css4"><apex:outputText value="Occupational pay" /></td>
+							<td class="css3" style="Text-align: right"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+									<apex:param value="{!paysummary.paysumm.xcdhcm__Occupational_pay__c}" />
+								</apex:outputText></td>
+						</tr>
+						
+						<!-- START :: 13/04/2018 NPAY-451 Presentation of the payslip with occupational pay modified by Shiva 
+						<tr style="{!IF(AND(paysummary.occupationalPay==false,paysummary.paysumm.Base_salary_standard__c!=0,paysummary.fullPayslip==false),'','display: none ')}">
+						 END :: 13/04/2018 NPAY-451 Presentation of the payslip with occupational pay modified by Shiva 
+							<td style="padding-left:7px;Text-align: left" class="css4"><apex:outputText value="{!paysummary.baseSalaryLabel}" /></td>
+							<td class="css3" style="Text-align: right"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+									<apex:param value="{!paysummary.paysumm.Base_salary_standard__c}" />
+								</apex:outputText></td>
+						</tr>
+                        END:: 18/07/2017 NPPD-305 Presentation of Statutory and Other Leave Payments added by Shiva-->
+                        <apex:repeat value="{!paysummary.paySalaryLabelVsAmount}" var="paySal" rendered="{!AND(paysummary.occupationalPay==false,paysummary.paySalaryLabelVsAmount!=null)}">
+							<tr>
+								<td class="css4" style="padding-left:7px;"><apex:outputText value="{!paySal}" /></td>
+								<td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+										<apex:param value="{!paysummary.paySalaryLabelVsAmount[paySal]}" />
+									</apex:outputText></td>
+							</tr>
+						</apex:repeat>    
+                        
+                        <apex:repeat value="{!paysummary.fullPayslipSalary}" var="p" rendered="{!AND(paysummary.fullPayslip==true,paysummary.fullPayslipSalary!=null)}">
+							<tr>
+								<td class="css4" style="padding-left:7px;"><apex:outputField value="{!p.xcdhcm__Type__c}" /></td>
+								<td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+										<apex:param value="{!p.xcdhcm__Amount__c}" />
+									</apex:outputText></td>
+							</tr>
+						</apex:repeat>
+						
+                        <apex:repeat value="{!paysummary.backPaySalaryLabelVsAmount}" var="backPay" rendered="{!paysummary.backPaySalaryLabelVsAmount!=null}">
+							<tr>
+								<td class="css4" style="padding-left:7px;"><apex:outputText value="{!backPay}" /></td>
+								<td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+										<apex:param value="{!paysummary.backPaySalaryLabelVsAmount[backPay]}" />
+									</apex:outputText></td>
+							</tr>
+						</apex:repeat>
+						<!-- START :: 28/10/2018 NPAY-639 Overtime presentation modified by Shiva -->
+						<apex:repeat value="{!paysummary.overtimeHoursLabelVsAmount}" var="overtimeHours" rendered="{!paysummary.overtimeHoursLabelVsAmount!=null}">
+							<tr>
+								<td class="css4" style="padding-left:7px;"><apex:outputText value="{!paysummary.overtimeHoursTypeVsLabel[overtimeHours]}" /></td>
+								<td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+										<apex:param value="{!paysummary.overtimeHoursLabelVsAmount[overtimeHours]}" />
+									</apex:outputText></td>
+							</tr> 
+						</apex:repeat>
+						<!-- END :: 28/10/2018 NPAY-639 Overtime presentation modified by Shiva -->
+						<apex:repeat value="{!paysummary.paymentExceptBackPay}" var="p" rendered="{!paysummary.paymentExceptBackPay!=null}">
+							<tr>
+								<td class="css4" style="padding-left:7px;"><apex:outputField value="{!p.xcdhcm__Type__c}" /></td>
+								<td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+										<apex:param value="{!p.xcdhcm__Amount__c}" />
+									</apex:outputText></td>
+							</tr>
+						</apex:repeat>
+						<!--
+						<apex:repeat value="{!paysummary.backPayPenisonSalaryLabelVsAmount}" var="backPayPension" rendered="{!paysummary.backPayPenisonSalaryLabelVsAmount!=null}">
+							<tr>
+								<td class="css4" style="padding-left:7px;"><apex:outputText value="{!backPayPension}" /></td>
+								<td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+										<apex:param value="{!paysummary.backPayPenisonSalaryLabelVsAmount[backPayPension]}" />
+									</apex:outputText></td>
+							</tr>
+						</apex:repeat>
+						
+                                             
+						<apex:repeat value="{!paysummary.payments}" var="p" rendered="{!paysummary.contributionBasis == false}">
+							<tr>
+								<td class="css4" style="padding-left:7px;"><apex:outputField value="{!p.xcdhcm__Type__c}" /></td>
+								<td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+										<apex:param value="{!p.xcdhcm__Amount__c}" />
+									</apex:outputText></td>
+							</tr>
+						</apex:repeat>
+						-->
+                    </table>
+                    <!-- END :: 12/10/2018 NPAY-634 Payslip Presentation - Consolidate Back Pay modified by Shiva -->
+                    
+                    <table style="float: left; width: 2%;"><tr><td></td></tr></table>
+                    <table style="float: right; width: 49%;">
+						<apex:repeat value="{!paysummary.deductions}" var="p">
+                            <tr>
+                                <td style="Text-align: left" class="css4"><apex:outputField value="{!p.xcdhcm__Type__c}" /></td>
+                                <td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                        <apex:param value="{!p.xcdhcm__Amount__c}" />
+                                    </apex:outputText></td>
+                            </tr>
+                        </apex:repeat>
+                        <!-- START :: 18/08/2018 NPAY-461 Payslips - Bugs and Usability added by Shiva -->
+                        <apex:repeat value="{!paysummary.employeePensionLabelVsAmount}" var="empPen" >
+                            <tr style="{!IF(paysummary.contributionBasis == true,'','display: none ')}">
+                                <td style="Text-align: left" class="css4"><apex:outputText value="{!empPen}" /></td>
+                                <td style="Text-align: right" class="css3"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                        <apex:param value="{!paysummary.employeePensionLabelVsAmount[empPen]}" />
+                                    </apex:outputText></td> 
+                            </tr> 
+                        </apex:repeat>
+                        
+						<!-- START :: 03/05/2018 NPAY-462 Pension presentation on payslip - main vs secondary contributions Modified by Shiva -->
+						<!-- START :: 12/05/2017 NPPD-1432 Can create Pay Detail for positive or negative One Off Pension and Benefit records modified by Tutu -->
+						<!-- START :: 08/02/2017 NPAY-223 Payroll5 issue list added by Farhan -->
+						<tr style="{!IF(AND(paysummary.employeePensionScheme != null,paysummary.employeePensionScheme != 0,paysummary.contributionBasis == false),'','display: none ')}">
+							<!-- END :: 18/08/2018 NPAY-461 Payslips - Bugs and Usability added by Shiva -->
+							<td class="css4"><apex:outputText value="{!$ObjectType.xcdhcm__Pay_Summary__c.Fields.xcdhcm__Employee_pension_contribution__c.Label}" /></td>
+							<td class="css3" style="Text-align: right"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+									<apex:param value="{!paysummary.employeePensionScheme}" />
+								</apex:outputText></td>
+						</tr>
+						<!-- END :: 08/02/2017 NPAY-223 Payroll5 issue list added by Farhan -->
+						<!-- END :: 12/05/2017 NPPD-1432 Can create Pay Detail for positive or negative One Off Pension and Benefit records modified by Tutu -->
+						<!-- END :: 03/05/2018 NPAY-462 Pension presentation on payslip - main vs secondary contributions Modified by Shiva -->
+						
+						<tr style="{!IF(OR(paysummary.paysumm.Tax__c==null),'display: none ','')}">
+							<td class="css4"><apex:outputText value="Tax" /></td>
+							<td class="css3" style="Text-align: right"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+									<apex:param value="{!paysummary.paysumm.xcdhcm__Tax__c}" />
+								</apex:outputText></td>
+						</tr>
+						<!-- START :: 26/12/2017 NPAY-403 Payroll7Patch2 issues modified by Tutu -->
+						<tr style="{!IF(OR(paysummary.paysumm.Employee_NI_sum__c==null),'display: none ','')}">
+							<td class="css4"><apex:outputText value="Employee-NI" /></td>
+							<td class="css3" style="Text-align: right"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+									
+									<apex:param value="{!paysummary.paysumm.xcdhcm__Employee_NI_sum__c}" />
+									<!-- END :: 26/12/2017 NPAY-403 Payroll7Patch2 issues modified by Tutu -->
+                                </apex:outputText></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <table style="float: left; width: 49%;">
+                        <tr>
+                            <!--  START 24/04/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by Jamil -->
+                            <!-- <th class="css9" style="padding-left:7px;"><apex:outputText value="Total payments" /></th> -->
+                            <th class="css9" style="padding-left:7px;"><apex:outputText value="Total gross pay" /></th>
+                            <!--  END 24/04/2017 NPAY-70 Pay Expenses through Payroll/ tidy up Benefit Award parenting layout added by Jamil -->
+                            
+                            <th class="css10" ><apex:outputText value="{0, number, ###,###,###,##0.00}">
+									<apex:param value="{!paysummary.paysumm.xcdhcm__Total_payments__c}" />
+                                </apex:outputText></th>
+                        </tr>
+                    </table>
+                    <table style="float: left; width: 2%;"><tr><td></td></tr></table>
+                    <table style="float: right; width: 49%;" border="0">
+                        <tr>
+                            <th class="css9"><apex:outputText value="Total deductions" /></th>
+                            <th class="css10"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                    <apex:param value="{!paysummary.paysumm.xcdhcm__Total_deductions__c}" />
+                                </apex:outputText></th>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <table style="float: left; width: 49%;" border="0">
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <!--  START:: 17/06/2015 NPPD-847  Payslip issues Modify by Sabir -->
+                    <table style="float: left; width: 2%;"><tr><td></td></tr></table>
+                    <!--  <div style="border-bottom: 2px solid #63a4c5; margin-top: 1px;"></div>-->
+                    <table style="float: right; width: 49%;" border="0">
+                        <tr>
+                            <th class="css6" style="width: 30%;"></th>
+                           <th style="width: 19%;">  <div style="border-bottom: 2px solid #63a4c5;" ></div></th>
+                        </tr>
+                    </table>
+                    <table style="float: right; width: 49%;" border="0">
+                        <tr>
+                            <th class="css6"><apex:outputText value="Net pay for period" /></th>
+                            
+                            <th class="css7" style="Text-align: right"><apex:outputText value="{0, number, ###,###,###,##0.00}">
+                                    <apex:param value="{!paysummary.paysumm.xcdhcm__Net_pay__c}" />
+                                </apex:outputText></th>
+                        
+                        </tr>
+                    </table>
+                    <!--  END:: 17/06/2015 NPPD-847  Payslip issues Modify by Sabir -->
+                    <!--  START :: 24/06/2016 NPAY-125 Payslip message and display added by Shiva--> 
+                    <!-- START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues Paper payslip - where there is multiple lines on the leaver payslip added by Jamil -->  
+        <div style="width:100%;float:right;display:table;border-top: 4px solid #63a4c5;margin-top:10px;margin-bottom:0px;padding-bottom:0px;padding-top:0px">
+        <br />  
+        <apex:outputText Style="font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" value="{!paysummary.paysumm.xcdhcm__Payslip_message_text__c}"></apex:outputText>
+        </div>
+        <!-- END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues Paper payslip  - where there is multiple lines on the leaver payslip added by Jamil -->            
+                </td>
+            </tr>
+        
+        </table>        
+
+        <!-- <apex:outPutPanel style="border-bottom: 2px solid #63a4c5;" rendered="{!$ObjectType.Pay_Summary__c.FieldSets.Payslip.size ==0}">
+        </apex:outPutPanel> -->
+        <!-- END :: 24/06/2016 NPAY-125 Payslip message and display added by Shiva-->
+        
+        <table style="width: 100%; table-layout: fixed;" border="0">
+        <!-- START :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues Paper payslip  - where there is multiple lines on the leaver payslip added by Jamil -->
+        <!-- <tr style="width:100%;float:right;display:table;border-top: 2px solid #63a4c5;border-bottom: 4px solid #63a4c5;margin-top:15px;margin-bottom:10px;padding-bottom:5px;padding-top:5px"></tr> -->
+        
+         <!-- END :: 30/01/2017 NPAY-403 Payroll7Patch2 Issues Paper payslip where there is multiple lines on the leaver payslip added by Jamil -->
+            <tr>
+                <td>
+                <div> 
+                    <table style="width: 100%;table-layout: fixed;">
+                        <apex:pageBlock mode="maindetail" rendered="{!$ObjectType.xcdhcm__Pay_Summary__c.FieldSets.xcdhcm__Payslip.size !=0}">
+				        <div style="width:100%;float:right;display:table;border-top: 4px solid #63a4c5;border-bottom: 4px solid #63a4c5;margin-top:15px;margin-bottom:10px;padding-bottom:5px;padding-top:5px">
+           				<!-- START :: 18/08/2018 NPAY-461 Payslips - Bugs and Usability added by Shiva -->
+            			<!-- START :: 12/10/2018 NPAY-628 LGPS Employer Pension Contribution on Payslip modified by Shiva -->
+            			<apex:repeat value="{!paysummary.employerPensionLabelVsAmount}" var="emprPen" rendered="{!paysummary.contributionBasis == true}"> 
+			            <div style="width:50%;float:left;">
+			                    <apex:outputText style="font-size: 12px;color: #6e7277;padding-left:10px;font-weight:normal !important;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" value="{!emprPen}" />
+			                    <apex:outputText Style="font-size: 12px;padding-right:10px;padding-top:4px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;float: right;" value="{0, number, ###,###,###,##0.00}">
+			                            <apex:param value="{!paysummary.employerPensionLabelVsAmount[emprPen]}" />
+			                        </apex:outputText>
+			            </div>
+			            </apex:repeat>
+            			<!-- END :: 18/08/2018 NPAY-461 Payslips - Bugs and Usability added by Shiva -->
+            			
+            			<apex:repeat value="{!$ObjectType.xcdhcm__Pay_Summary__c.FieldSets.xcdhcm__payslipLGPS}" var="field" rendered="{!paysummary.contributionBasis == true}">
+                    	<div style="width:50%;float:left;">
+           					<apex:outputText style="font-size: 12px;color: #6e7277;padding-left:10px;font-weight:normal !important;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;"
+              				value="{!field.label}"></apex:outputText>
+              				<apex:outputText Style="font-size: 12px;padding-right:10px;padding-top:4px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;float: right;" value="{0, number, ###,###,###,##0.00}">
+                    		<apex:param value="{!paysummary.paysumm[field]}" />
+              				</apex:outputText>
+              			</div>
+                  		</apex:repeat>
+                  		
+            			<apex:repeat value="{!$ObjectType.xcdhcm__Pay_Summary__c.FieldSets.xcdhcm__Payslip}" var="field" rendered="{!paysummary.contributionBasis == false}">
+                    	<div style="width:50%;float:left;">
+           					<apex:outputText style="font-size: 12px;color: #6e7277;padding-left:10px;font-weight:normal !important;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;"
+              				value="{!field.label}"></apex:outputText>
+              				<apex:outputText Style="font-size: 12px;padding-right:10px;padding-top:4px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;float: right;" value="{0, number, ###,###,###,##0.00}">
+                    		<apex:param value="{!paysummary.paysumm[field]}" />
+              				</apex:outputText>
+              			</div>
+                  		</apex:repeat>
+                  		<!-- END :: 12/10/2018 NPAY-628 LGPS Employer Pension Contribution on Payslip modified by Shiva -->
+       			</div>
+      </apex:pageBlock> 
+                                                
+                    </table>
+                    </div>
+                  </td>
+               </tr>
+             <tr style="width:100%;float:right;display:table;border-top: 2px solid #63a4c5;"></tr>        
+                   
+          </table>          
+     </div>
+     <!-- START :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan to support top margin in Adobe pdf reader -->
+      </div>
+     <!-- END :: 28/02/2018 NPAY-418 Add Name and Address to Printed Payslip added by Farhan to support top margin in Adobe pdf reader -->
+     </apex:repeat> 
+  
+  
+</apex:page>
+<!--   START :: 08/09/2017 NPAY-353 Paper payslips added by Jamil pop window -->
+<!-- END :: 09/07/2018 NPAY-461 Leaver Payslips - Bugs and Usability  added by Jamil -->

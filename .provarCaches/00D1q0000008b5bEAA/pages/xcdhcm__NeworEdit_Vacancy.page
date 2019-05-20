@@ -1,0 +1,100 @@
+<apex:page standardcontroller="xcdhcm__Vacancy__c" extensions="xcdhcm.NeworEdit_VacancyController" sidebar="false">
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'RecruitmentAppCSS/Recruitment.css')}" /> 
+	<!-- START :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->
+	<style>
+  		.Custom20Tab .tertiaryPalette, .individualPalette .Custom20Block .tertiaryPalette, .layoutEdit .individualPalette .Custom20Block .tertiaryPalette
+  		{
+    		background-color: #FFFFFF;
+    		border-top: 2px solid #63a4c5!important;
+		}
+		
+		.detailList .helpOrb
+		{ 
+    		position: static!important;
+		}
+		/* START:: 01/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil */
+		/* .helpOrb
+		{
+	    	width: 15px;
+		}  */
+		/* END:: 01/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil */ 
+	</style>
+<!-- END :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  --> 
+    <apex:form >
+        <apex:pageBlock title="{!$Label.xcdhcm__phneworedit_vacancy}‎">
+            <apex:pageMessage summary="{!$Label.xcdhcm__recruitment_companyjobrole_change_editvacancy}" severity="Info" strength="3" rendered="{!xcdhcm__Vacancy__c.id!=null}"/>
+            <apex:pageMessages />
+             <!-- START :: 22/1/2015 NPPD-952 Recruitment changes added by Kamal      -->
+               <apex:pageBlockSection title="{!Informationtitle}" id="Info" >
+                  <!--START:: 493Jira added by saravanan on 13/08/2014--> 
+                <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__Information_above_company_jobrole}" var="inf">
+                    <apex:inputField value="{!xcdhcm__Vacancy__c[inf]}" required="{!OR(inf.Required,inf.DBRequired)}"/>
+                </apex:repeat>
+                <!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> 
+                <apex:pageBlockSectionItem rendered="{!Post_and_spinal_point_for_vacancy}" >
+                <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal      --> 
+                 <apex:outputLabel value="{!$ObjectType.xcdhcm__Vacancy__c.Fields.xcdhcm__Post__c.Label}" for="fldid"/>
+                 <apex:actionRegion >
+                 <apex:inputField value="{!xcdhcm__Vacancy__c.xcdhcm__Post__c}" id="fldid" >
+                     <apex:actionSupport event="onchange" action="{!populatepostdatails}"  rerender="Info,compsecid,jobsecid,hiringid" status="defaultStatus" /><br/>
+                     <apex:actionStatus id="defaultStatus"
+                                startText="Please wait.........." />
+                </apex:inputField>  
+                </apex:actionRegion>
+                </apex:pageBlockSectionItem>
+                <apex:outputField value="{!xcdhcm__Vacancy__c.xcdhcm__Company_job_role_L__c}" id="fldid1" rendered="{!comjbrol}"/ >                     
+                <!-- END :: 22/1/2015 NPPD-952 Recruitment changes added by Kamal      --> 
+                <apex:pageBlockSectionItem rendered="{!comjbrol==false}" >
+                 <apex:outputLabel value="{!$ObjectType.xcdhcm__Vacancy__c.Fields.xcdhcm__Company_job_role_L__c.Label}" for="fldid"/>
+                 <apex:actionRegion >
+                 <apex:inputField value="{!xcdhcm__Vacancy__c.xcdhcm__Company_job_role_L__c}" id="fldid" >
+                     <apex:actionSupport event="onchange" action="{!defaultValueupdatefromCompJr}" rerender="compsecid,jobsecid,hiringid" status="defaultStatus" /><br/>
+                     <apex:actionStatus id="defaultStatus"
+                                startText="Please wait.........." />
+                </apex:inputField>  
+                </apex:actionRegion>
+                </apex:pageBlockSectionItem>
+                <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__Information_below_company_jobrole}" var="infb">
+                    <apex:inputField value="{!xcdhcm__Vacancy__c[infb]}" required="{!OR(infb.Required,infb.DBRequired)}"/>
+                </apex:repeat>
+                <!--END:: 493Jira added by saravanan on 13/08/2014-->
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!Compensationtitle}" id="compsecid">
+                 <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__Compensation}" var="b">
+                    <apex:inputField value="{!xcdhcm__Vacancy__c[b]}" required="{!OR(b.Required,b.DBRequired)}"/>                                                                                                                                               
+                </apex:repeat> 
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!Hiringdetailstitle}" id="hiringid">
+                <!--Pre populating the company after the jobrole change may use in future 
+                <apex:outputField value="{!Vacancy__c.Company_L__c}" rendered="{!Vacancy__c.Company_job_role__c!=null}"/>
+                <apex:inputField value="{!Vacancy__c.Company_L__c}" required="true" rendered="{!Vacancy__c.Company_job_role__c==null}"/>
+                <-->
+
+                 <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__Hiring_Details}" var="d">
+                    <apex:inputField value="{!xcdhcm__Vacancy__c[d]}" required="{!OR(d.Required,d.DBRequired)}"/>
+                 </apex:repeat>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="{!JobDescriptiontitle}" columns="1" id="jobsecid">
+                 <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__Job_Description}" var="c">
+                    <apex:inputField value="{!xcdhcm__Vacancy__c[c]}" required="{!OR(c.Required,c.DBRequired)}"
+                    style="width:80%;height:80px;"/>                                                                                                                                               
+                </apex:repeat> 
+            </apex:pageBlockSection>  
+             <!--START:: NPD-459 modified  by saravanan on 24/09/2014-->
+              <!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> <!--  
+            <apex:pageBlockSection title="{!PublishVacancytitle}">
+                 <apex:repeat value="{!$ObjectType.Vacancy__c.Fieldsets.Publish_Vacancy}" var="e">
+                    <apex:inputField value="{!Vacancy__c[e]}" required="{!OR(e.Required,e.DBRequired)}"/>                                                                                                                                               
+                </apex:repeat> 
+            </apex:pageBlockSection>-->
+             <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  --> 
+            <!--END:: NPD-459 modified  by saravanan on 24/09/2014-->
+            <apex:pageBlockButtons >  
+                <apex:commandButton value="{!$Label.xcdhcm__neworedit_vacancybsave}" action="{!save}"/>
+                <apex:commandButton value="{!$Label.xcdhcm__neworedit_vacancybcancel}" action="{!Cancel}"/> 
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+      <div style="border-bottom: 2px solid #63a4c5!important;"></div> 
+    </apex:form>
+</apex:page>

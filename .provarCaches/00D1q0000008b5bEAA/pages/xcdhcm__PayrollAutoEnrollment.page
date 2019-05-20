@@ -1,0 +1,152 @@
+<apex:page controller="xcdhcm.PayrollAutoEnrolmentContoller" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}"/>
+<style type="text/css">
+ .customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette, .layoutEdit .individualPalette .customnotabBlock .tertiaryPalette {
+   background-color: #FFFFFF!important;
+   border-color: #FFFFFF!important;
+}
+<!--START::25/11/2015 added by Farhan -->
+body .pbBody table.list tr.headerRow th 
+{
+    border-bottom: 2px solid #cde2f5 !important;
+}
+<!--END::25/11/2015 added by Farhan -->
+td.dataCol.first {
+    width: 500px !important;
+    height: 40px !important;
+}
+tbody {
+    display: table-row-group;
+    hori
+    border-color: inherit;
+}
+.homeTab .tertiaryPalette, .individualPalette .homeBlock .tertiaryPalette, .layoutEdit .individualPalette .homeBlock .tertiaryPalette {
+    background-color: #FFFFFF!important;
+    border-color: #FFFFFF!important;
+}
+body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+    width:3%!important;
+}
+input[type='text'] {
+    width: 100px!important;
+    text-align: right!important;
+}
+<!-- START::22/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+body .bPageBlock .pbBody .pbSubheader {
+    background-color: #FFFFFF!important;
+}
+<!-- END::22/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+</style>
+<script> 
+    function checkAll(cb)
+    {
+        var inputElem = document.getElementsByTagName("input");
+        for(var i=0; i<inputElem.length; i++)
+        {
+            if(inputElem[i].id.indexOf("checkedone")!=-1)
+            inputElem[i].checked = cb.checked;
+        }
+    }  
+</script>
+<apex:form >
+    <apex:pageBlock title="{!$Label.xcdhcm__phpayrollautoenrollment}" id="rows">
+    <apex:pageMessages id="erMsg"/>
+     <apex:outputPanel style="float:right;margin-right:50px;">      
+        <apex:pageBlockSection title="" columns="1" collapsible="false">
+            <apex:repeat var="payPeriod" value="{!$ObjectType.xcdhcm__Pay_Period__c.fieldSets.xcdhcm__Auto_enrolment}"> 
+                <apex:outputLabel value="{!payPeriod.Label}" style="font-size:10pt;color:#999999;font-family: Helvetica Neue,Helvetica, Arial, sans-serif;font-weight:bold;"> : &nbsp;&nbsp;&nbsp;  
+                    <apex:repeat var="item" value="{!payRollPeriod}"> 
+                        <apex:outputField value="{!item[payPeriod]}"/>      
+                    </apex:repeat>
+                </apex:outputLabel>           
+            </apex:repeat>
+        </apex:pageBlockSection> 
+        </apex:outputPanel>
+        </apex:pageBlock>
+        <apex:pageBlock >
+        <apex:outputPanel style="float:left;">
+        <apex:pageBlockSection id="viewSecId" columns="1" collapsible="false">
+            <apex:pageBlockSectionItem id="emprSecItem">
+            <apex:outputLabel value="View" for="viewAction"/>
+            <apex:outputPanel >
+            <apex:actionRegion >
+                <apex:SelectList id="viewAction" value="{!selectedActionView}" size="1">
+                    <apex:actionSupport event="onchange" action="{!onChangeActionView}" reRender="compRecId"/>
+                    <apex:selectOptions value="{!ActionViewList}"/>
+                </apex:SelectList>
+            </apex:actionRegion>
+            </apex:outputPanel>             
+        </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        </apex:outputPanel>
+        <apex:outputPanel >
+         <apex:pageBlockSection title="" columns="1" collapsible="false">
+           <apex:pageBlockTable value="{!wrapPayrollCompList}"  var="compItem" id="compRecId">
+                <apex:column headerValue="">
+                    <apex:facet name="header">
+                         <apex:inputCheckbox selected="true">
+                             <apex:actionSupport event="onclick"
+                                 onsubmit="checkAll(this)" reRender="" />
+                         </apex:inputCheckbox>
+                     </apex:facet>
+                    <apex:inputCheckbox id="checkedone" value="{!compItem.selected}"/>
+                </apex:column>
+                <!--START :: 27/04/2017 NPAY-274 Review Auto Enrolment - fixes added by Tutu --> 
+                <apex:column headerValue="{!$Objecttype.xcdhcm__Employee_Detail__c.fields.Name.label}">
+                <!-- START::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+                	<apex:outputLink target="_top" title="{!compItem.existCompData.Employee__r.Name}" value="/one/one.app#/sObject/{!compItem.existCompData.Id}" >{!compItem.existCompData.Employee__r.Name}
+                    </apex:OutputLink>
+                <!-- END::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+                </apex:column>
+                <!--END :: 27/04/2017 NPAY-274 Review Auto Enrolment - fixes added by Tutu --> 
+                <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Enrolment_status__c.label}">
+                    <apex:outputText value="{!compItem.existCompData.xcdhcm__Enrolment_status__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Eligibility__c.label}">
+                    <apex:outputText value="{!compItem.existCompData.xcdhcm__Eligibility__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Action__c.label}">
+                    <apex:outputText value="{!compItem.existCompData.xcdhcm__Action__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Action_date__c.label}">
+                    <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                        <apex:param value="{!compItem.existCompData.xcdhcm__Action_date__c}" /> 
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Deferral_date__c.label}">
+                    <c:noDateLink >
+                        <apex:inputField value="{!compItem.newCompData.xcdhcm__Deferral_date__c}"/>
+                    </c:noDateLink>
+                </apex:column>
+               <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Pension_Scheme__c.label}">
+                    <apex:inputField value="{!compItem.newCompData.xcdhcm__Pension_Scheme__c}"/>
+                </apex:column>
+                <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Effective_from__c.label}">
+                    <c:noDateLink >
+                        <apex:inputField value="{!compItem.newCompData.xcdhcm__Effective_from__c}"/>
+                    </c:noDateLink>
+                </apex:column>
+               <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Employee_contribution_pens_sal__c.label}">
+                    <apex:inputField value="{!compItem.newCompData.xcdhcm__Employee_contribution_pens_sal__c}"/>
+                </apex:column>
+               <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__Employer_contribution_pens_sal__c.label}">
+                    <apex:inputField value="{!compItem.newCompData.xcdhcm__Employer_contribution_pens_sal__c}"/>
+                </apex:column>
+                <!--START :: 27/04/2017 NPAY-274 Review Auto Enrolment - fixes added by Tutu --> 
+               <apex:column headerValue="{!$Objecttype.xcdhcm__Compensation__c.Fields.xcdhcm__AE_notice__c.label}">
+                    <apex:outputText value="{!compItem.existCompData.xcdhcm__AE_notice__c}"/>
+                </apex:column>
+               <!--END :: 27/04/2017 NPAY-274 Review Auto Enrolment - fixes added by Tutu --> 
+           </apex:pageBlockTable>
+         </apex:pageBlockSection>
+        </apex:outputPanel>
+        <apex:pageBlockButtons location="Bottom">
+            <apex:commandButton value="{!$Label.xcdhcm__payrollautoenrollmentbsaveandaction}" action="{!saveToAction}"/>
+            <apex:commandButton value="{!$Label.xcdhcm__payrollautoenrollmentbback}" action="{!backPage}" rerender="hiddenBlock"/>
+            	<apex:param name="payrollId" value="{!$CurrentPage.parameters.periodId}" assignTo="{!payrollId}"/>
+            
+	    </apex:pageBlockButtons>
+    </apex:pageBlock>
+    <apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
+</apex:form>
+</apex:page>

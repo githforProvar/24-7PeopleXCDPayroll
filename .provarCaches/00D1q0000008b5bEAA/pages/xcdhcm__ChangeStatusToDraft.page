@@ -1,0 +1,10 @@
+<apex:page standardController="xcdhcm__Pay_Period__c"
+	extensions="xcdhcm.GenerateEmployeePayRollController"
+	action="{!changeStatusToDraft}">
+	<apex:PageMessages />
+	<apex:sectionHeader title="Generate Employee Pay Roll" />
+	<apex:outputPanel >
+      You tried generating employee pay roll.  If you see this page, something went wrong.	You should have 
+      been redirected back to the record you clicked the button from.
+  </apex:outputPanel>
+</apex:page>

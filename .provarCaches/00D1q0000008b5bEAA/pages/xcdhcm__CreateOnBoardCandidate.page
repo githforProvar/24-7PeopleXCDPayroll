@@ -1,0 +1,16 @@
+<!-- 
+Name: CreateOnBoardCandidate.page 
+* @author Praveen
+* @date 07/03/2014
+* @description this will display the entire details of the Candidate. After clicking OnBoardCandidate button process will continue with new Joiner.	
+ -->
+<apex:page standardController="xcdhcm__Applicant__c" extensions="xcdhcm.CreateOnBoardCandidateController">
+	
+	<apex:form > 
+	<apex:pageMessages />
+	 	
+   		<apex:detail relatedList="true" title="true"/>  
+   	
+     </apex:form>            
+  
+</apex:page>

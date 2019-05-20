@@ -1,0 +1,414 @@
+<!-- Page Name         : Book Leave
+Created Date           : 10/06/2013
+Last Modified Date     :
+Purpose                : This Page will be used to book a book leave.    -->
+<apex:page controller="xcdhcm.BulkLeaveController" sidebar="false" id="BulkLeavePage" showheader="true" title="Book Leave" >
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />   
+    <style> 
+        .dateInput  
+        {
+        white-space: nowrap;
+        } 
+        .dateOnlyInput input 
+        {
+        width: 10em !important; 
+        }
+        #actionColumn
+        {
+        color: white;
+        }
+        .slds-scope img 
+        {
+        max-width: 250%;
+        height: auto;
+        }
+        .ThisPageHelpText span 
+        {
+        display: none;
+        }
+        .ThisPageHelpText:hover span 
+        {
+        display: block !important;
+        width: 300px;
+        background-color: #16325c!important;   
+        border: 1px solid #16325c!important;
+        padding: 4px;
+        color: white;
+        position: absolute;
+        z-index: 1;
+        top:100%;
+        right:15%;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;  
+        border-radius: 4px!important;      
+        text-transform: none;   
+        }
+        .LiteHelpText:hover span 
+        {
+        text-transform: none;
+        } 
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        color: #54698d !important;
+        font-weight: 300;
+        font-size: 1.25rem !important;
+        line-height: 1.25 !important;
+        }
+        .bPageBlock 
+        {
+        border-top: white;
+        }
+        .bPageBlock .pbHeader
+        {
+        background: #fafaf9 !important;  
+        }
+        .slds-cell-edit
+        {
+        background: #ffffff;
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form id="years"  >   
+                <!-- <apex:PageMessages /> -->
+                <apex:pageMessages id="erMsg"/>
+                <apex:pageBlock title="{!$Label.xcdhcm__phbulk_leave}" id="rows" >    
+                    
+                    <apex:actionStatus id="wait">                   
+                        <apex:facet name="start">
+                            <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </apex:facet>
+                        <apex:facet name="stop">
+                            <div class="slds-spinner_container slds-hide slds-is-fixed">                                
+                            </div>
+                        </apex:facet>                                
+                    </apex:actionStatus>
+                    
+                    <!-- <apex:pageblocksection columns="1"  id="pSec" > -->                        
+                    <apex:variable value="{!0}" var="rowNum"/> 
+                    
+                    <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;" id="PbTable">
+                        <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;" >
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <apex:outputpanel id="dele" rendered="{!yearlis.size >1}">
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <span id="actionColumn" >
+                                                Action
+                                            </span>
+                                        </th>
+                                    </apex:outputpanel>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.Employee_Details__c.Label}">
+                                                {!$ObjectType.Leave_Request__c.Fields.Employee_Details__c.Label}
+                                            </span>
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Employee_Details__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Leave_Request__c.Fields.Employee_Details__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.Leave_Category__c.Label}">
+                                                {!$ObjectType.Leave_Request__c.Fields.Leave_Category__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Leave_Category__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Leave_Request__c.Fields.Leave_Category__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.Start_Date__c.Label}">
+                                                {!$ObjectType.Leave_Request__c.Fields.Start_Date__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Start_Date__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Leave_Request__c.Fields.Start_Date__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                            <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.End_Date__c.Label}">
+                                                {!$ObjectType.Leave_Request__c.Fields.End_Date__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__End_Date__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Leave_Request__c.Fields.End_Date__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.Expected_return_to_work_date__c.Label}">
+                                                {!$ObjectType.Leave_Request__c.Fields.Expected_return_to_work_date__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Expected_return_to_work_date__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Leave_Request__c.Fields.Expected_return_to_work_date__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                    <apex:outputpanel rendered="{!multiLeaveEnable!=true}">
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <abbr class="slds-required" title="required">*</abbr>
+                                                <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.Number_of_days_of_holidays__c.Label}">
+                                                    {!$ObjectType.Leave_Request__c.Fields.Number_of_days_of_holidays__c.Label}
+                                                </span>
+                                                <span class="ThisPageHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Number_of_days_of_holidays__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span >{!$ObjectType.Leave_Request__c.Fields.Number_of_days_of_holidays__c.inlineHelpText}</span>
+                                                </span>
+                                            </div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <abbr class="slds-required" title="required">*</abbr>
+                                                <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.Hours_booked_hh__c.Label}">
+                                                    {!$ObjectType.Leave_Request__c.Fields.Hours_booked_hh__c.Label}
+                                                </span>
+                                                <span class="ThisPageHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Hours_booked_hh__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span >{!$ObjectType.Leave_Request__c.Fields.Hours_booked_hh__c.inlineHelpText}</span>
+                                                </span>
+                                            </div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col" >
+                                            <div class="slds-th__action slds-text-link_reset">
+                                                <abbr class="slds-required" title="required">*</abbr>
+                                                <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.mm__c.Label}">
+                                                    {!$ObjectType.Leave_Request__c.Fields.mm__c.Label}
+                                                </span>
+                                                <span class="ThisPageHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__mm__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span >{!$ObjectType.Leave_Request__c.Fields.mm__c.inlineHelpText}</span>
+                                                </span>
+                                            </div>
+                                        </th>
+                                    </apex:outputpanel>
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                            <span class="slds-truncate" title="{!$ObjectType.Leave_Request__c.Fields.Notes__c.Label}">
+                                                {!$ObjectType.Leave_Request__c.Fields.Notes__c.Label}
+                                            </span>
+                                            <span class="ThisPageHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Notes__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span >{!$ObjectType.Leave_Request__c.Fields.Notes__c.inlineHelpText}</span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <apex:repeat value="{!yearlis}" var="c">
+                                    <tr class="slds-hint-parent">
+                                        <apex:outputpanel rendered="{!yearlis.size >1}">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <apex:actionRegion >       
+						<!-- Start :: 04-10-2018 Changes made for T486801 Book bulk leave request by Kumbresh -->  
+                                                    <apex:commandlink action="{!delbulkleave}" immediate="true" >
+                                                     <!--END :: 04-10-2018 Changes made for T486801 Book bulk leave request by Kumbresh -->
+						        <apex:param name="rownumber" value="{!rowNum}" />
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove" />
+                                                    </apex:commandlink>
+                                                </apex:actionRegion>
+                                            </td>
+                                        </apex:outputpanel>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:actionRegion >
+                                                    <apex:outputPanel id="inputFi1">
+                                                        <apex:outputpanel layout="block" styleClass="requiredInput">
+                                                            <apex:outputpanel layout="block" styleClass="requiredBlock"></apex:outputpanel>         
+                                                            <apex:outputPanel >
+                                                                <apex:inputField value="{!c.holi.xcdhcm__Employee_Details__c}" required="false" style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}">
+                                                                    <apex:actionSupport event="onchange" action="{!picklistadding}" rerender="erMsg,yrsss,expret,nodays,nohours,nominutes,lCat" status="wait">
+                                                                        <apex:param name="Para4" value="{!rowNum}" assignTo="{!IndexValue}" />
+                                                                    </apex:actionSupport>
+                                                                </apex:inputField>    
+                                                            </apex:outputPanel>
+                                                        </apex:outputpanel> 
+                                                    </apex:outputPanel>    
+                                                </apex:actionRegion> 
+                                                <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:outputPanel id="lCat" > 
+                                                    <apex:outputpanel layout="block" styleClass="requiredInput">
+                                                        <apex:outputpanel layout="block" styleClass="requiredBlock"></apex:outputpanel>     
+                                                        <apex:inputField value="{!c.holi.xcdhcm__Country__c}" style="display : none" />
+                                                        <apex:outputPanel >
+                                                            <apex:inputField value="{!c.holi.xcdhcm__Leave_Category__c}" style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}" onclick="removeMaternity(this.id, '{!maternityCategory}');"  id="leaveCat" rendered="{!multiLeaveEnable = false}">   
+                                                                <apex:actionSupport event="onchange" action="{!picklistadding}" rerender="erMsg,yrsss,expret,nodays,nohours,nominutes" status="wait">
+                                                                    <apex:param name="Para2" value="{!rowNum-1}" assignTo="{!IndexValue}" />
+                                                                </apex:actionSupport>
+                                                            </apex:inputField>   
+                                                            
+                                                            <apex:selectList size="1" value="{!c.holi.xcdhcm__Leave_Category__c}" style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}" onfocus="removeMaternity(this.id, '{!maternityCategory}');" id="leaveCategory1" rendered="{!multiLeaveEnable = true}">
+							    <!--START :: 28/05/2018 NPPD-1630 Display leave category based on Country - Multi Job Role added by Sabir  -->
+                                                                <apex:selectOptions value="{!optionList[rowNum-1]}">
+								<!--END :: 28/05/2018 NPPD-1630 Display leave category based on Country - Multi Job Role added by Sabir  -->
+                                                                </apex:selectOptions>   
+                                                                <apex:actionSupport event="onchange" action="{!picklistadding}" rerender="erMsg,yrsss,expret,nodays,nohours,nominutes" status="wait">
+                                                                    <apex:param name="Para2" value="{!rowNum-1}" assignTo="{!IndexValue}" />
+                                                                </apex:actionSupport>                           
+                                                            </apex:selectList>
+                                                        </apex:outputPanel>  
+                                                    </apex:outputpanel>
+                                                </apex:outputPanel>
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:outputPanel id="yrss" > 
+                                                    <apex:outputpanel layout="block" styleClass="requiredInput">
+                                                        <apex:outputpanel layout="block" styleClass="requiredBlock"></apex:outputpanel>     
+                                                        <apex:outputPanel >
+                                                            <apex:inputField value="{!c.holi.xcdhcm__Start_Date__c}"  style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}">
+                                                                <apex:actionSupport event="onchange" action="{!picklistadding}" rerender="erMsg,yrss,yrsss,expret,nodays,nohours,nominutes" status="wait">
+                                                                    <apex:param name="Para1" value="{!rowNum-1}" assignTo="{!IndexValue}" />
+                                                                </apex:actionSupport>
+                                                            </apex:inputField>
+                                                            <apex:inputField id="StAMPM" value="{!c.Holi.xcdhcm__Start_Date_AM_PM_All_Day__c}" rendered="{!OR(c.patterntype=='Regular work pattern - days',c.patterntype == 'Regular work pattern - hours')}" style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}"/>
+                                                        </apex:outputPanel>
+                                                    </apex:outputpanel>
+                                                </apex:outputPanel>
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:outputPanel id="yrsss" > 
+                                                    <apex:outputpanel layout="block" styleClass="requiredInput">
+                                                        <apex:outputpanel layout="block" styleClass="requiredBlock" rendered="{!c.endDateReq}"></apex:outputpanel>    
+                                                        <apex:outputPanel >
+                                                            <apex:inputField value="{!c.holi.xcdhcm__End_Date__c}"  style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}">
+                                                                <apex:actionSupport event="onchange" action="{!picklistadding}" rerender="erMsg,expret,nodays,nohours,nominutes" status="wait">
+                                                                    <apex:param name="Para" value="{!rowNum-1}" assignTo="{!IndexValue}" />
+                                                                </apex:actionSupport>
+                                                            </apex:inputField>                    
+                                                            <apex:inputField id="EnAMPM" value="{!c.holi.xcdhcm__End_Date_AM_PM_All_Day__c}" rendered="{!OR(c.patterntype=='Regular work pattern - days',c.patterntype == 'Regular work pattern - hours')}" style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}"/>                     
+                                                        </apex:outputPanel>
+                                                    </apex:outputpanel>
+                                                </apex:outputPanel>
+                                            </span>
+                                        </td>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:outputPanel id="expret" > 
+                                                    <apex:inputField value="{!c.holi.xcdhcm__Expected_return_to_work_date__c}" rendered="{!c.endDateReq==false}">
+                                                        <apex:actionSupport event="onchange" action="{!picklistadding}" rerender="erMsg" status="wait">
+                                                            <apex:param name="Para0" value="{!rowNum-1}" assignTo="{!IndexValue}" />
+                                                        </apex:actionSupport>
+                                                    </apex:inputField>
+                                                </apex:outputPanel>
+                                            </span>
+                                        </td>
+                                        <apex:outputpanel rendered="{!multiLeaveEnable!=true}">
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:outputPanel id="nodays">
+                                                        <apex:outputpanel layout="block" styleClass="requiredInput">
+                                                            <apex:outputpanel layout="block" styleClass="requiredBlock"></apex:outputpanel>   
+                                                            <apex:InputField value="{!c.holi.xcdhcm__Number_of_days_of_holidays__c}" rendered="{!AND(c.patterntype != 'Regular work pattern - days' , c.patterntype != 'Regular work pattern - hours', c.noOfDays)}"  style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}"/>
+                                                        </apex:outputpanel>
+                                                    </apex:outputpanel>
+                                                </span>
+                                            </td>
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:outputPanel id="nohours"> 
+                                                        <apex:outputpanel layout="block" styleClass="requiredInput">
+                                                            <apex:outputpanel layout="block" styleClass="requiredBlock"></apex:outputpanel>    
+                                                            <apex:InputField id="nohoursField" value="{!c.holi.xcdhcm__Hours_booked_hh__c}"  rendered="{!AND(c.patterntype != 'Regular work pattern - days', c.patterntype != 'Regular work pattern - hours' , c.leavesubtype!='Sick Leave' , c.patterntype != 'Flexible working days')}" style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}"/>
+                                                        </apex:outputpanel>
+                                                    </apex:outputPanel>
+                                                </span>
+                                            </td>
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:outputPanel id="nominutes"> 
+                                                        <apex:outputpanel layout="block" styleClass="requiredInput">
+                                                            <apex:outputpanel layout="block" styleClass="requiredBlock"></apex:outputpanel> 
+                                                            <apex:InputField id="nominutesField" value="{!c.holi.xcdhcm__mm__c}"  rendered="{!AND(c.patterntype != 'Regular work pattern - days', c.patterntype != 'Regular work pattern - hours' , c.leavesubtype!='Sick Leave' , c.patterntype != 'Flexible working days')}" style="{!IF(AND(leaveError!='',CONTAINS(leaveError,c.holi.xcdhcm__Employee_Details__c),CONTAINS(leaveError,Text(c.holi.xcdhcm__Start_Date__c)),CONTAINS(leaveError,Text(c.holi.xcdhcm__End_Date__c))),'border:2px solid #c00 !important;','')}"/>
+                                                        </apex:outputpanel>
+                                                    </apex:outputPanel>
+                                                </span>
+                                            </td>
+                                        </apex:outputpanel>
+                                        <td role="gridcell" class="slds-cell-edit">
+                                            <span class="slds-grid slds-grid_align-spread">
+                                                <apex:InputField value="{!c.holi.xcdhcm__Notes__c}">
+                                                    <apex:actionSupport event="onchange" action="{!picklistadding}" rerender="erMsg" status="wait">
+                                                        <apex:param name="Para3" value="{!rowNum-1}" assignTo="{!IndexValue}" />
+                                                    </apex:actionSupport>
+                                                </apex:InputField>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>            
+                    <!-- </apex:pageblocksection> -->
+                    
+                    <apex:pageblockButtons location="Bottom" style="text-align: right!important;">    
+                        <apex:actionStatus id="saveStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputPanel >
+                                    <apex:commandButton value="{!$Label.xcdhcm__bulk_leavebaddrow}" action="{!addRow}" immediate="true" styleclass="slds-button slds-button--neutral" />
+                                    <apex:commandButton value="{!$Label.xcdhcm__bulk_leavebclearall}" action="{!clearAll}" immediate="true" styleclass="slds-button slds-button--neutral" />
+                                    &nbsp;
+                                    <apex:commandButton value="{!$Label.xcdhcm__bulk_leavebcancel}" action="{!cancel}" immediate="true" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                	<apex:commandButton value="{!$Label.xcdhcm__bulk_leavebsubmit}" action="{!submit}" rerender="id_saveBtn,erMsg,pSec,pTable" styleclass="slds-button slds-button--brand" status="saveStatus" id="id_saveBtn"/>
+                                </apex:outputPanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show" >
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageblockButtons>
+                </apex:pageblock>
+            </apex:form> 
+        </body>
+    </html> 
+    
+    <script>
+    function removeMaternity(idVal, maternityCategory)
+    {
+        var list = document.getElementById(idVal);
+        for(var i = list.length-1; i >= 0 ; i--)
+        {
+            if(maternityCategory.indexOf( list.options[i].text) != -1)
+            {
+                list.remove(i);
+            }
+        }
+    }
+    </script>
+    
+</apex:page>

@@ -1,0 +1,382 @@
+<apex:page standardController="xcdhcm__Claim__c" extensions="xcdhcm.ClaimDetailViewController" showHeader="true" sidebar="false" wizard="false">
+     <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteVacancy.css')}" /> 
+    <script> 
+    function checkAll(obj,receivedInputID){
+        var inputCheckBox = document.getElementsByTagName("input");                 
+        for(var i=0; i<inputCheckBox.length; i++){         
+            if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                    
+                inputCheckBox[i].checked = obj.checked; 
+            }
+        }          
+    }
+    </script> 
+    
+    <style>
+        /*  
+        -   Hides Action Column for Approval History
+        -   Hides Delete, Clone buttons
+        */
+        [class$='actionColumn']{display:none;}
+        [name$='clone']{display:none;}
+        [name$='unlock']{display:none;}
+        [title$='Locked']{display:none;}        
+        [name$='del']{display:none;}
+        [name$='edit']{display:none;}/* 26/05/2015 Display Edit button only for manager Added by Ranjeet*/
+        [name='piRemove']{display:none;}
+        [name='piSubmit']{display:none;}
+        
+        .slds-scope caption, .slds-scope td, .slds-scope th {
+            padding: 6px;
+        }
+        
+        .pbBody .pbSubheader h3, body .bWizardBlock .bPageBlock .pbBody .pbSubheader label 
+        {
+            color: #336699 !important;
+            font-size: 12pt !important;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: normal;
+        }
+        .Custom83Tab .tertiaryPalette,.individualPalette .Custom83Block .tertiaryPalette,.layoutEdit .individualPalette .Custom83Block .tertiaryPalette
+        {
+            background-color: #FFFFFF;
+            border-color: #63a4c5 !important;
+            border-top: 2px solid #63a4c5 !important;
+        }
+        body .bPageBlock .pbBody .pbSubheader
+        {
+            font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+            font-size: 10pt;
+            font-weight: normal!important;
+            color: #336699!important;
+        }
+        /*For page layout arrow hide*/
+        body .bPageBlock .pbBody .pbSubheader .hideListButton 
+        {
+            display: none;
+        }
+        body .pbBody table.list tr.headerRow th 
+        {
+            color: #54698d;
+            font-weight: normal;
+            font-family: 'Salesforce Sans',Arial,sans-serif;
+            line-height: 1.25; 
+            letter-spacing:.0625rem;
+            white-space: normal;
+            background: #ffffff !important;
+            border: none;
+            font-size: .9em;
+            padding: 5px 2px 4px 5px;
+            border-bottom: 1px solid #cde2f5 !important;
+            border-top: 1px solid #cde2f5 !important;
+        }
+     
+        .pbBody .bPageBlock .pbHeader, .pbBody .bPageBlock .pbTitle, .pbBody .bPageBlock .pbLinks, .pbBody .bPageBlock .pbLinks a 
+        {
+                padding-left: 6px !important;
+        }
+        td.pbTitle 
+        {
+                width: 25%!important; 
+        }
+        
+        body .bRelatedList .pbBody table.list, body .apexp .pbBody table.list 
+        {
+            margin-left: 20px;
+        }
+        body .bPageBlock .pbBody .pbSubheader h3, body .bWizardBlock .bPageBlock .pbBody .pbSubheader label
+        {
+            margin-left: 15px;
+        }
+        bEditBlock .pbHeader>table>tbody>tr>td, .bPageBlock .pbHeader>table>tbody>tr>td, .bLayoutBlock .pbHeader>table>tbody>tr>td, .bEditBlock .pbBottomButtons>table>tbody>tr>td, .bPageBlock .pbBottomButtons>table>tbody>tr>td, .bLayoutBlock .pbBottomButtons>table>tbody>tr>td 
+        {
+                margin-right:5mm;
+                margin-top: 6mm;
+        }
+        
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+                margin-left: 9px;
+        }   
+   
+        <!--Start: PopUp window to display the user Records -->
+        .custPopup 
+        {
+            background-color: white;
+            border-width: 2px;
+            border-style: inset;
+            z-index: 9999;
+            left: 350px;
+            padding: 10px;
+            position: Fixed;
+            width: 500px;
+            margin-left: 70px;
+            top:150px;
+            text-decoration: none;
+            background: #ffffff !important;
+            border: 1px solid #ccc !important;
+            -moz-box-shadow: 4px 5px 10px #99ccff;
+            -webkit-box-shadow: 4px 5px 10px #99ccff;
+            box-shadow: 4px 5px 10px #99ccff;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            color: #336699;
+        }
+        .popupBackground 
+        {
+            background-color: black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+        body .pbBody table.list tr.headerRow th:first-child,body .pbBody table.list tr.dataRow td:first-child
+        {
+            border-left-width: 0;
+            width: 0.1% !important;
+        }
+        .bPageTitle .ptBody .content 
+        {
+            display: none;
+        }
+        .customnotabTab .tertiaryPalette,.individualPalette .customnotabBlock .tertiaryPalette,.layoutEdit .individualPalette .customnotabBlock .tertiaryPalette
+        {
+            background-color: #FFFFFF;
+            border-color: #63a4c5 !important;
+            border-top: 2px solid #63a4c5 !important;
+        }
+        body .bPageBlock .pbBody .pbSubheader .hideListButton 
+        {
+            display: none;
+        }
+    <!--End: PopUp window to display the user Records -->
+    
+        .bPageBlock .requiredInput .requiredBlock  
+        {
+            display:none!important;
+        }
+        
+        body .pbBody table.list tr.headerRow th {
+         color: #54698d!important;
+            font-weight: normal;
+            font-family: 'Salesforce Sans',Arial,sans-serif;
+            line-height: 1.25; 
+            letter-spacing:.0625rem;
+            white-space: normal;
+            background: #ffffff !important;
+            border: none;
+            font-size: .9em;
+            padding: 5px 2px 4px 5px;
+            border-bottom: 1px solid #cde2f5 !important;
+            border-top: 1px solid #cde2f5 !important;
+}
+     
+    </style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope"> 
+            <apex:form >        
+                <apex:detail relatedList="false" title="false"/>
+                
+                <apex:outputText Style="padding-left:40px;color: #999999 !important;font-size: 10pt;" value="{!$Label.xcdhcm__claimdetails_approvalpagenote}" rendered="{!allowApprovalProcess}"/>
+                
+                <apex:pageBlock id="in" mode="maindetail" rendered="{!allowApprovalProcess}" >
+                    <apex:pageBlockButtons location="top" > 
+                        <apex:commandButton value="Cancel" immediate="true" action="{!cancelClaimDetail}"  reRender="appRejectBtn393" status="mySaveStatus2" styleclass="slds-button slds-button--neutral"/>
+                        <apex:commandButton value="{!$Label.xcdhcm__claimdetailsbedit}" onclick="window.open('/{!claim.id}/e?retURL={!currentPageURL}', '_self')" id="appRejectBtn393" reRender="pagblkId,pagblkId1, approveErrId" rendered="{!allowApprovalProcess}" status="mySaveStatus2" styleclass="slds-button slds-button--neutral"/> 
+                        <apex:commandButton value="{!$Label.xcdhcm__claimdetailsbapproveselectedexpenses}" action="{!approveClaim}" id="appRejectBtn" reRender="pagblkId,pagblkId1, approveErrId" rendered="{!allowApprovalProcess}" status="mySaveStatus2" styleclass="slds-button slds-button--neutral"/> 
+                        <apex:commandButton action="{!ShowPopup}" value="{!$Label.xcdhcm__claimdetailsbrejectedselectedexpenses}" id="appRejectBtn1" rendered="{!allowApprovalProcess}"  reRender="approveErrId,tstpopup1" styleclass="slds-button slds-button--neutral"/> 
+                        <apex:commandButton action="{!ShowPopup}" value="{!$Label.xcdhcm__claimdetailsbreturnselectedexpenses}" id="appReturnBtn" rendered="{!allowApprovalProcess}" reRender="approveErrId,tstpopup2" styleclass="slds-button slds-button--neutral"/>  
+                        <apex:commandButton action="{!redirectToReassignPage}" value="{!$Label.xcdhcm__claimdetailsbreassignclaimapproval}" id="ReassignBtn" reRender="pagblkId,pagblkId1, approveErrId" rendered="{!allowApprovalProcess}" status="mySaveStatus2" styleclass="slds-button slds-button--neutral"/>
+                        <apex:outputPanel >
+                            <apex:actionStatus id="mySaveStatus2"> 
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div>
+                                    </div>
+                                </apex:facet>
+                            </apex:actionStatus>
+                        </apex:outputPanel>
+                    </apex:pageBlockButtons>
+                </apex:pageBlock>
+
+                <div Class="line"></div>
+                <apex:PageMessages id="approveErrId" /> 
+                
+                <apex:pageBlock title="{!$Label.xcdhcm__claimdetailsexpenses}" id="pagblkId" mode="maindetail"> 
+                    <apex:outputText Value="No records to display" rendered="{!expenseListAgainstCurrentClaim.size == 0}"  style="padding-left: 20px;"/>
+                    
+                    <apex:pageblockTable value="{!expenseListAgainstCurrentClaim}" var="expWrapper"  rendered="{!expenseListAgainstCurrentClaim.size > 0}" width="100%">
+                        <apex:column rendered="{! allowApprovalProcess == true || allowSubmitProcess == true }"> <!-- Added rendered condition -->
+                            <apex:facet name="header">
+                                <apex:inputCheckbox selected="true">
+                                    <apex:actionSupport event="onclick" onsubmit="checkAll(this, 'checkedExpense')" reRender=""/>
+                                </apex:inputCheckbox>
+                            </apex:facet>
+                            <apex:inputCheckbox value="{!expWrapper.selected}" id="checkedExpense" disabled="{! expWrapper.expense.Status__c == 'Approved'}"/> <!-- Modified from Approve to Approved -->
+                        </apex:column>
+                        
+                        <apex:repeat var="f" value="{! $ObjectType.Expense__c.fieldSets.Expense_view_summary_column}" >
+                            <apex:column styleclass="columnWidth"> 
+                                <apex:facet name="header"><div  class="slds-text-title">{!f.label}</div></apex:facet>       
+                                
+                                <div style="width:100%; display:block;">
+                                    <apex:outputpanel rendered="{!allowApprovalProcess==true}" > 
+                                <apex:outputField value="{!expWrapper.expense[f]}" rendered="{!IF(f!='xcdhcm__Comments__c', 'true','false')}" />                                    
+                                <apex:inputText value="{!expWrapper.expense[f]}" rendered="{!IF(f=='xcdhcm__Comments__c', 'true','false')}"  />     
+                                    </apex:outputpanel>
+                                    <apex:outputpanel rendered="{!allowApprovalProcess==false}" >
+                                        <apex:outputField value="{!expWrapper.expense[f]}"  /> 
+                                    </apex:outputpanel>      
+                                </div>
+                            </apex:column>  
+                        </apex:repeat> 
+                        <apex:column styleclass="columnWidth">
+                            <apex:facet name="header"><div class="slds-text-title"><span style="text-align:left !important;float:left!important;" >Receipt</span></div></apex:facet>
+                            <apex:outputLink style="width:5em; margin-left:9px; word-break:break-all; float:left; text-align:left;" target="_blank" title="{!expWrapper.attachFile.Name}" value="/{!expWrapper.attachFile.id}" rendered="{!expWrapper.attachFile.id != null}">view</apex:OutputLink>
+                        </apex:column>   
+                    </apex:pageblockTable>
+                </apex:pageBlock>
+                
+                <div Class="line"></div>
+                
+                <apex:pageBlock title="{!$Label.xcdhcm__claimdetailsmileage}" rendered="{!MileageSection}" id="pagblkId1" mode="maindetail"> 
+                    
+                    <apex:outputText Value="No records to display" rendered="{!mileageListAgainstCurrentClaim.size == 0}"  style="padding-left: 20px;"/>
+                    
+                    <apex:pageblockTable value="{!mileageListAgainstCurrentClaim}" var="expWrapper"  rendered="{!mileageListAgainstCurrentClaim.size > 0}">
+                        <apex:column rendered="{! allowApprovalProcess == true || allowSubmitProcess == true }"> <!-- Added rendered condition -->
+                            <apex:facet name="header">
+                                <apex:inputCheckbox selected="true">
+                                    <apex:actionSupport event="onclick" onsubmit="checkAll(this, 'checkedMileage')" reRender=""/>
+                                </apex:inputCheckbox>
+                            </apex:facet>
+                            <apex:inputCheckbox value="{!expWrapper.selected}" id="checkedMileage" disabled="{! expWrapper.expense.Status__c == 'Approved'}"/> <!-- Modified from Approve to Approved -->
+                        </apex:column>
+                        
+                        <apex:repeat var="f" value="{! $ObjectType.Expense__c.fieldSets.Mileage_summary_columns}" >
+                            <apex:column styleclass="columnWidth"> 
+                                <apex:facet name="header"><div  class="slds-text-title">{!f.label}</div></apex:facet>                           
+                                <apex:outputpanel rendered="{!allowApprovalProcess==true}" > 
+                                <apex:outputField value="{!expWrapper.expense[f]}" rendered="{!IF(f!='xcdhcm__Comments__c', 'true','false')}" />                                    
+                                <apex:inputText value="{!expWrapper.expense[f]}" rendered="{!IF(f=='xcdhcm__Comments__c', 'true','false')}"  />     
+                                </apex:outputpanel>
+                                <apex:outputpanel rendered="{!allowApprovalProcess==false}" >
+                                <div class="slds-truncate" >
+                                    <apex:outputField value="{!expWrapper.expense[f]}"  styleclass="slds-truncate" /> 
+                                    </div>
+                                </apex:outputpanel>      
+                            </apex:column>  
+                        </apex:repeat> 
+                        
+                        <apex:column styleclass="columnWidth">
+                            <apex:facet name="header"><div class="slds-text-title"><span style="text-align:left !important;float:left!important;">Receipt</span></div></apex:facet>
+                            <apex:outputLink style="width:5em; margin-left:9px; word-break:break-all; float:left; text-align:left;" target="_blank" title="{!expWrapper.attachFile.Name}" value="/{!expWrapper.attachFile.id}" rendered="{!expWrapper.attachFile.id != null}">view</apex:OutputLink>
+                        </apex:column>  
+                    </apex:pageblockTable>
+                </apex:pageBlock>
+                
+                <apex:pageBlock id="tstpopup1">
+                    <apex:outputPanel >
+                        <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopup}" />
+                        <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopup}">
+                            <apex:commandLink action="{!closePopup}" type="image/png" rerender="tstpopup1" style="text-decoration:none">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Crosse.png')}" width= "2%" style="float: right;"/>
+                            </apex:commandlink>
+                            
+                            <apex:PageMessages />
+                            <div style="height: 160px; overflow: auto;">
+                                <apex:outputpanel >
+                                    <apex:outputlabel value="{!$Label.xcdhcm__claimdetailsimrejectselectedexpenses}"
+                                                      Style="color:#6e7277;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 1.2em;" escape="false"/>
+                                    <br /><br /><br />
+                                    <apex:outputlabel value="Comment" Style="color:#6e7277;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 1.2em;" />
+                                    &nbsp;<apex:inputText value="{!CommentRecord}" Style="width: 300px;height: 20px;"/>
+                                </apex:outputpanel>
+                            </div>
+                            <br />
+                            <br />
+                            <center>
+                                <apex:commandButton value="{!$Label.xcdhcm__claimdetailsbcontinue}" reRender="pagblkId,pagblkId1,approveErrId" action="{!rejectClaim}" status="mySaveStatus1" styleclass="slds-button slds-button--neutral"/>
+                                <apex:commandButton value="{!$Label.xcdhcm__claimdetailsbback}" action="{!closePopup}" reRender="tstpopup1" status="mySaveStatus1"  styleclass="slds-button slds-button--neutral"/>
+                            </center>
+                            <apex:actionStatus id="mySaveStatus1">
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div>
+                                    </div>
+                                </apex:facet>
+                            </apex:actionStatus> 
+                            <div Class="line"></div>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:pageBlock>
+                <!--End: PopUp window to display for Reject Pop up -->
+                
+                <apex:pageBlock id="tstpopup2">
+                    <apex:outputPanel >
+                        <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopup}" />
+                        <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopup}">
+                            <apex:commandLink action="{!closePopup}" type="image/png" rerender="tstpopup2"  style="text-decoration:none">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Crosse.png')}" width= "2%" style="float: right;"/>
+                            </apex:commandlink>
+                            
+                            <apex:PageMessages />
+                            <div style="height: 160px; overflow: auto;">
+                                <apex:outputpanel >
+                                    <apex:outputlabel value="{!$Label.xcdhcm__claimdetailsimreturnselectedexpenses}"
+                                                      Style="color:#6e7277;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 1.2em;" escape="false"/>
+                                    <br /><br /><br />
+                                    <apex:outputlabel value="Comment" Style="color:#6e7277;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 1.2em;"/>
+                                    &nbsp;<apex:inputText value="{!CommentRecord}" Style="width: 300px;height: 20px;" />
+                                </apex:outputpanel> 
+                            </div>
+                            <br />
+                            <br />
+                            <center>
+                                <apex:commandButton value="{!$Label.xcdhcm__claimdetailsbcontinue}" reRender="pagblkId,pagblkId1,approveErrId" action="{!returnClaim}" status="mySaveStatus2"  styleclass="slds-button slds-button--neutral"/>
+                                <apex:commandButton value="{!$Label.xcdhcm__claimdetailsbback}" action="{!closePopup}" reRender="tstpopup2" styleclass="slds-button slds-button--neutral"/>
+                            </center>
+                            <apex:actionStatus id="mySaveStatus2">
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div>
+                                    </div>
+                                </apex:facet>
+                            </apex:actionStatus>
+                            <div Class="line"></div>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:pageBlock>
+                <!--START: PopUp window to display for Reject Pop up -->
+                
+            </apex:form>
+            <apex:outputpanel rendered="{!MileageSection}">
+                <div Class="line"></div>
+                <br />
+            </apex:outputpanel>
+            
+            <apex:pageBlock mode="maindetail">
+                    <div>
+                        <apex:relatedList list="ProcessSteps" />
+                    </div>
+                <div Class="line"></div>
+            </apex:pageBlock>
+        </body>
+    </html>
+</apex:page>

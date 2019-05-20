@@ -1,0 +1,122 @@
+<apex:page showHeader="true" tabStyle="xcdhcm__Vacancy__c" title="Apply" sidebar="false" 
+controller="xcdhcm.ApplyPositionFormController">
+ <!--  START :: 07/18/2016 NPPD-1116 business card added by kamal   --> 
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Internalsite.css')}" />    
+ <!--  END :: 07/18/2016 NPPD-1116 business card added by kamal   --> 
+ <style> 
+ .Custom20Tab .tertiaryPalette, .individualPalette .Custom20Block .tertiaryPalette, .layoutEdit .individualPalette .Custom20Block .tertiaryPalette {
+    background-color: #FFFFFF!important;
+    border-top:2px solid #63a4c5!important;;
+ }
+</style>
+    <apex:form id="frm"> 
+        <!-- START :: 12/06/2014 NPPD-372 Recruitment Enhancements Modified by Praveen -->
+        <apex:pageBlock title="{!$Label.xcdhcm__phapplypositionagnform}">
+        <!-- END :: 12/06/2014 NPPD-372 Recruitment Enhancements Modified by Praveen -->
+            <apex:pageMessages />    
+            <!--  START :: 29/12/2015 NPPD-1042 custom label changes added by Kamal   --> 
+            <apex:pageBlockSection title="{!$Label.xcdhcm__applypositionagnformentercandidatedetails}">
+           <!--  END:: 29/12/2015 NPPD-1042 custom label changes added by Kamal   -->  
+            	<!-- START :: 12/06/2014 NPPD-372 Recruitment Enhancements Modified by Praveen -->
+            	<apex:outputField value="{!VacancyrcdIns.xcdhcm__Job_title__c}"/>
+            	<!-- START :: 27/08/2015 NPPD-827 Recruitment Enhancements by kamal  -->
+            	<apex:outputField value="{!VacancyrcdIns.xcdhcm__Job_reference__c}"/>
+            	<!-- <apex:outputField value="{!VacancyrcdIns.Location_name__c}"/> -->
+            	<!-- END :: 27/08/2015 NPPD-827 Recruitment Enhancements by kamal  -->
+            	<apex:outputLabel value=""/>
+            	<apex:outputLabel value=""/>
+                <!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  -->  
+                <apex:repeat value="{!$ObjectType.xcdhcm__Candidate__c.Fieldsets.xcdhcm__New_Candidate_agency}" var="a">
+                <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  -->  
+                    <apex:inputField value="{!candidateIns[a]}" required="{!OR(a.Required,a.DBRequired)}"/>        
+                </apex:repeat>                 
+           </apex:pageBlockSection>  
+           <!--  START :: 29/12/2015 NPPD-1042 custom label changes added by Kamal   -->  
+            <apex:pageBlockSection title="{!$Label.xcdhcm__applypositionagnformenterapplicationdetails}"> 
+          <!--  END:: 29/12/2015 NPPD-1042 custom label changes added by Kamal   -->     
+               <!-- START :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  -->                  
+                <apex:repeat value="{!$ObjectType.xcdhcm__Applicant__c.Fieldsets.xcdhcm__New_applicant_agency}" var="a">
+              <!-- END :: 24/11/2015 NPPD-1017 Recruitment changes added by Kamal  -->    
+                    <apex:inputField value="{!applicantIns[a]}" required="{!OR(a.Required,a.DBRequired)}"/>        
+                </apex:repeat>   
+                <!-- END :: 12/06/2014 NPPD-372 Recruitment Enhancements Modified by Praveen -->
+            </apex:pageBlockSection>
+            <!-- START :: 12/06/2014 NPPD-372 Recruitment Enhancements Modified by Praveen -->
+           <!-- END :::: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    --> 
+            <apex:pageBlockSection title="{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Cover_letter__c.Label}" 
+                        rendered="{!VacancyrcdIns.xcdhcm__Show_cover_letter_section__c}" columns="1">
+                <apex:pageBlockSectionItem >
+                <!-- START :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->
+                    <apex:outputLabel style="font-weight:bold;color:#999;" value="{!$Label.xcdhcm__applicationformcoverlettermessage}"/>
+                <!-- END :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem > 
+                    <apex:inputField value="{!applicantIns.xcdhcm__Cover_letter__c}" style="width: 80% !important; margin-left:8%"/>  
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <!-- END :: 12/06/2014 NPPD-372 Recruitment Enhancements Modified by Praveen -->
+            <!--  START :: 07/18/2016 NPPD-1116 business card added by kamal   -->        
+                                   
+           <apex:pageblockSection columns="{!IF(AND(BusinessCard,OR(VacancyrcdIns.xcdhcm__Show_CV_section__c,Vacan.xcdhcm__Show_CV_section__c)) ,'2','1')}" >
+        	 <!-- START :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+        	 <apex:pageBlockSection id="uim" title="{!$Label.xcdhcm__applypositionagnformuploadimage}" collapsible="false"  columns="1" rendered="{!BusinessCard}" >     
+			 <!-- END :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->	
+					<div class="input" >
+					    <!-- START :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal  		  -->
+		                <apex:outputLabel styleclass="lb" value="{!$Label.xcdhcm__recruitment_applicationuploadimg_section_message}"/> <br/>
+		              <!-- END :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal  		  -->				    			
+						<div style="width:105px;height:20px;">			
+						 	<span class="cke_toolgroup" style="border:none;" role="presentation" > 
+							 	<span class="cke_button"></span>
+								<span class="cke_button">
+								 	<a style="text-decoration: none;margin-top:5px;" id="cke_16" class="cke_off cke_button_image"  href="javascript:void('Image')" title="Image" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_16_label" onkeydown="return CKEDITOR.tools.callFunction(22, event);" 
+								 			onclick="CKEDITOR.tools.callFunction(24, this); return false;">
+								 	<span class="cke_icon" style="width: 125px;height:20px;">&nbsp;</span>
+								 	<span id="cke_16_label" class="cke_label" > 
+								 		<div style="width:110px;height:24px;margin-top: -17px;border-radius:2px;background-color:#f5f5f5 ;border:1px solid #b5b5b5;"> 
+								 		<p style="margin-top: 4px;margin-left:8px;font-weight:bold;">Browse Image</p></div>
+									</span>
+								 	</a>
+						 		</span>
+						 	</span>
+						</div>							
+						 <apex:pageBlockSectionItem > 					     
+						    <apex:inputField id="test" value="{!candidateIns.xcdhcm__Profile_image__c}"  /> 					
+						 </apex:pageBlockSectionItem>  						   					
+					</div>  
+		          </apex:pageBlockSection> 
+		          <!-- START :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+        	      <apex:pageBlockSection title="{!$Label.xcdhcm__applypositionagnformuploadyourcv}" rendered="{!OR(VacancyrcdIns.xcdhcm__Show_CV_section__c,Vacan.xcdhcm__Show_CV_section__c)}" id="cvsec" collapsible="false" columns="1"  >
+	              <!-- END :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	                 <!-- START :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal  		  -->
+	                <apex:outputLabel styleclass="lb" value="{!$Label.xcdhcm__recruitment_applicationuploadcv_section_message}"/> <br/>
+	              <!-- END :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal  		  -->
+	                <center>
+	                    <apex:inputfile value="{!resumeIns.body}" filename="{!resumeIns.Name}"  style="{!IF(!BusinessCard,'margin-left:8%;text-align: center;','')} "  />  
+	                </center>  
+	              </apex:pageBlockSection>	                
+             </apex:pageblockSection>        
+        <!--  END :: 07/18/2016 NPPD-1116 business card added by kamal   -->                            
+            <!-- START :: 27/08/2015 NPPD-827 Recruitment Enhancements by kamal  -->
+            <!-- START :::: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    -->
+             <apex:pageBlockSection title="{!$Label.xcdhcm__applypositionagnformdeclaration}" collapsible="false" rendered="{!AND(XCD_Control_PanelValue==true,VacancyrcdIns.xcdhcm__Declaration__c!=null)}" columns="1" > 
+                    <apex:repeat value="{!applicantIns}" >                                           
+	                     <apex:repeat value="{!$ObjectType.xcdhcm__Applicant__c.Fieldsets.xcdhcm__Declaration_summary}" var="a">
+	                        <!-- START :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->
+	                         <apex:outputField value="{!applicantIn[a]}"  rendered="{!IF(applicantIn[a]==Vacan.xcdhcm__Declaration__c, 'true', 'false' )}" />	                       
+	                         <apex:inputField value="{!applicantIn[a]}"   rendered="{!IF(applicantIn[a]!=Vacan.xcdhcm__Declaration__c, 'true', 'false' )}" style="{!IF(a=='xcdhcm__Confirmation__c', 'width:420px!important', 'false' )}"/>        
+	                        <!-- END :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->          
+	                    </apex:repeat>  
+                   </apex:repeat>            
+            </apex:pageBlockSection>  
+            <!-- END :::: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    --> 
+            <!-- END :: 27/08/2015 NPPD-827 Recruitment Enhancements by kamal  -->
+            <center>
+            <apex:pageBlockButtons location="bottom"> 
+                <apex:commandButton value="{!$Label.xcdhcm__applypositionagnformbsubmitapplication}" action="{!applyPosition}" />
+                <apex:commandButton value="{!$Label.xcdhcm__applypositionagnformbcancel}" action="{!cancel}" immediate="true" />
+            </apex:pageBlockButtons></center>
+        </apex:pageBlock>
+        <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+    </apex:form>
+</apex:page>

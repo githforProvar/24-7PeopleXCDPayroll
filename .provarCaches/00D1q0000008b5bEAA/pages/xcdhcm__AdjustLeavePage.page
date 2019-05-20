@@ -1,0 +1,69 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.EmployeeController" sidebar="false">
+<apex:form > 
+    <apex:pageBlock title="{!$Label.xcdhcm__phadjustleavepage}">
+        <apex:pageBlockSection title="{!$Label.xcdhcm__adjustleavepageinformation}" rendered="{!AdjustLeaveInfoSection = true}">
+            <apex:pageBlockSectionItem >
+                <apex:outputlabel value="Employee name"/>
+                <apex:outputField value="{!xcdhcm__Employee_Detail__c.Name}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputlabel value="Leave year"/>
+                <apex:outputField value="{!HsRecord.Name}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputlabel value="Future balance date"/>
+                <apex:inputField value="{!HsRecord.xcdhcm__Future_balance_date__c}"/>
+            </apex:pageBlockSectionItem>  
+            <apex:pageBlockSectionItem >
+                <apex:outputlabel value="Leave notes"/>
+                <apex:inputField value="{!HsRecord.xcdhcm__Leave_Adjustment_Notes__c}"/>
+            </apex:pageBlockSectionItem>   
+        </apex:pageBlockSection>
+           
+     <apex:pageBlockSection title="{!$Label.xcdhcm__adjustleavepageadministratordetails}" rendered="{!AdjustLeaveAdminSection = true}">  
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Leave adjustment"/>
+                <apex:inputField value="{!HsRecord.xcdhcm__Leave_Adjustment__c}"/>
+            </apex:pageBlockSectionItem> 
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Part time deduction override"/>
+                <apex:inputField value="{!HsRecord.xcdhcm__PT_deduction_workflow__c}"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="No longer in use"/>
+                <apex:inputField value="{!HsRecord.xcdhcm__No_longer_in_use__c}"/>
+            </apex:pageBlockSectionItem>  
+     </apex:pageBlockSection> 
+        
+        <apex:pageBlockButtons >
+            <apex:commandButton value="{!$Label.xcdhcm__adjustleavepagebsave}" action="{!saveAdjustLeave}"/> 
+            <apex:commandButton value="{!$Label.xcdhcm__adjustleavepagebcancel}" action="{!cancelAdjustLeave}"/>
+        </apex:pageBlockButtons>
+    </apex:pageBlock>
+<!-- START :: 23/09/2014 NPPD-532 Image is not rendering properly Modified by Praveen. -->        
+<!--BEGIN: Following fields used by developer -->
+ <apex:pageBlock rendered="false">
+     <apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__Job_Role__c}" />
+     <apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__Company__c}" />
+     <apex:outputField value="{!xcdhcm__Employee_Detail__c.Job_Role__r.xcdhcm__Pattern_Type__c}" />
+     <apex:outputField value="{!xcdhcm__Employee_Detail__c.Job_Role__r.xcdhcm__Employment_Type__c}" />
+     <!-- <apex:outputField Value="{!Employee_Detail__c.Image__c}" /> -->
+     <apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__User__c}" />
+     <apex:outputField value="{!xcdhcm__Employee_Detail__c.id}" />
+ </apex:pageBlock>
+ <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+ <!--END: Following fields used by developer -->   
+<!-- END :: 23/09/2014 NPPD-532 Image is not rendering properly Modified by Praveen. -->       
+</apex:form>
+</apex:page>
+
+     
+         <!--   <apex:repeat value="{!$ObjectType.Leave_Summary__c.Fieldsets.Employee_adjust_leave}"
+                                    var="s">
+                                    <apex:inputField value="{!leaveSummary[s]}" />
+                                </apex:repeat>        -->   
+                                
+                                  <!--       <apex:repeat value="{!$ObjectType.Leave_Summary__c.Fieldsets.Admin_adjust_leave}"
+                                    var="s">
+                                    <apex:inputField value="{!leaveSummary[s]}" />  
+                                </apex:repeat>         -->

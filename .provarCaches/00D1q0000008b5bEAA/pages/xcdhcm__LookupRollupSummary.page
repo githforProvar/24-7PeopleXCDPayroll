@@ -1,0 +1,36 @@
+<apex:page standardController="xcdhcm__Lookup_Rollup_Summary__c"
+	extensions="xcdhcm.LookupRollupController" sidebar="false" showHeader="true">
+	<apex:form id="frm">
+		<apex:pageBlock title="{!$Label.xcdhcm__phlookuprollupsummary}" id="rollups">
+			<apex:pageMessages />
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton action="{!newRollupButton}" value="{!$Label.xcdhcm__lookuprollupsummarybnewrollup}"
+					styleclass="formbutton" />
+			</apex:pageBlockButtons>
+
+			<apex:outputText Value="No records to display"
+				rendered="{!RollupSummaries.Size=0}" />
+			<apex:pageblockTable value="{!RollupSummaries}" var="rollup"
+				width="100%" rendered="{!RollupSummaries!=null}">
+
+				<apex:column headervalue="Action" style="width:6%">
+					<apex:commandLink action="{!rollupSummaryEdit}" value="Edit"
+						style="margin-right:3px;">
+						<apex:param value="{!rollup.id}" name="rollupId"></apex:param>
+					</apex:commandLink>
+					<span style="margin-right: 4px;">|</span>
+					<apex:commandLink action="{!rollupDelete}" value="Del">
+						<apex:param value="{!rollup.id}" name="rollupId"></apex:param>
+					</apex:commandLink>
+				</apex:column>
+
+				<apex:repeat var="f"
+					value="{!$ObjectType.xcdhcm__Lookup_Rollup_Summary__c.FieldSets.xcdhcm__Rollup_Summary_Columns}">
+					<apex:column value="{!rollup[f]}" />
+				</apex:repeat>
+			</apex:pageblockTable>
+			<div Class="line"></div>
+
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,314 @@
+<!-- START :: 04/10/2016 NPPD-1277 Directory next and previous buttons not working correctly modify by Sabir-->
+<apex:page controller="xcdhcm.DirectoryControler" sidebar="false" showHeader="true" cache="false" readOnly="true"> 
+<style>
+body .bPageBlock .pbBody {
+    background: #f7f9fb;
+}
+	.prfimg1 img
+	{
+		width:100px !important;
+		height:100px !important;
+		background:#ccc;
+	}
+	
+    input[type="text"] 
+    {	
+    		width: 110px !important;
+	}
+	/*column header*/
+	.table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>th 
+	{
+     	font-size: 1.25rem!important;;
+		color: #54698d;
+		font-weight: normal;
+		font-family: Salesforce Sans,Arial,sans-serif;
+		line-height: 1.25; 
+		letter-spacing:.0625rem;
+		white-space: normal!important;
+ 		text-transform: uppercase;   				
+	}
+	/*column data*/
+	.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td 
+	{
+       	font-size: 1.25rem!important;;
+  		color: #16325c;
+  		font-weight: normal;
+  		font-family: 'Salesforce Sans',Arial,sans-serif;  		
+	}
+	html body.sfdcBody 
+    {
+      padding:0px;
+      background: rgba(221, 219, 218, 0.18);
+      font-family: "Salesforce Sans", Arial, sans-serif!important;
+    }
+	/*column image*/
+    [data-letters]:before 
+    {
+        content:attr(data-letters);
+        display:inline-block;
+        font-size:16px;
+        margin-top:0px;
+        max-width:50px;
+        width:50px; 
+        height:50px;
+        line-height:50px;
+        text-align:center;
+        border-radius:50%;
+        background:plum;
+        vertical-align:middle;
+        color:white;
+        z-index:1;
+    }
+</style>
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="directortyApp" lang="en">
+	<head>
+		<meta charset="utf-8" />
+  		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+		<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+	</head>
+	
+	<script type="text/javascript">
+		//For stop press enter
+	    document.onkeypress = function (e) 
+	    {
+	        e = e || window.event;
+	        var charCode = (typeof e.which == "number") ? e.which : e.keyCode; 
+	        if(charCode == 13)
+	        {
+	            return false;
+	        }
+	        else
+	        {
+	            return true;
+	        }
+	    };
+		</script>
+		 <!--- -------------------START AngularJs----------------------------------------- -->
+   		<script type="text/javascript">
+			<!-- Name your application -->
+			var myapp = angular.module('directortyApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+			<!-- Define Controller  -->
+			var contrl=myapp.controller('ctrlRead', function ($scope, $filter ,$uibModal,$compile) {    		
+        		<!--- JSON from apex controller --->
+        		$scope.items = {!wrapList}; 
+        		
+        		//For pagination
+		    $scope.filteredItems = [];
+		    $scope.itemsPerPage = 25;
+		    $scope.currentPage = 1;
+        		$scope.maxlength = 5;
+        		$scope.selecteDropDown = "--Select--";
+        		$scope.selectedValue = "--Select--";
+			$scope.alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+						            	
+		    	//Initialize the Search Filters 
+	  		var searchMatch = function (haystack, needle) 
+	  		{
+            		if(!needle) 
+                	{
+                		return true;
+                	}
+	        		return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+			};
+	          
+            	$scope.search = function () 
+            	{
+                	$scope.filteredItems = $filter('filter')($scope.items, function (item) 
+                	{
+                    	for(var attr in item) 
+                    	{
+                        if(searchMatch(item.FirstName , $scope.query))
+                        		return true;
+                    	}
+                    	return false;
+                	});
+            	};
+            	
+           	//functions have been describe process the data for display
+	        	$scope.search();
+	        	
+	        	//For alphabatically search
+	     	$scope.setActiveLetter = function (letter) 
+            	{
+            	 	if(letter !='All')
+            	 	{
+                		$scope.filteredItems = $filter('filter')($scope.items, function (item) 
+                		{
+                			for(var attr in item) 
+                			{
+               				if(searchMatch(item.FirstName.charAt(0) , letter))
+               				return true;
+                			}
+                    		return false;
+                		});
+                	}
+                	else
+                	{
+                		$scope.search();
+                	}
+            	};
+            	
+            	//for department serach            	
+            	$scope.lookup ='';
+            	$scope.checkLook = function(deptLookup)
+            	{
+              	if(deptLookup == '')
+              	{
+              	 	$scope.search();
+              	}
+              	else
+              	{
+	          		$scope.filteredItems = $filter('filter')($scope.items, function (item)
+		            {
+			      		for (var attr in item)
+			            {
+				            	if(item.Department != null && searchMatch(item.Department ,deptLookup))
+				            	{
+					            	return true;
+				            	}
+			            } 
+			            return false;
+			        });
+			     }   
+            	};
+            	//For drop down search
+			$scope.dropboxitemselected = function(item) 
+  			{
+             	if(item == "Manager")
+                 {
+                		$scope.selectedValue = '';
+        				$scope.allManager =  {!AllManager};
+                 }
+                 if(item == "Location")
+                 {
+                		$scope.selectedValue = '';
+        				$scope.allLocation =  {!AllLocation};
+                 }
+              	if(item == "--Select--")
+              	{
+              		$scope.selectedValue = '--Select--';
+              		$scope.search();
+              	}
+			}
+                    
+      		$scope.dropDownsearch = function (SelectedRecord) 
+      		{
+                	$scope.filteredItems = $filter('filter')($scope.items, function (item) 
+                	{
+                    	for (var attr in item) 
+                    	{
+                        	if(SelectedRecord != "--Select--" && (item.Location  != null && searchMatch(item.Location , SelectedRecord)) || (item.Manager  != null && searchMatch(item.Manager , SelectedRecord)))
+                        		return true; 
+                    	}
+                    	return false;
+                	});
+            	};
+		   
+		});      	
+</script>
+
+<body class="slds-scope" ng-controller="ctrlRead">
+    <apex:form id="frm1">
+    		<apex:pageBlock id="resultBlock1" mode="maindetail" > 
+        		<apex:pageMessages />
+        			<div style=" background: #007fcc; width: 3.2rem;height: 3.2rem; border-radius: 2px;margin:10px;background-image: url('{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Directory.svg')}');">
+          		</div>
+          	<div style="font-weight:400!important;font-size: 2.2rem;line-height: 1.25; color: #16325c;margin-left:5rem;text-transform: uppercase;margin-top: -3.8rem;">Directory</div>
+          		<br/>
+          	<table width="100%" border="0">
+          		<tr>
+          			<td width="20%"  style="text-align:center">
+          			  <apex:outputLabel value="Search"  style="font-size:1.4rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;"/>&nbsp;&nbsp;
+						<input type="text" ng-model="query" ng-change="search()"  placeholder="Search"  style="border-radius: 3px;border: 1px solid #dddbda;height: 28px;padding-left: 3px;font-family:Salesforce Sans, Arial, sans-serif;font-size: 13px;" />
+            			</td>
+            			<td width="35%"  style="text-align:left">
+          				<apex:outputLabel value="Filter by"  style="font-size:1.4rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;"/>&nbsp;&nbsp;
+						<select ng-model="selecteDropDown" ng-change="dropboxitemselected(selecteDropDown)"  style="border-radius: 3px;border: 1px solid #dddbda;font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;height:28px;">
+							<option value="--Select--" >--Select--</option>
+							<option value="Department" >Department</option>
+							<option value="Manager" >Manager</option>
+							<option value="Location" >Location</option>
+						</select>
+						
+						<span ng-if = "selecteDropDown ==  'Manager'  || selecteDropDown ==  'Location' " >							
+							<select ng-model="selectedValue"  style="border-radius: 3px;border: 1px solid #dddbda;font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;width:40%;height:28px;" ng-change="dropDownsearch(selectedValue)" >
+								<option value="--Select--" >--Select--</option>
+								<option class="css1" ng-if = "selecteDropDown ==  'Manager' " ng-repeat="manager in allManager | orderBy: manager " value="{{manager}}" 
+								style="border-radius: 3px;border: 1px solid #dddbda;font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;width:40%;height:28px;">{{manager}}</option>
+								<option class="css1" ng-if = "selecteDropDown ==  'Location' " ng-repeat="location in allLocation | orderBy: location " value="{{location}}"  style="border-radius: 3px;border: 1px solid #dddbda;font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;width:40%;height:28px;">
+								{{location}}</option>
+							</select>
+						</span>
+						
+						<span ng-if = "selecteDropDown ==  'Department' " >				
+							<apex:inputField id="lokup" value="{!departmentLookup.xcdhcm__Parent_L__c}"  html-ng-model="lookup"  html-ng-change="checkLook(lookup)"
+							style="width: 300px;border-radius: 3px;border: 1px solid #dddbda;height: 28px;padding-left: 3px;font-family:'Salesforce Sans', Arial, sans-serif;font-size: 13px;"/>
+						</span>
+						
+          			</td>
+          			<td width="45%" style="text-align: right;font-size: 1.5rem;">
+  						<div>
+          					<button style="font-size: 12px;font-family: Salesforce Sans,Arial,sans-serif;font-weight: normal;color: #337ab7;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;width:18px;height: 20px;" type="button"  ng-repeat="letter in alphabet" ng-click="setActiveLetter(letter)" ng-class="{'btn-primary': letter==activeLetter}">{{letter}}</button>
+							<button style="font-size: 12px;font-family: Salesforce Sans,Arial,sans-serif;font-weight: normal;color: #337ab7;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;;height: 20px;" type="button;width:20px;"  ng-click="setActiveLetter('All')" ng-class="{'btn-primary': letter==activeLetter}">All</button>
+          				</div>
+          			</td>
+          		</tr>
+          	</table>			
+    		<br/>
+     		<table  class="table  table-hover;"  style="background: #fdfdfd;">
+ 				<tr>
+ 					<th></th>
+ 					<th>Full name</th>
+ 					<th>Department</th>
+ 					<th>Manager</th>
+ 					<th>Job title</th>
+ 					<th>Email</th>
+ 					<th>Phone</th>
+ 					<th>Mobile</th>
+ 					<th>Location</th>
+ 					<th>Skype ID</th>
+ 				</tr>
+ 				<tbody>
+        				<tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak"  >
+        					<td>					
+							<span ng-if="item.EmpFletter == null " > 
+								<apex:image value="{{item.Image}}"  style="border-radius: 60%; behavior: url(PIE.htc); width: 50px; height: 50px; margin-right: 5px;"/>								
+                        		</span>
+                        		<span ng-if="item.EmpFletter != null "  data-letters="{{item.EmpFletter}}" ></span>
+        					</td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.FirstName}}" /></td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.Department}}" /></td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.Manager}}" /></td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.Jobtitle}}" /></td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.Email}}" /></td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.Phone}}" /></td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.Mobile}}" /></td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.Location}}" /></td>
+        					<td style="vertical-align: middle;"><apex:outputText value="{{item.wrapPersonal.Skype_ID__c}}" /></td>
+ 					</tr>
+ 			</tbody>
+   		</table>
+   		  <!-- =========================================START Pagination=== ================================================ -->
+			<table width="100%">
+			    <tfoot>
+				    <tr>
+					    <td width="50%">
+				     		<ul uib-pagination ="x"  total-items="filteredItems.length" ng-model="currentPage" items-per-page="itemsPerPage" 
+				     			max-size="maxlength" class="pagination-sm" boundary-links="true" force-ellipses="true" >
+				     		</ul>
+						</td>	
+						</tr>
+				</tfoot>
+		</table>
+   		  <!-- =========================================END Pagination=== ================================================ -->
+	</apex:pageBlock>
+  </apex:form>
+</body>
+</html>
+</apex:page>
+<!-- END :: 04/10/2016 NPPD-1277 Directory next and previous buttons not working correctly modify by Sabir-->

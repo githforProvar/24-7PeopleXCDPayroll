@@ -1,0 +1,251 @@
+<apex:page controller="xcdhcm.RtiEYUController"   sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}"/>
+<style type="text/css">
+.links 
+{
+    display: none;
+} 
+.customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette, .layoutEdit .individualPalette .customnotabBlock .tertiaryPalette 
+{
+   background-color: #FFFFFF!important;
+   border-color: #FFFFFF!important;
+}
+<!--START::25/11/2015 added by Farhan -->
+body .pbBody table.list tr.headerRow th 
+{
+	border-bottom: 2px solid #cde2f5 !important;
+}
+<!--END::25/11/2015 added by Farhan -->
+td.dataCol.first {
+    width: 500px !important;
+    height: 40px !important;
+}
+body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+    width:2%!important;
+}
+.highlight
+{
+   background-color: #D3D3D3;
+}
+</style>
+<apex:form id="eyuFormId">
+<div ng-controller="ctrlRead">
+  <apex:pageBlock title="{!$Label.xcdhcm__phrtieyusummary}" id="rows">
+  <apex:pageMessages id="erMsg"/>
+<html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+<head>
+<meta charset="utf-8"/>
+<!-- <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet"/> -->
+<!-- <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet"/> -->
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"/>
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
+<script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script type="text/javascript">
+var myapp = angular.module('hello', []);
+var sortingOrder = 'empDetailsRec.Name';
+<!-- Define Controller  -->
+var contrl=myapp.controller('ctrlRead', function ($scope, $filter) 
+{
+	<!--- Initialize Scope Variables --->
+	$scope.sortingOrder = sortingOrder;
+	$scope.reverse = false;
+	$scope.filteredItems = [];
+	$scope.groupedItems = [];
+	$scope.itemsPerPage = 10;
+	$scope.pagedItems = [];
+	$scope.currentPage = 0;
+	$scope.selectedAll = true;
+	$scope.items = [];
+	$scope.items ={!EmployeeRecordsListAJ};
+		       
+    var searchMatch = function (haystack, needle) 
+    {
+        if(!needle) 
+        {
+            return true;
+        }
+        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+    };       
+    //Initialize the Search Filters 
+    $scope.search = function () 
+    {
+        $scope.filteredItems = $filter('filter')($scope.items, function (item) 
+        {
+	        for(var attr in item) 
+	        {
+	        	if (searchMatch(item.empDetailsRec.Name, $scope.query))
+	            return true;
+	        }
+        	return false;
+        });
+        // Define Sorting Order
+        if ($scope.sortingOrder !== '') 
+        {
+            $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+        }
+        $scope.currentPage = 0;
+        // Group by pages
+        $scope.groupToPages();
+    };
+    //Getting code from static resource
+    {!scriptcode}
+    $scope.selectedData = function()
+    {
+        saveEyuRti(JSON.stringify($scope.items));
+    };
+});
+contrl.$inject = ['$scope', '$filter'];
+</script>
+</head>
+<body>
+  <table style="margin-top:10px;">
+       <tr>
+           <td style="width:40%!important;">
+               <apex:outputLabel value="Select employer" for="emprList" style="margin-right:10px;display:inline!important;"/>
+	           <apex:outputPanel layout="inline">
+				<apex:actionRegion >
+					<apex:SelectList id="emprList" value="{!selectedEmployer}" size="1" style="margin-right:150px;">
+						<apex:actionSupport event="onchange" action="{!choosenTaxYear}"/>
+						<apex:selectOptions value="{!Employer}"/>
+					</apex:SelectList>
+				</apex:actionRegion>
+				</apex:outputPanel> 
+           </td>
+           <td style="width:30%!important;">
+              <apex:outputLabel value="Select tax year" for="taxYearList" style="margin-right:10px;display:inline!important;"/>
+              <apex:outputPanel layout="inline">
+				<apex:actionRegion >
+					<apex:SelectList id="taxYearList" value="{!selectedTaxYear}" size="1" style="margin-right:150px;">
+						<apex:actionSupport event="onchange" action="{!choosenFrequency}"/>
+						<apex:selectOptions value="{!TaxYear}"/>
+					</apex:SelectList>
+				</apex:actionRegion>
+			  </apex:outputPanel>
+           </td>
+           <td>
+             <apex:outputLabel value="Select frequency" for="frequencyList" style="margin-right:10px;display:inline!important;"/>
+             <apex:outputPanel layout="inline">
+				<apex:actionRegion >
+					<apex:SelectList id="frequencyList" value="{!selectedFrequency}" size="1" style="margin-right:150px;">
+						<apex:actionSupport event="onchange" action="{!choosenView}"/>
+						<apex:selectOptions value="{!Frequency}"/>
+					</apex:SelectList>
+				</apex:actionRegion>
+			</apex:outputPanel>
+           </td>
+       </tr>
+       </table>
+       <hr style="border-width: 1px;border-style: solid;border-color: #63a4c5;"></hr>
+       <!-- START :: 05/10/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+       <!-- <apex:outputLabel value="Payroll employees" style="color: #336699 !important;font-size: 12pt !important;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-weight: normal;"/> -->
+       <apex:outputLabel value="{!$Label.xcdhcm__rtieyusummarypayrollemployees}" style="color: #336699 !important;font-size: 12pt !important;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-weight: normal;"/>
+       <!-- END :: 05/10/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+       <table style="margin-top:10px;">
+       <tr>
+       	   <td style="width:40%!important;">
+       	   	<apex:outputLabel value="View" for="viewList" style="margin-right:10px;display:inline!important;"/>
+           	<apex:outputPanel layout="inline">
+				<apex:actionRegion >
+					<apex:SelectList id="viewList" value="{!selectedView}" size="1" style="margin-right:150px;"> 
+	                       <apex:actionSupport event="onchange" action="{!choosenView}"/>
+	                       <apex:selectOptions value="{!EmpView}" /> 
+	                   </apex:SelectList>
+				</apex:actionRegion>
+			</apex:outputPanel>
+           </td>
+           <td style="width:40%!important;">
+               <apex:outputLabel value="Search employee" style="margin-right:10px;display:inline!important;"/>
+               <apex:outputPanel layout="inline">
+	               	<input type="text" ng-model="query" ng-change="search()" placeholder="Search" style = "width:250px!important;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC); 
+	               		   background-repeat: no-repeat;background-position: 235px 8px;"/>
+               	</apex:outputPanel>
+           </td>
+       </tr>
+   </table>
+   <table class="table  table-hover,ng-cloak ">
+	   <thead>
+	       <tr>
+             <th class="empDetailsRec.selected">
+                 <input type="checkbox" ng-model="selectedAll" ng-click="checkAll()"/>
+             </th>
+             <th class="empDetailsRec.Name">{!$ObjectType.Employee_Detail__c.fields.Name.label}&nbsp;<a ng-click="sort_by('empDetailsRec.Name')"><i class="icon-sort"></i></a></th>
+             <th class="empDetailsRec.Payroll_no__c">{!$ObjectType.Employee_Detail__c.fields.Payroll_no__c.label}&nbsp;<a ng-click="sort_by('empDetailsRec.Payroll_no__c')"><i class="icon-sort"></i></a></th>
+             <th class="empDetailsRec.Company__c">{!$ObjectType.Employee_Detail__c.fields.Company__c.label}&nbsp;<a ng-click="sort_by('empDetailsRec.Company__c')"><i class="icon-sort"></i></a></th>
+             <th class="empDetailsRec.Payroll_start_date__c">{!$ObjectType.Employee_Detail__c.fields.Payroll_start_date__c.label}&nbsp;<a ng-click="sort_by('empDetailsRec.Payroll_start_date__c')"><i class="icon-sort"></i></a></th>
+             <th class="empDetailsRec.Payroll_end_date__c">{!$ObjectType.Employee_Detail__c.fields.Payroll_end_date__c.label}&nbsp;<a ng-click="sort_by('eempDetailsRec.Payroll_end_date__c')"><i class="icon-sort"></i></a></th>
+             <th class="empDetailsRec.Payroll_set_up__c">{!$ObjectType.Employee_Detail__c.fields.Payroll_set_up__c.label}&nbsp;<a ng-click="sort_by('empDetailsRec.Payroll_set_up__c')"><i class="icon-sort"></i></a></th>
+	       </tr>
+	   </thead>
+	   <tbody>                    
+        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse | filter:query" class="ng-cloak">
+              <td style="text-align:left;">                                       
+                 <input type="checkbox" ng-value="{{item.selected}}"  name="item.selected"  ng-model="item.selected"/>
+              </td>
+              <td style="text-align:left;">
+                 {{item.empDetailsRec.Name}}                                     
+              </td>
+              <td style="text-align:left;">
+                 {{item.empDetailsRec.xcdhcm__Payroll_no__c}}                                     
+              </td>
+              <td style="text-align:left;">
+                 {{item.empDetailsRec.xcdhcm__Company__r.Name}}                                     
+              </td>
+              <td style="text-align:left;">
+                 {{item.empDetailsRec.xcdhcm__Payroll_start_date__c}}                                     
+              </td>
+              <td style="text-align:left;">
+                 {{item.empDetailsRec.xcdhcm__Payroll_end_date__c}}                                     
+              </td>
+              <td style="text-align:left;">
+              	<div ng-if="item.empDetailsRec.xcdhcm__Payroll_set_up__c == true">
+                	<apex:image id="theImage" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/true_tick.jpg')}" width="23" height="29"/>
+                </div>   
+                <div ng-if="item.empDetailsRec.xcdhcm__Payroll_set_up__c == false">
+                	<apex:image id="theImage1" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/false_tick.jpg')}" width="16" height="22"/>
+                </div> 
+             </td>
+        </tr>
+    </tbody>
+     <tfoot>
+    	<tr>
+            <td colspan="13" style="border:none !important;">
+		    	<div class="pagination pagination-large pagination-centered">
+			       <ul style="box-shadow:none !important;">  
+			           <li ng-class="{disabled: currentPage == 0}">
+			               <a ng-click="prevPage()"> Prev</a>
+			           </li>
+			           <li ng-repeat="n in range(pagedItems.length)"
+			           ng-class="{active: n == currentPage}"
+			           ng-click="setPage()">
+			               <a ng-bind="n + 1">1</a>
+			           </li>
+			           <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+			               <a ng-click="nextPage()">Next </a>
+			           </li>
+			       </ul>
+			   </div>
+		   </td>
+	   </tr>
+    </tfoot>
+   </table>
+</body>
+</html>
+<apex:pageBlockButtons location="Bottom">
+	  <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+      <!-- <apex:commandButton action="{!saveEyu}" value="Create EYU" id="saveButton"/>
+ 	  <apex:commandButton action="{!Back}" value="Back" id="backButton"/> -->
+ 	  	<apex:commandButton style="display:none;">
+        	<input type="button" ng-click="selectedData()" value="{!$Label.RtiEYUSummaryBCreateEYU}" class="btn"/>      
+        </apex:commandButton>
+        <apex:actionFunction name="saveEyuRti" action="{!saveEyu}" rerender="erMsg,hiddenBlock" oncomplete="">
+            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+        </apex:actionFunction>
+	  <apex:commandButton action="{!Back}" value="{!$Label.xcdhcm__rtieyusummarybback}" id="backButton"/>
+	  <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+</apex:pageBlockButtons>
+</apex:pageBlock>
+<apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
+</div>
+</apex:form>
+</apex:page>

@@ -1,0 +1,134 @@
+<apex:page standardController="xcdhcm__Salary_Review__c"  extensions="xcdhcm.NewSalaryReviewController" showHeader="true" sidebar="flase" >
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/CompanyPageCss.css')}" />
+	<style>  
+   		.apexp .bPageBlock.apexDefaultPageBlock .pbBody 
+        	{
+    			margin-left: -6px;
+		}
+	    .slds-scope .slds-truncate 
+	    {
+	    		white-space: normal;
+	    		width:180px;
+		}
+		#LiteHelpTextID span 
+    		{
+            	display: none;
+   		}
+             
+  		#LiteHelpTextID:hover span 
+		{
+	          display: block !important;
+	          width: 300px;
+	          background-color: #16325c!important;   
+	          border: 1px solid #16325c!important;
+	          padding: 4px;
+	          color: white;
+	          position: absolute;
+	          z-index: 1;
+	          top:100%;
+	          right:20%;
+	          text-align: justify;
+	          white-space: normal;
+	          font-weight: normal;  
+	          border-radius: 4px!important;    
+	          left:5% !important;     
+            }
+            #LiteHelpTextID:hover 
+            {
+            		position: inherit;
+            }
+
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form >
+                <apex:pageblock title="{!$Label.xcdhcm__phsalaryreviews}">
+                    <apex:pageMessages />
+                    <apex:outputText Value="{!$Label.xcdhcm__salaryreviewsimnorecords}" rendered="{!salReview.Size=0}" />
+                    
+                    <apex:outputpanel rendered="{!salReview.Size>0}">
+                		<div class="slds-scrollable" style="height: 26rem;">
+	                        <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+	                            <thead>
+	                                <tr class="slds-text-title--caps"> 
+	                                    <th scope="col" class="columnWidth">
+	                                        <div class="slds-truncate" >
+	                                            {!$ObjectType.Salary_Review__c.Fields.Name.label}
+	                                        </div>
+	                                    </th>
+	                                    <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Salary_Review__c.FieldSets.xcdhcm__SalaryReview_Summary_Columns}">
+	                                        <th scope="col" class="columnWidth">
+	                                            <div class="slds-truncate" >
+	                                             {!$ObjectType.Salary_Review__c.Fields[f].label}
+	                                                <span id="LiteHelpTextID">
+	                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Salary_Review__c.Fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Lhelp.png')}"/>
+	                                                    <span>{!$ObjectType.Salary_Review__c.Fields[f].inlineHelpText}</span>
+	                                                </span>
+	                                            </div>
+	                                        </th> 
+	                                    </apex:repeat>
+	                                    <th scope="col" class="columnWidth">
+	                                        <div class="slds-truncate" >
+	                                            {!$Label.SalaryReviewsCHView}
+	                                        </div>
+	                                    </th>
+	                                </tr> 
+	                            </thead>
+	                            <tbody>
+	                                <apex:repeat value="{!salReview}" var="SalRev">
+	                                    <tr> 
+	                                        <th scope="row" class="columnWidth">
+	                                            <div class="slds-truncate" >
+	                                                <apex:outputLink rendered="{!SalaryReviewNameLinkAdminView=true}" target="_top" title="{!SalRev.Name}" value="/{!SalRev.id}">{!SalRev.Name}</apex:OutputLink>
+	                                                <apex:outputText rendered="{!SalaryReviewNameLinkAdminView=false}">{!SalRev.Name}</apex:outputText>
+	                                            </div>
+	                                        </th>
+	                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Salary_Review__c.FieldSets.xcdhcm__SalaryReview_Summary_Columns}">
+	                                            <th scope="row" class="columnWidth">
+	                                                <div class="slds-truncate" >
+	                                                    <apex:outputField value="{!SalRev[f]}"  /> 
+	                                                </div>
+	                                            </th> 
+	                                        </apex:repeat> 
+	                                        <th scope="row" class="columnWidth">
+	                                            <div class="slds-truncate" >
+	                                                <apex:commandLink value="{!$Label.xcdhcm__salaryreviewslview}" action="{!displayNewsalaryview}" >
+	                                                    <apex:param name="salaryId" value="{!SalRev.id}" assignTo="{!salaryId}" />         
+	                                                </apex:commandLink>
+	                                            </div>
+	                                        </th>
+	                                    </tr> 
+	                                </apex:repeat>
+	                            </tbody>
+	                        </table>
+	               		</div>
+                    </apex:outputpanel>
+                    
+                    <apex:pageblockButtons location="top" style="text-align: right!important;">
+                        <apex:actionStatus id="newStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputPanel >
+                                    <apex:commandButton value="{!$Label.xcdhcm__salaryreviewsbback}" action="{!Cancel}"  rerender="id_newBtn" styleclass="slds-button slds-button--neutral" />
+                                 	<!--Regresion issue-->
+                                    <apex:commandButton value="{!$Label.xcdhcm__salaryreviewsbnewreview}" action="{!newSalrayReview}"  styleclass="slds-button slds-button--brand" rendered="{!views == 'adminview'}"  status="newStatus" rerender="id_newBtn" id="id_newBtn"/>
+                                 	<!--Regresion issue-->
+                                </apex:outputPanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageblockButtons>
+                </apex:pageblock>
+            </apex:form> 
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,339 @@
+<apex:page standardcontroller="xcdhcm__Applicant__c" extensions="xcdhcm.ApplicationConsoleViewController" sidebar="false" tabStyle="Manage_Application__tab"  >  
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteApplicationConsole.css')}"/> 
+
+<html lang="en"> 
+  <!-- this bootstrap css help to make table responsive   -->
+<head>
+    <meta charset="utf-8" />     
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />   
+    <link href="{!URLFOR($Resource.XCD_static_resources,'Css/bootstrap.min.css')}" rel="stylesheet" />
+          <style>
+	        	.apexp .bPageBlock.apexDefaultPageBlock .pbBody .pbSubheader h3
+	        	{
+	        		font-size: 15px !important;
+        		}
+        		
+		        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader
+		        {
+		        	font-size: 15px !important;
+	        	}
+		        .zen .zen-tabMenu a
+		        {
+		        	font-size: 0.9em;
+	        	}
+	            .phHeaderCustomLogo
+	            {
+	            	font-size: 12px;
+            	}
+		            
+		    	html body.sfdcBody
+		    	{ 
+      padding: 10px;
+      background: #fdfdfd;             
+    }
+</style>
+</head> 
+   
+  <body> 
+  <!-- Console form dispaly first -->
+  <apex:form id="frm" rendered="{!dispalyForm==true}"> 
+    <!-- Main table 1 -->    
+    
+     <div style="height: 85px; background: #fafaf9;padding-top:25px;box-shadow: 5px 5px 4px #ccc;border-top-left-radius: 4px;    border-top-right-radius: 4px; ">                          
+           <table style="width:100%;"> 
+                <tr>  
+                 <td style="width:20%;padding-left:5px" >
+                     <!-- Main table first row sub table 1 --> 
+                      <table>
+                         <tr>     
+                            <td style="padding:5px;" > 
+                               <apex:outputLabel value="Select vacancy" for="theName" style="font-size:17px;"/>                               
+                            </td>                                       
+                            <td style="padding:5px;" > 
+                                                                                                              
+                              <apex:actionRegion >                    
+                                <apex:inputField Value="{!applicant.xcdhcm__Vacancy__c}" required="true" style="Width:150px;" taborderhint="2" id="theName">
+                                     <apex:actionSupport event="onchange" action="{!Application}" rerender="frm" status="wait">                                                                                                                                                                            
+                                     </apex:actionSupport>
+                                 </apex:inputField>                     
+                              </apex:actionRegion>                               
+                            </td>      
+                          
+                           <td style="float:left;padding-top:4px;" >        
+                              <apex:actionStatus id="wait" > 
+                                   <apex:facet name="start"> 
+                                    <img class="waitingImage" src="/img/loading.gif"  height="15px" />                              
+                                   </apex:facet> 
+                              </apex:actionStatus>       
+                          </td>  
+                        </tr>         
+                      </table>  
+                 </td> 
+                
+                 <td style="width:5%;padding-right:3px;" >
+                      <apex:outputLabel value="Job title:" style="font-size:17px;float: right;"/>
+                 </td>          
+                 
+                 <td style="width:16%;color:#16325c!important;font-weight: 500;font-size: 1em; padding-bottom: 3px;" > 
+                      <apex:outputField value="{!vacancyIns.xcdhcm__Job_title__c}" styleclass="lb"/>
+                 </td>
+                  
+                 <td style="width:5%;padding-right:3px;" >
+                      <apex:outputLabel value="Reference:" style="font-size:17px;float: right;"/>
+                 </td> 
+                
+                 <td style="width:8%;color:#16325c!important;font-weight: 500;font-size: 1em; padding-bottom: 3px;" > 
+                      <apex:outputField value="{!vacancyIns.xcdhcm__Job_reference__c}" styleclass="lb" />
+                 </td>  
+                  
+                  <td style="width:5%;padding-right:3px;" >
+                      <apex:outputLabel value="Recruiter:" style="font-size:17px;float: right;"/>
+                 </td> 
+                   
+                 <td style="width:16%; color:#16325c!important; font-weight: 500;font-size: 1em; padding-bottom: 3px;" > 
+                      <apex:outputField value="{!vacancyIns.xcdhcm__Recruiter_L__c}" />  
+                 </td>
+                     
+                 <td style="width:5%;" > 
+                      <div style="float:right;">           
+                        <apex:commandButton value="{!$Label.xcdhcm__applicationconsoleviewbupdatestatus}" action="{!selected}" style="display:inline!important;margin-right: 10px;" rendered="{!dispalyTable!=false}" />                    
+                    </div>
+                 </td>                
+                                       
+              </tr>
+            </table>                     
+    </div>
+    
+    
+    <table width="100%" border="0" style="margin:0%;margin-top: 0%;" > 
+      
+            
+      <tr>  
+         <td style="width:100%;vertical-align: top; " >   
+           <div style=" border-bottom: 1px solid #ccc;  background: #fff; border-top: 1px solid #fff;    box-shadow: 5px 5px 4px #ccc;"  > 
+            <!-- this span for application background blue colour & title  -->
+            <span>
+              <div style="width:100%;height:30px;background:#FFF;color:#16325c!important;font-weight: 500;font-size: 1em; padding-bottom: 3px;padding-top:5px;padding-left:5px;">
+						<!-- START:: 01/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil -->
+                 		<h4 style="font-size: 17px;">Applications</h4>
+                 		<!-- END:: 01/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil -->   
+              </div>     
+            </span>              
+                       
+            <!-- this div for application ground blue colour & title  -->
+            <!-- START :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->     
+            <div style="width:99.5%;height:210px">            
+            <!-- END :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->           
+              <apex:pageMessage summary="No records to display.Please select the vacancy." severity="Info" strength="3" rendered="{!dispalyTable=false}" />
+                 <apex:outputpanel rendered="{!dispalyTable}" >  
+                    <!-- main table second row sub table 2 for align command button & popup message  -->
+                               
+                     <table>  
+                      <tr>                       
+                        <td>
+                          <apex:outputPanel layout="block" rendered="{!displayMessage}" style="width:340px; font-size: 12px; color: #85bef7;">
+                            <apex:commandLink action="{!ClosePopup}"  type="image/png" style="float:right;text-decoration:none">
+                                <img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Crosse.png')}" style="width:14px;height:14 px;" title="Close"/>
+                            </apex:commandlink> 
+                            <apex:pageMessage summary="Records updated successfully" severity="Info" strength="2" />            
+                         </apex:outputPanel> 
+                        </td>
+                      </tr>
+                    </table> 
+                    <!-- This div for scrollbar css apply to application tabel -->    
+                    <div class="scrollbar" id="ex3" >    
+                  <!-- START :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->   
+                      <apex:outputText Value="No application for selected vacancy" rendered="{!listWrapper==null}" />                                                              
+                       <apex:dataTable id="pb" value="{!listWrapper}" var="le" width="100%;" rendered="{!listWrapper!=null}"   >  
+                  <!-- END :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->       
+                            <apex:column headervalue="Select" width="2%" onmousemove="this.parentNode.style.backgroundColor='#ccc'" onmouseout="this.parentNode.style.backgroundColor=''">
+                           <!-- START :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->    
+                                <apex:facet name="header">
+                                    <apex:inputCheckbox >
+                                        <apex:actionSupport event="onclick" onsubmit="checkAll(this)" reRender=""/>
+                                    </apex:inputCheckbox>
+                                </apex:facet>  
+                           <!-- END :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->       
+                                <apex:inputcheckbox value="{!le.selected}" id="checkedoneReg" />                                      
+                            </apex:column>  
+                           
+                            <apex:column width="0.5%">                                                              
+                            </apex:column>         
+                            <apex:column headervalue="{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Applicant_name__c.Label}" onmousemove="this.parentNode.style.backgroundColor='#ccc'" onmouseout="this.parentNode.style.backgroundColor=''">                                
+                               <apex:commandLink value="{!le.app.xcdhcm__Applicant_name__c}" action="{!linkDetials}" style="color:#0070d2;" reRender="frm" >                               
+                                <apex:param name="appid" value="{!le.app.id}" assignTo="{!appId}"/>
+                                <apex:param name="canid" value="{!le.app.xcdhcm__Candidate__c}" assignTo="{!canId}"/>
+                              </apex:commandLink>                               
+                           </apex:column> 
+                           
+                           <apex:column headervalue="{!$ObjectType.xcdhcm__Applicant__c.Fields.Name.Label}" >                               
+                               <apex:commandLink value="{!le.app.Name}" onClick="window.open('/{!le.app.id}');" target="_blank" style="color:#0070d2;" reRender="frm" />                                                                                                                   
+                           </apex:column>   
+                         
+                           <apex:repeat var="f"  value="{!$ObjectType.xcdhcm__Applicant__c.FieldSets.xcdhcm__Application_Consoleview}">                 
+                            <apex:column value="{!le.app[f]}" headerValue="{!f.Label}" />  
+                           </apex:repeat>       
+                     </apex:dataTable>                                   
+                   </div>                                               
+                 </apex:outputpanel>
+                 </div>  
+                    <apex:outputpanel rendered="{!AND(listWrapper!=null,OR(listWrapper.size>19, hasPrevious==true))}" >   
+			            <center  style="padding-top:20px" >
+			                   <apex:outputpanel id="button1"  > 
+			                      <apex:commandButton value="" action="{!previous}"  rendered="{!hasPrevious}" reRender="pb,button1,frm" style="display:inline!important;background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/prevd.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;"/>
+			                      <apex:commandButton value="" rendered="{!hasPrevious=false}"  reRender="pb"  style="display:inline!important;background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/prevd.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;"/>
+			                       Previous&nbsp;&nbsp;Next&nbsp;&nbsp;
+					              <apex:commandButton value="" action="{!next}" rendered="{!hasNext}" reRender="pb,button1,frm" style="display:inline!important;background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/nextd.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;" />  
+					              <apex:commandButton value="" rendered="{!hasNext=false}"  reRender="pb" style="display:inline!important;background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/nextd.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;" />             
+			                   </apex:outputpanel>
+		                    </center>  
+		            </apex:outputpanel>          
+                </div>                 
+             </td>
+            </tr>           
+             <tr >           
+               <td >
+                  <div style="width:100%;height:700px;/*padding-top:20px;*/"> 
+               <!-- START :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->   
+                     <apex:outputPanel rendered="{!listWrapper!=null}" >  
+                        <apex:outputText Value="Click applicant name to view." rendered="{!AND(appId==null,canId==null)}" style="margin-left:5px;margin-top:15px" />   
+                     </apex:outputPanel>  
+                      <!-- END :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  --> 
+                      <apex:outputPanel rendered="{!AND(appId!=null,canId!=null)}" >
+                         <!-- Main table thir row sub table 3 to align alication & candiate -->
+                         <div style="border:1px solid #ccc ;box-shadow:3px 3px 9px #ccc;border-radius: 4px;background: #fff;margin-top:10px" > 
+                          <table style="width:100%; margin-top: 10px;">
+                             <tr>                      
+                                 <td style="width:50%;vertical-align:top;padding-right: 5px;" >
+                                   <div style="height:615px;" class="scrollbardetail" >                                                  
+                                           
+                                    <apex:pageBlock id="pb1" title="{!$Label.xcdhcm__applicationconsoleviewcandidatedetails}" rendered="{!CandidateDetails!=null}" >                                                                                                     
+                                           <apex:pageBlockSection columns="2"  >
+                                              <apex:repeat value="{!CandidateDetails}" var="c" rows="2">  
+                                                <apex:repeat var="i"  value="{!$ObjectType.xcdhcm__Candidate__c.FieldSets.xcdhcm__Consoleview_CandidateDetails}">                                           
+                                                    <apex:outputfield value="{!c[i]}" />                                 
+                                               </apex:repeat>    
+                                           </apex:repeat>    
+                                            </apex:pageBlockSection>   
+                                              
+                                            <apex:pageBlockSection title="{!$Label.xcdhcm__applicationconsoleviewemploymentandskills}"  columns="2" collapsible="false" > 
+                                              <apex:repeat value="{!CandidateDetails}" var="a" rows="2">  
+                                                <apex:repeat var="f"  value="{!$ObjectType.xcdhcm__Candidate__c.FieldSets.xcdhcm__Consoleview_EmploymentSkills}">                                           
+                                                    <apex:outputfield value="{!a[f]}" />                                 
+                                                </apex:repeat>   
+                                              </apex:repeat>    
+                                            </apex:pageBlockSection>                                                                                                                                                               
+                                        </apex:pageBlock>   
+                                      </div>                                                              
+                                                                                                                                                    
+                                 </td>      
+                                                                             
+                                 <td style="width:50%;vertical-align:top;padding-left: 5px; " >  
+                                   <div style="height:615px;" class="scrollbardetail" >                                    
+                                        <apex:pageBlock id="pb2" title="{!$Label.xcdhcm__applicationconsoleviewapplicationdetails}"  rendered="{!ApplicationDetails!=null}" >                                                   
+                                        <!-- END:: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->  
+                                           <apex:pageBlockSection columns="2"  > 
+                                              <apex:repeat value="{!ApplicationDetails}" var="ap" rows="2">  
+                                                <apex:repeat var="i"  value="{!$ObjectType.xcdhcm__Applicant__c.FieldSets.xcdhcm__Consoleview_Application_Details}">                                            
+                                                    <apex:outputfield value="{!ap[i]}" />                                
+                                               </apex:repeat>   
+                                           </apex:repeat>    
+                                            </apex:pageBlockSection>
+                                            <apex:pageBlockSection title="{!$Label.xcdhcm__applicationconsoleviewsupportinginformation}"  columns="1" collapsible="false" > 
+                                              <apex:repeat value="{!ApplicationDetails}" var="a" rows="2">  
+                                                <apex:repeat var="f"  value="{!$ObjectType.xcdhcm__Applicant__c.FieldSets.xcdhcm__Consoleview_SupportingInformation}">                                          
+                                                    <apex:outputfield value="{!a[f]}" />                                 
+                                                </apex:repeat>   
+                                              </apex:repeat>    
+                                            </apex:pageBlockSection>                                                                                                                                                                   
+                                        </apex:pageBlock>  
+                                       </div >                                                                                                                       
+                                 </td>
+                             </tr>       
+                          </table>  
+                         </div> 
+                       </apex:outputPanel>
+                    </div>
+                </td> 
+            </tr>           
+        </table>    
+     </apex:form> 
+     
+     <!-- Update form dispaly second when click update button -->    
+     <apex:form id="frm2" rendered="{!dispalyForm==false}"  > 
+    
+         <div style="width:100%;height:30px;color:#16325c!important;font-weight: 500;font-size: 1em; padding-bottom: 3px;padding-top:5px;padding-left:5px;">
+             <h4 style="font-size: 17px;"> Update applications</h4>   
+          </div> 
+              
+        <apex:pageBlock >       
+          <div style="float:right;">
+           <apex:pageBlockButtons location="Bottom" id="butn" >                
+                <apex:actionStatus id="saveStatus">                    
+                   <apex:facet name="stop">
+                        <apex:outputPanel >
+                            
+                       <!-- START :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->       
+                             <apex:outputPanel rendered="{!listWrapper!=null}">   
+                             <apex:commandButton value="{!$Label.xcdhcm__applicationconsoleviewbupdate}" action="{!updateApp}" style="display:inline!important;" rendered="{!listWrapper.size>0 }" status="saveStatus" rerender="butn" />
+                             </apex:outputPanel> 
+                             <apex:commandButton value="{!$Label.xcdhcm__applicationconsoleviewbback}" action="{!back}" style="display:inline!important;" rendered="{!or(listWrapper==null,listWrapper.size==0) }" immediate="true" /> 
+                             <apex:commandButton value="{!$Label.xcdhcm__applicationconsoleviewbcancel}" action="{!cancel}" style="display:inline!important;" immediate="true" /> 
+                       <!-- END :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->  	
+                        </apex:outputPanel>  
+                    </apex:facet>
+                    <apex:facet name="start">
+                        <apex:outputPanel >                          
+                           
+                            <apex:commandButton value="{!$Label.xcdhcm__applicationconsoleviewbprocessing}" disabled="true"  style="display:inline!important;"  />
+                            <apex:commandButton value="{!$Label.xcdhcm__applicationconsoleviewbcancel}" disabled="true"  style="display:inline!important;" /> 
+                       </apex:outputPanel>                         
+                    </apex:facet>                                  
+                </apex:actionStatus>                 
+            </apex:pageBlockButtons> 
+           </div>
+	             <!-- START :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->     
+            <apex:pageMessage summary="No record selected." severity="warning" strength="3" rendered="{!or(listWrapper==null,listWrapper.size==0)}" />
+            <apex:pageBlockTable id="bp2" value="{!listWrapper}" var="a"  rendered="{!and(listWrapper!=null,listWrapper.size>0 )}"  >
+          <apex:column headerValue="{!$ObjectType.xcdhcm__Applicant__c.Fields.Name.Label}">
+                    <apex:outputField value="{!a.app.Name}"/>                 
+                </apex:column>
+          <!-- END :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->        
+                <apex:repeat var="f"  value="{!$ObjectType.xcdhcm__Applicant__c.FieldSets.xcdhcm__Application_Statusupdate}">                   
+                <apex:column headerValue="{!f.Label}">
+                  <apex:inputField value="{!a.app[f]}"/>  
+                </apex:column>                 
+                </apex:repeat>   
+                 
+            </apex:pageBlockTable>               
+          <!-- START :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->    
+            <apex:outputpanel rendered="{!AND(listWrapper!=null,OR(listWrapper.size>19, hasPrevious==true))}" >
+              <center style="padding-top:20px">  
+                <apex:outputpanel id="button"   >                                             
+                     <apex:commandButton value="" action="{!previous}"  rendered="{!hasPrevious}" reRender="bp2,frm,button" style="display:inline!important;background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/prevd.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;"/>
+                     <apex:commandButton value="" rendered="{!hasPrevious=false}" reRender="bp2" style="display:inline!important;background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/prevd.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;"/> 
+                      Previous&nbsp;&nbsp;Next&nbsp;&nbsp;
+                     <apex:commandButton value="" action="{!next}" rendered="{!hasNext}" reRender="bp2,frm,button" style="display:inline!important;background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/nextd.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;" />		             
+		             <apex:commandButton value="" rendered="{!hasNext=false}" reRender="bp2" style="display:inline!important;background-color: #fff !important;background-image: url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Directory/img/nextd.png')}') !important;background-position: inherit;box-shadow: none !important;border: none !important;width: 16px;height: 16px;" />                         
+                </apex:outputpanel>
+              </center>   
+             </apex:outputpanel>
+          <!-- END :: 05-09-2017 Summer17 patch NPPD-1489 pagination added by kamal  -->        
+        </apex:pageBlock>       
+     
+    </apex:form>    
+   </body>      
+ </html>       
+ <!--  This script helps to select all check box when selecting top one  -->    
+ <script> 
+    function checkAll(cb)
+    {
+        var inputElem = document.getElementsByTagName("input");
+        for(var i=0; i<inputElem.length; i++)
+        {
+            if(inputElem[i].id.indexOf("checkedoneReg") != -1)
+            inputElem[i].checked = cb.checked;
+        }
+    }    
+ </script>
+</apex:page>

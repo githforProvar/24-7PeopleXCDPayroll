@@ -1,0 +1,314 @@
+<!-- 
+Name: Online payslips
+* @author Sabir Khan
+* @date 23/01/2015
+* @description Online payslips Added by Sabir.
+-->
+ <!--  START :: Lightning issue Jamil -->
+<!-- <apex:page standardController="xcdhcm__Employee_Detail__c" sidebar="false" showHeader="true" wizard="false" extensions="xcdhcm.RewardExtensionController"> -->
+<apex:page standardController="xcdhcm__Employee_Detail__c" sidebar="false" showHeader="true" wizard="false" extensions="xcdhcm.RewardExtensionController" action="{!PaySlipToDisplay}">
+ <!-- END :: Lightning issue Jamil -->
+    <!--     <apex:stylesheet value="{!URLFOR($Resource.Css,'Sublineremovecss.css')}" /> -->
+    <!--<apex:stylesheet value="{!URLFOR($Resource.Css,'Lite/LiteJoinerFirst.css')}" /> -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'LightningCSS/LiteJoinerFirst.css')}" /> 
+    <Style>
+        .PageHeader 
+        {   
+        font-family: "Salesforce Sans",Arial,sans-serif!important;
+        font-weight: normal;
+        display: inline-block;
+        color: #54698d;
+        line-height: 1.5;
+        margin-right: .75rem;
+        margin-bottom: .25rem;
+        font-size: 12pt !important;
+       // padding-left:1%;
+        } 
+        .slds-scope select 
+        {
+        width: 10%!important;
+        }
+        .line
+        {
+        border-bottom: 1px solid #dbdbdb!important;
+        }  
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        font-family: "Salesforce Sans",Arial,sans-serif!important;
+        font-weight: normal;
+        display: inline-block;
+        color: #54698d;
+        line-height: 1.5;
+        margin-right: .75rem;
+        margin-bottom: .25rem;
+        font-size: 12pt !important;
+        }
+        .apexp .bPageBlock.apexDefaultPageBlock .pbBody .pbSubheader
+        {
+        border-top:1px solid #dbdbdb!important;
+        }  
+        .slds-scope .slds-table_bordered tbody td, .slds-scope .slds-table_bordered tbody th, .slds-scope .slds-table--bordered tbody td, .slds-scope .slds-table--bordered tbody th 
+        {
+        border-top: 1px solid #fff!important;
+        }  
+        .slds-scope .slds-table_bordered, .slds-scope .slds-table--bordered 
+        {
+        border-top: 1px solid #fff!important;
+        border-bottom: 1px solid #fff!important;
+        }     
+        .slds-scope .slds-table 
+        {
+        background-color:#fff!important;
+        } 
+        .slds-scope .slds-text-title_caps, .slds-scope .slds-text-title--caps 
+        {
+        text-transform: none;
+        }
+        .slds-scope .slds-border_right, .slds-scope .slds-border--right 
+        {
+        border-right: 1px solid #fff!important;
+        }
+        .slds-scope .slds-border_left, .slds-scope .slds-border--left
+        {
+        border-left: 1px solid #fff!important;
+        }
+        .slds-scope .slds-border_top, .slds-scope .slds-border--top
+        {
+        border-top: 1px solid #fff!important;
+        }
+        .slds-scope .slds-border_bottom, .slds-scope .slds-border--bottom 
+        {
+        border-bottom: 1px solid #fff!important;
+        }
+        .slds-scope .slds-table--cell-buffer tr>td:first-child, .slds-scope .slds-table--cell-buffer tr>th:first-child, .slds-scope .slds-table_cell-buffer tr>td:first-child, .slds-scope .slds-table_cell-buffer tr>th:first-child 
+        {
+        padding-left: 0px !important;
+        }
+        .slds-scope .slds-truncate 
+        {
+        text-transform: none!important;
+        }
+        body .bEditBlock .pbHeader, body .bLayoutBlock .pbHeader, body .apexp .bPageBlock.apexDefaultPageBlock .pbHeader 
+        {
+        border-bottom: #fdfdfd;
+        }
+        .bEditBlock .pbHeader>table, .apexp .bPageBlock.apexDefaultPageBlock .pbHeader>table, #ep.bLayoutBlock .pbHeader>table 
+        {
+        border-bottom: #fdfdfd;
+        }
+        .columnWidth
+        {
+        width: 10%;
+        }
+    </Style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form >
+                <br/>
+               <!--  lightning issue Jamil --> 
+               <!--  <apex:outputText value="{!$Label.PHViewPaySlip}" styleclass="PageHeader" /> -->
+                <!--  lightning issue Jamil --> 
+                <apex:outputPanel style="margin-left:910px; padding-left: 9%;">
+                    <apex:actionRegion >
+                        <apex:outputText value="Year" style="color:#999;font-weight: bold;font-size: 10pt!important;" /> &nbsp;&nbsp;&nbsp;
+                        <apex:selectList value="{!selectedYear}" size="1" styleclass="datepick">
+                            <apex:selectOptions value="{!TaxYears}" />
+                            <!--  START ::lightinh issue Jamil -->
+                            <!--   <apex:actionSupport event="onchange" action="{!P60ToDisplay}" reRender="Pgb4" status="counter12" /> -->  
+                            <apex:actionSupport event="onchange" action="{!PaySlipToDisplay}" reRender="Pgb2,Pgb4,Pgb3" status="counter" />
+                            <!--  END ::lightinh issue Jamil -->
+                        </apex:selectList>
+                        <apex:actionStatus id="counter">
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </apex:facet>
+                            <apex:facet name="stop" />
+                        </apex:actionStatus>
+                    </apex:actionRegion>
+                </apex:outputPanel>
+                <br />
+                <br />
+                <apex:pageBlock title="{!$Label.xcdhcm__viewpayslippayslip}" id="Pgb2">
+                    <apex:outputText Value="No records to display" rendered="{!paySlipWrapperList.Size=0}" />
+                    <apex:outputpanel id="pgbt" rendered="{!paySlipWrapperList.Size>0}">
+                        <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                            <thead>
+                                <tr class="slds-text-title--caps"> 
+                                    <th scope="col" class="columnWidth">
+                                        <div class="slds-truncate">
+                                            Document
+                                        </div>
+                                    </th>
+                                    <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Pay_Summary__c.fieldSets.xcdhcm__ViewPayslip}">
+                                        <th scope="col" class="columnWidth">
+                                            <div class="slds-truncate">
+                                                {!$ObjectType.Pay_Summary__c.Fields[f].label}
+                                                <span id="LiteHelpTextID">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Pay_Summary__c.Fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Pay_Summary__c.Fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </div>
+                                        </th> 
+                                    </apex:repeat>
+                                    <th scope="col" class="columnWidth">
+                                        <div class="slds-truncate">
+                                            View
+                                        </div>
+                                    </th>
+                                </tr> 
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!paySlipWrapperList}" var="payslip">
+                                    <tr> 
+                                        <th scope="row" class="columnWidth">
+                                            <div class="slds-truncate" >
+                                                <apex:outputText value="{!payslip.document}" />
+                                            </div>
+                                        </th>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Pay_Summary__c.fieldSets.xcdhcm__ViewPayslip}">
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:outputField value="{!payslip.paySummary[f]}" />
+                                                </div>
+                                            </th> 
+                                        </apex:repeat> 
+                                        <th scope="row" class="columnWidth">
+                                            <div class="slds-truncate" >
+                                                <apex:commandLink value="View" action="{!display}" target="_blank">
+                                                    <apex:param name="payId" value="{!payslip.paySummary.Id}"
+                                                                assignTo="{!payId}" />
+                                                </apex:commandLink>
+                                            </div>
+                                        </th>
+                                    </tr> 
+                                </apex:repeat>
+                            </tbody>
+                        </table>        
+                        <div Class="line"></div>      
+                    </apex:outputpanel> 
+                </apex:pageBlock>
+                <br />
+               
+                                                        
+                        
+                   <!--  Lightning issue Jamil -->
+                <apex:pageBlock title=""  id="Pgb3" >
+                <apex:outputText Value="{!$Label.xcdhcm__viewpayslipp45}" rendered="{!pay45WrapperList.Size>0}" styleclass="PageHeader" />
+               <!--  <apex:outputText Value="No records to display" rendered="{!pay45WrapperList.Size=0}" /> -->
+                    <apex:outputpanel id="pgbt11" rendered="{!pay45WrapperList.Size>0}">
+                <!--  lightning issue Jamil -->    
+                        <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                            <thead>
+                                <tr class="slds-text-title--caps"> 
+                                    <th scope="col" class="columnWidth">
+                                        <div class="slds-truncate" id="Col1">
+                                            Document
+                                        </div>
+                                    </th>
+                                    <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Pay_Period__c.fieldSets.xcdhcm__Payroll_Payslip}">
+                                        <th scope="col" class="columnWidth">
+                                            <div id="Col2"  class="slds-truncate">
+                                                {!$ObjectType.Pay_Period__c.Fields[f].label}
+                                                <span id="LiteHelpTextID">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Pay_Period__c.Fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Pay_Period__c.Fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </div>
+                                        </th> 
+                                    </apex:repeat>
+                                    <th scope="col" class="columnWidth">
+                                        <div class="slds-truncate">
+                                            View
+                                        </div>
+                                    </th>
+                                </tr> 
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!pay45WrapperList}" var="payslip1">
+                                    <tr> 
+                                        <th scope="row" class="columnWidth">
+                                            <div class="slds-truncate" >
+                                                <apex:outputText value="P45" />
+                                            </div>
+                                        </th>
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Pay_Period__c.fieldSets.xcdhcm__Payroll_Payslip}">
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:outputField value="{!payslip1.payPeriodRecord[f]}" />
+                                                </div>
+                                            </th> 
+                                        </apex:repeat> 
+                                        <th scope="row" class="columnWidth">
+                                            <div class="slds-truncate" >
+                                                <apex:commandLink value="View" action="{!P45display}" target="_blank"/>
+                                            </div>
+                                        </th>
+                                    </tr> 
+                                </apex:repeat>
+                            </tbody>
+                        </table>  
+                        <div Class="line"></div>            
+                    </apex:outputpanel> 
+                </apex:pageBlock>
+                
+                <br/>
+                <!--  lightning Issue Jamil -->
+                 
+                 <apex:pageBlock title=""  id="Pgb4"> 
+                
+               <apex:outputText Value="{!$Label.xcdhcm__viewpayslipp60}" rendered="{!p60WrapperList.Size>0}" styleclass="PageHeader" />
+                  <!--   <apex:outputText Value="No records to display" rendered="{!IF(p60WrapperList.size!=0,False,True)}"/> -->
+                   <!--  <apex:outputpanel id="pgbt" rendered="{!IF(p60WrapperList.size!=0,true,false)}"> -->
+                    <apex:outputpanel id="pgbt1" rendered="{!p60WrapperList.Size>0}">
+                     <!--  lightning Issue Jamil -->
+                        <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                            <thead>
+                                <tr class="slds-text-title--caps"> 
+                                    <th scope="col" class="columnWidth">
+                                        <div class="slds-truncate" id="Col1">
+                                            Document
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="columnWidth">
+                                        <div class="slds-truncate">
+                                            View
+                                        </div>
+                                    </th>
+                                </tr> 
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!p60WrapperList}" var="p60">
+                                    <tr> 
+                                        <th scope="row" class="columnWidth">
+                                            <div class="slds-truncate" >
+                                                <apex:outputText value="P60" />
+                                            </div>
+                                        </th>
+                                        <th scope="row" class="columnWidth">
+                                            <div class="slds-truncate" >
+                                                <apex:commandLink value="View" action="{!P60display}"  target="_blank">
+                                                    <apex:param name="id" value="{!p60.paySummaryytd.Employee__r.id}" assignTo="{!employeeID}" />
+                                                    <apex:param name="taxyear" value="{!p60.paySummaryytd.xcdhcm__Tax_year__c}" assignTo="{!taxyear}" />      
+                                                </apex:commandLink>
+                                            </div>
+                                        </th>
+                                    </tr> 
+                                </apex:repeat>
+                            </tbody>
+                        </table>  
+                        <div Class="line"></div>            
+                    </apex:outputpanel> 
+                </apex:pageBlock>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

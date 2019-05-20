@@ -1,0 +1,91 @@
+<!-- 
+Name: ExternalPositions Page 
+* @author Praveen
+* @date 07/03/2014
+* @description Page is used in site to display vacancies on site.
+ -->
+   
+<apex:page controller="xcdhcm.ExternalPositionsController" action="{!initList}" showheader="false" sidebar="false" >
+ 
+<apex:composition template="{!$Site.Template}"><br/>
+
+<apex:define name="body">
+ 
+<apex:form id="theForm">
+<div id="extMain">
+
+ <h2 class="extTitle">Current vacancies</h2> <br/><br/>  
+    <apex:pageBlock id="theBlock" >
+    <apex:PageMessages />  
+      <apex:actionRegion >
+        <apex:outputText value="Search: " style="Width:100%!important;margin-left:10px!important;" />     
+        <input type="text" title="Please input key words - for example Location, Full time, Job title - with a comma between each keyword" id="PositionName" onkeyup="doSearch();" style="width: 200px!important;height: 20px!important;border-radius: 8px!important;" placeholder="  Key words" />            
+  
+        
+        <apex:actionFunction name="searchServer" action="{!runquery}" rerender="positionList,noRecordMsg,div" status="status" >
+            <apex:param name="PositionName" value="" />
+        </apex:actionFunction> 
+        
+         <apex:outputpanel style="margin-left:10px!important;margin-top:5px!important;" >               
+                 <apex:actionStatus id="status" > 
+                   <apex:facet name="start">    
+                    <img class="waitingImage" src="/img/loading.gif"  height="15" />   
+                    <span >Please Wait...</span>
+                   </apex:facet> 
+                </apex:actionStatus>  
+            </apex:outputpanel>   
+                                      
+        </apex:actionRegion>    
+       
+        <br/>
+        
+         
+        <apex:outputPanel layout="block" rendered="{!displayMessage}" style="width:340px; font-size: 12px; color: #85bef7;">
+            <apex:commandLink action="{!ClosePopup}"  type="image/png" style="float:right;text-decoration:none">
+            <!-- START::3/2/218 REG issue ro 59 and NPPD-1623 changes done by Kamal -->
+                     <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/close.PNG')}" title="close"  style="width:15px;"/> 
+            <!-- END::3/2/218 REG issue ro 59 and NPPD-1623 changes done by Kamal -->
+            </apex:commandlink>
+            <apex:pageMessage summary="{!$Label.xcdhcm__recruitment_candidate_successfully_applied}" severity="Info" strength="3" />            
+        </apex:outputPanel> 
+        <br/>
+        <apex:outputPanel id="noRecordMsg">
+            <apex:outputText Value="No records to display" rendered="{!vacancy.Size=0}" /> 
+        </apex:outputPanel>
+               
+                                   
+        <apex:pageBlockTable id="positionList" value="{!vacancy}" var="Vac">           
+            <apex:column headervalue="{!$ObjectType.xcdhcm__Vacancy__c.Fields.xcdhcm__Job_title__c.Label}" > 
+                <apex:commandLink value="{!Vac.xcdhcm__Job_title__c}" action="{!viewVacancy}" id="theLink">
+                     <apex:param name="assignVacId" assignTo="{!vacancyId}" value="{!Vac.id}"/>
+                </apex:commandLink>
+           </apex:column>
+            <apex:repeat value="{!$ObjectType.xcdhcm__Vacancy__c.Fieldsets.xcdhcm__PositionList}" var="i">   
+                <apex:column value="{!Vac[i]}"  /> 
+            </apex:repeat>
+           <apex:column headervalue="" > 
+                <apex:commandLink action="{!viewVacancy}" id="applybuttonLink" style="text-decoration:none">                    
+                     <apex:commandButton value="{!$Label.xcdhcm__externalpositionsbview}" styleclass="applybut"/>
+                     <apex:param name="assignVacId" assignTo="{!vacancyId}" value="{!Vac.id}"/>
+                </apex:commandLink>
+           </apex:column>         
+        </apex:pageBlockTable> 
+        
+    </apex:pageBlock>
+    </div>
+  
+</apex:form> 
+
+</apex:define>
+</apex:composition>
+
+
+<script type="text/javascript">
+    function doSearch() 
+    {
+        searchServer(
+        document.getElementById("PositionName").value);
+    }
+</script> 
+
+</apex:page>

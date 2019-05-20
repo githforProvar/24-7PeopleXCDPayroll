@@ -1,0 +1,353 @@
+<!-- 
+Name: TotalRewardStatement Page 
+* @author Sabir Khan
+* @date 02/12/2014
+* @description Total Reward Statement Added by Sabir.
+ -->
+<apex:page standardController="xcdhcm__Employee_Detail__c"
+	extensions="xcdhcm.RewardExtensionController" sidebar="false"
+	 renderas="pdf" showHeader="true" wizard="false" applyBodyTag="false">
+	<head>
+<!--START :: 25/05/2015 NPPD-823 Total Reward Statement - Currency Modify by Sabir -->
+	
+<style>
+@page {
+	margin-left: 5cm;
+	margin-right: 5cm;
+}
+</style>
+<!--END :: 25/05/2015 NPPD-823 Total Reward Statement - Currency Modify by Sabir -->
+
+<!--START :: 05/03/2015 NPPD-752 Total reward statement - fixes Added by sabir -->
+<style>
+
+<!-- START :: 23/04/2015 NPPD-793 Total reward statement Modified by Praveen -->
+td.css1 {
+	font-size: 12px;
+	padding-left: 40px !important;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	color: #6e7277;
+	text-align:left;
+}
+
+td.css2 {
+	font-size: 12px;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	Text-align: right;
+}
+
+td.css3 {
+	font-size: 13px;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	Text-align: right;
+	font-weight: bold;
+}
+
+th.css4 {
+	font-size: 13px;
+	padding-left: 40px !important;
+	color: #6e7277;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;	
+	text-align:left;
+}
+
+td.css5 {
+	font-size: 15px;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	Text-align: right;
+	font-weight: bold;
+}
+
+th.css6 {
+	font-size: 15px;
+	padding-left: 40px !important;
+	color: #6e7277;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	text-align:left;
+}
+<!-- END :: 23/04/2015 NPPD-793 Total reward statement Modified by Praveen -->
+th.css7 {
+	font-size: 15px;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	color: #6e7277;
+}
+</style>
+	</head>
+<!--START :: 25/05/2015 NPPD-823 Total Reward Statement - Currency Modify by Sabir -->
+	<apex:form >
+	<div style="width:110px;height:110px;border:1px solid #f5f5f5;vertical-align:middle;display:table-cell;text-align:center;">
+		<apex:image url="{!imageURL}" width="110"  alt="no image" 
+		rendered="{!IF(documentList.size!=0, true, false)}" style="max-height:110px;"/></div>
+		<br />
+		<div style="border-bottom: 1px solid #63a4c5; margin-bottom: 10px;"></div>
+		<!-- START :: 23/04/2015 NPPD-793 Total reward statement Modified by Praveen --> 
+		<table style="width: 100%">
+			<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif !important;">
+				<th><apex:outputLabel value="Total Reward Statement – " style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif !important;"/> 
+				<apex:outputfield value="{!empDetail.Name}" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif !important;"/>
+				</th>
+			</tr>
+		<!--START ::16/01/2015 NPPD-637 Total reward statement - v2  Modify by Sabir-->  
+			<tr style="{!IF(OR(!checkCurrency==false),'display: none ','')}">
+				<td class="css7">
+			<apex:outputPanel >
+				<apex:outputText value="{!compensationCurrency}" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif !important;"/>
+		 		</apex:outputPanel>
+		 		</td>
+			</tr>
+		<!--END ::16/01/2015 NPPD-637 Total reward statement - v2  Modify by Sabir-->  
+		</table>
+		<div style="border-bottom: 1px solid #63a4c5; margin-top: 1px;"></div>
+		
+		<table style="width: 100%">
+			<tr>
+				<td>
+					<h3
+					style="font-size: 13px; color: #6e7277; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">
+					Compensation</h3>
+				</td>
+			</tr>
+		</table>
+		<!-- END :: 23/04/2015 NPPD-793 Total reward statement Modified by Praveen -->
+		<table style="width: 100%">
+		   <apex:repeat value="{!EmployeeReward}" var="bn">
+			<tr>
+				<td class="css1" width="20%"><apex:outputLabel value="Annual salary" /></td>
+				<td class="css2" width="80%">
+					 <apex:outputPanel rendered="{!checkCurrency==true}">
+					<apex:outputText value="{!bn.CurrencyIsoCode}" />
+					<apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!bn.xcdhcm__Base_Salary__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+			     <apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!bn.xcdhcm__Base_Salary__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+				</td>
+			</tr>
+			<tr style="{!IF(OR(bn.Bonus_OTE__c==0),'display:none','')}">
+				<td class="css1" width="20%"><apex:outputLabel value="Bonus OTE" /></td>
+				<td class="css2" width="80%">
+				<apex:outputPanel rendered="{!checkCurrency==true}">
+					<apex:outputText value="{!bn.CurrencyIsoCode}" />
+					<apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!bn.xcdhcm__Bonus_OTE__c}" />
+					</apex:outputText>					
+				</apex:outputPanel>
+			     <apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!bn.xcdhcm__Bonus_OTE__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+				</td>
+			</tr>
+			<tr style="{!IF(OR(bn.Commission__c==0),'display:none','')}" >
+				<td class="css1" width="20%"><apex:outputLabel value="Commission OTE" />
+				</td>
+				<td class="css2" width="80%">
+				<apex:outputPanel rendered="{!checkCurrency==true}">
+				<apex:outputText value="{!bn.CurrencyIsoCode}" />
+					<apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!bn.xcdhcm__Commission__c}" />
+					</apex:outputText>					</apex:outputPanel>
+			     <apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!bn.xcdhcm__Commission__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+				</td>
+			</tr>
+         </apex:repeat>
+			<tr>
+				<td width="60%"></td>
+				<td align="right" style="border-bottom: 1px solid #63a4c5; width: 20px" width="40%"></td>
+			</tr>
+			<tr>
+				<th class="css4" width="30%"><apex:outputLabel value="Total compensation" /></th>
+				<td class="css3" width="70%">
+				 <apex:outputPanel rendered="{!checkCurrency==true}">
+				<!-- START :: 25/07/2016 NPPD-1061 currency referency changed user to employee modified by kamal --> 
+			        <apex:outputText value="{!usrCurrency}" />
+			    <!-- END :: 25/07/2016 NPPD-1061 currency referency changed user to employee modified by kamal -->    
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+									<apex:param value="{!totalCompensationInstance.xcdhcm__Base_Salary__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+			     <apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!totalCompensationInstance.xcdhcm__Base_Salary__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+				</td>
+			</tr>
+		</table>
+		<br />
+		<!-- START :: 23/04/2015 NPPD-793 Total reward statement Modified by Praveen -->
+		<!--START :: 20-12-2016 Winter2016 NPPD-1303 Total Reward Statement - where pension = 0 Added by Rahul S.-->
+		<apex:outputPanel rendered="{!totalBenefitProvider !=0}">
+		<!--END :: 20-12-2016 Winter2016 NPPD-1303 Total Reward Statement - where pension = 0 Added by Rahul S.-->
+		<table style="width: 100%">
+			<tr>
+				<td>
+					<h3
+						style="font-size: 13px; color: #6e7277; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">
+						Pension – annual benefit</h3>
+				</td>
+			</tr>
+		</table>
+		<!-- END :: 23/04/2015 NPPD-793 Total reward statement Modified by Praveen -->
+		<table style="width: 100%">
+			<apex:repeat value="{!EmployeeReward}" var="pnsn">
+			<tr style="{!IF(OR(pnsn.Annual_benefit__c == 0),'display:none','')}">
+				<td class="css1" width="50%"><apex:outputText value="{!pnsn.xcdhcm__Pension_provider__c}" />
+				</td>
+				<td class="css2" width="50%">
+					<apex:outputPanel rendered="{!checkCurrency==true}">
+					<apex:outputText value="{!pnsn.CurrencyIsoCode}" />
+					<apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!pnsn.xcdhcm__Annual_benefit__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+			     <apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!pnsn.xcdhcm__Annual_benefit__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+				</td>
+			</tr>
+			</apex:repeat>
+			<tr>
+				<td width="60%"></td>
+				<td align="right" style="border-bottom: 1px solid #63a4c5; width: 20px" width="40%"></td>
+			</tr> 
+			<tr>
+				<th class="css4" width="30%"><apex:outputLabel value="Total pension payments" /></th>
+				<td class="css3" width="70%">
+				 <apex:outputPanel rendered="{!checkCurrency==true}">
+			<!-- START :: 25/07/2016 NPPD-1061 currency referency changed user to employee modified by kamal -->	 
+			        <apex:outputText value="{!usrCurrency}" />
+			<!-- END :: 25/07/2016 NPPD-1061 currency referency changed user to employee modified by kamal -->        
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+									<apex:param value="{!totalBenefitProvider}" />
+					</apex:outputText>
+				</apex:outputPanel>
+			     <apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!totalBenefitProvider}" />
+					</apex:outputText>
+				</apex:outputPanel>
+				</td>
+			</tr>
+			
+		</table>
+		<!--START :: 20-12-2016 Winter2016 NPPD-1303 Total Reward Statement - where pension = 0 Added by Rahul S.-->
+		</apex:outputPanel>
+		<!--END :: 20-12-2016 Winter2016 NPPD-1303 Total Reward Statement - where pension = 0 Added by Rahul S.-->
+		<br />
+		<!-- START :: 23/04/2015 NPPD-793 Total reward statement Modified by Praveen -->
+		<apex:outputPanel rendered="{!employeeBenefitList.size !=0}">
+		<table style="width: 100%">
+			<tr>
+				<td>
+					<h3
+						style="font-size: 13px; color: #6e7277; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">
+						Benefits – annual value</h3>
+				</td>
+			</tr>
+		</table>
+		<!-- END :: 23/04/2015 NPPD-793 Total reward statement Modified by Praveen -->
+		<table style="width: 100%">
+			<apex:repeat value="{!employeeBenefitList}" var="bn">
+					<!-- START :: 19/06/2018 NPPD-1669 Total Reward Statement - Issue  Modified by Anil-->
+					<!-- <tr style="{!IF(OR(bn.Employer_Contribution__c > 0.00),'','display:none')}"> -->
+					<tr style="{!IF(OR(bn.Employer_Contribution__c == 0.00),'display:none','')}">
+					<!-- END :: 19/06/2018 NPPD-1669 Total Reward Statement - Issue  Modified by Anil-->
+					<td class="css1" width="50%"><apex:outputText value="{!bn.xcdhcm__Benefit_Type__c}" />
+					</td>
+					<td class="css2" width="50%">
+						<apex:outputPanel rendered="{!checkCurrency==true}">
+						<apex:outputText value="{!bn.CurrencyIsoCode}" rendered="{!IF(bn.xcdhcm__Benefit_amount__c!=null, true, false)}"/>
+					<apex:outputText value="{0, number, ###,###,###,##0.00}" rendered="{!IF(bn.xcdhcm__Benefit_amount__c!=null, true, false)}">
+					<apex:param value="{!bn.xcdhcm__Benefit_amount__c}" />
+					</apex:outputText>
+						</apex:outputPanel>
+						<apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!bn.xcdhcm__Benefit_amount__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+					</td>
+				</tr>
+			</apex:repeat>
+			<tr>
+				<td width="60%"></td>
+				<td align="right" style="border-bottom: 1px solid #63a4c5; width: 20px" width="40%"></td>
+			</tr>
+			<tr>
+				<th class="css4" width="30%"><apex:outputLabel value="Total benefit value" />
+				</th>
+				<td class="css3" width="70%">
+				 <apex:outputPanel rendered="{!checkCurrency==true}">
+		<!-- START :: 25/07/2016 NPPD-1061 currency referency changed user to employee modified by kamal -->		 
+				<apex:outputText value="{!usrCurrency}" /> 
+	    <!-- END :: 25/07/2016 NPPD-1061 currency referency changed user to employee modified by kamal -->			
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+						<apex:param value="{!totalBenefitInstance.xcdhcm__Benefit_amount__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+					 <apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!totalBenefitInstance.xcdhcm__Benefit_amount__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+				</td>
+			</tr>
+		</table>
+		</apex:outputPanel>
+		<br />
+		<br />
+		<br />
+		<table style="width: 100%;">
+			<tr>
+				<td width="60%"></td>
+				<td align="right" width="40%"
+					style="border-bottom: 1px solid #63a4c5; width: 90px;"></td>
+			</tr>
+			<tr>
+				<th class="css6" width="30%"><apex:outputLabel value="Total Reward" />
+				</th>
+				<td class="css5" width="70%">
+				<apex:outputPanel rendered="{!checkCurrency==true}">
+				<!-- START :: 25/07/2016 NPPD-1061 currency referency changed user to employee modified by kamal -->
+				 <apex:outputText value="{!usrCurrency}" />
+				<!-- END :: 25/07/2016 NPPD-1061 currency referency changed user to employee modified by kamal --> 
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!totalRewardInstance.xcdhcm__Base_Salary__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+						 <apex:outputPanel rendered="{!checkCurrency==false}">
+			        <apex:outputText value="{0, number, ###,###,###,##0.00}">
+					<apex:param value="{!totalRewardInstance.xcdhcm__Base_Salary__c}" />
+					</apex:outputText>
+				</apex:outputPanel>
+				</td>
+			</tr>
+		</table>
+		<div style="border-bottom: 1px solid #63a4c5; margin-top: 20px;"></div>
+		<apex:outputLabel style="color:#6e7277;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 0.6em;"
+			value="Note" />
+		<br />
+		<apex:outputText style="color:#6e7277;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 0.6em;"
+			value="Pensions benefit and Benefit value defined as total value of Employer contributions" />
+		<br />
+		<apex:outputLabel style="color:#6e7277;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 0.6em;"
+			value="Date:" />&nbsp;
+		<apex:outputText value="{0,date,dd'/'MM'/'yyyy}" style="color:#6e7277; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 0.6em;" >
+    	<apex:param value="{!Today()}" />
+		</apex:outputText>
+	</apex:form>
+<!--END :: 25/05/2015 NPPD-823 Total Reward Statement - Currency Modify by Sabir -->
+	<!--END :: 05/03/2015 NPPD-752 Total reward statement - fixes modify by sabir -->
+</apex:page>

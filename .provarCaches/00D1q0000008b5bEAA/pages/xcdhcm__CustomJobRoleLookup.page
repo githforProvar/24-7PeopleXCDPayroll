@@ -1,0 +1,104 @@
+<apex:page controller="xcdhcm.CustomJobRoleLookupController" title="Search"  showHeader="false" sideBar="false" tabStyle="xcdhcm__Job_Role__c" id="pg">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head> 
+            <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteJoinerFirst.css')}" />
+            <apex:slds />
+            <style>
+                .bPageBlock, .brandSecondaryBrd, .bEditBlock, .secondaryPalette
+                {
+                    border:none; 
+                }
+                
+                .slds-scope .slds-modal__content:last-child 
+                {
+                    box-shadow: none;
+                }
+                
+                .pageTitleIcon 
+                {
+                    background-image: url(/img/sprites/master.png) !important;
+                    background-position: 0 -1202px !important;
+                }
+                
+                
+                tspan
+                {
+                    font-family: 'Salesforce Sans',Arial,sans-serif;
+                    color: #4E7EB2;
+                }
+                
+                img
+                {
+                    width: 24px !important;
+                    height: 24px !important;
+                }
+            </style>
+        </head>
+        
+        <body class="slds-scope">
+            <apex:form >
+                <apex:pageBlock id="page"  mode="edit">
+                    <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large" style="overflow:auto;">
+                        <!-- SEARCH TAB -->
+                        <apex:actionRegion >
+                            <apex:pageBlockSection columns="1"> 
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputPanel id="top" layout="block">
+                                        <div class="slds-modal__content slds-p-around--medium">
+                                            <div class="content"><img src="/s.gif" alt="" class="pageTitleIcon" title="" /><h1 style="font-size: 1.8em;color: #333435;">Lookup</h1></div>
+                                            <p> Enter search text and click Go </p>
+                                            
+                                            <div style="padding-top:30px; padding-bottom:10px;">
+                                                <apex:outputPanel id="infoMsg">
+                                                	<!-- START::04-01-2019 NPPD-1784 Custom lookup for jobrole in add/review compensation page -->
+                                                    <apex:outputPanel rendered="{!AND(searchResultCount !=null,searchResultCount > 100)}">
+                                                        <p style="color:red;">Your search returned {!searchResultCount} job roles. Only first 100 are displayed. Please narrow search result by typing in the job role name.</p>
+                                                    </apex:outputPanel>
+                                                    <!-- END :04-01-2019 NPPD-1784 Custom lookup for jobrole in add/review compensation page -->
+                                                </apex:outputPanel>
+                                                <apex:inputText id="txtSearch" value="{!searchString}" />
+                                            </div>
+                                            
+                                            <div>
+                                                <apex:commandButton id="btnGo" value="Go" action="{!search}" rerender="searchResults, infoMsg" styleclass="slds-button slds-button--neutral"></apex:commandButton>
+                                                <apex:commandButton id="btnShowAll" value="Show all" action="{!showAll}" rerender="txtSearch, searchResults, infoMsg" styleclass="slds-button slds-button--neutral"></apex:commandButton>
+                                            </div> 
+                                            
+                                            <apex:outputPanel id="searchResults">
+                                                <div style="max-height:400px;"> 
+                                                    <h1 style="font-size: 1.2em;color: #333435;">Searched result</h1>
+                                                    <apex:pageBlockTable value="{!results}" var="a" id="tblResults">
+                                                        <apex:column >
+                                                            <apex:facet name="header">
+                                                                <apex:outputPanel >Name</apex:outputPanel>
+                                                            </apex:facet>
+                                                            <apex:outputLink value="javascript:top.window.opener.lookupPick2('{!FormTag}','{!TextBox}_lkid','{!TextBox}','{!a.Id}','{!a.Name}', false)" rendered="{!NOT(ISNULL(a.Id))}">{!a.Name}</apex:outputLink>
+                                                        </apex:column>
+                                                        
+                                                        <apex:repeat value="{!$ObjectType.xcdhcm__Job_Role__c.FieldSets.xcdhcm__Job_Role_Lookup}" var="f">
+                                                            <apex:column rendered="{!IF(AND(f != 'Id', f != 'Name'), TRUE, FALSE)}">
+                                                                <apex:facet name="header">
+                                                                    <apex:outputPanel >{!f.label}</apex:outputPanel>
+                                                                </apex:facet>
+                                                                <apex:outputPanel rendered="{!results.size > 0}">
+                                                                    <apex:outputField value="{!a[f]}"/>   
+                                                                </apex:outputPanel>
+                                                            </apex:column>
+                                                        </apex:repeat>
+                                                    </apex:pageBlockTable>
+                                                    <apex:outputPanel rendered="{!results.size = 0}">
+                                                        <div style="padding-top:10px;">No result found</div>
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                            </apex:pageBlockSection>
+                        </apex:actionRegion>
+                    </div>
+                </apex:pageBlock>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

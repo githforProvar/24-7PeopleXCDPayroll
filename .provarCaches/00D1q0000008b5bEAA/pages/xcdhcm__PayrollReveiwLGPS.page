@@ -1,0 +1,336 @@
+<apex:page controller="xcdhcm.PayrollLGPSReviewController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}"/>
+<style type="text/css">
+<!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+body 
+{
+  font-size: 10px !important;   
+}
+.pagination-large ul>li>a, .pagination-large ul>li>span {
+    padding: 5px 10px!important;
+    font-size: 10.5px!important;
+}
+input[type='text'] 
+{
+	height: 12px!important;
+    width: 130px!important;
+    font-size: 10px!important;
+}
+<!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+.popupBg
+{
+   opacity: 4.0;
+   filter: alpha(opacity = 60);
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   top: 0;
+   left: 0;
+   z-index: 9998;
+}
+.customPopup
+{
+   line-height: 25px;
+   position: absolute;
+   left: 60%;
+   padding:10px;
+   z-index: 9999;
+   text-align: center;
+   top: 150px;
+   width: 400px;
+   margin-left: -450px;
+   text-decoration: none;
+   font-weight: bold;
+   background: #ffffff !important;
+   border: 1px solid #ccc !important;         
+   -moz-box-shadow: 4px 5px 10px #99ccff;
+   -webkit-box-shadow: 4px 5px 10px #99ccff;
+   box-shadow: 4px 5px 10px #99ccff;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   color:#336699;
+ }
+<!-- START::22/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+.table th, .table td {
+    padding: 6px !important;
+}
+<!-- END::22/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+<!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+/* necessary stylesheet modification */
+.ui-tooltip 
+{
+	padding: 10px 20px;
+	box-shadow: 0 0 0px black;
+	font-family: Arial,Helvetica,sans-serif;
+	color: black;
+	margin: 0; 
+	font-size: 110%;
+	font-weight:normal;
+	border: 2px solid Black;
+	background-color: #FEFDB9;
+	padding: 5px;
+	opacity: 1.00;
+	width:200px;
+}
+      
+.helpText_tooltip, .helpText_tooltipOn 
+{
+	position: relative;
+	background-image: url(/img/help/helpOrbs.gif);
+	width: 18px;
+	height: 15px;
+	background-position:0px 0px;
+	vertical-align:text-bottom;
+}
+
+.helpText_tooltipOn
+{
+	background-position:19px 0px;
+}
+
+.SecondTD
+{
+	padding-left:2px; 
+	text-align:left;
+}
+
+.firstTD
+{
+	padding-right:2px;  
+	text-align:right;
+}
+<!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+</style>
+<apex:form >
+<apex:outputPanel id="popup">
+    <apex:outputpanel styleClass="popupBg" rendered="{!displayPopup}" style="opacity: 0.2;background-color: black;"/>
+    <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopup}">
+       <center>  
+           <apex:outputtext value="{!validationPopupMsg}" rendered="{!displayPopup}"/>
+           <br/><br/>
+           <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!saveAndUpdate}" style="width: 100px;" onClick="disableButton(this);" styleClass="butt"/>
+		   <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelPopup}" style="width: 100px;" onClick="disableButton(this);" styleClass="butt"/>
+	   </center>
+    </apex:outputPanel>
+</apex:outputPanel>
+<div ng-controller="ctrlRead">
+	<apex:pageBlock title="{!$Label.xcdhcm__phpayrolllgps}" id="rows">
+	<apex:pageMessages id="erMsg"/>
+<html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+<head>
+<meta charset="utf-8"/>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"/>
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
+<script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script type="text/javascript">
+var myapp = angular.module('hello', []);
+<!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+var sortingOrder = 'newCompData.Name__r.Last_name__c';
+<!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+<!-- Define Controller  -->
+var contrl=myapp.controller('ctrlRead', function ($scope, $filter) 
+{
+	<!--- Initialize Scope Variables --->
+	$scope.sortingOrder = sortingOrder;
+	$scope.reverse = false;
+	$scope.filteredItems = [];
+	$scope.groupedItems = [];
+	$scope.itemsPerPage = 40;
+	$scope.pagedItems = [];
+	$scope.currentPage = 0;
+	$scope.selectedAll = true;
+	$scope.items = [];
+	$scope.items ={!wrapPayrollCompListAJ};       
+    var searchMatch = function (haystack, needle) 
+    {
+        if(!needle) 
+        {
+            return true;
+        }
+        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+    };
+    //Initialize the Search Filters 
+    $scope.search = function () 
+    {
+        $scope.filteredItems = $filter('filter')($scope.items, function (item) 
+        {
+	        for(var attr in item) 
+	        {
+	        	if (searchMatch(item.newCompData.xcdhcm__Employee__r.Name, $scope.query))
+	            return true;
+	        }
+        	return false;
+        });
+        // Define Sorting Order
+        <!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+        /*if ($scope.sortingOrder !== '') 
+        {
+            $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+        }*/
+        <!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+        $scope.currentPage = 0;
+        // Group by pages
+        $scope.groupToPages();
+    };           
+    //Getting code from static resource
+    {!scriptcode}
+    $scope.selectedData = function()
+    {
+        saveUpdate(JSON.stringify($scope.items));
+    };
+    
+});
+contrl.$inject = ['$scope', '$filter'];
+//START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu
+$(function()
+  {
+    $(".displayTooltip").tooltip();
+    $(".displayTooltip").mouseover(function() 
+	{
+		$(this).find('img').addClass('helpText_tooltipOn');
+    });  
+	$(".displayTooltip").mouseleave(function() 
+	{
+		$(this).find('img').removeClass('helpText_tooltipOn');
+	});     
+  });
+//END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu
+</script>
+</head>
+<body>
+   <table style="margin-top:10px;">
+       <tr>
+           <td>
+           	   <!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+               <apex:outputLabel value="Filter by" style="margin-right:10px;font-size: 10px !important;"/>
+               <!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+           </td>
+           <td>
+            <apex:actionRegion >
+            	<!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->        
+            	<apex:SelectList size="1" value="{!selectedFilterView}"  style="margin-right:150px;height: 20px!important;width: 130px!important;font-size: 10px!important;">
+            	<!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu --> 
+                    <apex:actionSupport event="onchange" action="{!onChangeFilterView}" status="recordFilter"/>
+                    <apex:selectOptions value="{!FilterViewList}" /> 
+                    <apex:actionStatus startText="Loading..." id="recordFilter"/>  
+                </apex:SelectList>
+            </apex:actionRegion> 
+           </td>
+           <!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+           <td>
+               <apex:outputLabel value="Search employee" style="margin-right:10px;font-size: 10px !important;"/>
+           </td>
+           <td>
+               <input type="text" ng-model="query" ng-change="search()" placeholder="Search" style = "height: 12px!important;width: 130px!important;font-size: 10px!important;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC);background-repeat: no-repeat;background-position: 200px 8px;"/>
+           </td>
+           <!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+       </tr>
+    </table>
+	<table class="table  table-hover,ng-cloak ">
+		<thead>
+			<tr>
+				<th class="">
+                  <input type="checkbox" ng-model="selectedAll" ng-click="checkAll()"/>
+               </th>
+               <th class="">Employee&nbsp;&nbsp;&nbsp;</th>
+               <th class="">Annual salary&nbsp;&nbsp;&nbsp;</th>
+               <th class="">Last pay run : pensionable pay p.a&nbsp;&nbsp;&nbsp;</th>
+               <th class="">50/50&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+               <th class="">Employee contribution%&nbsp;&nbsp;&nbsp;</th>
+               <!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+               <th class="">Current pensionable pay p.a
+               <span class="displayTooltip" id="spanPen" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="For monthly payroll = 12x and for weekly 52x total pensionable earnings in last pay run] total pensionable earnings defined as pensionable pay + all other payments where employee pensionable = true"/>
+				</span>
+               </th>
+               <th class="">&nbsp;&nbsp;&nbsp;Contribution table rate%
+               	<span class="displayTooltip" id="spanRate" display="inline">
+					<img src="/s.gif" class="helpText_tooltip" title="From Payroll settings - Rate % at earnings band which includes Current pensionable pay"/>
+				</span>
+               </th>
+               <!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+               <th class="">Revised employee contribution%&nbsp;&nbsp;&nbsp;</th>
+               <th class="">Send email&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody> 
+			<!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->                   
+	        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder | filter:query" class="ng-cloak">
+	        <!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+               <td style="text-align:left;">                                       
+                  <input type="checkbox" ng-value="{{item.selected}}"  name="item.selected"  ng-model="item.selected"/>
+               </td>
+               <td style="text-align:left;">
+               <!-- START::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+               	  <a href="/one/one.app#/alohaRedirect/{{item.existCompData.Id}}" >{{item.existCompData.xcdhcm__Employee__r.Name}}</a>
+               <!-- END::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+               </td>
+               <td style="text-align:left;">
+                  {{item.existCompData.xcdhcm__Base_Salary__c | currency: "{!curr} "}}                                     
+               </td>
+               <!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+               <td style="text-align:left;">
+                  {{item.prevAnualPensionableAmt | currency: "{!curr} "}}                                   
+               </td>
+               <!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+               <td style="text-align:left;">
+                  {{item.existCompData.xcdhcm__LGPS50_50__c}}                                     
+               </td>
+               <td style="text-align:left;">
+                  {{item.existCompData.xcdhcm__Employee_contribution_pens_sal__c}}                                     
+               </td>
+               <!-- START :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+               <td style="text-align:left;">
+                  {{item.anualPensionableAmt | currency: "{!curr} "}}                                     
+               </td>
+               <!-- END :: 27/07/2018 NPAY-416 Review LGPS - managing individual changes - issues modified by Tutu -->
+               <td style="text-align:left;">
+                  {{item.payRoleSettingsData.xcdhcm__Rate__c}}                                    
+               </td>
+               <td style="text-align:left;">
+                  <input type="Text" ng-value="{{item.newCompData.xcdhcm__Employee_contribution_pens_sal__c}}" name="item.inputContribution"  ng-model="item.newCompData.xcdhcm__Employee_contribution_pens_sal__c"/>                                    
+               </td>
+               <td style="text-align:left;">
+                  <input type="checkbox" ng-value="{{item.newCompData.xcdhcm__Send_email__c}}"  name="item.sendMail"  ng-model="item.newCompData.xcdhcm__Send_email__c"/>                                     
+               </td>
+            </tr>
+		</tbody>
+		<tfoot>
+			<tr>
+	            <td colspan="13" style="border:none !important;">
+			    	<div class="pagination pagination-large pagination-centered">
+				       <ul style="box-shadow:none !important;">  
+				           <li ng-class="{disabled: currentPage == 0}">
+				               <a ng-click="prevPage()"> Prev</a>
+				           </li>
+				           <li ng-repeat="n in range(pagedItems.length)"
+				           ng-class="{active: n == currentPage}"
+				           ng-click="setPage()">
+				               <a ng-bind="n + 1">1</a>
+				           </li>
+				           <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+				               <a ng-click="nextPage()">Next </a>
+				           </li>
+				       </ul>
+				   </div>
+			   </td>
+		   </tr>
+		</tfoot>
+	</table>
+</body>
+</html>
+<apex:pageBlockButtons location="Bottom">
+	   <apex:commandButton style="display:none;">       
+        	<input type="button" ng-click="selectedData()" value="{!$Label.PayrollLGPSBSaveandaction}" class="btn"/>      
+        </apex:commandButton>
+        <apex:actionFunction name="saveUpdate" action="{!createPopup}" rerender="erMsg,hiddenBlock,popup" >
+            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+        </apex:actionFunction>
+       <apex:commandButton value="{!$Label.xcdhcm__payrolllgpsbback}" action="{!backPage}" rerender="hiddenBlock"/>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+<apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
+</div>
+</apex:form>
+</apex:page>

@@ -1,0 +1,115 @@
+<apex:page StandardController="xcdhcm__Company__c" extensions="xcdhcm.CompanyExtensionController" sidebar="false"> 
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteLeaveBulk.css')}" />
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+            <style>
+	           	.datePicker
+		       	{ 
+					margin-left:210px !important;
+				  	width: 21% !important;
+				  	position: sticky !important;    
+				} 
+				<!-- START :: 07-03-2018 LightningPatch1 NPPD-1623 lightning regression issue row 36 Added by Rahul S.  -->
+				.picklistArrowLeft, .picklistArrowRight, .rightArrowIcon, .leftArrowIcon, .doubleArrowUp, .upArrowIcon, .downArrowIcon, .doubleArrowDwn 
+				{
+		     		margin-right: 26px;
+				}
+				.rightArrowIcon,.leftArrowIcon
+				{
+					height: 20px!important;
+				} 
+				.message .messageText h4 
+				{
+				  font-weight: inherit;
+				}
+				<!-- END :: 07-03-2018 LightningPatch1 NPPD-1623 lightning regression issue row 36 Added by Rahul S.  -->
+            </style>
+        </head>
+        <body class="slds-scope"> 
+            <!-- <apex:sectionHeader title="{!$Label.Create_New_Public_HolidaysCreateNewPublicHolidayfortheyear}" /> -->
+            <table width="100%" border="0">
+                <tr>
+                    <td valign="Top" width="15%"></td>
+                    <td valign="Top" width="90%">
+                        <apex:form id="formId" style="width:80%">
+                            <div role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal--large" aria-labelledby="header43">
+                                <div class="slds-modal__container">
+                                    <div class="slds-modal__header">
+                                        <apex:commandLink action="{!cancelPublicHolidays}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                            <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                                        </apex:commandLink>
+                                        
+                                        <h2 id="header43" class="slds-text-heading--medium">{!$Label.Create_New_Public_HolidaysCreateNewPublicHolidayfortheyear}</h2>
+                                    </div>
+                                    <div class="slds-modal__content slds-p-around--medium">
+                                        <apex:pageMessages id="errorMsg"/>
+                    <!-- START :: 07/07/2017 NPPD-1473 Uploading public holidays from data file modified by Kumbresh K -->
+                    <apex:PageMessage Id="info" title="{!$Label.xcdhcm__createnewpublicholidaysimtherearenopublicholidaysdefined}" severity="info" strength="3" rendered="{!displayInfoMsg == true}"/>
+                                        <apex:pageBlock >
+                                            <div class="slds">
+                                                <apex:dataTable styleClass="slds-table slds-table--bordered slds-table--striped" value="{!companyHolidays}" var="cf" style="width:100%">
+                            <!-- END :: 07/07/2017 NPPD-1473 Uploading public holidays from data file modified by Kumbresh K -->
+                                                    <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holidays__c.Fields.Name.Label}" style="width:20%">
+                                                        <apex:inputfield value="{!cf.Name}" />
+                                                    </apex:column>
+                                                    <!-- START :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                                    <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holidays__c.Fields.xcdhcm__Holiday_Date__c.Label}" style="width:20%">
+                                                        <!-- END :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                                        <c:noDateLink >
+                                                            <apex:inputfield value="{!cf.xcdhcm__Holiday_Date__c}" styleClass="dateFormat" />
+                                                        </c:noDateLink>
+                                                    </apex:column>
+                                                    <!-- START::20/01/2015 NPPD-512 Public Holiday (Half day) added by Geetha -->
+                                                    <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holidays__c.Fields.xcdhcm__Half_day__c.Label}" style="width:5%">
+                                                        <apex:inputfield value="{!cf.xcdhcm__Half_day__c}" />
+                                                    </apex:column>
+                                                    <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holidays__c.Fields.xcdhcm__Select_AM_PM__c.Label}" style="width:7%">
+                                                        <apex:inputfield value="{!cf.xcdhcm__Select_AM_PM__c}" />
+                                                    </apex:column>
+                                                    <!-- START::03/09/2015 NPPD-859 Public Holiday (Region) added by Ranjeet -->
+                                                    <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holidays__c.Fields.xcdhcm__Region__c.Label}" style="width:60%">
+                                                        <apex:inputfield value="{!cf.xcdhcm__Region__c}" />   
+                                                    </apex:column>
+                                                    <!-- END::03/09/2015 NPPD-859 Public Holiday (Region) added by Ranjeet -->
+                                                    
+                                                    <!-- END::20/01/2015 NPPD-512 Public Holiday (Half day) added by Geetha -->
+                                                </apex:dataTable>
+                                            </div>
+                                        </apex:pageBlock>
+                                    </div>
+                                    <div class="slds-modal__footer">
+                                        <apex:actionStatus id="saveStatus">                   
+                                            <apex:facet name="stop">
+                                                <apex:outputPanel >
+                                                    <apex:commandButton value="{!$Label.xcdhcm__create_new_public_holidaysbcancel}" action="{!cancelPublicHolidays}" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                                    <!-- START :: 07-03-2018 LightningPatch1 NPPD-1623 lightning regression issue row 35 Modified by Rahul S.  -->
+                                                    <apex:commandButton value="{!$Label.xcdhcm__create_new_public_holidaysbaddrow}" action="{!addHolidayRow}" rerender="formId,errorMsg,id_saveBtn" styleclass="slds-button slds-button--neutral" status="saveStatus" />
+                                                    <!-- END :: 07-03-2018 LightningPatch1 NPPD-1623 lightning regression issue row 35 Modified by Rahul S.  -->
+                                                    <!-- START :: 09-10-2017 Lightning Issues/Actions commented by Rahul S -->
+                                                    <!-- <apex:commandButton value="{!$Label.Create_New_Public_HolidaysBSaveandNewHolidayYear}" action="{!saveAndNewHolYear}" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn,errorMsg"/> -->
+                                                    <!-- END :: 09-10-2017 Lightning Issues/Actions commented by Rahul S -->
+                                                    <apex:commandButton value="{!$Label.xcdhcm__create_new_public_holidaysbsaveall}" action="{!saveCompanyHolidays}" styleclass="slds-button slds-button--brand" status="saveStatus" rerender="id_saveBtn,errorMsg" id="id_saveBtn"/>
+                                                </apex:outputPanel>
+                                            </apex:facet>
+                                            <apex:facet name="start">
+                                                <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div> 
+                                                </div>                    
+                                            </apex:facet>                                
+                                        </apex:actionStatus> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-backdrop slds-backdrop--open"></div>
+                        </apex:form>
+                    </td>
+                </tr>
+            </table>
+        </body>
+    </html>
+</apex:page>

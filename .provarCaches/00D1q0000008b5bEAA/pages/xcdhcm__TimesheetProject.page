@@ -1,0 +1,1086 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" sidebar="false"
+	extensions="xcdhcm.TimeSheetProjectController" action="{!TSDates}">
+	
+	<apex:form id="theform">
+		<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Timesheet.css')}" id="thePage"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+	<!-- START :: 08/08/2016 NPPD-1208 Timesheet - handling changes after submission added by Farhan     
+	<apex:outputPanel id="styleclsOutputPanel"
+			rendered="{!if(approvalStatus == 'Approved' || ($User.Id == empDetail.User__c && approvalStatus == 'Awaiting Approval'),true,false)}">
+		-->    
+		<apex:outputPanel id="styleclsOutputPanel" rendered="{!if(((TimesheetEditablePermission == false && (approvalStatus == 'Awaiting Approval' || approvalStatus == 'Approved')) || approvalStatus == 'Confirmed'),true,false)}">
+	<!-- END :: 08/08/2016 NPPD-1208 Timesheet - handling changes after submission added by Farhan --> 
+		
+		<style type="text/css">
+			
+			textarea 
+			{
+				pointer-events: none;
+				display: block;
+			}
+			 
+			textarea:focus {
+				outline: none;
+			}
+			
+			body .pbBody table.list tr.dataRow th, body .pbBody table.list tr.dataRow td
+				{
+				pointer-events: none;
+			}
+			
+			.picklistArrowRight {
+				pointer-events: none;
+			}
+			
+			.picklistArrowLeft {
+				pointer-events: none;
+			}
+			
+			.pbBody a:hover, .lbBody a:hover {
+				pointer-events: none;
+			}
+			
+			.pbBody, .pbBody a, .pbBody td, .lbBody a, .lbBodyDescription, .list .headerRow .noRowsHeader
+				{
+				pointer-events: none;
+			}
+			
+			.nodisplay {
+				display: none;
+			}
+			
+			.apexp .totalRow {
+				font-weight: bold;
+				background-color: #797970;
+			}
+			</style>  
+			<!-- START :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan -->
+			<script>
+			$(document).ready(function()
+         	{
+         		$("[id$=Timesheet_Date_Table] :input").prop("disabled",true);
+			});
+		</script> 
+		<!-- END :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan -->
+		</apex:outputPanel>   
+			
+					<style>
+					
+					
+			.list tr td {
+				padding-top: 5px !important;
+			}
+			
+			.list tr td:last-child, .list tr th:last-child {
+				width: 7.6% !important;
+			}
+			
+			.helpButton, .helpButtonOn {
+				z-index: 100;
+				position: relative;
+			}
+			
+			.list th:first-child div {
+				//margin-top: -16px;
+			}
+			
+			/*.helpButton:hover .titlepopup,.helpButtonOn:hover .titlepopup,*/
+			#hlpbtn:hover .titlepopup {
+				display: block !important;
+				width: 300px;
+				background: #FEFDB9;
+				padding: 4px;
+				color: #000;
+				position: absolute;
+				z-index: 1;
+				top: 175px;
+				border: 1px solid #FFA603;
+				text-align: justify;
+				white-space: normal;
+				font-weight: normal;
+			}
+			
+			#hlpbtn:hover .titlepopup1 {
+				display: block !important;
+				width: 300px;
+				background: #FEFDB9;
+				padding: 4px;
+				color: #000;
+				position: absolute;
+				z-index: 1;
+				top: 175px;
+				border: 1px solid #FFA603;
+				text-align: justify;
+				white-space: normal;
+				font-weight: normal;
+				right: 5px;
+			}
+			
+			#hlpbtn img {
+				height: 12px;
+				margin-left: 3px;
+				margin-top: -1px;
+				opacity: 0.50;
+			}
+			
+			#hlpbtn img:hover {
+				opacity: 1.0;
+			}
+			
+			img[title] {
+				font-size: 19px;
+			}
+			
+			@
+			-moz-document url-prefix () { .hhmm { margin-left:2px!important;
+				
+			}
+			
+			.mm {
+				margin-left: -15px;
+			}
+			
+			}
+			.list td, .list th, body.oldForecast .list .last td, body.oldForecast .list .last th
+				{
+				//padding: 4px 0px 4px 0px !important;
+			}
+			
+			.inputfclass {
+				width: 32% !important;
+			}
+			
+			.inputfclass1 {
+				width: 50% !important;
+			}
+			
+			.inputfclass2 {
+				width: 60% !important;
+			}
+			
+			.inputfclass3 {
+				width: 50% !important;
+			}
+			
+			@media all and (min-width: 766px) and (max-width:1050px) {
+				.selectlistt {
+					width: 46% !important;
+				}
+				.selectlistcol {
+					width: 15% !important;
+				}
+				.inputfclass {
+					width: 32% !important;
+				}
+				.inputfclass1 {
+					width: 70% !important;
+				}
+				.inputfclass2 {
+					width: 60% !important;
+				}
+				.inputfclass3 {
+					width: 50% !important;
+				}
+				.duecol {
+					width: 18% !important;
+				}
+				input {
+					font-size: 9.7px;
+					padding: 2px 0 2px 0;
+				}
+				select {
+					font-size: 9.6px;
+					padding: 2px 0 2px 0;
+				}
+				body .pbBody table.list tr th, body .pbBody table.list tr td {
+					font-size: 9.7px;
+				}
+				body .pbBody table.list tr.headerRow th {
+					font-size: 9px !important;
+				}
+			}
+			
+			body .pbBody table.list tr.headerRow th {
+				background: #fff !important;
+				border-bottom: 1px solid #cde2f5 !important;
+				border-top: none !important;
+				color: #999999 !important;
+				border-left: none !important;
+				border-right: none !important;
+			}
+			
+			/*box class name */
+			.boxMsg
+			{
+			display:none;
+			position: absolute;
+			    z-index: 10000;
+			    background: #fff;
+			    margin-left: 40px;
+			    float:left;
+			}
+			
+			
+			
+			/*hover box remove this class once dublclick fn done */
+			.hourss1:hover ~ .boxMsg
+			{
+			display:block !important;   
+			}
+			
+			
+			/*popup*/
+			.popupBg {
+				background-color: black;
+				opacity: 0.70;
+				filter: alpha(opacity =   70);
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				z-index: 9998;
+				background: black !important;
+			}
+			
+			.customPopup {
+				line-height: 25px;
+				position: absolute;
+				left: 50%;
+				padding: 10px;
+				z-index: 9999;
+				text-align: center;
+				top: 150px;
+				width: 500px;
+				margin-left: -250px;
+				text-decoration: none;
+				font-weight: bold;
+				background: #ffffff !important;
+				border: 1px solid #ccc !important;
+				/*-moz-box-shadow: 4px 5px 10px #99ccff;
+				-webkit-box-shadow: 4px 5px 10px #99ccff;
+				box-shadow: 4px 5px 10px #99ccff; */
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+				color: #336699;
+			}
+			
+			.butt {
+				border: 1px solid #d9d9d9 !important;
+				color: #999999 !important;
+				background-color: #fff !important;
+				background-image: none !important;
+				-moz-box-shadow: 2px 1px 8px #a6d6ff;
+				-webkit-box-shadow: 2px 1px 8px #a6d6ff;
+				box-shadow: 2px 1px 8px #a6d6ff;
+		}
+		<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+		.test
+		{
+			top:0px;
+			margin-left: -7px;
+			line-height: normal;
+			color: #000;
+			padding: 0px 7px;
+			position: fixed;
+ 			z-index:1;
+  			background: #fff;
+  			display:none;
+  			/*START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan*/
+  			height: 8%;
+  			/*END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan*/
+		}
+		/*popup*/
+	</style>
+	<script>
+		$(window).scroll(function() 
+		{    
+		    var scroll = $(window).scrollTop();
+			if(scroll >= 275)
+			{
+				$('.test').css({"display":"block"});
+			}
+			else
+			{
+				$('.test').css({"display":"none"});
+			}
+			
+		});
+	</script>
+	<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+			<!-- START :: 16/11/2017 NPPD-1372 Weekly timesheet modified by Farhan(removed height)-->
+			<div style="width:100%;">
+			<!-- END :: 16/11/2017 NPPD-1372 Weekly timesheet modified by Farhan -->
+	
+		<apex:pageBlock mode="edit" id="theblock" title="{!$Label.xcdhcm__phtimesheetproject}">
+			<apex:pageMessages id="errorId" escape="false" /> 
+			
+			<apex:pageBlockSection id="timSummJobrolSecId" columns="1">
+				<apex:pageBlockSectionItem id="timSummJobrolId">
+					
+					<apex:outputPanel id="timSummJobrolpanel"
+						style="{!if(TS_approver == 'yes','font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt !important;' ,'pointer-events: auto;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt !important;')}">
+						<apex:outputLabel value="Employee"
+							style="margin-right:5px;color: #999999;font-weight: bold;" />
+							
+							<apex:outputField value="{!empDetail.Name}" style="" />
+						
+						<apex:outputLabel value="{!$ObjectType.xcdhcm__Overtime_Record__c.Fields.xcdhcm__Job_Role__c.Label}"
+							style="{!IF((greyOut != true), 'color: #999999;margin-left:5px;margin-right:5px;color: #999999;font-weight: bold;', 'color: #999999; margin-left:5px; margin-right:5px;color: #999999;font-weight: bold;')}" />
+						
+							<apex:actionRegion >
+								<apex:selectList id="jobrolePicklist" value="{!jobroleVal}"
+									size="1"
+									style="{!IF((greyOut != true), 'width: 170px !important;', 'width: 170px !important;color: #999999; pointer-events: none;')}">
+									<apex:selectOptions value="{!jobroleValues}" />
+									<apex:actionSupport action="{!getTimeSheetMonths}"
+										event="onchange" status="processing" reRender="timSummPicklist" />
+								</apex:selectList>
+							</apex:actionRegion>
+
+						<apex:outputLabel value="Period"
+							style="{!IF((greyOut != true), 'color: #999999;margin-right:5px;color: #999999;font-weight: bold;', 'color: #999999; margin-right:5px;color: #999999;font-weight: bold;')}" />
+							<apex:actionRegion >
+								<apex:selectList id="timSummPicklist" value="{!timeSheetMonth}"
+									size="1"
+									style="{!IF((greyOut != true), 'width: 120px !important;', 'color: #999999; pointer-events: none;width: 120px !important;')}">
+									<apex:selectOptions value="{!TimeSheetSummaryValues}" />
+									<!-- <apex:actionSupport action="{!TimeSheetRecords}" event="onchange" status="processing"/> -->
+								</apex:selectList>
+							</apex:actionRegion>
+
+						<apex:actionStatus startText="Processing..." id="processing" />
+						
+						<apex:commandButton id="btn1" value="{!$Label.xcdhcm__timesheetprojectbgo}" action="{!TSDates}"
+							rendered="{!IF(TS_approver != 'yes',true,false)}"
+							reRender="thePage,styleclsOutputPanel,theform,btn1,errorId,Timesheet_Date_Table"
+							onClick="disableButton(this);"
+							style="{!IF((greyOut != true), 'margin-left:10px;', 'margin-left:10px; display: none;')}" />
+						
+						<apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;"
+							target="_blank" action="{!helpLinkTimesheet}" value="Help" 
+							id="theCommandLink" />
+						<apex:outputPanel id="ButtonsId" rendered="{!TS_Project_Wrapper.size!=0}">
+							
+							<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+							<!-- START :: 30/05/2016 NPPD-1198 Add Processing feature when click Save at bottom of timesheet modified by Farhan -->
+							<!-- START :: 09/06/2016 NPPD-1164 Admin or Manager can submit Timesheet on behalf of Employee modified by Farhan -->
+							<!--
+							<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbsave}" action="{!initialSaveCheck}" id="saveTopButton"
+								rendered="{!OR(approvalStatus == 'Not Submitted',approvalStatus == 'Rejected',approvalStatus == null)}"
+								onClick="disableButton(this,'{!$Component.saveBottomButton}');"
+								reRender="errorId,ButtonsId,theform,thePage,Timesheet_Date_Table"
+								style="{!if(approvalStatus=='Approved' || ($User.Id == empDetail.User__c && approvalStatus == 'Awaiting Approval'),'opacity:0.5; pointer-events: none;','')}" />
+							<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbsave}" rendered="{!AND(approvalStatus != 'Not Submitted',approvalStatus != 'Rejected',approvalStatus != null)}" Disabled="true" style="opacity:0.5; pointer-events: none;"/>-->
+							<!-- START :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+							<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbsave}" action="{!initialSaveCheck}" id="btnTopSave" 
+								onClick="disableButton(this,'saveBtn');"
+								reRender="errorId,ButtonsId,theform,thePage,Timesheet_Date_Table"
+								style="{!if(((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null) || (TimesheetEditablePermission == true && approvalStatus!='Confirmed')),'','opacity:0.5; pointer-events: none;')}" />
+							<!-- END :: 09/06/2016 NPPD-1164 Admin or Manager can submit Timesheet on behalf of Employee modified by Farhan -->
+							<!-- END :: 30/05/2016 NPPD-1198 Add Processing feature when click Save at bottom of timesheet modified by Farhan -->
+							<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbcancel}" action="{!cancelTS}"
+								id="btnTopCancel" onClick="disableButton(this);"
+								rerender="errorId,SummaryPanel,ButtonsId" />
+							<!-- END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+						<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+					</apex:outputPanel>
+					
+				</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+				<!-- START :: 28/04/2016 NPPD-1080 Timesheet - fixes added by Farhan -->
+				<apex:outputPanel rendered="{!TS_Project_Wrapper.size!=0}">
+					<label style="margin-left:25px;color: #999999;font-weight: bold;"> Status </label>
+			        <label style="margin-left:5px;margin-right:15%;font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 10pt !important"> {!approvalStatus} </label>
+			    </apex:outputPanel>
+			    <!-- END :: 28/04/2016 NPPD-1080 Timesheet - fixes added by Farhan -->
+			</apex:pageBlockSection>
+			
+			<apex:pageBlockSection rendered="{!TS_Project_Wrapper.size!=0}" columns="1">
+				<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+				<apex:CommandButton value="{!$Label.xcdhcm__timesheetprojectbaddproject}" action="{!AddProject}" oncomplete="" onClick="this.style.color='#336699';this.value='Please wait...';"
+					rerender="Timesheet_Default_Project_Table,PRAdd,Default_Projects,errorId,theform" style="margin-left:40%;"/>
+				<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+			</apex:pageBlockSection>
+			<br />
+			<br />
+			
+			<apex:outputText Value="No records to display"
+				rendered="{!IF(AND(jobroleVal != null,TS_Project_Wrapper.Size=0),TRUE,FALSE)}"
+				style="margin-left:20px;" />
+
+			<apex:pageBlockTable value="{!TS_Project_Wrapper}" var="ts"
+				rendered="{!TS_Project_Wrapper.size!=0}" id="Timesheet_Date_Table"
+				columnswidth="60%,40%" cellspacing="0"
+				cellpadding="0" style="width:12%;float:left;">
+				
+				<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+				<apex:column style="{!IF((contains(leave_await_app_Dates_Check, TEXT(ts.Month_date)) || contains(leave_approved_Dates_Check, TEXT(ts.Month_date)) || contains(comPubHolidaysCheck, TEXT(ts.Month_date)) || IF(OR(jobrolePattern = 'Work cycle - days', jobrolePattern = 'Work cycle - hours'), ts.Due == 0, NOT(contains(workingdaysCheck, ts.Day_OF_Project)))), 'width:95px;padding: 6.5px 0 !important;float:left; background-color: #f5f5f5;', 'width:95px;padding: 6.5px 0 !important;float:left;')}">
+				<!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->		
+					<apex:facet name="header"> 
+						Date
+						<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+						<div class="test" style="margin-bottom:5px;border-bottom:1px solid #cde2f5;color:#999999;padding-bottom: 1px;width:95px;">
+						<!-- START :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+							<br/>Date
+						<!-- END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+						</div>
+						<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+			   		</apex:facet>
+					<apex:outputText value="{!ts.Date_Of_Project}" id="if1" />
+				</apex:column> 
+				
+				<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+				<apex:column style="{!IF((contains(leave_await_app_Dates_Check, TEXT(ts.Month_date)) || contains(leave_approved_Dates_Check, TEXT(ts.Month_date)) || contains(comPubHolidaysCheck, TEXT(ts.Month_date)) || IF(OR(jobrolePattern = 'Work cycle - days', jobrolePattern = 'Work cycle - hours'), ts.Due == 0, NOT(contains(workingdaysCheck, ts.Day_OF_Project)))), 'width:50px;padding: 6.5px 3px !important; background-color: #f5f5f5;', 'width:50px;padding: 6.5px 3px !important;')}">  
+				<!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->		
+					<apex:facet name="header">
+						Day
+						<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+						<div class="test" style="margin-bottom:5px;border-bottom:1px solid #cde2f5;color:#999999;padding-bottom: 1px;width:50px;">
+						<!-- START :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+							<br/>Day
+						<!-- END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+						</div>
+						<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+			   		</apex:facet>
+			   		<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+					<apex:outputText value="{!ts.Day_OF_Project}" id="if2" style="height: 16px;"/> 
+					<!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+				</apex:column>
+			</apex:pageBlockTable>
+			
+			<apex:outputPanel id="MainDiv" rendered="{!TS_Project_Wrapper.size!=0}">
+			<div style="width: 66.8%; float: left; overflow-x: scroll; margin-top: -30px;">
+				 <apex:variable var="rowCounter" value="{!0}"/>
+				 <apex:variable var="classcounter" value="{!0}"/>
+				 
+				 <apex:pageBlockTable value="{!toDisplay}" var="ts"
+					rendered="{!TS_Project_Wrapper.size!=0}"
+					id="Timesheet_Default_Project_Table"
+					columnswidth="100%" cellspacing="0"
+					cellpadding="0" style="width:100px;margin-bottom: 7px;">
+					
+					<apex:variable var="columnCounter" value="{!0}"/>
+					
+					<apex:repeat value="{!ts.Project_InnerWrapper_List}" var="EachPR" id="Default_Projects">
+						
+						<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->																					
+						<apex:column style="{!IF(( contains(leave_await_app_Dates_Check, TEXT(ts.timesheetDate)) || contains(leave_approved_Dates_Check, TEXT(ts.timesheetDate)) || contains(comPubHolidaysCheck, TEXT(ts.timesheetDate)) ) || IF(OR(jobrolePattern = 'Work cycle - days', jobrolePattern = 'Work cycle - hours'), ts.Due == 0, NOT(contains(workingdaysCheck, ts.Day))), 'width:100px !important; padding:1px 0px; background-color: #f5f5f5', 'width:100px !important; padding:1px 0px;')}">
+						<!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+						<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+							<apex:outputText rendered="{! If(ts.timesheetDate == first_Date_OF_Month ,true,false) }" >
+								<div class="test">
+									<apex:selectList value="{!EachPR.prjRec}" id="header" onchange="setHeader(this.id,1);" 
+										multiselect="false" size="1"
+										rendered="{! If(ts.timesheetDate == first_Date_OF_Month ,true,false) }"
+										style="margin-bottom:5px;float:left;width:14ch;" >
+										<apex:selectOptions value="{!Project}" /> 
+									</apex:selectList><br/>
+		
+									<apex:outputText value="hh.mm"
+										rendered="{! If(ts.timesheetDate == first_Date_OF_Month ,true,false) }" 
+										style="font-weight:bold;margin-bottom:5px;border-bottom:1px solid #cde2f5;color:#999999;padding-bottom: 1px;float:left;width:110px;" />
+								</div>
+							</apex:outputText>
+							
+							
+							<apex:selectList value="{!EachPR.prjRec}" id="projectHeader_1" 
+								multiselect="false" size="1" onchange="setHeader(this.id,2);"
+								rendered="{! If(ts.timesheetDate == first_Date_OF_Month ,true,false) }"
+								style="margin-bottom:5px;float:left;width:14ch;" >
+								<apex:selectOptions value="{!Project}"/>
+								
+							</apex:selectList>
+
+							<apex:outputtext rendered="{! If(ts.timesheetDate == first_Date_OF_Month ,true,false) }">
+								<script type="text/javascript">
+							        (
+							        	function()
+							        	{
+							        		var pageHeader = '{!$Component.projectHeader_1}';
+							        		var freezedHeader = '{!$Component.header}';
+							        		var selectedProject = document.getElementById(pageHeader).value;
+							        		var txtvalue = document.getElementById(pageHeader);
+							        		var id1 = txtvalue;
+		    								txtvalue = txtvalue.options[txtvalue.selectedIndex].text;
+	    						    		console.log('Selected Project id is '+selectedProject+' and name is'+txtvalue);
+	    						    		var lowervar = txtvalue.toLowerCase();
+									    	var uppervar = txtvalue.toUpperCase();
+									    	var varlength = txtvalue.length;
+									    	console.log('char length'+varlength);
+									    	//document.getElementById(pageHeader).value = txtvalue.substring(0,12);
+									    	if(varlength > 12)
+									    	{
+									    		console.log('original-'+txtvalue+' lower-'+lowervar+' upper-'+uppervar);
+										    	if(!isNaN(txtvalue))
+										    	{
+										    		document.getElementById(pageHeader).style.width = "15.5ch";
+										    		document.getElementById(freezedHeader).style.width = "15.5ch";
+										    	}
+										    	else if(txtvalue === lowervar)
+										    	{
+										    		document.getElementById(pageHeader).style.width = "13.8ch";
+										    		document.getElementById(freezedHeader).style.width = "13.8ch";
+										    	}
+										    	else if(txtvalue === uppervar)
+										    	{
+										    		document.getElementById(pageHeader).style.width = "18.5ch";
+										    		document.getElementById(freezedHeader).style.width = "18.5ch";
+										    	}
+										    	else
+										    	{
+										    		document.getElementById(pageHeader).style.width = "14.8ch";
+										    		document.getElementById(freezedHeader).style.width = "14.8ch";
+										    	}
+									    	}
+		    	        	        	}
+				        	        )();
+							    </script>
+							</apex:outputtext>
+							<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan -->
+							<apex:outputText value="hh.mm"
+								rendered="{! If(ts.timesheetDate == first_Date_OF_Month ,true,false) }" 
+								style="font-weight:bold;margin-bottom:5px;border-bottom:1px solid #cde2f5;color:#999999;padding-bottom: 1px;float:left;width:110px;" />
+							<apex:outputText value="Notes"
+								rendered="{! If(ts.timesheetDate == first_Date_OF_Month ,true,false) }"
+								style="margin-bottom:5px;font-weight:bold;border-bottom:1px solid #cde2f5;color:#999999;padding-bottom: 3px;float:left;width:110px;display:none;" />
+							
+							<div style="position:relative;">
+								<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan -->
+								<!-- START :: 29/06/2017 NPPD-1440 Not able to Input decimal point in Project timesheet(included onclick) modified by Farhan -->
+								<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+										<!-- START :: 28/08/2018 NPPD-1682 Timesheet improvements added by Anil -->
+										<apex:inputText id="Hours_1" value="{!EachPR.hours}" style="{!IF((EachPR.Notes !=null && greyOut != true),'width:35px;float:left;height:15px;padding: 1.2px;border-right:4px solid #03a303;pointer-events: visible;','width:35px;float:left;height:15px;padding: 1.2px;')}"
+											 onkeydown="return isNumberKey(event)" onchange="checkforhhmm(this.id,{!classcounter});" onkeyup="calculateDayWorkedTotal(this,'{!rowCounter}','{!Total_No_Of_Columns}','{!columnCounter}','{!numberOfDays}');return false;" ondblclick="openPage(this,'{!classcounter}');" styleclass="hourss{!classcounter}"/>
+									 	<div id="Msg2{!classcounter}"  style="display:none; color: #e74c2e;" > 
+									   		<div style="width:85px;float:left;height:12px;" >
+										   		<font style="float:left">Invalid hh.mm</font>
+									   		</div>
+								   		</div>
+								   		<!-- END :: 28/08/2018 NPPD-1682 Timesheet improvements added by Anil -->
+								<!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+								<!-- END :: 29/06/2017 NPPD-1440 Not able to Input decimal point in Project timesheet(included onclick) modified by Farhan -->
+								<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan -->	
+									<div class="boxMsg{!classcounter}" style="width:200px;position: absolute;z-index: 1000;margin-left: 50px;height:150px;display:none;" >
+										<apex:inputTextarea rows="3" id="Notes_1" value="{!EachPR.Notes}" onKeyUp="fncKeyLength(this);" style="width:200px;float:left;height:80px;" />
+			                                <p class="btn" style="margin-top: 5px;float: left;width: 30px;text-align: center;pointer-events: visible;" onclick="HideDiv('{!classcounter}',this,'{!rowCounter}','{!columnCounter}');">
+			                                	Ok
+			                                </p>
+									</div>
+							</div>
+							<br/>
+							<div style="width:100%;float:left;">
+								<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+								<apex:inputText id="TotHourPerProject" value="{!totalcol[columnCounter]}" rendered="{! If(ts.timesheetDate == last_Date_Of_Month ,true,false) }" 
+									style="background-color: #dddddd; box-shadow: none;color: #666; padding: 1px; margin-top:10px;width:40px;" onmousedown="disable(this.id);"/>
+								<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+								</div>
+								
+								<apex:variable var="columnCounter" value="{!columnCounter+1}"/>
+						 		<apex:variable var="classcounter"  value="{!classcounter+1}"/>
+						
+						</apex:column>
+					</apex:repeat>
+						
+					<apex:column >
+						<apex:variable var="columnCounter" value="{!0}"/>
+						<apex:variable var="rowCounter" value="{!rowCounter+1}"/>
+					</apex:column>    
+				</apex:pageBlockTable>
+			</div>
+			</apex:outputPanel>
+
+			<apex:pageBlockTable value="{!toDisplay}" rendered="{!TS_Project_Wrapper.size!=0}" var="ts" style="margin-top:-15px;width:20%;float:left;">
+				<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+				<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+				<apex:column style="{!IF((contains(leave_await_app_Dates_Check, TEXT(ts.timesheetDate)) || contains(leave_approved_Dates_Check, TEXT(ts.timesheetDate)) || contains(comPubHolidaysCheck, TEXT(ts.timesheetDate)) )|| IF(OR(jobrolePattern = 'Work cycle - days', jobrolePattern = 'Work cycle - hours'), ts.Due == 0, NOT(contains(workingdaysCheck, ts.Day))), 'width: 7% !important;padding:1px 5px; background-color: #f5f5f5', 'width: 7% !important;padding:1px 5px;')}">
+				<!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+				<!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+					<apex:facet name="header">  
+						Total Project <br/> hh.mm
+						<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+						<div class="test" style="margin-bottom:5px;border-bottom:1px solid #cde2f5;color:#999999;padding-bottom: 1px;width: 9% !important;">
+							Total Project <br/> hh.mm
+						</div>
+						<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+			   		</apex:facet>
+					  
+					<apex:InputText value="{!ts.Total_Hours_In_A_Day}" id="if11"
+						style="background-color: #dddddd; box-shadow: none;color: #666; padding: 1px; height:15px;width: 40%" onmousedown="disable(this.id);"/>
+						<span style="float: left; width: 100%;"></span>
+						<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan -->
+						<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+						<apex:InputText value="{!TotalWorked}" id="Total_Hours_in_Month" rendered="{! If(ts.timesheetDate == last_Date_Of_Month ,true,false) }" style="background-color: #dddddd; box-shadow: none;color: #666; padding: 0px; width: 40px;margin-top:10px;" onmousedown="disable(this.id);"/>  
+						<!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+						<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan -->
+				</apex:column>   
+				
+               	<!-- START :: 17/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim -->
+               	<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+				<apex:column style="{!IF((contains(leave_await_app_Dates_Check, TEXT(ts.timesheetDate)) || contains(leave_approved_Dates_Check, TEXT(ts.timesheetDate)) || contains(comPubHolidaysCheck, TEXT(ts.timesheetDate)) )|| IF(OR(jobrolePattern = 'Work cycle - days', jobrolePattern = 'Work cycle - hours'), ts.Due == 0, NOT(contains(workingdaysCheck, ts.Day))), 'width: 8% !important; background-color: #f5f5f5', 'width: 8% !important;')}">
+				<!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->	
+					<apex:facet name="header"> 
+						Leave Booked <br/>hh.mm
+						<!-- START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+						<div class="test" style="margin-bottom:5px;border-bottom:1px solid #cde2f5;color:#999999;padding-bottom: 1px;width: 9% !important;">
+							Leave Booked <br/>hh.mm
+						</div>
+						<!-- END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan -->
+					</apex:facet>
+					<apex:outputText value="{!ts.leave_booked}" style="" rendered="{!( ts.leaveId == null )}"/>
+					<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+					<apex:outputLink target="_blank" title="Leave booked" value="/one/one.app#/alohaRedirect/{!ts.leaveId}" 
+					style="{!
+					IF(AND(contains(leave_approved_Dates_Check, TEXT(ts.timesheetDate)),contains(leave_approved_Dates_Check,ts.leaveId)),IF(contains(workingTimeLeaveId,ts.leaveId),'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;','pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+					IF(AND(contains(leave_await_app_Dates_Check, TEXT(ts.timesheetDate)),contains(leave_await_app_Dates_Check,ts.leaveId)) ,IF(contains(workingTimeLeaveId,ts.leaveId),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;','pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+					'display:none;'))}">
+					<!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+					<apex:outputText value="{!ts.leave_booked}" id="if10" style="" styleclass="inputfclass1"/>
+					</apex:OutputLink>
+					&nbsp;&nbsp;
+					<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+				<apex:outputLink target="_blank" title="Leave booked" value="/one/one.app#/alohaRedirect/{!ts.leave2Id}" rendered="{!( ts.leave2Id != null )}"
+					style="{!
+					IF(AND(contains(leave_approved_Dates_Check, TEXT(ts.timesheetDate)),contains(leave_approved_Dates_Check,ts.leave2Id)),IF(contains(workingTimeLeaveId,ts.leave2Id),'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;','pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+					IF(AND(contains(leave_await_app_Dates_Check, TEXT(ts.timesheetDate)),contains(leave_await_app_Dates_Check,ts.leave2Id)) ,IF(contains(workingTimeLeaveId,ts.leave2Id),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;','pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+					'display:none;'))}">
+					<!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+					<apex:outputText value="{!ts.leave_booked2}" id="if10ab" style="" styleclass="inputfclass1"/>
+					</apex:OutputLink><br/> 
+					<apex:InputText value="{!TotalLeave}" id="Total_Leave_in_Month1" rendered="{! If(ts.timesheetDate == last_Date_Of_Month ,true,false) }" style="background-color: #dddddd; box-shadow: none;color: #666; padding: 1px; width: 40px;margin-top:10px;" onmousedown="disable(this.id);"/>
+				<!-- END :: 17/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim -->
+				</apex:column>
+			</apex:pageBlockTable>
+			
+			<apex:pageBlockSection >
+
+			</apex:pageBlockSection>
+			<br/><br/>
+			<apex:outputLabel rendered="{!TS_Project_Wrapper.size!=0}" value="{!$Label.xcdhcm__timesheet_declaration}" style="font-weight: bold; font-size: 13px;"/>
+    		
+		</apex:pageBlock></div>  
+			<!-- START :: 03/05/2016 NPPD-1080 Timesheet-fixes added by Farhan --> 
+                <br/><br/>
+		    <apex:outputPanel id="ButtonsId1" rendered="{!TS_Project_Wrapper.size!=0}">
+		    <br/> 
+		    <table style="width:100%;" cellpadding="5px;" cellspacing="5px">
+		    	<tr>
+		    		<td style=" width:35%;border: 1.5px solid black;">
+		    			<apex:repeat value="{!TimesheetNotes}" var="f">
+			 				<apex:outputText value="{!f}" style="font-size: 13px; height:25px;"/><br/>
+						</apex:repeat>
+		    		</td>
+		    		<td style=" margin-left: 10%; padding-left:5%;" valign="bottom" >
+		    			<apex:outputPanel id="ButtonBottom" >
+						<!-- END :: 03/05/2016 NPPD-1080 Timesheet-fixes added by Farhan --> 
+							<!-- START :: 30/05/2016 NPPD-1198 Add Processing feature when click Save at bottom of timesheet modified by Farhan -->
+		    				<!-- START :: 09/06/2016 NPPD-1164 Admin or Manager can submit Timesheet on behalf of Employee modified by Farhan -->
+							<!-- START :: 08/08/2016 NPPD-1208 Timesheet - handling changes after submission added by Farhan --> 
+							<!-- START :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+							<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbsave}" action="{!initialSaveCheck}" id="btnBottomSave"
+									onClick="disableButton(this,'saveBtn');" reRender="errorId,ButtonsId,theform,thePage,Timesheet_Date_Table"
+									style="{!if(((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null) || (TimesheetEditablePermission == true && approvalStatus!='Confirmed')),'','opacity:0.5; pointer-events: none;')}" />
+							
+							<!-- START :: 24/12/2018 NPPD-1856 Timesheets - Validate Before Submission modifield by Farhan(added form id in rerender) -->
+							<!-- START :: 09/06/2016 NPPD-1164 Admin or Manager can submit Timesheet on behalf of Employee modified by Farhan -->
+							<!-- END :: 30/05/2016 NPPD-1198 Add Processing feature when click Save at bottom of timesheet modified by Farhan -->
+							<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbsubmittimesheet}"
+								action="{!submitForApprove}" rendered="{!TS_approver != 'yes'}"
+								rerender="popup,errorId,theform" id="btnSubmit"
+								onClick="disableButton(this,'saveBtn');"
+								style="{!if((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null),'','opacity:0.5; pointer-events: none;')}" />
+							<!-- END :: 08/08/2016 NPPD-1208 Timesheet - handling changes after submission added by Farhan -->
+							<!-- END :: 24/12/2018 NPPD-1856 Timesheets - Validate Before Submission modifield by Farhan -->
+							<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbapprovereject}" action="{!approveRejectTS}" rendered="{!TS_approver == 'yes'}" onClick="disableButton(this);" rerender="errorId,SummaryPanel,ButtonsId" style="{!if(approvalStatus=='Awaiting Approval','','opacity:0.5; pointer-events: none;')}"/> 
+			       			<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbcancel}" action="{!cancelTS}" id="btnBottomCancel" onClick="disableButton(this);" rerender="errorId,SummaryPanel,ButtonsId"/>
+		</apex:outputPanel><!-- END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+					<!-- START :: 03/05/2016 NPPD-1080 Timesheet-fixes added by Farhan --> 
+				    </td>
+		    	</tr>
+		    </table>
+		    </apex:outputPanel><br/>
+		    <!-- END :: 03/05/2016 NPPD-1080 Timesheet-fixes added by Farhan --> 
+		
+		<!--  popup  -->
+    	<apex:outputPanel id="popup">
+			<apex:outputPanel styleClass="popupBg" rendered="{!(displayPopup)}"/>
+			<apex:outputPanel id="popup1" styleClass="customPopup" layout="block" rendered="{!(displayPopup)}">
+				<center>
+					<apex:outputtext id="oText2" value="{! $Label.Confirm_message_to_submit_timesheet}"/>
+					<br />
+						<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+						<!-- START :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+						<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbok}" action="{!acceptTSApproval}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId,ButtonsId1,theblock" styleClass="butt"/>
+						<apex:commandButton value="{!$Label.xcdhcm__timesheetprojectbcancel}" action="{!cancelTSApproval}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId,ButtonsId1,theblock" styleClass="butt"/>
+						<!-- END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan -->
+						<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+				</center>
+			</apex:outputPanel>
+		</apex:outputPanel>
+		<!-- popup -->
+
+		<div style="border-bottom: 2px solid #63a4c5 !important;"></div>
+		<br />
+		
+	</apex:form>
+	
+
+	<script type="text/javascript">
+			//START :: 24/07/2018 NPPD-1682 Timesheet improvements added by Anil
+		//START :: 29/06/2017 NPPD-1440 Not able to Input decimal point in Project timesheet added by farhan
+		//set the mm value to two decimal value.
+		function checkforhhmm(src, cellNum)
+		{
+			var value = document.getElementById(src).value;
+			document.getElementById('Msg2'+cellNum).style.display = "none";
+			//var RE = /^\d{0,2}(\.\d{1})?\d{0,1}$/;
+			if(value == '' || value == '.')
+			{
+				value = 0.00;
+			}
+			var rate1mins = ((value - parseInt(value))*100).toFixed(0);
+			var rate1hr = value - rate1mins;
+			document.getElementById(src).value = (parseFloat(value).toFixed(2) == 'NaN' ? '0.00' : parseFloat(value).toFixed(2));
+			if(rate1mins >= 60 || rate1hr >= 24)
+			{
+				document.getElementById('Msg2'+cellNum).style.display = "block";
+			}
+		}
+		//END :: 24/07/2018 NPPD-1682 Timesheet improvements added by Anil
+		//END :: 29/06/2017 NPPD-1440 Not able to Input decimal point in Project timesheet added by farhan
+		/*Calculating number of hours worked, Balance, Flexi claim*/
+		function calculateDayWorkedTotal(src,rowNumber,TotalColumn,columnNumber,numberOfDays)
+		{
+			var newsum=0;
+			var total_project_on_month_sum = 0;
+			var wholenumbersum = 0;
+			var decimalnumbersum = 0;
+			for(var i=0;i<TotalColumn;i++)
+			{
+				//var endswithid = String(rowNumber) +':Default_Projects:'+ String(i) +':Hours_1';
+				//$( "[id$='0:Default_Projects:0:Hours_1']").val()
+				//console.log('rowid--'+idendswith);
+				//var eachId = 'j_id0:theform:theblock:Timesheet_Default_Project_Table:'+ String(rowNumber) +':Default_Projects:'+ String(i) +':Hours_1';
+				
+				var idendswith = "[id$='"+String(rowNumber) +':Default_Projects:'+ String(i) +':Hours_1'+"']";
+				if(!isNaN(  $(idendswith).val()) &&  $(idendswith).val() != null &&  $(idendswith).val() !='')
+				{
+					newsum = parseFloat($(idendswith).val())+parseFloat(newsum); 
+					wholenumbersum =  Math.floor($(idendswith).val())+wholenumbersum;
+					decimalnumbersum = (parseFloat($(idendswith).val()).toFixed(2) - Math.floor($(idendswith).val())) + decimalnumbersum ;
+				}
+			}
+			
+			decimalnumbersum = decimalnumbersum.toFixed(2);
+			if(decimalnumbersum >= 0.60 && decimalnumbersum != 0 )
+			{
+				wholenumbersum = wholenumbersum + Math.floor(decimalnumbersum/0.60);
+				wholenumbersum = wholenumbersum + (decimalnumbersum % 0.60);
+			}
+			
+			else if(decimalnumbersum < 0.60  && decimalnumbersum != 0)
+			{
+				wholenumbersum = wholenumbersum + parseFloat(decimalnumbersum);
+			}
+			
+			//var rowid = 'j_id0:theform:theblock:j_id57:'+String(rowNumber)+':if11';
+			var idendswithTotal = "[id$='"+':'+String(rowNumber)+':if11'+"']";
+			
+			//console.log('rowid ends with ttoal'+idendswithTotal.count);
+			console.log('wholenumbersum ttoal'+wholenumbersum);
+			
+			if(wholenumbersum != null && !isNaN(wholenumbersum) && wholenumbersum != '')
+			{
+				$(idendswithTotal).val(parseFloat(wholenumbersum).toFixed(2));
+			}
+			else if(wholenumbersum==0){
+				$(idendswithTotal).val(parseFloat(wholenumbersum).toFixed(2));
+			}
+			
+			var columnnewsum=0;
+			for(var i=0;i<numberOfDays;i++)
+			{
+				var columnidendswith = "[id$='"+':'+String(i) +':Default_Projects:'+ String(columnNumber) +':Hours_1'+"']";
+				
+				if(!isNaN(  $(columnidendswith).val()) &&  $(columnidendswith).val() != null &&  $(columnidendswith).val() !='')
+				{
+					//START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan
+					//columnnewsum = parseFloat($(columnidendswith).val())+parseFloat(columnnewsum);  
+					columnnewsum = parseFloat(columnnewsum) + (((parseInt($(columnidendswith).val())*60) + (parseFloat($(columnidendswith).val()) - parseInt($(columnidendswith).val()))*100))/60;
+					//END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan
+				}
+			}
+			//START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan
+			columnnewsum = (parseInt(columnnewsum) + (columnnewsum - parseInt(columnnewsum))*0.6).toFixed(2);
+			//END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan
+			var columnidendswithTotal = "[id$='"+':'+String(numberOfDays-1)+':Default_Projects:'+String(columnNumber)+':TotHourPerProject'+"']";
+			
+			if(columnnewsum != null && !isNaN(columnnewsum) && columnnewsum != '')
+			{
+				$(columnidendswithTotal).val(parseFloat(columnnewsum).toFixed(2));
+				//console.log('testeee'+$(idendswithTotal).val());
+				//console.log('testeee'+$(idendswithTotal).val());
+				//document.getElementById(rowid).innerHTML = parseFloat(newsum).toFixed(2);
+			}
+			var total_worked = 0.0;
+			for(i=0;i<=numberOfDays;i++) 
+			{
+				var temp_RowNUm = 0;
+				var idendswith = "[id$='"+':'+String(temp_RowNUm+i)+':if11'+"']";
+				console.log($(idendswith).val());
+				if(!isNaN(  $(idendswith).val()) &&  $(idendswith).val() != null &&  $(idendswith).val() !='')
+				{
+					total_worked = total_worked + (((parseInt($(idendswith).val())*60) + (parseFloat($(idendswith).val()) - parseInt($(idendswith).val()))*100))/60; 
+				}
+			}
+			total_worked = (parseInt(total_worked) + (total_worked - parseInt(total_worked))*0.6).toFixed(2);
+			total_project_on_month_sum = total_worked;
+			//console.log('total worked value is --> '+ total_worked);
+			//console.log(total_project_on_month_sum);
+			var id_Of_Total_PR_Month = "[id$='"+':'+String(numberOfDays-1)+':Total_Hours_in_Month'+"']";
+			
+			//j_id0:theform:theblock:j_id63:30:Total_Hours_in_Month.val(parseFloat(total_project_on_month_sum).toFixed(2));
+			
+			//document.getElementById('j_id0:theform:theblock:j_id63:30:Total_Hours_in_Month').value = parseFloat(total_project_on_month_sum).toFixed(2);
+			
+			if(total_project_on_month_sum !=null && total_project_on_month_sum != '')
+			{
+				$(id_Of_Total_PR_Month).val(parseFloat(total_project_on_month_sum).toFixed(2));  
+			}
+			 
+			else if(total_project_on_month_sum == 0)
+			{
+				$(id_Of_Total_PR_Month).val(parseFloat(total_project_on_month_sum).toFixed(2));  
+			}
+		}
+		function HideDiv(classnumber,src,rowcounterno,columncounterno){
+	              console.log('rowcounterno id'+rowcounterno);
+	              console.log('columncounterno id'+columncounterno);
+	              var currenttimeentryid = "[id$='"+':'+String(rowcounterno)+':Default_Projects:'+String(columncounterno)+':Hours_1'+"']";
+	              var currentNotesId = "[id$='"+':'+String(rowcounterno)+':Default_Projects:'+String(columncounterno)+':Notes_1'+"']";
+	              var classname = ".boxMsg"+classnumber;
+	              var Textname = ".hourss"+classnumber;
+	               console.log('test class name'+classname);
+	               $(classname).hide();
+	               console.log('notes value'+$(currentNotesId).val());
+	               if($(currentNotesId).val() != null && $(currentNotesId).val() !=''){
+	                	console.log('test entered if');
+	               		$(currenttimeentryid).css("border-right: 4px solid #03a303"); 
+	               }
+	               else{
+	               		console.log('test entered else');
+	               		$(Textname).css("border-right","1px solid #acacac");
+	               }
+	               
+	    }
+		function openPage(src,rowCounter)
+		{
+			console.log(' Source '+ src);
+			//window.open('Opening Popup','_target','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes');
+			
+			
+			 var classname = ".boxMsg"+rowCounter;
+			 var Textname = ".hourss"+rowCounter;
+			 console.log('test class name'+classname);
+			 $(classname).show();
+			 $(Textname).css("border-right","4px solid red");
+			 
+			// $(Textvalue).css("border-right","4px solid #03a303");
+		}
+		
+		function isNumberKey(evt)
+	    {
+	       var charCode = (evt.which) ? evt.which : evt.keyCode;
+	       //START :: 22/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan
+	       var status = '{!approvalStatus}';
+	       var editablePermission = '{!TimesheetEditablePermission}';
+	       //if(status != 'Not Submitted' && status != 'Rejected')
+	       if((editablePermission == 'false' && (status == 'Awaiting Approval' || status == 'Approved')) || status == 'Confirmed')
+	       {
+	       		return false;
+	       }
+	       //START :: 18/05/2017 NPPD-1440 Not able to Input decimal point in Project timesheet modified by Farhan
+	       //allowing 110 and 190 code as it is used for decimal point
+	       if(charCode != 46 && charCode != 37 && charCode != 39 && charCode != 110 && charCode != 190 && ((charCode > 31 && charCode <48)||(charCode>57 && charCode<93) ||charCode >105 ))
+	       //END :: 18/05/2017 NPPD-1440 Not able to Input decimal point in Project timesheet modified by Farhan
+	       //END :: 22/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements modified by Farhan
+	          return false;
+	
+	       return true;
+	    }
+	    // START :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan
+	    function setHeader(idval,val)
+	    {
+	    	var id;
+	    	var selectedProject;
+	    	var varlength;
+	    	var txtvalue;
+	    	if(val == 2)
+		    {
+		    	id = idval.split(':projectHeader_1');
+		    	selectedProject = document.getElementById(id[0]+':projectHeader_1').value;
+		    	txtvalue = document.getElementById(id[0]+':projectHeader_1');
+		    	varlength = selectedProject.length;
+		    	document.getElementById(id[0]+':header').value = selectedProject;
+		    }
+		    else
+		    {
+		    	id = idval.split(':header');
+		    	selectedProject = document.getElementById(id[0]+':header').value;
+		    	txtvalue = document.getElementById(id[0]+':header');
+		    	varlength = selectedProject.length;
+		    	document.getElementById(id[0]+':projectHeader_1').value = selectedProject;
+		    }
+		    var id1 = txtvalue;
+			txtvalue = txtvalue.options[txtvalue.selectedIndex].text;
+    		console.log('**Selected Project id is '+selectedProject+' and name is'+txtvalue);
+    		var lowervar = txtvalue.toLowerCase();
+	    	var uppervar = txtvalue.toUpperCase();
+	    	console.log('original-'+txtvalue+'lower-'+lowervar+'upper-'+uppervar+',char length'+varlength);
+	    	if(varlength > 12)
+	    	{
+			    if(!isNaN(txtvalue))
+		    	{
+		    		document.getElementById(id[0]+':projectHeader_1').style.width = "15.5ch";
+		    		document.getElementById(id[0]+':header').style.width = "15.5ch";
+		    		console.log('number');
+		    	}
+		    	else if(txtvalue === lowervar)
+		    	{
+		    		document.getElementById(id[0]+':projectHeader_1').style.width = "13.8ch";
+		    		document.getElementById(id[0]+':header').style.width = "13.8ch";
+		    		console.log('lower');
+		    	}
+		    	else if(txtvalue === uppervar)
+		    	{
+		    		document.getElementById(id[0]+':projectHeader_1').style.width = "18.5ch";
+		    		document.getElementById(id[0]+':header').style.width = "18.5ch";
+		    		console.log('upper');
+		    	}
+		    	else
+		    	{
+		    		document.getElementById(id[0]+':projectHeader_1').style.width = "14.8ch";
+		    		document.getElementById(id[0]+':header').style.width = "14.8ch";
+		    		console.log('mixed');
+		    	}
+		    }
+	    }
+	    // END :: 26/08/2016 NPPD-1194 Project Timesheets - Fixes and Improvements added by Farhan
+		function calculateWorked(idval) 
+		{  
+		    var id = idval.split(':if');   
+		    var sthours  = parseInt(document.getElementById(id[0]+':if3').value);
+		    var stmins = parseInt(document.getElementById(id[0]+':if4').value);
+		    var endhours = parseInt(document.getElementById(id[0]+':if5').value);  
+		    var endmins = parseInt(document.getElementById(id[0]+':if6').value);
+		    var breaks = parseInt(document.getElementById(id[0]+':if7').value);
+		    //var due = document.getElementById(id[0]+':if9').innerHTML;
+		    var due = document.getElementById(id[0]+':if9').value;
+		    var leavebooked = document.getElementById(id[0]+':if10').innerHTML;
+		    
+		    if(!(isNaN(sthours)) && !(isNaN(stmins)) && !(isNaN(endhours)) && !(isNaN(endmins)))
+		    {
+		        var calVal = ((((endhours*60)+endmins) - ((sthours*60)+stmins)-breaks)/60);
+		        document.getElementById(id[0]+':if8').value =  (parseInt(calVal) + (calVal.toFixed(2) - parseInt(calVal))*0.6).toFixed(2) ;
+		    
+			    var worked = document.getElementById(id[0]+':if8').value;
+			    if(!(isNaN(due)) && worked!=null)
+			    {    	
+			        //document.getElementById(id[0]+':if11').value = ((((parseInt(worked)*60) + ((worked - parseInt(worked))*100))/60) - (((parseInt(due)*60) + ((due - parseInt(due))*100))/60) - (((parseInt(leavebooked)*60) + ((leavebooked - parseInt(leavebooked))*100))/60)).toFixed(2);
+			        
+			        var calBalance = (((parseInt(worked)*60) + ((worked - parseInt(worked))*100))/60) - (((parseInt(due)*60) + ((due - parseInt(due))*100))/60) + (((parseInt(leavebooked)*60) + ((leavebooked - parseInt(leavebooked))*100))/60);
+			        document.getElementById(id[0]+':if11').value = (parseInt(calBalance) + (calBalance.toFixed(2) - parseInt(calBalance))*0.6).toFixed(2);
+			        //alert(due);
+			    
+				    var balance = document.getElementById(id[0]+':if11').value;
+				    var toilClaim = document.getElementById(id[0]+':if13').value;
+			        var toilUse = document.getElementById(id[0]+':if14').value;
+			        var overtimeClaim = document.getElementById(id[0]+':if15').value;
+			        var flexiUse = document.getElementById(id[0]+':if17').value;
+				    if(balance!=null && flexiUse!="")
+				   	{  
+				        var calFlexiclaim = (((parseInt(balance)*60) + ((balance - parseInt(balance))*100)) - ((parseInt(toilClaim)*60) + ((toilClaim - parseInt(toilClaim))*100)) + ((parseInt(toilUse)*60) + ((toilUse - parseInt(toilUse))*100))
+													- ((parseInt(overtimeClaim)*60) + ((overtimeClaim - parseInt(overtimeClaim))*100)) + ((parseInt(flexiUse)*60) + ((flexiUse - parseInt(flexiUse))*100)))/60;
+				        document.getElementById(id[0]+':if16').value = (parseInt(calFlexiclaim) + (calFlexiclaim.toFixed(2) - parseInt(calFlexiclaim))*0.6).toFixed(2);
+				    }
+				 }
+		    }
+		    return false;
+		}
+		
+		/*To disable the inputfield(which will manipulate automatically)*/
+		function disable(idval)
+		{
+		    /*document.getElementById(idval).disabled = true;*/
+		    document.getElementById(idval).setAttribute("readonly", "true"); 
+		}
+		
+		/*To disable the notes field*/ 
+		function disableNotes(idval)
+		{
+		    document.getElementById(idval).disabled = true;
+		}
+		
+		/*To disable the button*/
+		//START :: 30/05/2016 NPPD-1198 Add Processing feature when click Save at bottom of timesheet modified by Farhan
+		function disableButton(objBtn,compo) 
+		//END :: 30/05/2016 NPPD-1198 Add Processing feature when click Save at bottom of timesheet modified by Farhan 
+		{
+		    objBtn.disabled = true;
+		    objBtn.style.color='#336699';
+		    objBtn.value='Processing...';
+		    window.scrollTo(0, 0);
+		    //START :: 30/01/2017 NPAY-223 Payroll5 issue modified/commented by farhan
+		    //START :: 30/05/2016 NPPD-1198 Add Processing feature when click Save at bottom of timesheet added by Farhan
+		    /*if(compo != null)
+		    {
+			    document.getElementById(compo).setAttribute("value", "Processing..."); 
+			    document.getElementById(compo).setAttribute("disabled", "true");
+			}*/
+		    //END :: 30/05/2016 NPPD-1198 Add Processing feature when click Save at bottom of timesheet added by Farhan
+			console.log('compo - '+compo);
+			if(compo == 'saveBtn')
+			{
+				$("[id$='btnTopSave']").val('Processing...');
+				$("[id$='btnBottomSave']").val('Processing...');
+			}
+			$("[id$='btn1']").prop('disabled', true);
+			$("[id$='btnTopSave']").prop('disabled', true);
+			$("[id$='btnTopCancel']").prop('disabled', true);
+			$("[id$='btnBottomSave']").prop('disabled', true);
+			$("[id$='btnSubmit']").prop('disabled', true);
+			$("[id$='btnBottomCancel']").prop('disabled', true);
+			//END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan
+		}
+		
+		/*To remove --none-- option in picklist*/
+		function removeNone(idval)
+		{
+		    var list = document.getElementById(idval);
+		   // alert(list.options[0].text);
+		    if(list.options[0].text == '--None--')
+		    {
+		    	list.remove(0);
+		    }
+		} 
+		
+		function fncKeyLength(textBox)
+		{
+			if (window.event.ctrlKey)
+			{
+				console.log('')
+				if (window.event.keyCode == 255)//Paste 
+				{
+					if (textBox.value.length > maxLength - 1)
+					{            
+	  					alert("* You have reached max limit of 255 chars");
+	  					textBox.value = textBox.value.substr(0, maxLength); 
+					}
+				}
+			}
+		}
+	
+	</script>
+
+</apex:page>

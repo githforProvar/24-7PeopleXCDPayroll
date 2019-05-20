@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Controls links from custom buttons - e.g., Performance Review, HR Request</description>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>xcdhcm__CustomURL_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>CustomURL_Value</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Custom_Button_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Rename filed label from CustomButtonName to &quot;Custom value&quot;  as part of NPPD-1841.
+Use this field to input the ID values</description>
+        <externalId>false</externalId>
+        <label>Custom value</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Description__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <label>CustomURL</label>
+    <listViews>
+        <fullName>Custom_URL</fullName>
+        <columns>NAME</columns>
+        <columns>xcdhcm__Description__c</columns>
+        <columns>xcdhcm__Custom_Button_Name__c</columns>
+        <columns>xcdhcm__CustomURL_Value__c</columns>
+        <columns>LAST_UPDATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>Custom URL</label>
+        <language>en_GB</language>
+        <sharedTo>
+            <group>HR_Administrator</group>
+        </sharedTo>
+    </listViews>
+    <visibility>Public</visibility>
+</CustomObject>

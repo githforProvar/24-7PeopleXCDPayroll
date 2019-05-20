@@ -1,0 +1,372 @@
+<apex:page standardController="xcdhcm__Salary_Review__c"  extensions="xcdhcm.NewSalaryReviewController" showHeader="true" sidebar="flase">
+    <!-- START :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important; 
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        .customnotabTab .listViewport .subNav .linkBar, .customnotabTab .mComponent .cHeader, .customnotabTab .genericTable, .customnotabTab .bSubBlock, .customnotabTab .bPageBlock 
+        {
+        border-top: white;
+        }
+        .bPageBlock .detailList tr td, .bPageBlock .detailList tr th, .hoverDetail .bPageBlock .detailList tr td, .hoverDetail .bPageBlock .detailList tr th 
+        {
+        border-bottom: white;
+        }
+        .duelingListBox table.layout td 
+        {
+        text-align: left;
+        }
+        .datePicker
+       { 
+		  margin-left:210px !important;
+		  width: 21% !important;
+		  position: sticky !important;    
+		} 
+		.picklistArrowLeft, .picklistArrowRight, .rightArrowIcon, .leftArrowIcon, .doubleArrowUp, .upArrowIcon, .downArrowIcon, .doubleArrowDwn {
+     		margin-right: 30px;
+		}
+		.rightArrowIcon,.leftArrowIcon
+		{
+			height: 20px!important;
+		}
+		
+        
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form id="formid">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!Cancel}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>  
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNewSalaryReview}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageblock id="blockid">
+                                <apex:pageMessages id="erMsg"/>
+                                
+                                <apex:pageblocksection columns="2" >
+                                    <apex:pageblocksectionItem >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        <apex:outputpanel rendered="{!$objectType.xcdhcm__Salary_Review__c.fields.Name.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        {!$ObjectType.Salary_Review__c.fields.Name.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$Label.xcdhcm__newsalaryreviewhtreviewname}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!salaryReview.Name}"  required="true" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageblocksectionItem>
+                                    
+                                    <apex:repeat value="{!salaryReview}" var="se" rows="1">   
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Salary_Review__c.Fieldsets.xcdhcm__New_Salary_Review_setup}" var="i">
+                                        	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <apex:outputpanel rendered="{!$objectType.xcdhcm__Salary_Review__c.fields[i].Accessible}">
+                                            <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->  
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Salary_Review__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Salary_Review__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label> 
+                                                        
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!se[i]}" required="{!i.required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>     
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div>  
+                                            </apex:outputpanel>                                                                                                                                             
+                                        </apex:repeat>
+                                    </apex:repeat>
+                                </apex:pageblocksection>
+                                <br />
+                                <apex:outputlabel value="{!$Label.xcdhcm__salaryemployeesandreviews}" style="color:#336699;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;font-size: 1.2em;"/>
+                                <br />
+                                <apex:pageblocksection columns="2" >
+                                    <apex:pageBlockSectionItem >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil--> 
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Latest_employee_continuous_service_date__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.Salary_Review__c.fields.Latest_employee_continuous_service_date__c.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Latest_employee_continuous_service_date__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!salaryReview.xcdhcm__Latest_employee_continuous_service_date__c}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil--> 
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Reviewers__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.Salary_Review__c.fields.Reviewers__c.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Reviewers__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!salaryReview.xcdhcm__Reviewers__c}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->  
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Companies__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil--> 
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        {!$ObjectType.Salary_Review__c.Fields.Companies__c.Label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Companies__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                            <c:MultiselectPicklist leftOption="{!CompnayValues}" rightOption="{!selectedCompany}" size="5" width="150px!important" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil--> 
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Department__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        {!$ObjectType.Salary_Review__c.Fields.Department__c.Label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Department__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputPanel layout="block" styleClass="requiredInput"  style="padding-top:5px">
+                                                            <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                                            <c:MultiselectPicklist leftOption="{!DepartmentValues}" rightOption="{!selectedDepartment}" size="5" width="150px!important"/>
+                                                        </apex:outputPanel>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil--> 
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Employment_status__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        {!$ObjectType.Salary_Review__c.Fields.Employment_status__c.Label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Employment_status__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:outputPanel layout="block" styleClass="requiredInput"  style="padding-top:5px">
+                                                            <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                                            <c:MultiselectPicklist leftOption="{!EmployeeStatusValues}" rightOption="{!selectedEmpStatus}" size="5" width="150px!important"/>
+                                                        </apex:outputPanel>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageblocksectionItem >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil--> 
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Management_reviews__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil--> 
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.Salary_Review__c.fields.Management_reviews__c.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Management_reviews__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:actionRegion >
+                                                            <apex:inputField value="{!salaryReview.xcdhcm__Management_reviews__c}">
+                                                                <apex:actionSupport event="onchange"  action="{!showFields}" rerender="FinalRevDueId">
+                                                                    <apex:param name="Managereviews" value="{!salaryReview.xcdhcm__Management_reviews__c}" assignTo="{!Managereviews}"/> 
+                                                                </apex:actionSupport>
+                                                            </apex:inputField>
+                                                        </apex:actionRegion> 
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageblocksectionItem>
+                                </apex:pageblocksection>
+                                
+                                <apex:pageblocksection id="FinalRevDueId">
+                                    <apex:pageblocksectionItem >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__First_review_due__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.Salary_Review__c.fields.First_review_due__c.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.First_review_due__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!salaryReview.xcdhcm__First_review_due__c}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageblocksectionItem>
+                                    
+                                    <apex:pageblocksectionItem rendered="{!displaySecRevDue}" >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Second_review_due__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" id="SecRevDueId" >
+                                                        {!$ObjectType.Salary_Review__c.fields.Second_review_due__c.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Second_review_due__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!salaryReview.xcdhcm__Second_review_due__c}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageblocksectionItem>
+                                    
+                                    <apex:pageblocksectionItem rendered="{!displayFinalRevDue}" >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Final_review_due__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" id="SecRevDueId" >
+                                                        {!$ObjectType.Salary_Review__c.fields.Final_review_due__c.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Final_review_due__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!salaryReview.xcdhcm__Final_review_due__c}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageblocksectionItem>
+                                    
+                                    <apex:pageblocksectionItem rendered="{!displayFourthRevDue}" >
+                                    	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Salary_Review__c.fields.xcdhcm__Fourth_review_due__c.Accessible}">
+                                        <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" id="SecRevDueId" >
+                                                        {!$ObjectType.Salary_Review__c.fields.Fourth_review_due__c.label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Salary_Review__c.Fields.Fourth_review_due__c.inlineHelpText}</span>
+                                                        </span>
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!salaryReview.xcdhcm__Fourth_review_due__c}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageblocksectionItem>
+                                </apex:pageblocksection>
+                                
+                            </apex:pageblock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__newsalaryreviewbcancel}" action="{!Cancel}" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>  
+                                        <apex:commandButton value="{!$Label.xcdhcm__newsalaryreviewbsaveandcreate}" action="{!saveAndCreate}"  styleclass="slds-button slds-button--brand" reRender="erMsg,id_saveBtn" status="saveStatus" id="id_saveBtn" />
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form> 
+        </body> 
+    </html>
+    <!-- END :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+</apex:page>

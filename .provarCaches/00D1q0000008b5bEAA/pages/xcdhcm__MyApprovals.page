@@ -1,0 +1,801 @@
+<!-- START :: 10-03-2017 summer2017 NPPD-1329 My Approvals Created by Rahul S-->
+<apex:page showHeader="true" sidebar="false" standardStylesheets="true" tabstyle="My_Approvals__tab" controller="xcdhcm.MyApprovalsController" applyHTmlTag="true" action="{!approvalRecords}">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />  
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+            <style>
+                .slds-scope .slds-truncate 
+                {
+                word-break: normal;
+                white-space: normal!important;
+                }
+                .columnWidth
+                {
+                width: 10%;
+                }
+                .firstcolumn
+                {
+                padding-left: 1% !important;
+                width: 10%;
+                }
+                .iconHover
+                {
+                text-decoration:none !important;
+                }
+                #LiteHelpTextID span 
+                {
+                display: none;
+                }
+                #LiteHelpTextID:hover span 
+                {
+                display: block !important;
+                width: 300px;
+                background-color: #16325c!important;   
+                border: 1px solid #16325c!important;
+                padding: 4px;
+                color: white;
+                position: absolute;
+                z-index: 1;
+                top:100%;
+                right:20%;
+                text-align: justify;
+                white-space: normal;
+                font-weight: normal;  
+                border-radius: 4px!important;    
+                left:5% !important;   
+                text-transform: none; 
+                }
+                #LiteHelpTextID:hover 
+                {
+                position:inherit;
+                }
+                span.fLetter
+                {
+                background: plum;
+                border-radius: 2.8em !important;
+                -moz-border-radius: 0.8em;
+                -webkit-border-radius: 0.8em;
+                display: inline-block;
+                font-weight: bold;
+                line-height: 1.9em;
+                margin-right: 5px;
+                text-align: center;
+                width: 2.6em;
+                height: 2.6em;
+                color: #fff;
+                text-decoration: none;
+                font-size: 105%;
+                }
+            </style> 
+        </head>
+        <body class="slds-scope">
+            <!-- Leave requests -->
+            <br/>
+            <apex:pageMessages id="id_error"/>  
+            <apex:outputtext rendered="{!leaveSection}">
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer ">
+                    <caption style="padding-left: 1%;"><font size="4">{!$Label.MyApprovalsLeaverequests}</font></caption>
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate">{!$Label.MyApprovalsCHRequest}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >
+                                    {!$ObjectType.Leave_Request__c.fields.Employee_Details__c.Label}
+                                    <span id="LiteHelpTextID">
+                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Employee_Details__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                        <span>{!$ObjectType.Leave_Request__c.Fields.Employee_Details__c.inlineHelpText}</span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >
+                                    {!$ObjectType.Leave_Request__c.fields.Leave_Category__c.Label}
+                                    <span id="LiteHelpTextID">
+                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Leave_Category__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                        <span>{!$ObjectType.Leave_Request__c.Fields.Leave_Category__c.inlineHelpText}</span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >
+                                    {!$ObjectType.Leave_Request__c.fields.Dates__c.Label}
+                                    <span id="LiteHelpTextID">
+                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Request__c.Fields.xcdhcm__Dates__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                        <span>{!$ObjectType.Leave_Request__c.Fields.Dates__c.inlineHelpText}</span>
+                                    </span>
+                                </div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHDatesubmitted}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHSubmitterpreviousapprover}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate">{!$Label.MyApprovalsCHAction}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!sectionVsRecordsMap['leave']}" var="leave"  >
+                            <tr>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!leave.leaveReq.ID}" >{!leave.leaveReq.Name}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate">
+                                        <apex:image rendered="{!IF(leave.empImage == 'null', false, true)}" value="{!leave.empImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(leave.empImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!leave.empFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!leave.leaveReq.Employee_Details__r.Name}"/>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!leave.leaveReq.Leave_Category__c}"/>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="{!leave.leaveReq.View_leave_in_calendar__c}" style="word-break: normal;">{!leave.leaveReq.Dates__c}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!leave.processIns.CreatedDate}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:image rendered="{!IF(leave.submitterImage == 'null', false, true)}" value="{!leave.submitterImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(leave.submitterImage == 'null', true, false)}" >
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!leave.submitterFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!leave.processInsHis.ActorId}" />
+                                    </div>
+                                </td>
+                                <th scope="row" class="columnWidth">
+                                    <div class="slds-truncate"  >
+                                        <apex:outputLink styleclass="iconHover"  target="_top" value="/one/one.app?source=aloha#/sObject/{!leave.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-approval " title="Approve">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#approval')}"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-close " title="Reject">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#close')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app?source=aloha#/sObject/{!leave.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-description " title="The assignee should be a manager or administrator who has permission to see the employee's records">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#change_owner')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                    </div>
+                                </th>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputtext>
+            
+            <!-- Expense claims -->
+            <apex:outputtext rendered="{!expenseSection}">
+                <br/>
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer ">
+                    <caption style="padding-left: 1%;"><font size="4">{!$Label.MyApprovalsExpenseclaims}</font></caption>
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHRequest}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Claim__c.fields.Employee__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Claim__c.fields.Total_claim__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >  </div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHDatesubmitted}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHSubmitterpreviousapprover}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHAction}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!sectionVsRecordsMap['expense']}" var="Exp"  >
+                            <tr>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!Exp.claimReq.ID}" >{!Exp.claimReq.Name}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate">
+                                        <apex:image rendered="{!IF(Exp.empImage == 'null', false, true)}" value="{!Exp.empImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(Exp.empImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!Exp.empFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!Exp.claimReq.Employee__r.Name}"/>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!Exp.claimReq.Total_claim__c}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" > 
+                                        
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!Exp.processIns.CreatedDate}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:image rendered="{!IF(Exp.submitterImage == 'null', false, true)}" value="{!Exp.submitterImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(Exp.submitterImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!Exp.submitterFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!Exp.processInsHis.ActorId}" />
+                                    </div>
+                                </td>
+                                <th scope="row" class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app#/alohaRedirect/{!Exp.claimReq.ID}">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-approval " title="Approve">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#approval')}"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-close " title="Reject">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#close')}"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-back " title="Return">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#redo')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app?source=aloha#/sObject/{!Exp.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-description " title="The assignee should be a manager or administrator who has permission to see the employee's records">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#change_owner')}"></use>
+                                                </svg>  
+                                            </span>
+                                        </apex:OutputLink>
+                                    </div>
+                                </th>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputtext>
+            
+            
+            <!-- Overtime claims -->
+            <apex:outputtext rendered="{!overtimeSection}">
+                <br/>
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer ">
+                    <caption style="padding-left: 1%; "><font size="4">{!$Label.MyApprovalsOvertimeclaims}</font></caption>
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHRequest}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Overtime__c.fields.Employee_Details__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Overtime__c.fields.Payment_Amount__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" title="{!$ObjectType.Overtime__c.fields.Date__c.Label}">{!$ObjectType.Overtime__c.fields.Date__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHDatesubmitted}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHSubmitterpreviousapprover}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHAction}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!sectionVsRecordsMap['overtime']}" var="overtime" >
+                            <tr>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!overtime.overtimeReq.Id}">{!overtime.overtimeReq.Name}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate">
+                                        <apex:image rendered="{!IF(overtime.empImage == 'null', false, true)}" value="{!overtime.empImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(overtime.empImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!overtime.empFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!overtime.overtimeReq.Employee_Details__r.Name}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!overtime.overtimeReq.Payment_Amount__c}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!overtime.overtimeReq.Date__c}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!overtime.processIns.CreatedDate}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:image rendered="{!IF(overtime.submitterImage == 'null', false, true)}" value="{!overtime.submitterImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px;height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(overtime.submitterImage == 'null', true, false)}" >
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!overtime.submitterFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!overtime.processInsHis.ActorId}" />
+                                    </div>
+                                </td>
+                                <th scope="row" class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app?source=aloha#/sObject/{!overtime.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-approval " title="Approve">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#approval')}"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-close " title="Reject">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#close')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app?source=aloha#/sObject/{!overtime.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-description " title="The assignee should be a manager or administrator who has permission to see the employee's records">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#change_owner')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                    </div>
+                                </th>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputtext>
+            
+            <!-- Timesheet -->
+            <apex:outputtext rendered="{!timesheetSection}">
+                <br/>
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer ">
+                    <caption style="padding-left: 1%;"><font size="4">{!$Label.MyApprovalsTimesheet}</font></caption>
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHRequest}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Overtime_Record__c.fields.Employee_Details__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Overtime_Record__c.fields.Total_hours_worked__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Overtime_Record__c.fields.Name.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHDatesubmitted}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHSubmitterpreviousapprover}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHAction}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!sectionVsRecordsMap['timesheet']}" var="timesheet">
+                            <tr>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!timesheet.timesheetReq.Id}">{!timesheet.timesheetReq.Name}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate">
+                                        <apex:image rendered="{!IF(timesheet.empImage == 'null', false, true)}" value="{!timesheet.empImage}" style="border-radius: 50%; behavior: url(PIE.htc);width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(timesheet.empImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!timesheet.empFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!timesheet.timesheetReq.Employee_Details__r.Name}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!timesheet.timesheetReq.Total_hours_worked__c}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!timesheet.timesheetReq.Name}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!timesheet.processIns.CreatedDate}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:image rendered="{!IF(timesheet.submitterImage == 'null', false, true)}" value="{!timesheet.submitterImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(timesheet.submitterImage == 'null', true, false)}" >
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!timesheet.submitterFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!timesheet.processInsHis.ActorId}" />
+                                    </div>
+                                </td>
+                                <th scope="row" class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app#/alohaRedirect/apex/xcdhcm__TimesheetProcessInstance?id={!timesheet.approveId}&TSsummID={!timesheet.timesheetReq.Id}">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-approval " title="Approve">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#approval')}"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-close " title="Reject">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#close')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app?source=aloha#/sObject/{!timesheet.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-description " title="The assignee should be a manager or administrator who has permission to see the employee's records">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#change_owner')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                    </div>
+                                </th>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputtext>
+            
+            <!-- Learning enrolment -->
+            <apex:outputtext rendered="{!enrolmentSection}">
+                <br/>
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer ">
+                    <caption style="padding-left: 1%;"><font size="4">{!$Label.MyApprovalsLearningenrolment}</font></caption>
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHRequest}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Course_Enrolment__c.fields.Employee__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Course_Enrolment__c.fields.Course__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Course_Enrolment__c.fields.Event_starts__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHDatesubmitted}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHSubmitterpreviousapprover}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHAction}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!sectionVsRecordsMap['enrol']}" var="enrolment"  >
+                            <tr>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!enrolment.enrolmentReq.ID}">{!enrolment.enrolmentReq.Name}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate">
+                                        <apex:image rendered="{!IF(enrolment.empImage == 'null', false, true)}" value="{!enrolment.empImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(enrolment.empImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!enrolment.empFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!enrolment.enrolmentReq.Employee__r.Name}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!enrolment.enrolmentReq.Course__c}">{!enrolment.enrolmentReq.Course__r.Name}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!enrolment.enrolmentReq.Event_starts__c}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!enrolment.processIns.CreatedDate}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:image rendered="{!IF(enrolment.submitterImage == 'null', false, true)}" value="{!enrolment.submitterImage}"  style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(enrolment.submitterImage == 'null', true, false)}" >
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!enrolment.submitterFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!enrolment.processInsHis.ActorId}" />
+                                    </div>
+                                </td>
+                                <th scope="row" class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app?source=aloha#/sObject/{!enrolment.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-approval " title="Approve">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#approval')}"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-close " title="Reject">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#close')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                        <apex:outputLink styleclass="iconHover"   target="_top" value="/one/one.app?source=aloha#/sObject/{!enrolment.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-description" title="The assignee should be a manager or administrator who has permission to see the employee's records">
+                                                <svg class="slds-icon slds-icon--x-small " aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#change_owner')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                    </div>
+                                </th>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputtext>
+            
+            <!-- Vacancies -->
+            <apex:outputtext rendered="{!vacanciesSection}">
+                <br/>
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer ">
+                    <caption style="padding-left: 1%;"><font size="4">{!$Label.MyApprovalsVacancies}</font></caption>
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Vacancy__c.fields.Name.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Vacancy__c.fields.Hiring_manager_L__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Vacancy__c.fields.Job_title__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$ObjectType.Vacancy__c.fields.Hire_by__c.Label}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHDatesubmitted}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHSubmitterpreviousapprover}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHAction}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!sectionVsRecordsMap['vacancy']}" var="vacancy" >
+                            <tr>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!vacancy.vacancyReq.ID}">{!vacancy.vacancyReq.Name}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate">
+                                        <apex:image rendered="{!IF(vacancy.empImage == 'null', false, true)}" value="{!vacancy.empImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(vacancy.empImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!vacancy.empFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!vacancy.vacancyReq.Hiring_manager_L__r.Name}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!vacancy.vacancyReq.Job_title__c}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!vacancy.vacancyReq.Hire_by__c}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!vacancy.processIns.CreatedDate}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:image rendered="{!IF(vacancy.submitterImage == 'null', false, true)}" value="{!vacancy.submitterImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(vacancy.submitterImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!vacancy.submitterFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!vacancy.processInsHis.ActorId}" />
+                                    </div>
+                                </td>
+                                <th scope="row" class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink styleclass="iconHover"  target="_top" value="/one/one.app?source=aloha#/sObject/{!vacancy.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-approval " title="Approve">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#approval')}"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-close " title="Reject">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#close')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                        <apex:outputLink styleclass="iconHover" target="_top" value="/one/one.app?source=aloha#/sObject/{!vacancy.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-description " title="The assignee should be a manager or administrator who has permission to see the employee's records">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#change_owner')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                    </div>
+                                </th>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputtext>
+            
+            <!-- Others -->
+            <apex:outputtext rendered="{!otherSection}">
+                <br/>
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer ">
+                    <caption style="padding-left: 1%;"><font size="4">{!$Label.MyApprovalsOther}</font></caption>
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHRequest}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHEmployee}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHType}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" > </div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHDatesubmitted}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHSubmitterpreviousapprover}</div>
+                            </th>
+                            <th scope="col" class="columnWidth">
+                                <div class="slds-truncate" >{!$Label.MyApprovalsCHAction}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!sectionVsRecordsMap['other']}" var="other">
+                            <tr>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!other.otherReq.ID}">{!other.otherReq['Name']}</apex:OutputLink>
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate">
+                                        <apex:image rendered="{!IF(other.empImage == 'null', false, true)}" value="{!other.empImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(other.empImage == 'null', true, false)}">
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!other.empFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputText value="{!other.otherEmpName}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputText value="{!other.othertype}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputField value="{!other.processIns.CreatedDate}" />
+                                    </div>
+                                </td>
+                                <td class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:image rendered="{!IF(other.submitterImage == 'null', false, true)}" value="{!other.submitterImage}" style="border-radius: 50%; behavior: url(PIE.htc); width: 35px; height: 35px; margin-right: 5px;"/>
+                                        <apex:outputpanel rendered="{!IF(other.submitterImage == 'null', true, false)}" >
+                                            <span class="fLetter"> <font size="5" style="position: relative; top: 5px;">{!other.submitterFLetter} </font></span>
+                                        </apex:outputpanel>
+                                        <apex:outputField value="{!other.processInsHis.ActorId}" />
+                                    </div>
+                                </td>
+                                <th scope="row" class="columnWidth">
+                                    <div class="slds-truncate" >
+                                        <apex:outputLink styleclass="iconHover"  target="_top" value="/one/one.app?source=aloha#/sObject/{!other.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-approval " title="Approve">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#approval')}"></use>
+                                                </svg>
+                                            </span>
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-close " title="Reject">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#close')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                        <apex:outputLink styleclass="iconHover"  target="_top" value="/one/one.app?source=aloha#/sObject/{!other.approveId}/view">
+                                            <span class="slds-icon_container slds-icon_container--circle slds-icon-action-description " title="The assignee should be a manager or administrator who has permission to see the employee's records">
+                                                <svg class="slds-icon slds-icon--x-small" aria-hidden="true">
+                                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#change_owner')}"></use>
+                                                </svg>
+                                            </span>
+                                        </apex:OutputLink>
+                                    </div>
+                                </th>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputtext>
+            <br/>
+        </body>
+    </html>
+</apex:page>
+<!-- END :: 10-03-2017 summer2017 NPPD-1329 My Approvals Created by Rahul S-->

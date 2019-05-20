@@ -1,0 +1,8 @@
+<apex:page standardController="xcdhcm__XCD_PAY_Payroll__c" extensions="xcdhcm.GeneratePayRollPeriodsController"
+	action="{!generatePayRollPeriods}">
+	<apex:sectionHeader title="{!$Label.xcdhcm__generatepayrollperiodsgeneratepayrollperiod}" />
+	<apex:outputPanel >
+      You tried generating pay roll periods.  If you see this page, something went wrong.  You should have 
+      been redirected back to the record you clicked the button from.
+  </apex:outputPanel>
+</apex:page>

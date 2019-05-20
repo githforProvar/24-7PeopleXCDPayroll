@@ -1,0 +1,69 @@
+<apex:page standardController="xcdhcm__XCD_PAY_Payroll__c" extensions="xcdhcm.CeasePayrollController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}"/>
+<style type="text/css">
+ .customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette, .layoutEdit .individualPalette .customnotabBlock .tertiaryPalette {
+   background-color: #FFFFFF!important;
+   border-color: #FFFFFF!important;
+}
+<!--START::25/11/2015 added by Farhan -->
+body .pbBody table.list tr.headerRow th 
+{
+	border-bottom: 2px solid #cde2f5 !important;
+}
+<!--END::25/11/2015 added by Farhan -->
+td.dataCol.first {
+    width: 500px !important;
+    height: 40px !important;
+}
+body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+    width:2%!important;
+}
+.highlight
+{
+   background-color: #D3D3D3;
+}
+</style>
+<apex:form >
+  <apex:pageBlock title="{!$Label.xcdhcm__phceasepayroll}" id="rows">
+   <apex:pageMessages id="erMsg" rendered="{!flag=true}"/>
+   <apex:pageBlockSection title="" columns="1" collapsible="false" rendered="{!flag=false}">
+	   <apex:pageBlockTable value="{!wrapPayrollList}"  var="item">
+	   		<apex:column headerValue="">
+	            <apex:inputCheckbox value="{!item.selected}" rendered="{!item.payrollData.xcdhcm__Date_scheme_ceased__c == null}"/>
+	        </apex:column>   		
+	    	<apex:repeat var="cease" value="{!$ObjectType.xcdhcm__XCD_PAY_Payroll__c.fieldSets.xcdhcm__CeasePayrollData}">     	
+		        <apex:column headerValue="{!cease.Label}">
+		         <span class="{!if(item.payrollData.xcdhcm__Date_scheme_ceased__c != null, 'highlight', '')}">
+		        	<apex:outputField value="{!item.payrollData[cease]}"/>
+		         </span>
+		        </apex:column>		            
+	  	    </apex:repeat>
+	   </apex:pageBlockTable>
+   </apex:pageBlockSection>
+   <apex:pageBlockSection title="" columns="1" collapsible="false" rendered="{!flag=true}">
+   	 <apex:inputField value="{!ceaseDate.xcdhcm__Date_scheme_ceased__c}" id="ceaseDateId"/>
+   </apex:pageBlockSection>
+   <apex:pageBlockSection title="" columns="1" collapsible="false" rendered="{!flag=true}">
+	   <apex:pageBlockTable value="{!wrapEmployeeList}"  var="item">
+	    	<apex:repeat var="ceaseEmp" value="{!$ObjectType.xcdhcm__Employee_Detail__c.fieldSets.xcdhcm__Cease_employee}">     	
+		        <apex:column headerValue="{!ceaseEmp.Label}">
+		        	<!-- START::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+		        	<apex:outputLink target="_top" title="{!item.ceaseEmployee[ceaseEmp]}" value="/one/one.app#/sObject/{!item.ceaseEmployee['Id']}" rendered="{!ceaseEmp == 'Name'}">{!item.ceaseEmployee[ceaseEmp]}</apex:OutputLink>
+		        	<!-- END::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+		        	<apex:outputField value="{!item.ceaseEmployee[ceaseEmp]}" rendered="{!ceaseEmp != 'Name'}"/> 
+		        </apex:column>		            
+	  	    </apex:repeat>
+	   </apex:pageBlockTable>
+   </apex:pageBlockSection>
+   <apex:outputText value=""/>   
+   <apex:pageBlockButtons location="Bottom" rendered="{!flag=false}">
+	   	<apex:commandButton value="{!$Label.xcdhcm__ceasepayrollbnext}" action="{!nextSelectedPayroll}" id="theButton"/>
+	    <apex:commandButton value="{!$Label.xcdhcm__ceasepayrollbback}" action="{!backPayroll}"/>
+   </apex:pageBlockButtons>
+   <apex:pageBlockButtons location="Bottom" rendered="{!flag=true}">
+	   	<apex:commandButton value="{!$Label.xcdhcm__ceasepayrollbceasepayroll}" action="{!saveToPayroll}" id="theButton"/>
+	    <apex:commandButton value="{!$Label.xcdhcm__ceasepayrollbcancel}" action="{!backPayroll}"/>
+   </apex:pageBlockButtons>
+  </apex:pageBlock>
+</apex:form>
+</apex:page>

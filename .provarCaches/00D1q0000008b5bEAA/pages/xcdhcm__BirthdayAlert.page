@@ -1,0 +1,82 @@
+<apex:page sidebar="false" showHeader="false" controller="xcdhcm.BirthAlertController" id="oneSimpleTablePagination">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/bulkleave.css')}" />  
+
+        <style>
+        .formbut
+        {
+
+            border: 1px solid #D9D9D9 !important;
+            color: #999 !important;
+            background-color: #FFF !important;
+            background-image: none !important;
+            box-shadow: 2px 1px 8px #A6D6FF !important;
+            margin-top: 5px !important;
+        }  
+        
+        body .apexp .pbBody table.list {
+border: none !important;
+border-bottom:none !important; 
+}
+        body .pbBody table.list tr.headerRow th
+        
+        {
+        
+        border-bottom:none !important;
+border-top:none !important;
+
+}
+
+
+.errorConsole .x-grid3-row-over, body .pbBody table.list tr.dataRow.highlight td, body .pbBody table.list tr.dataRow.highlight th
+{
+background-image: none !important;
+}
+
+body .bPageBlock .pbBody .labelCol
+{
+float:left;
+}
+
+        </style>
+    <apex:form id="frmid">
+    
+        <apex:pageBlock mode="detail" id="blk" rendered="{!mysettingsEnable==false}">
+            <apex:outputText Value="No records to display" rendered="{!AlertDisplayWrapperClsList.Size=0}" />
+            <apex:pageBlockSection >
+            <apex:pageBlockTable id="mid" value="{!AlertDisplayWrapperClsList}" var="perwrapVar" rendered="{!AlertDisplayWrapperClsList.Size>0}" style="width:170%;margin-left:-15px;margin-top:-15px;">
+                <apex:column style="width:35%;">
+                    <apex:outPutText value="{!perwrapVar.DateString}"/>
+                </apex:column>
+                <apex:column style="width:65%;">
+                    <apex:outputLink target="_blank" title="{!perwrapVar.personalIns.Employee_Details__r.Name}" value="/{!perwrapVar.personalIns.Id}"> {!perwrapVar.personalIns.Employee_Details__r.Name}</apex:outputLink>
+                </apex:column>
+            </apex:pageBlockTable> 
+            </apex:pageBlockSection>
+                      
+
+            <apex:commandLink action="{!mysettingsLinkAction}" value="My Settings" rerender="frmid"/>
+           
+            <apex:commandButton action="{!Previous}" title="Previous" value="<" reRender="blk,myButtons" disabled="{!DisablePrevious}" rendered="{!AND(total_size!=null,total_size>10)}" style="margin-left:15%;"/>        
+            <apex:commandButton action="{!Next}" title="Next" value=">" reRender="blk,myButtons" disabled="{!DisableNext}" rendered="{!AND(total_size!=null,total_size>10)}" />
+            
+            
+        </apex:pageBlock>
+        
+        <apex:pageBlock rendered="{!mysettingsEnable}">
+    
+            <apex:pageBlockSection columns="1">  
+                 <apex:selectList label="Company" value="{!selectedCompanyId}" size="1" style="float:left;width:100%;">
+                    <apex:selectOptions value="{!Copanylistvalues}" />
+                 </apex:selectList>
+                 <apex:inputText Label="Days Notice" value="{!displayNotice}" style="float:left;width:100%;"/>
+            </apex:pageBlockSection>
+            <center>
+                <apex:commandButton value="Save" action="{!savemysetting}" rerender="frmid" styleClass="formbut"/>
+                <apex:commandButton value="Cancel" action="{!cancelsettingBtn}" rerender="frmid" styleClass="formbut"/>
+            </center>
+        </apex:pageBlock>
+    </apex:form>
+     
+    
+        
+</apex:page>

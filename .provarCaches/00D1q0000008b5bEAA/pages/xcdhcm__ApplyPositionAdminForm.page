@@ -1,0 +1,338 @@
+<apex:page showHeader="true" tabStyle="xcdhcm__Vacancy__c" title="Apply" sidebar="false" 
+controller="xcdhcm.ApplyPositionFormController">    
+ <!--  START :: 07/18/2016 NPPD-1116 business card added by kamal   --> 
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+ <!--  END :: 07/18/2016 NPPD-1116 business card added by kamal   --> 
+ <style>  
+    .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: #ccc;
+        border-color: #ccc;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        border-radius: 4px;
+        color: #54698d!important;
+        font-size: 1.15em;
+        letter-spacing: .0625rem;
+        font-weight: 500;
+        }
+        body .bEditBlock .pbBody .pbSubheader, body .bWizardBlock .pbBody .pbSubheader
+        {
+        font-size: 1.0em!important;
+        line-height: 1.25!important;
+        color: #54698d!important;
+        letter-spacing: .0625rem!important; 
+        font-weight: normal!important;
+        }
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        input[type='text'] 
+        {
+        width: 100%;
+        }  
+        textarea
+        {
+        width:100%;
+        } 
+        select
+        {
+        width:100%!important;
+        }
+        body .bPageBlock .pbBody .labelCol, body .bPageBlock .pbBody .dataCol, body .bPageBlock .pbBody .data2Col, body .print .topics-label, body .print .topics-list 
+        {     
+        border: none!important;
+        }
+        body .bPageBlock .pbBody .dataCol 
+        {
+        border: #fff!important;
+        border: none!important;
+        }
+        #intMain
+        {
+        background: #fff!important; 
+        } 
+        .slds-scope .slds-text-heading--medium, .slds-scope .slds-text-heading_medium 
+        {
+        background: #fff!important; 
+        }
+</style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form id="frm"> <br/>
+                <h2 class="slds-text-heading--medium"> {!$Label.xcdhcm__phapplypositionadminform}</h2>
+                <apex:actionStatus id="wait">                   
+                    <apex:facet name="start">
+                        <div class="slds-spinner_container slds-show slds-is-fixed" >
+                            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </apex:facet>
+                    <apex:facet name="stop">
+                        <div class="slds-spinner_container slds-hide slds-is-fixed">
+                            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </apex:facet>                                
+                </apex:actionStatus>
+                <apex:pageBlock id="pb">  
+            <apex:pageMessages />    
+         <!-- START :::: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    --> 
+            <!--  START :: 29/12/2015 NPPD-1042 custom label changes added by Kamal   --> 
+            <apex:pageBlockSection title="{!$Label.xcdhcm__applypositionadminformentercandidatedetails}" collapsible="false"  >
+           <!--  END:: 29/12/2015 NPPD-1042 custom label changes added by Kamal   -->   
+				<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+				<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Vacancy__c.Fields.xcdhcm__Job_title__c.Accessible}">
+				<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                    <label class="slds-form-element__label" >
+                                        {!$ObjectType.Vacancy__c.Fields.Job_title__c.Label}
+                                    </label> 
+                                    <div class="slds-form-element__control">
+                <apex:outputField value="{!VacancyrcdIns.xcdhcm__Job_title__c}"/>
+                                    </div>                                                                                        
+                                </div>
+                            </div> 
+                        </apex:outputpanel>
+				<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+				<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Vacancy__c.Fields.xcdhcm__Job_reference__c.Accessible}">
+				<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                    <label class="slds-form-element__label" >
+                                        {!$ObjectType.Vacancy__c.Fields.Job_reference__c.Label}
+                                    </label> 
+                                    <div class="slds-form-element__control">
+                <!-- <apex:outputField value="{!VacancyrcdIns.Location_name__c}"/> -->
+                                    </div>                                                                                        
+                                </div>
+                            </div> 
+                        </apex:outputpanel>
+                <apex:outputLabel value=""/>
+                <apex:outputLabel value=""/>
+                        <apex:repeat value="{!candidateIns}" >
+                <apex:repeat value="{!$ObjectType.xcdhcm__Candidate__c.Fieldsets.xcdhcm__New_candidate_admin}" var="a">
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$objectType.xcdhcm__Candidate__c.fields[a].Accessible}">
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(a.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!OR(a.Required,a.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!a.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Candidate__c.fields[a].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.xcdhcm__Candidate__c.fields[a].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                    <apex:inputField value="{!candidateIns[a]}" required="{!OR(a.Required,a.DBRequired)}"/>        
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>      
+                                </apex:outputpanel>    
+                </apex:repeat>                 
+                        </apex:repeat>      
+                        <apex:pageBlockSectionItem helpText="{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Employee_candidate_L__c.inlineHelpText}" >
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue added by  Anil-->
+					<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Employee_candidate_L__c.Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue added by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            {!$ObjectType.Applicant__c.Fields.Employee_candidate_L__c.Label}
+                                            <span class="LiteHelpText">
+                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Employee_candidate_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                <span>{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Employee_candidate_L__c.inlineHelpText}</span>
+                                            </span>
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >   
+                                                <apex:outputPanel >      
+                                                    <apex:inputField value="{!applicantIn.xcdhcm__Employee_candidate_L__c}" >                                                                                                                                                           
+                                                        <apex:actionSupport event="onchange"  action="{!pullEmployee}" rerender="jbsec,Apsec" status="wait" >                                      
+                                                            <!-- <apex:actionStatus startText="Loading detail..." id="wait"/> -->
+                                                        </apex:actionSupport>
+                                                    </apex:inputField>
+                                                </apex:outputPanel>
+                                            </apex:actionRegion>  
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel> 
+                        </apex:pageBlockSectionItem>   
+            </apex:pageBlockSection>
+             
+            <!--  START :: 29/12/2015 NPPD-1042 custom label changes added by Kamal   -->  
+            <apex:pageBlockSection title="{!$Label.xcdhcm__applypositionadminformenterapplicationdetails}" collapsible="false"  > 
+                        <apex:repeat value="{!applicantIn}" >  
+                <apex:repeat value="{!$ObjectType.xcdhcm__Applicant__c.Fieldsets.xcdhcm__New_applicant_admin}" var="a">
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$objectType.xcdhcm__Applicant__c.fields[a].Accessible}">
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(a.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!OR(a.Required,a.DBRequired)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!a.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Applicant__c.fields[a].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.xcdhcm__Applicant__c.fields[a].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                    <apex:inputField value="{!applicantIns[a]}" required="{!OR(a.Required,a.DBRequired)}"/>        
+                                            </div>                                                                                        
+                                        </div>
+                                    </div>      
+                                </apex:outputpanel>   
+                </apex:repeat> 
+                        </apex:repeat>                          
+                        <apex:pageBlockSectionItem rendered="{!vacanlocup==true}" >
+					<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+					<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Vacancy__c.Accessible}">
+					<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                        <label class="slds-form-element__label" >
+                                            {!$ObjectType.Applicant__c.Fields.Vacancy__c.Label}
+                                        </label> 
+                                        <div class="slds-form-element__control">
+                                            <apex:actionRegion >   
+                                                <apex:outputPanel >      
+                                                    <apex:inputField value="{!applicantIn.xcdhcm__Vacancy__c}" >     
+                                                        <apex:actionSupport event="onchange" action="{!pullVacancy}"  rerender="jbsec,pb,clsec,cvsec" status="wait" >  
+                                                            <!-- <apex:actionStatus startText="Loading detail..." id="wait"/> -->
+                                                        </apex:actionSupport>
+                                                    </apex:inputField>
+                                                </apex:outputPanel>
+                                            </apex:actionRegion>   
+                                        </div>                                                                                        
+                                    </div>
+                                </div> 
+                            </apex:outputpanel> 
+                        </apex:pageBlockSectionItem>   
+            </apex:pageBlockSection>
+            <!-- START :: 12/06/2014 NPPD-372 Recruitment Enhancements Modified by Praveen -->
+           <!-- END :::: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    --> 
+			<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+			<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Cover_letter__c.Accessible}">		
+			<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+	    <apex:pageBlockSection title="{!$ObjectType.xcdhcm__Applicant__c.Fields.xcdhcm__Cover_letter__c.Label}" 
+                        rendered="{!VacancyrcdIns.xcdhcm__Show_cover_letter_section__c}" columns="1">
+                <apex:pageBlockSectionItem >
+                <!-- START :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->
+                    <apex:outputLabel style="font-weight:bold;color:#999;" value="{!$Label.xcdhcm__applicationformcoverlettermessage}"/>
+               <!-- END :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->     
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem > 
+                    <apex:inputField value="{!applicantIns.xcdhcm__Cover_letter__c}" style="width: 80% !important; margin-left:8%"/>  
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <!-- END :: 12/06/2014 NPPD-372 Recruitment Enhancements Modified by Praveen -->
+			<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+			</apex:outputpanel>
+			<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+         <!--  START :: 07/18/2016 NPPD-1116 business card added by kamal   -->        
+         
+        <apex:pageblockSection columns="{!IF(AND(BusinessCard,OR(VacancyrcdIns.xcdhcm__Show_CV_section__c,Vacan.xcdhcm__Show_CV_section__c)) ,'2','1')}" >
+             <!-- START :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+             <apex:pageBlockSection id="uim" title="{!$Label.xcdhcm__applypositionadminformuploadimage}" collapsible="false"  columns="1" rendered="{!BusinessCard}" >     
+             <!-- END :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                    <div class="input" >
+                        <!-- START :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal         -->
+                        <apex:outputLabel styleclass="lb" value="{!$Label.xcdhcm__recruitment_applicationuploadimg_section_message}"/> <br/>
+                      <!-- END :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal         -->                                   
+                        <div style="width:105px;height:20px;">          
+                            <span class="cke_toolgroup" style="border:none;" role="presentation" > 
+                                <span class="cke_button"></span>
+                                <span class="cke_button">
+                                    <a style="text-decoration: none;margin-top:5px;" id="cke_16" class="cke_off cke_button_image"  href="javascript:void('Image')" title="Image" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_16_label" onkeydown="return CKEDITOR.tools.callFunction(22, event);" 
+                                            onclick="CKEDITOR.tools.callFunction(24, this); return false;">
+                                    <span class="cke_icon" style="width: 125px;height:20px;">&nbsp;</span>
+                                    <span id="cke_16_label" class="cke_label" > 
+                                        <div style="width:110px;height:24px;margin-top: -17px;border-radius:2px;background-color:#f5f5f5 ;border:1px solid #b5b5b5;"> 
+                                        <p style="margin-top: 4px;margin-left:8px;font-weight:bold;">Browse Image</p></div>
+                                    </span>
+                                    </a>
+                                </span>
+                            </span>
+                        </div>                          
+                         <apex:pageBlockSectionItem >                        
+                            <apex:inputField id="test" value="{!candidateIns.xcdhcm__Profile_image__c}"  />                     
+                         </apex:pageBlockSectionItem>                                           
+                    </div>  
+                  </apex:pageBlockSection> 
+                  <!-- START :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                  <apex:pageBlockSection title="{!$Label.xcdhcm__applypositionadminformuploadyourcv}" rendered="{!OR(VacancyrcdIns.xcdhcm__Show_CV_section__c,Vacan.xcdhcm__Show_CV_section__c)}" id="cvsec" collapsible="false" columns="1"  >
+                  <!-- END :: 22/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                    <!-- START :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal         -->
+                    <apex:outputLabel styleclass="lb" value="{!$Label.xcdhcm__recruitment_applicationuploadcv_section_message}"/> <br/>
+                  <!-- END :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal         -->
+                    <center>
+                        <apex:inputfile value="{!resumeIns.body}" filename="{!resumeIns.Name}"  style="{!IF(!BusinessCard,'margin-left:8%;text-align: center;','')} "  />  
+                    </center>  
+                  </apex:pageBlockSection>                  
+             </apex:pageblockSection>       
+         <!--  END :: 07/18/2016 NPPD-1116 business card added by kamal   --> 
+            <!-- START :: 27/08/2015 NPPD-827 Recruitment Enhancements by kamal  -->
+            <!-- START :::: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    -->
+             <apex:pageBlockSection title="{!$Label.xcdhcm__applypositionadminformdeclaration}" collapsible="false" rendered="{!AND(XCD_Control_PanelValue==true,VacancyrcdIns.xcdhcm__Declaration__c!=null)}" columns="1" > 
+                    <apex:repeat value="{!applicantIns}" >                                             
+                         <apex:repeat value="{!$ObjectType.xcdhcm__Applicant__c.Fieldsets.xcdhcm__Declaration_summary}" var="a">
+                            <!-- START :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->
+						<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+						<apex:outputpanel rendered="{!$objectType.xcdhcm__Applicant__c.fields[a].Accessible}">
+                             <apex:outputField value="{!applicantIns[a]}"  rendered="{!IF(applicantIns[a]==Vacan.xcdhcm__Declaration__c, 'true', 'false' )}" />                        
+                             <apex:inputField value="{!applicantIns[a]}"   rendered="{!IF(applicantIns[a]!=Vacan.xcdhcm__Declaration__c, 'true', 'false' )}" style="{!IF(a=='xcdhcm__Confirmation__c', 'width:420px!important', 'false' )}"/>        
+						</apex:outputpanel>
+						<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                            <!-- END :: 09/12/2015 NPPD-1030 Recruitment changes added by Kamal  -->     
+                        </apex:repeat>  
+                   </apex:repeat>            
+            </apex:pageBlockSection>  
+            <!-- END :::: 22/1/2015 NPPD-952 Recruitment changes added by Kamal    --> 
+            <!-- END :: 27/08/2015 NPPD-827 Recruitment Enhancements by kamal  -->
+			<!-- START:: 29/01/2019 T493068 Winter2018 Regression modified by Anil-->
+			<apex:pageBlockButtons location="bottom">
+				<apex:actionStatus id="status"> 
+                <apex:facet name="stop">
+				<apex:commandButton id="bottomSaveBtn" value="{!$Label.xcdhcm__applypositionadminformbsubmitapplication}" action="{!applyPosition}" onclick="return checkDoubleSubmit(this)" styleclass="slds-button slds-button--neutral" />
+				</apex:facet>
+				</apex:actionStatus>
+				<apex:commandButton id="bottomCancelBtn" value="{!$Label.xcdhcm__applypositionadminformbcancel}" action="{!cancel}" immediate="true" styleclass="slds-button slds-button--neutral" />
+			</apex:pageBlockButtons>
+			<!-- END:: 29/01/2019 T493068 Winter2018 Regression modified by Anil-->
+        </apex:pageBlock>
+                <div class="line"></div>  
+    </apex:form>
+     </body>
+    </html>
+	<!-- START:: 29/01/2019 T493068 Winter2018 Regression added by Anil-->
+	<script>
+	   	var isClicked = false;
+		function checkDoubleSubmit(obj)
+		{
+			if (isClicked)
+			{
+				return false;
+			}
+			else
+			{
+				isClicked = true;
+				obj.className = 'btnDisabled';//only shows the button as disabled. 
+				return true; 
+			}
+		}
+	</script>
+	<!-- END:: 29/01/2019 T493068 Winter2018 Regression added by Anil-->
+</apex:page>

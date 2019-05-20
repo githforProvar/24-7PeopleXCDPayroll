@@ -1,0 +1,417 @@
+<apex:page Controller="xcdhcm.TimeSheetSummaryController" sidebar="false" showHeader="true" wizard="false" cache="false" readOnly="false" action="{!redirectToTimesheetPage}">
+			
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:includeScript value="https://code.jquery.com/jquery-2.2.4.min.js" />
+            <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet"/>
+            <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteTimesheet.css')}" />
+            <apex:includeLightning />
+            <apex:slds />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <style>
+                /* To remove left and right padding */
+                .noSidebarCell, .sidebarCell .fixed 
+                {
+                    /*padding: 0 !important;*/
+                }
+                
+                .icon-padding
+                {
+                    padding-left : calc((50% - 38px)/2);
+                    text-align: left;
+                }
+
+                .apexp .bPageBlock.apexDefaultPageBlock .pbBody 
+                {
+                    margin: 0;
+                }
+                
+                .bEditBlock .pbHeader>table>tbody>tr>td, .bPageBlock .pbHeader>table>tbody>tr>td, .bLayoutBlock .pbHeader>table>tbody>tr>td, .bEditBlock .pbBottomButtons>table>tbody>tr>td, .bPageBlock .pbBottomButtons>table>tbody>tr>td, .bLayoutBlock .pbBottomButtons>table>tbody>tr>td 
+                {
+                    padding: 0;
+                }
+                
+                body .bPageBlock .pbTitle 
+                {
+                    padding: 0;
+                }
+
+                @media (min-width:960px) and (max-width:1280px)
+                {
+                    .icon-padding
+                    {
+                        padding-left : calc((50% - 48px)/2);
+                        text-align: left;
+                    }
+                }
+
+                @media (min-width:1281px) and (max-width:1440px)
+                {
+                    .icon-padding
+                    {
+                        padding-left : calc((50% - 68px)/2);
+                        text-align: left;
+                    }
+                }
+
+                @media (min-width:1441px) and (max-width:1680px)
+                {
+                    .icon-padding
+                    {
+                        padding-left : calc((50% - 78px)/2);
+                        text-align: left;
+                    }
+                }
+
+                @media (min-width:1920px)
+                {
+                    .icon-padding
+                    {
+                        padding-left : calc((50% - 88px)/2);
+                        text-align: left;
+                    }
+                }   
+
+                .slds-scope:not(html), .slds-scope body 
+                {                  
+                    background: #fff;
+                } 
+                
+                #ThisPageHelpTextID span 
+	            {
+			       display: none;
+			    }
+			    
+			   	#ThisPageHelpTextID:hover span 
+			   	{
+				   display: block !important;
+				   width: 300px;
+				   background-color: #16325c!important;   
+				   border: 1px solid #16325c!important;
+				   padding: 4px;
+				   color: white;
+				   position: absolute;
+				   z-index: 1;
+				   top:100%;
+				   right:5%;
+				   text-align: justify;
+				   white-space: normal;
+				   font-weight: normal;  
+				   border-radius: 4px!important;    
+			   	}
+			   	
+			   	#ThisPageHelpTextID:hover 
+			   	{
+			   		position: inherit;
+			   	}
+                .tooltip .tooltiptext {
+                    visibility: hidden;                 
+                    background-color: #fff;
+                    color: #000;
+                    text-align: center;
+                    border-radius: 3px;
+                    padding: 3px;
+                    position: absolute;
+                    z-index: 1;   
+                    border: 1px solid #ccc;
+                }
+                
+                .tooltip:hover .tooltiptext {
+                    visibility: visible;
+                }
+            </style>
+
+            <script>
+                function confirmTimesheetCancel() 
+                {
+                    var isCancel = confirm("Do you want to recall this Timesheet?");
+                    if (isCancel) return true;
+                    return false;
+                }
+                
+                //START :: 16-06-2017 New Lightning UI Added by Rahul S 
+                //Used to display spinner on loading page
+                document.onreadystatechange = function () 
+                {
+                    var state = document.readyState
+                    if (state == 'interactive') 
+                    {
+                        document.getElementById('contents').style.visibility="hidden";
+                    } 
+                    else if (state == 'complete') 
+                    {
+                        setTimeout(function()
+                        {
+                            document.getElementById('load').style.display = "none";
+                            document.getElementById('contents').style.visibility="visible";
+                        },2000);
+                    }
+                }
+                //END :: 16-06-2017 New Lightning UI Added by Rahul S    
+                
+                //START:: Embedding lightning components in VF page
+                $Lightning.use
+                ( 
+                    "c:XCDLightning", function() 
+                    {
+                    	var permissionLevel = '{!permissionLevel}';
+                        $Lightning.createComponent
+                        (
+                            "c:HeaderWithIcon",
+                            { 
+                                parentPage: "TimesheetSummary",
+                                permissionLevel: permissionLevel
+                            },
+                            "HeaderWithIcon",
+                            function(cmp) 
+                            {
+                            }
+                        );
+                    }
+                );
+                
+                $Lightning.use
+                (
+                    "c:XCDLightning", function() 
+                    {
+                    	var permissionLevel = '{!permissionLevel}';
+                    	var timesheetType = '{!empDetail.Job_Role__r.Timesheet__c}';
+                        $Lightning.createComponent
+                        (
+                            "c:MyActionIcon",
+                            { 
+                                parentPage: "TimesheetSummary",
+                                permissionLevel: permissionLevel,
+                                timesheetType: timesheetType 
+                            },
+                            "ActionIcon",
+                            function(cmp) 
+                            {
+                            }
+                        );
+                    }
+                );
+                
+                $Lightning.use
+                (
+                    "c:XCDLightning", function() 
+                    {
+                        var userID = '{!currentUser.Id}';
+                        var empID = '{!empid}';
+                        var imgURL = '{!ImageURL}';
+                        var permissionLevel = '{!permissionLevel}';
+                        var imageRenderTrue = false;
+                        if(imgURL != undefined && imgURL.length > 0)
+                        {
+                            imageRenderTrue = true;
+                        }
+                        var nameTemp = '{!empName}';
+                        var nameArr = nameTemp.split(' ');
+                        var name = 'Welcome, '+nameArr[0];
+                        var fLetter = nameArr[0].charAt(0).toUpperCase();
+                        
+                        $Lightning.createComponent
+                        (
+                            "c:MyBusinessCard",
+                            { 
+                                userID:userID,
+                                empID:empID,
+                                imgUrl:imgURL,
+                                imageRenderTrue:imageRenderTrue,
+                                name:name,
+                                fLetter:fLetter,
+                                renderBodyTrue:true,
+                                parentPage:"TimesheetSummary",
+                                permissionLevel:permissionLevel,
+                                widthH:200,
+                                marginL:35,
+                                marginT:-(18+(200-2*35))
+                            },
+                            "BusinessCard",
+                            function(cmp) 
+                            {
+                            }
+                        );
+                    }
+                );
+                //END:: Embedding lightning components in VF page
+            </script> 
+            
+        </head> 
+        
+        <body>
+            <apex:param name="currentvfPage" value="{!$CurrentPage.Name}"/>
+            
+            <!-- used to display spinner on page load -->
+            <div id="load">
+                <div class="slds-spinner_container slds-show slds-is-fixed" style="background-color:white;">
+                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- used to display page content after page load -->
+            <div id="contents" style="width:100%; overflow:hidden;">
+                <div id="idTable" class="slds-grid slds-wrap"  style="margin-left:auto; margin-right:auto;">
+                    <!-- Navigation bar -->
+                    <div class="slds-size_12-of-12">
+                        <div id="HeaderWithIcon" style="padding-left:25%;"></div>
+                    </div>                  
+                    
+                    <div class="slds-size_12-of-12">     
+                        <div style="height:68px; background-color:#ed9e5d">
+                            <div style="width:100%; height:100%; padding-left:25%; text-align:left; font-family:'Dosis', sans-serif; font-size:30pt; color:white; font-weight:100; display:flex; justify-content:left; align-items:center;">
+                                Timesheet
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Business card/ Actions section -->
+                    <div class="slds-size_3-of-12"  style="vertical-align:top; text-align:center; padding-left: 58px; padding-right: 58px;">
+                        <div id="BusinessCard" style="margin-left:auto; margin-right:auto; margin-top:-140px; background:transparent !important;"></div>
+                        
+                        <div style="margin-top:10px;">               
+                            <div class="icon-padding">
+                                <apex:outputText style="font-family: 'Dosis', sans-serif; font-size: 18pt;color: black;font-weight: 600 !important; display: inline-block; word-wrap: break-word;" value="{!empDetail.Name}" /><br/>
+                            </div>
+                            
+                         <!--    <div class="icon-padding">
+                                <div class="slds-icon_container slds-icon_container--circle slds-icon-action-close" title="">
+                                     <svg class="slds-icon slds-icon--xx-small" aria-hidden="true">
+                                         <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#call')}"></use>
+                                     </svg>
+                                </div>&nbsp;&nbsp;                        
+                                <apex:outputText id="phone" style="font-family: 'Dosis', sans-serif; font-size:0.85rem;color: rgb(135,135,135);font-weight: 100 !important; text-decoration:none" value="{!currentUser.Phone}" /><br/>
+                            </div>
+                                        
+                            <div class="icon-padding">   
+                                <div class="slds-icon_container slds-icon_container--circle slds-icon-action-priority" title="">
+                                    <svg class="slds-icon slds-icon--xx-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#email')}"></use>
+                                    </svg>
+                                </div>&nbsp;&nbsp;
+                                <apex:outputText id="Email" style="font-family: 'Dosis', sans-serif; font-size: 0.85rem;color: rgb(135,135,135);font-weight: 100 !important; word-wrap: break-word; word-break: break-all;" value="{!currentUser.email}" />
+                            </div>  -->
+                            
+                            <div class="icon-padding">
+                                <div class="slds-icon_container slds-icon_container--circle slds-icon-action-close" style="border-radius: 48%;width: 24px;height: 24px;text-align:center; " title="">
+                                     <svg class="slds-icon slds-icon--xx-small" aria-hidden="true" style="margin-top:2px;">
+                                         <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#call')}"></use>
+                                     </svg>
+                                </div>&nbsp;&nbsp;                        
+                                <apex:outputText id="phone" style="font-family: 'Dosis', sans-serif; font-size:0.85rem;color: rgb(135,135,135);font-weight: 100 !important; text-decoration:none" value="{!currentUser.Phone}" /><br/>
+                            </div>
+                                        
+                            <div class="icon-padding" >   
+                              <table>
+                               <tr>
+                                   <td>
+                                     <div class="slds-icon_container slds-icon_container--circle slds-icon-action-priority" style="border-radius: 48%;width: 24px;height: 24px;text-align:center;" title="">
+                                        <svg class="slds-icon slds-icon--xx-small" aria-hidden="true" style="margin-top:2px;">
+                                            <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#email')}"></use>
+                                        </svg>
+                                    </div>&nbsp;&nbsp;
+                                   </td>
+                                   <td>
+                                     <div  class="tooltip" style="margin-top: -10px;">
+                                         <div   style="margin-top: -10px; margin-left: 5px;font-family: 'Dosis', sans-serif; font-size: 0.85rem;color: rgb(135,135,135);font-weight: 100 !important;white-space: nowrap;width:20em;overflow: hidden;text-overflow: ellipsis;display: inline-block;">                                    
+                                            {!currentUser.email}
+                                          </div>    
+                                          <span class="tooltiptext" style="font-family: 'Dosis', sans-serif;">{!currentUser.email}</span>                                                        
+                                    </div>                             
+                                      
+                                   </td>
+                               </tr>
+                              </table>
+                             </div>   
+                        </div>
+                        
+                        <div id="ActionIcon" style=" margin-left:auto; margin-right:auto;"></div>
+                    </div>
+
+                    <!-- Data section -->
+                    <div class="slds-size_9-of-12" style="text-align:left;height:100%; border-left: 0.26mm solid #ccc; padding-left:20px; padding-right:20px; margin-top: 5px;"> 
+                        <apex:outputPanel id="tabdetails1">
+                            <apex:form >  
+                                <apex:pageBlock title="Timesheets" mode="edit">
+                                    <apex:PageMessages id="errorMsg1"/>
+                                    
+                                    <apex:pageBlockButtons location="top"  style="float:right; margin-top:13px; margin-bottom:13px;" >
+                                        <apex:commandButton action="{!newTimesheet}" value="{!$Label.xcdhcm__timesheetsummarysttimesheetsbbooktimesheet}" rendered="{!AND(displayCancelButton==false, NewTimesheetButton == true)}" styleclass="slds-button slds-button--neutral" style="display:inline!important; box-shadow: none!important;"/>
+                                        
+                                        <apex:commandButton value="{!$Label.xcdhcm__timesheetsummarysttimesheetsbcancel}" action="{!cancelTS}" rendered="{!displayCancelButton==true}" onClick="this.style.color='#336699';this.value='Processing...';" styleclass="slds-button slds-button--neutral" style="display:inline!important; box-shadow: none!important;"/>
+                                    </apex:pageBlockButtons>                                        
+                                    
+                                    <table class="slds-table slds-table--bordered slds-table--cell-buffer " id="table" > 
+                                        <thead>
+                                            <tr class="slds-text-title--caps"> 
+                                                <th scope="col" class="columnWidth">
+                                                    <div class="slds-truncate">Recall</div>
+                                                </th>
+                                                <th scope="col" class="columnWidth">
+                                                    <div class="slds-truncate">{!$ObjectType.Overtime_Record__c.fields.Name.label}</div>
+                                                </th>
+                                                <apex:repeat value="{! $ObjectType.Overtime_Record__c.Fieldsets.Timesheet_summary}" var="f">
+                                                    <th scope="col" class="columnWidth">
+                                                        <div class="slds-truncate">
+                                                            {!$ObjectType.Overtime_Record__c.Fields[f].label}
+                                                            <span id="ThisPageHelpTextID">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Overtime_Record__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Overtime_Record__c.fields[f].inlineHelpText}</span>
+                                                            </span>
+                                                        </div>
+                                                    </th> 
+                                                </apex:repeat>
+                                            </tr> 
+                                        </thead>
+                                        <tbody>
+                                            <apex:repeat value="{!myTSSummaries}" var="sub">
+                                                <tr> 
+                                                    <th scope="row" class="columnWidth">
+                                                        <div class="slds-truncate" >
+                                                            <apex:commandlink action="{!cancelTimesheetRecord}" onClick="return confirmTimesheetCancel();" rendered="{!sub.xcdhcm__Approval_status__c == 'Awaiting Approval'}">
+                                                                <apex:param name="sumListid" value="{!sub.id}"/>
+                                                                <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Recall" style="width:16px;"/>
+                                                            </apex:commandlink>
+                                                        </div>
+                                                    </th>
+                                                    <th scope="row" class="columnWidth">
+                                                        <div class="slds-truncate" >
+                                                            <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__Timesheet?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}" rendered="{!sub.xcdhcm__Time_sheet_approach__c == 'Full'}">{!sub.Name}</apex:OutputLink>
+                                                            <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetDays?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}" rendered="{!sub.xcdhcm__Time_sheet_approach__c == 'Days'}">{!sub.Name}</apex:OutputLink>
+                                                            <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetHours?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}" rendered="{!sub.xcdhcm__Time_sheet_approach__c == 'Hours'}">{!sub.Name}</apex:OutputLink>
+                                                            <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetProject?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}" rendered="{!sub.xcdhcm__Time_sheet_approach__c == 'Project'}">{!sub.Name}</apex:OutputLink>
+                                                            <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetHoursOvertime?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach=HoursPlusOvertime" rendered="{!sub.xcdhcm__Time_sheet_approach__c == 'Hours + Overtime'}">{!sub.Name}</apex:OutputLink>
+                                                            <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetFlexHours?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach=FlexHours" rendered="{!sub.xcdhcm__Time_sheet_approach__c == 'Flex-time'}">{!sub.Name}</apex:OutputLink>
+                                                        </div>
+                                                    </th>     
+                                                    
+                                                    <apex:repeat value="{! $ObjectType.Overtime_Record__c.Fieldsets.Timesheet_summary}" var="f">
+                                                        <th scope="row" class="columnWidth">
+                                                            <div class="slds-truncate" >
+                                                                <apex:outputField value="{!sub[f]}"/>
+                                                            </div>
+                                                        </th> 
+                                                    </apex:repeat> 
+                                                </tr> 
+                                            </apex:repeat>
+                                        </tbody>
+                                    </table>
+                                    <br /><br />
+                                    <center>
+                                        <apex:outputText Value="There are no timesheets to display" rendered="{! myTSSummaries.size == 0}" style="font-size:14px;"/>
+                                    </center>
+                                    <br/><br/>
+                                </apex:pageBlock>
+                            </apex:form> 
+                        </apex:outputPanel> 
+                    </div>                  
+                </div>
+            </div>
+        </body>
+    </html> 
+    <div style="margin-top:30px;"></div>
+</apex:page>

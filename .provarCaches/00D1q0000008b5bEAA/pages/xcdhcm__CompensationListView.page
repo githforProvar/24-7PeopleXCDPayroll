@@ -1,0 +1,206 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.ModifyCompensationController" rendered="true" sidebar="false">
+    
+    <style type="text/css"> 
+        input[type='text']{
+        width:175px!important;
+        }
+        select{ 
+        width:178px!important;
+        }          
+        <!--Start: PopUp window to display the Compensation Records -->
+        .custPopup
+        {
+        background: #fff url(/img/alohaSkin/lookup_bg.png) repeat-x;
+        border-width: 2px;
+        border-style: inset;
+        z-index: 9999;
+        left: 50%;
+        padding:10px;
+        position: absolute;
+        /* These are the 3 css properties you will need to change so the popup 
+        displays in the center of the screen. First set the width. Then set 
+        margin-left to negative half of what the width is. You can add 
+        the height property for a fixed size pop up if you want.*/
+        width: 650px;
+        margin-left: -250px;
+        top:100px;
+        }
+        .popupBackground
+        {
+        //background-color:black;
+        opacity: 0.20;
+        filter: alpha(opacity = 20);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .pageTitleIcon
+        {
+        background-image: url(/img/sprites/master.png);
+        background-position: 0 -1202px;
+        width: 32px;
+        height: 32px;
+        }    
+        <!--End: PopUp window to display the Compensation Records -->
+    </style>
+    
+    
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        body .bPageBlock .pbBody .pbSubheader {
+        color: #54698d!important;
+        }
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette{
+        background-color: rgba(204, 204, 204, 0.34)!important;
+        border-color: rgba(204, 204, 204, 0.34)!important;
+        }
+        .bPageBlock .requiredInput .requiredBlock {
+        display:none!important;
+        }
+        <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important;
+		   position: sticky !important;    
+		} 
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">
+            
+            <apex:form id="myForm" style="width:100%; height:80%;">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancel}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium"></h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            
+                            <apex:pageBlock id="theblock">
+                                <apex:pageMessages id="errorId"></apex:pageMessages> 
+                                <apex:pageMessage id="compensationInfoMsg" summary="{!$Label.xcdhcm__compensationlistview_select_compensation_to_change_msg}" severity="info" strength="3"/>  
+                                <br/><br/>
+                                <apex:outputPanel id="info">
+                                <div class="slds-grid slds-wrap"> 
+                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                            <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                <label class="slds-form-element__label" >
+                                                    Select a Compensation
+                                                </label>
+                                                <div class="slds-form-element__control">
+                                                    <apex:outputPanel >
+                                                        <apex:inputHidden value="{!compIDSelected}" id="targetId"/>
+                                                        <apex:inputText size="30" value="{!compNameSelected}" id="targetName" style="width:175px;margin-left:15px" tabindex="1"/>
+                                                        <apex:commandLink action="{!showCompensationListPopup}"  type="image/png" rerender="tstpopup" style="text-decoration:none" tabindex="1">
+                                                            <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/lookup.png')}" class="ClookupIcon" title="Compensation Lookup (New Window)"/>
+                                                        </apex:commandlink>
+                                                    </apex:outputPanel>
+                                                </div>                                                                                        
+                                            </div>
+                                        </div>                                         
+                                    <!-- START :: 01-12-2018 NPPD-1822 Error handling - Compensation Added by Rahul S -->
+									<div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+										<div class="slds-form-element slds-p-around--small">
+											<label class="slds-form-element__label"> 
+											 Select an action
+											</label>
+											<div class="slds-form-element__control">
+												<apex:selectList id="compensationActionlist"  
+													value="{!compensationAction}" size="1" tabindex="10">
+													<apex:selectOptions value="{!CompensationActionOptions}" />
+												</apex:selectList>
+											</div>
+										</div>
+									</div>
+									<!-- END :: 01-12-2018 NPPD-1822 Error handling - Compensation Added by Rahul S -->
+                                    </div>
+                                    
+                                    <apex:outputPanel id="tstpopup" >
+                                        <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayCompensationListPopup}"/>
+                                        <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayCompensationListPopup}">
+                                            <apex:commandLink action="{!closeCompensationListPopup}"  type="image/png" rerender="tstpopup" style="float:right;text-decoration:none">
+                                                <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Close"/>
+                                            </apex:commandlink>
+                                            <div class="content">
+                                                <img src="/s.gif" alt="" class="pageTitleIcon" title="" />
+                                                <h1 style="font-size: 1.8em;color: #333435;">Lookup</h1>
+                                            </div>
+                                            <div style="height:360px;overflow:auto;">
+                                                <apex:pageBlockTable value="{!compensationList}" var="comp"> 
+                                                 <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata-->
+                                                    <apex:column headerValue="{!$ObjectType.xcdhcm__Compensation__c.Fields.Name.Label}" >
+                                                        <apex:commandLink value="{!comp.Name}" action="{!compensationSelected}" reRender="info,errorId"> 
+                                                            <apex:param name="idSelected" value="{!comp.id}" />
+                                                            <apex:param name="nameSelected" value="{!comp.Name}" />
+                                                        </apex:commandLink> 
+                                                    </apex:column>
+                                                    <apex:column headerValue="{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Role_L__c.Label}"  rendered="{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Role_L__c.Accessible}">
+                                                        <apex:outputText value="{!comp.Role_L__r.Name}" />
+                                                    </apex:column>
+                                                    <apex:column headerValue="{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Base_Salary__c.Label}" rendered="{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Base_Salary__c.Accessible}">
+                                                        <apex:outputField value="{!comp.xcdhcm__Base_Salary__c}" />
+                                                    </apex:column>
+                                                    <apex:column headerValue="{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Effective_from__c.Label}" rendered="{!$ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Effective_from__c.Accessible}">
+                                                        <apex:outputField value="{!comp.xcdhcm__Effective_from__c}" />
+                                                    </apex:column>
+                                                     <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata-->
+                                                </apex:pageBlockTable>   
+                                            </div> <br/>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>             
+                                    
+                                    
+                                </apex:outputPanel>
+                                <div class="errorMsg" style="padding-left:145px;width:150px;">
+                                    <apex:outputpanel layout="block" styleClass="requiredInput" rendered="{!LEN(errorMsg) > 0}">
+                                        <apex:outputpanel layout="block" styleClass="requiredBlock" ></apex:outputpanel>
+                                        <strong>{!'Error:'}</strong>&nbsp;{!errorMsg}
+                                    </apex:outputPanel>
+                                </div>
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__compensationlistviewbcancel}" action="{!cancel}" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__compensationlistviewbnext}" action="{!processChangeCompensation}" styleclass="slds-button slds-button--brand" reRender="errorMsg,id_saveBtn" status="saveStatus" id="id_saveBtn"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:25%; bottom:25%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+                
+            </apex:form> 
+        </body>
+    </html>
+</apex:page>

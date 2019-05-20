@@ -1,0 +1,5 @@
+<!--  
+<apex:page ShowHeader="true" controller="My_Review_Controller" action="{!init}">
+</apex:page>
+-->
+<apex:page ></apex:page>

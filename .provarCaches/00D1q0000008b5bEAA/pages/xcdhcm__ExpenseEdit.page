@@ -1,0 +1,138 @@
+<apex:page standardController="xcdhcm__Expense__c" extensions="xcdhcm.ExpenseViewController" sidebar="false"> 
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        	display:none!important;
+        }
+        input[type='text'] {
+        	width: 100%;
+        }  
+        textarea
+        {
+        	width:100%;
+        } 
+        select
+        {
+        	width:100%!important;
+        }
+    </style>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope"> 
+            <apex:form enctype="multipart/form-data">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelUpload}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!IF(isMileage, 'Edit mileage', 'Edit expense')}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageBlock >
+                                <apex:pageMessages id="erMsg" />
+                                <apex:outputPanel rendered="{!isMileage = false}">
+                                    <apex:pageBlockSection showHeader="false" columns="2" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Expense__c.fieldSets.xcdhcm__Edit_expense}" var="fieldValue">
+									<!-- START:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh--> 
+									<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Expense__c.fields[fieldValue].Accessible}">
+									<!-- END:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh--> 
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(fieldValue.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!fieldValue.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!fieldValue.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Expense__c.fields[fieldValue].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Expense__c.fields[fieldValue].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!expense[fieldValue]}" required="{!fieldValue.Required}" style="{!IF(fieldValue.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div>  
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlockSection>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel rendered="{!isMileage}">
+                                    <apex:pageBlockSection showHeader="false" columns="2" collapsible="false">
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Expense__c.fieldSets.xcdhcm__Edit_mileage}" var="fieldValue">
+									<!-- START:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh--> 
+									<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Expense__c.fields[fieldValue].Accessible}">
+									<!-- END:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh--> 
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(fieldValue.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!fieldValue.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!fieldValue.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Expense__c.fields[fieldValue].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Expense__c.fields[fieldValue].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!expense[fieldValue]}" required="{!fieldValue.Required}" style="{!IF(fieldValue.label=='Blankspace','display:none;' ,'')}"/>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div>  
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:pageBlockSection>
+                                </apex:outputPanel>
+                                <br/>
+                                
+                                <apex:pageBlockSection showHeader="false" columns="2" id="block1" collapsible="false">
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <apex:outputLabel value="Attach receipt" for="file" styleclass="slds-form-element__label"/>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="file" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionregion >
+                                <apex:actionStatus id="saveStatus">                   
+                                    <apex:facet name="stop">
+                                        <apex:outputPanel >
+                                        <apex:commandButton action="{!cancelUpload}" value="Cancel" styleclass="slds-button slds-button--neutral"/>
+                                        <apex:commandButton action="{!saveUpload}" value="Save" styleclass="slds-button slds-button--brand"/>
+				
+                                            <!-- <apex:commandButton action="{!cancelUpload}" value="Cancel" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                            <apex:commandButton action="{!saveUpload}" value="Save" styleclass="slds-button slds-button--brand" reRender="erMsg,id_saveBtn" status="saveStatus" id="id_saveBtn"/> -->
+                                        </apex:outputPanel>
+                                    </apex:facet>
+                                    <apex:facet name="start">
+                                        <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                <div class="slds-spinner__dot-a"></div>
+                                                <div class="slds-spinner__dot-b"></div>
+                                            </div> 
+                                        </div>                    
+                                    </apex:facet>                                
+                                </apex:actionStatus> 
+                            </apex:actionregion>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

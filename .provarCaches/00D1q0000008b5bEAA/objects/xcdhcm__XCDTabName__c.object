@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>deprecated. Controls labels on XCD visualforce pages ,&apos;This feature is replaced by custom labels&apos;</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>xcdhcm__Replacewith__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This text field used to hold the new TabName</description>
+        <externalId>false</externalId>
+        <label>Replacewith</label>
+        <length>50</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Status__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Status</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Title_location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Title location</label>
+        <length>50</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>xXCDTabName</label>
+    <listViews>
+        <fullName>Available</fullName>
+        <columns>NAME</columns>
+        <columns>xcdhcm__Title_location__c</columns>
+        <columns>xcdhcm__Replacewith__c</columns>
+        <columns>xcdhcm__Status__c</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>LAST_UPDATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>Available</label>
+        <language>en_GB</language>
+    </listViews>
+    <visibility>Public</visibility>
+</CustomObject>

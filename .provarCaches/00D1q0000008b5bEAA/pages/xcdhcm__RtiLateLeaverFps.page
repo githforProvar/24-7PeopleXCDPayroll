@@ -1,0 +1,66 @@
+<apex:page standardController="xcdhcm__RTI__c" extensions="xcdhcm.RTILateLeaverController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}"/>
+<style type="text/css">
+ .customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette, .layoutEdit .individualPalette .customnotabBlock .tertiaryPalette {
+   background-color: #FFFFFF!important;
+   border-color: #FFFFFF!important;
+}
+body .pbBody table.list tr.headerRow th 
+{
+	border-bottom: 2px solid #cde2f5 !important;
+}
+td.dataCol.first {
+    width: 500px !important;
+    height: 40px !important;
+}
+body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+    width:2%!important;
+}
+.highlight
+{
+   background-color: #D3D3D3;
+}
+</style>
+<apex:form id="lateLeaverId">
+	<apex:pageBlock title="{!$Label.xcdhcm__payrollperiodblateleaverfps}" id="rows1" rendered="true">
+	<apex:pageMessages id="erMsg"/>
+		<apex:pageBlockTable value="{!wrapLateLeaverEmployeeList}" var="item">
+			<apex:column headerValue="">
+	            <apex:inputCheckbox value="{!item.selected}"/>
+	        </apex:column>
+			<apex:column headerValue="Leaving date">
+				<apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+			    	<apex:param value="{!item.lateLeaverEmployee.Employee__r.xcdhcm__Leaving_Date__c}" /> 
+				</apex:outputText>
+			</apex:column>
+			<apex:column headerValue="Last pay run">
+				<apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+			    	<apex:param value="{!item.lateLeaverEmployee.Employee__r.xcdhcm__Payroll_end_date__c}" /> 
+				</apex:outputText>
+			</apex:column>
+			<apex:column headerValue="Date of most recent FPS">
+				<apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+			    	<apex:param value="{!item.lateLeaverEmployee.RTI_summary__r.xcdhcm__Submit_dt__c}" /> 
+				</apex:outputText>
+			</apex:column>
+			<apex:column headerValue="RTI name">
+				<apex:outputLink target="_top" title="{!item.lateLeaverEmployee.RTI_summary__r.Name}" value="/one/one.app#/sObject/{!item.lateLeaverEmployee.xcdhcm__RTI_summary__c}">{!item.lateLeaverEmployee.RTI_summary__r.Name}
+                </apex:OutputLink>
+			</apex:column>
+			<apex:column headerValue="Date of leaving in RTI">
+				<apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+			    	<apex:param value="{!item.lateLeaverEmployee.xcdhcm__Dt_of_Leaving__c}" /> 
+				</apex:outputText>
+			</apex:column>
+			<apex:column headerValue="Payments due">
+				<apex:outputLink target="_blank"  title="{!item.lateLeaverEmployee.Employee__r.Name}" value="/one/one.app#/sObject/{!reportId}/view?fv4={!item.lateLeaverEmployee.Employee__r.xcdhcm__Leaving_Date__c}&fv5={!item.lateLeaverEmployee.Employee__r.Name}">{!item.lateLeaverEmployee.Employee__r.Name}
+                </apex:OutputLink>
+			</apex:column>			
+		</apex:pageBlockTable>
+		<apex:pageBlockButtons location="Bottom">
+			<apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcreatefps}" action="{!createLateLeaverFPS}" id="theButton"/>
+    		<apex:commandButton value="{!$Label.xcdhcm__payrollperiodbback}" action="{!backPage}"/>
+		</apex:pageBlockButtons>
+	</apex:pageBlock>
+</apex:form>
+</apex:page>

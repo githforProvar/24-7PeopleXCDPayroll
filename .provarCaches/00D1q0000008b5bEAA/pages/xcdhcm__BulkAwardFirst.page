@@ -1,0 +1,115 @@
+<apex:page standardController="xcdhcm__Company__c" extensions="xcdhcm.BulkAwardsController" sidebar="false" showHeader="true" wizard="false">
+  <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEditPage.css')}" />       
+    <style>
+        .slds-scope .slds-section-title--divider {	 
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        }       
+    </style>
+     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script>
+    		function setFocusOnLoad() {}
+    </script>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form id="theform">
+            <apex:actionFunction name="doSave" action="{!next}" />
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancel}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <svg class="slds-button__icon slds-button__icon--large" aria-hidden="true">
+                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHBulkAwardFirst}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <apex:pageBlock mode="edit" id="pgblock1">
+                                <apex:PageMessages id="error1"/>
+                                <apex:actionRegion >
+                                    <apex:pageBlockSection id="sec1" columns="3" collapsible="false">
+                                        
+                                        <apex:pageBlockSectionItem id="item1">
+                                            <apex:outputpanel >
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <abbr class="slds-required" title="required">*</abbr> 
+                                                        <apex:outputLabel value="Select award type" styleclass="slds-form-element__label"/>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:SelectList id="List" value="{!selectedAwardType}" size="1">
+                                                                <apex:actionSupport event="onchange" reRender="pgblock1" />
+                                                                <apex:selectOptions value="{!AwardType}" />
+                                                            </apex:SelectList>
+                                                        </div>                                                                                        
+                                                    </div>
+                                            </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        <apex:pageBlockSectionItem id="item2">
+                                             <apex:outputpanel >
+	                                                <div class="slds-form-element slds-p-around--small">                                                                                                  
+	                                                    <abbr class="slds-required" title="required">*</abbr> 
+	                                                	<apex:outputLabel value="Date of award" styleclass="slds-form-element__label"/>
+	                                                    <div class="slds-form-element__control">
+	                                                        <apex:inputField value="{!benefitDateInstance.xcdhcm__Date_of_award__c}" required="true" />
+	                                                    </div>                                                                                        
+	                                                </div>
+	                                        </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        <apex:pageBlockSectionItem id="item3">
+                                             <apex:outputpanel >
+	                                                <div class="slds-form-element slds-p-around--small">                                                                                                  
+	                                                    <abbr class="slds-required" title="required">*</abbr> 
+	                                                	<apex:outputLabel value="Earliest payment date" styleclass="slds-form-element__label"/>
+	                                                    <div class="slds-form-element__control">
+	                                                        <apex:inputField value="{!benefitDateInstance.xcdhcm__Earliest_payment_date__c}" required="true" />
+	                                                    </div>                                                                                        
+	                                            </div> 
+	                                        </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                    </apex:pageBlockSection>
+                                    
+                                </apex:actionRegion>
+                            </apex:pageBlock>
+                            
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:commandButton value="{!$Label.xcdhcm__bulkawardfirstbcancel}" action="{!cancel}" immediate="true"  styleclass="slds-button slds-button--neutral" />
+                        	<apex:commandButton value="{!$Label.xcdhcm__bulkawardfirstbnext}"  styleclass="slds-button slds-button--brand" onClick="SaveOnClick(); return false;"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+                
+                <script>
+			  function DisableAllButtons (actionText) {
+			    var buttons = document.getElementsByClassName("btn");
+			    for (var i = 0; i < buttons.length; i++) {
+			        var button = buttons[i];
+			        button.disabled = true;
+			        button.classList.add("btnDisabled");
+			        if ( actionText != null && actionText != "" ) button.value = actionText;
+			        button.style.color='#336699';
+			    }
+			  }
+			  function SaveOnClick () {
+			    try {
+			        DisableAllButtons ("Processing...");
+			    } catch(err) { }
+			    doSave();
+			  }
+			</script>
+
+            </apex:form> 
+        </body>
+    </html>
+</apex:page>

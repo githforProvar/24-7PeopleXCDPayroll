@@ -1,0 +1,121 @@
+<apex:page standardController="xcdhcm__XCD_PAY_Payroll__c" sidebar="false" tabStyle="Payroll__tab" 
+	extensions="xcdhcm.PayrollDetailViewController">
+	
+	<!-- <apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+	
+	<style type="text/css">
+		.bPageTitle .ptBody .content 
+		{
+	    	color: #336699 !important;
+	    	
+	   	}
+		.bPageTitle .ptBody .content .pageType
+		{
+	    	color: #336699 !important;
+	    }
+	    .bPageTitle .ptBody .content .pageDescription
+		{
+	    	font-weight: bold!important;
+	    }
+		body .bPageBlock .pbBody .pbSubheader .hideListButton 
+		{
+    		display: none;
+		}
+		body .bRelatedList .bPageBlock .pbHeader 
+		{
+			border-top: 2px solid #63a4c5!important;
+		}
+		.pbHeader #topButtonRow
+		{
+		    display: none;
+		}
+		.listHoverLinks
+		{
+			display: none;
+		}
+		/*popup*/ 
+		.popupBg 
+		{
+			background-color:black;
+			opacity: 0.2;
+			filter: alpha(opacity =   70);
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			z-index: 9998;
+			background: black !important;
+		}
+		.customPopup 
+		{
+			line-height: 25px;
+			position: absolute;
+			left: 50%;
+			padding: 10px;
+			z-index: 9999;
+			text-align: center;
+			top: 150px;
+			width: 500px;
+			margin-left: -250px;
+			text-decoration: none;
+			font-weight: bold;
+			background: #ffffff !important;
+			border: 1px solid #ccc !important;
+			/*-moz-box-shadow: 4px 5px 10px #99ccff;
+			-webkit-box-shadow: 4px 5px 10px #99ccff;
+			box-shadow: 4px 5px 10px #99ccff; */
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			color: #336699;
+		}
+		.butt 
+		{
+			border: 1px solid #d9d9d9 !important;
+			color: #999999 !important;
+			background-color: #fff !important;
+			background-image: none !important;
+			-moz-box-shadow: 2px 1px 8px #a6d6ff;
+			-webkit-box-shadow: 2px 1px 8px #a6d6ff;
+			box-shadow: 2px 1px 8px #a6d6ff;
+		}
+		/*popup*/
+	</style>
+	<script>
+		function disableButton(objBtn) 
+		{
+		    objBtn.disabled = true;
+		    objBtn.style.color='#336699';
+		    objBtn.value='Processing...';
+		}
+	</script>
+	
+	<apex:form id="theForm">
+		<apex:PageMessages id="errorId" />
+		<div>
+			<br/> 
+			<center >
+				<apex:commandButton value="{!$Label.xcdhcm__payrolldetailviewbedit}" action="{!edit}" />
+				<apex:commandButton value="{!$Label.xcdhcm__payrolldetailviewbupdateemployeetaxcode}" action="{!showPopUp}" onClick="disableButton(this);" rendered="{!AND(previousTaxYearPayRolls.size != 0 , payRoll.xcdhcm__Payroll_approach__c == 'UK Net')}" rerender="theForm"/>
+				<apex:commandButton value="{!$Label.xcdhcm__payrolldetailviewbback}" action="{!backToPayroll}" />
+			</center>
+		</div>
+		
+		<apex:outputPanel id="popup">
+            <apex:outputpanel styleClass="popupBg" rendered="{!displayPopUp}" />
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+               <center>  
+                   <apex:outputtext value="{!taxCodeMsg}" rendered="{!displayPopUp}" escape="false"/>
+                     <br/><br/>
+                   	<apex:commandButton value="{!$Label.xcdhcm__payrolldetailviewbok}" action="{!updateEmpTaxCode}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId" styleClass="butt"/>
+					<apex:commandButton value="{!$Label.xcdhcm__payrolldetailviewbcancel}" action="{!cancelUpdate}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId" styleClass="butt"/>
+			   </center>
+            </apex:outputPanel>
+            <br/>
+        </apex:outputPanel>	 
+        
+	<apex:detail relatedList="true" title="true" />
+	</apex:form>
+	
+</apex:page>

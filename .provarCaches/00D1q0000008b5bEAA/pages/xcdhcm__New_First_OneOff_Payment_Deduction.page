@@ -1,0 +1,165 @@
+<apex:page standardController="xcdhcm__Company__c" extensions="xcdhcm.BulkEmployeeOneOffController" sidebar="false" showHeader="true" wizard="false">
+  <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />       
+    <style>
+     .dateInput  
+        {
+        white-space: nowrap;
+        } 
+        .dateOnlyInput input 
+        {
+        width: 10em !important; 
+        }
+        #actionColumn
+        {
+        color: white;
+        }
+        .slds-scope img 
+        {
+        max-width: 250%;
+        height: auto;
+        }
+        .slds-scope .slds-section-title--divider {	 
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        }       
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form id="theform">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancel}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <svg class="slds-button__icon slds-button__icon--large" aria-hidden="true">
+                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.New_OneOff_Payment_DeductionSelectpaymentordeduction}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- START :: 22-02-2018 Spring2018 NPPD-1564 Retain data if Mandatory fields missed and Double click check Commented by Rahul S-->
+                            <!-- <apex:PageMessages /> -->
+                            <!-- END :: 22-02-2018 Spring2018 NPPD-1564 Retain data if Mandatory fields missed and Double click check Commented by Rahul S-->
+                            <apex:pageBlock mode="edit">
+                                <apex:PageMessages />
+                                
+                                  <apex:actionStatus id="recordStatus" >
+                                        <apex:facet name="start">
+                                            <div class="slds-spinner_container slds-show slds-is-fixed" style="top:20%; bottom:20%;Z-index:2">
+                                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div>
+                                            </div>
+                                        </apex:facet>
+                                        <apex:facet name="stop">
+                                            <div class="slds-spinner_container slds-hide slds-is-fixed">
+                                            </div>
+                                        </apex:facet>
+                             	</apex:actionStatus>
+                                
+                                <apex:actionRegion >
+									<apex:pageBlockSection id="sec" > 
+                                 		<apex:pageBlockSectionItem id="item1">
+                                            <apex:outputpanel >
+	                                                <div class="slds-form-element slds-p-around--small">                                                                                                  
+	                                                    <abbr class="slds-required" title="required">*</abbr> 
+	                                                	<apex:outputLabel value="Select payment or deduction" styleclass="slds-form-element__label"/>
+	                                                    <div class="slds-form-element__control">
+	                                                        <apex:SelectList id="List" value="{!strRecordType}" size="1"  label="Select payment or deduction">
+                                                                        <apex:actionsupport event="onchange" action="{!updateRecordType}" rerender="theform" status="recordStatus" />
+                                                                        <apex:selectOptions value="{!RecordTypes}" />
+                                                            	</apex:SelectList>
+	                                                </div>
+	                                            </div> 
+	                                        </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        <apex:pageBlockSectionItem id="item2" >
+                                             <apex:outputpanel >
+	                                                <div class="slds-form-element slds-p-around--small">                                                                                                  
+	                                                    <abbr class="slds-required" title="required">*</abbr> 
+	                                                	<apex:outputLabel value="Set default type" styleclass="slds-form-element__label"/>
+	                                                    <div class="slds-form-element__control">
+                                                                <apex:inputfield value="{!myBenefit.xcdhcm__Benefit_Type__c}" id="subPicklist" />
+	                                                </div>
+	                                            </div> 
+	                                        </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                           <apex:pageBlockSectionItem id="item3" >
+                                             <apex:outputpanel >
+	                                                <div class="slds-form-element slds-p-around--small">                                                                                                  
+	                                                    <abbr class="slds-required" title="required">*</abbr> 
+	                                                	<apex:outputLabel value="Date of award" styleclass="slds-form-element__label"/>
+	                                                    <div class="slds-form-element__control">
+                                                                <apex:inputfield value="{!myBenefit.xcdhcm__Date_of_award__c}" required="true" />
+	                                                </div>
+	                                            </div> 
+	                                        </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                         <apex:pageBlockSectionItem id="item4" >
+                                             <apex:outputpanel >
+	                                                <div class="slds-form-element slds-p-around--small">                                                                                                  
+	                                                    <abbr class="slds-required" title="required">*</abbr> 
+	                                                	<apex:outputLabel value="Earliest payment date" styleclass="slds-form-element__label"/>
+	                                                    <div class="slds-form-element__control">
+                                                                <apex:inputfield value="{!myBenefit.xcdhcm__Earliest_payment_date__c}" required="true" />
+	                                                </div>
+	                                            </div> 
+	                                        </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                    </apex:pageBlockSection>
+                                </apex:actionRegion>
+                            </apex:pageBlock>
+                        </div>
+                        
+                         <div class="slds-modal__footer">
+                       		<apex:outputPanel >
+                             	<apex:commandButton action="{!cancel}" value="Cancel"  reRender="theform" styleclass="slds-button slds-button--neutral" />
+                             	<apex:commandButton value="Next" onClick="SaveOnClick(); return false;"  styleclass="slds-button slds-button--brand"   id="id_nextBtn" />   
+								<apex:actionFunction name="doSave"  action="{!nextMethod}" />
+                        		</apex:outputPanel>
+                 		</div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+ 	<script>
+    		function setFocusOnLoad() {}
+    		
+		function DisableAllButtons (actionText)
+		{
+			var buttons = document.getElementsByClassName("btn");
+		   	for (var i = 0; i < buttons.length; i++) 
+		   	{
+		       	var button = buttons[i];
+		       	button.disabled = true;
+		       	button.classList.add("btnDisabled");
+		       	if(actionText != null && actionText != "" ) button.value = actionText;
+		       	button.style.color='#336699';
+		   	}
+		}
+		
+		function SaveOnClick () 
+		{
+		   try 
+		   {
+		       DisableAllButtons ("Processing...");
+		   }
+		  	catch(err) { }
+		   doSave();
+		 }
+		</script>
+                
+            </apex:form> 
+        </body>
+    </html>
+</apex:page>

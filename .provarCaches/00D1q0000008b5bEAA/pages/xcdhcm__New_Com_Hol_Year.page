@@ -1,0 +1,95 @@
+<apex:page standardController="xcdhcm__Company__c" extensions="xcdhcm.CompanyExtensionController" sidebar="false" showHeader="true" wizard="false" >
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.Css,'Sublineremovecss.css')}" /> -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteCompanySub.css')}" />  
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <head>
+        <apex:slds />
+    </head>
+    <body class="slds-scope">
+    <apex:form >
+        <div role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal--large" aria-labelledby="header43">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                 <apex:commandLink action="{!cancelHolidayYear}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                     <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                 </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Com_Hol_Year}</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                            <apex:pageMessages id="errorMsg"/> 
+             <!--   <apex:pageBlock title="{!$Label.PHNew_Com_Hol_Year}"> 
+                    <apex:pageMessages /> 
+                    <apex:pageBlockButtons >
+                        <!-- START :: 25/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                        
+                        <!-- <apex:commandButton value="{!$Label.xcdhcm__new_com_hol_yearbcontinue}" action="{!saveCompanyHolidayYear}" styleclass="slds-button slds-button--neutral"/>
+                        <apex:commandButton value="{!$Label.xcdhcm__new_com_hol_yearbcancel}" action="{!cancelHolidayYear}" immediate="true" styleclass="slds-button slds-button--neutral"/> -->
+                        <!-- END :: 25/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                   <!-- </apex:pageBlockButtons>  -->
+                    
+                    
+                    <!-- <apex:pageBlockSection title="{!$Label.New_Com_Hol_YearNewcompanyleaveyear}" columns="2" collapsible="false">
+                            <apex:repeat value="{!companyHolidayYear}" var="ch" rows="1">
+                                <apex:repeat value="{!$ObjectType.xcdhcm__Company_Holiday_Year__c.Fieldsets.xcdhcm__Com_Hol_Year_Set}" var="i">
+                                 <apex:inputField value="{!ch[i]}" required="{!i.Required}"/>                                                                                                                                               
+                                </apex:repeat>
+                                </apex:repeat>
+                         </apex:pageBlockSection> -->
+                    <apex:repeat value="{!locationDetail}" var="ld" rows="1">                       
+                        <div class="slds-grid slds-wrap">
+                            <apex:repeat value="{!companyHolidayYear}" var="ch" rows="1">
+                                <apex:repeat value="{!$ObjectType.xcdhcm__Company_Holiday_Year__c.Fieldsets.xcdhcm__Com_Hol_Year_Set}" var="i">
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                    	<!-- START:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh-->
+                                    	<apex:outputpanel rendered="{!$ObjectType.xcdhcm__Company_Holiday_Year__c.fields[i].Accessible}">
+                                    	<!-- END:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh-->
+	                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+	                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+	                                                 <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+	                                                {!i.label}
+	                                                <span class="LiteHelpText">
+	                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Company_Holiday_Year__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+	                                                        <span>{!$ObjectType.Company_Holiday_Year__c.fields[i].inlineHelpText}</span>
+	                                                </span>
+	                                                </label>
+	                                            <div class="slds-form-element__control">
+	                                                <apex:inputField value="{!ch[i]}" required="{!i.Required}"/>
+	                                            </div>                                                                                        
+	                                        </div>
+	                                    <!-- START:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh-->    
+                                        </apex:outputpanel>
+                                        <!-- END:: 12/11/2018 NPPD-1819 FLS issue modify by  Kumbresh-->
+                                    </div>  
+                                </apex:repeat>
+                            </apex:repeat>
+                        </div> 
+                    </apex:repeat>
+                <!-- </apex:pageBlock>  -->
+            </div>
+            <div class="slds-modal__footer">
+                <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_com_hol_yearbcancel}" action="{!cancelHolidayYear}" immediate="true" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_com_hol_yearbcontinue}" action="{!saveCompanyHolidayYear}" styleclass="btn slds-button slds-button--brand" status="saveStatus" rerender="id_saveBtn,errorMsg" id="id_saveBtn"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:30%; bottom:30%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop slds-backdrop--open"></div>
+    <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+   </apex:form>
+   </body>
+</html>
+</apex:page>

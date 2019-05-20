@@ -1,0 +1,477 @@
+<apex:page standardController="xcdhcm__Company__c"
+    extensions="xcdhcm.CompanyController" showHeader="true" sidebar="false"
+    wizard="false" tabStyle="My_Company__tab">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/CompanyPageCss.css')}" />
+    <br />
+    <style type="text/css">
+.links {display: none;}
+ td.pbTitle{width:43%!important;}
+ 
+</style> 
+    <script type="text/javascript">
+    function doSearch() 
+    {
+        searchServer(
+        document.getElementById("EmployeeName").value);
+    }
+    </script> 
+    <!-- START :: 16/01/2014 NPPD-88,NPPD-197 Schedule Maintenance Landing Page Added by Praveen -->
+    <apex:form >
+         <apex:OutputPanel rendered="{!schmaintenance==true}" >
+             <div  style="height:600px;">
+                <apex:OutputPanel layout="block" rendered="{!schmaintenance==true}" style="width:430px;height:270px;margin:auto;position:relative; border: 1px solid #f87878;
+                                                                                            border-radius: 10px;-moz-box-shadow: 0 0 9px #ccc;-webkit-box-shadow: 0 0 9px #ccc;
+                                                                                            box-shadow: 0 0 9px #ccc;">
+                    <div style="width:430px;height:35px;border-bottom: 2px solid #ccc;">
+                            <p style="font-weight: bold;font-size: 14px;margin-left: 95px;">Scheduled Maintenance Notification<br/> </p>
+                    </div>
+                    <div style="margin-left:20px;margin-top:10px; background-repeat: no-repeat;background-size: 150px 150px;background-position-x: 258px;background-position-y: 58px;background-position: 100% 85%;background-image:url(/resource/XCD_static_resources/Icons/Schedule_Maintance_Img_Clock);">
+                    <h3 style="font-size: 12px;font-weight: bold;">
+                     <center>  
+                        <apex:outputText value="{!schmainStartDate}"/> <br/> to <br/>
+                        <apex:outputText value="{!schmainEndDate}"/><br/>
+                     </center>
+                     </h3>
+		                             <!-- START :: 29/11/2016 NPPD-1318 Schedule Maintenance message Modified by kamal  -->
+                        <p style="font-size:12px; margin:auto;width:380px;margin-top:20px;">{!$Label.ScheduleMaintenance_BannerMessage}</p>                      
+                        <!--  <p style="font-size:12px; margin:auto;width:380px;margin-top:20px;">
+                        Please be advised that XCD HR will be performing scheduled maintenance during the above time period. </p>
+                        
+                        <p style="font-size:12px;margin:auto;width:380px;margin-top: 10px;">
+                        XCD HR will not be available during this period. Please plan accordingly. We apologise for any inconvenience to you and your business.
+                        </p> -->
+                        
+                        <!-- <apex:image value="{!URLFOR($Resource.Schedule_Maintance_Img_Clock)}"  style="float:right;width: 120px;margin-left: 15px;" /> -->
+                        <!-- END :: 29/11/2016 NPPD-1318 Schedule Maintenance message Modified by kamal  -->
+                        
+                        <br/><br/>
+                        
+                    <apex:commandLink action="{!Closeschmaintenance}" value="Continue" style="color:#555; float: right;margin-right: 20px;" rendered="{!showContinue==true}"/>
+                        <br/><br/> 
+                    </div>
+                </apex:OutputPanel>
+             </div>        
+         </apex:OutputPanel>
+    </apex:form> 
+    <!-- END :: 16/01/2014 NPPD-88,NPPD-197 Schedule Maintenance Landing Page Added by Praveen -->
+    
+    <apex:outputPanel rendered="{!schmaintenance==false}">
+   
+     <table width="100%" border="0" align="right" >   
+     <tr> <td valign="Top" width="10%" style="height: 400px;padding-top:5%;"> 
+     
+    <apex:form >
+    <apex:outputPanel >
+     <apex:commandButton action="{!joiner}" value="{!$Label.xcdhcm__abcompanynewjoiner}" styleclass="sidebutton"/>  
+    <br /> <br />
+    </apex:outputPanel>
+    <!-- START :: 16/014/2014 NPPD-257 Alignment of buttons on Company page Modified by Shiva -->
+    <apex:outputPanel rendered="{!BulkLeaveButton}" >
+    <apex:commandButton action="{!bulkleave}" value="{!$Label.xcdhcm__abcompanybookleave}" styleclass="sidebutton" />   
+    <br /> <br />
+    </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!BulkOvertimeButton}">
+    <apex:commandButton action="{!bulkOvertime}" value="{!$Label.xcdhcm__abcompanyclaimovertime}" styleclass="sidebutton" />   
+    <br /> <br />
+    </apex:outputPanel>  
+    
+    <apex:outputPanel rendered="{!BulkRewardButton}">
+    <apex:commandButton action="{!newEmployeeAwards}" value="{!$Label.xcdhcm__abcompanynewaward}" styleclass="sidebutton" /> 
+    <br /> <br />
+    </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!BulkRewardButton}" >
+    <apex:commandButton action="{!newEmployeeOneOff}" value="{!$Label.xcdhcm__abcompanynewpayment}" styleclass="sidebutton" />  
+    <br /> <br />
+    </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!BulkRewardButton}" >        
+     <!-- START :: 24/02/2015 NPPD-713 Salary review - bugs and minor changes Modified by Sabir -->     
+    <apex:commandButton action="{!newEmployeeCompensation}" value="{!$Label.xcdhcm__abcompanysalaryreview}" styleclass="sidebutton" />   
+     <!-- END :: 24/02/2015 NPPD-713 Salary review - bugs and minor changes Modified by Sabir -->   
+    <br /> <br />
+    </apex:outputPanel>       
+     <!-- END :: 16/014/2014 NPPD-257 Alignment of buttons on Company page Modified by Shiva -->
+     <!-- START :: 28/08/2015 NPPD-596 pcc Salary review added by Saravanan -->    
+     <apex:outputPanel rendered="{!PccSalaryReviewBtn}" >
+    <apex:commandButton action="{!pccSalaryReviewBtnAction}" value="{!$Label.xcdhcm__abcompanysalaryincrement}" styleclass="sidebutton" />  
+    <br /> <br />
+    </apex:outputPanel> 
+     <!-- END :: 28/08/2015 NPPD-596 pcc Salary review added by Saravanan --> 
+    </apex:form> 
+    </td>
+     
+            <td valign="Top" width="5%"></td>
+
+            <td valign="Top" width="70%"><apex:tabPanel switchType="client"
+                    value="{!SelectedTab}" id="CompanyTabPanel" tabClass="activeTab"
+                    inactiveTabClass="inactiveTab" headerAlignment="center"
+                    headerSpacing="2px" width="95%"
+                    style="background:#000; border-radius:5px;background-image:url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/ribbon5.png')}');">
+
+                    <!-- Detail Page -->
+                   <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                    <apex:tab label="{!$Label.xcdhcm__companystcompany}" name="CompanyDetails" id="tabdetails">
+                     <!--END :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                         <!-- START :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+                    <apex:form rendered="{!HelpCompanyAdmin}">
+                        <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;" target="_blank" action="{!helpLinkCompanyAdmin}" value="Help" id="theCommandLink"/>
+                    </apex:form>
+                    <!-- END :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+                        <apex:detail relatedList="false" title="true" />
+
+                        <!-- Company Holiday Year page -->
+                        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div><br/>
+
+                        <apex:pageBlock title="{!$Label.xcdhcm__companycompanyleaveyear}" id="companyHolidayYear" 
+                            rendered="{!CompanyLeaveYearSectionView}">
+
+                            <apex:pageBlockButtons location="top">
+                                <apex:form >
+                                 <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                                    <apex:commandButton action="{!newCompanyHolidayYear}"
+                                        value="{!$Label.xcdhcm__companystcompanybnewleaveyear}"
+                                        rendered="{!NewCompanyLeaveYearButton}"
+                                        style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #99ccff;-webkit-box-shadow: 2px 1px 8px #99ccff;box-shadow:  2px 1px 8px #99ccff;" />
+                                  <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                                </apex:form>
+
+                            </apex:pageBlockButtons>
+
+                            <apex:pageblockTable value="{!companyHolidayYears}"
+                                var="companyHolidayYear" width="100%">
+                                <!-- START :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holiday_Year__c.Fields.Name.Label}">
+	                            <!-- END :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	                                <apex:outputLink target="_top"
+	                                    title="{!companyHolidayYear.Name}"
+	                                    value="/{!companyHolidayYear.id}">{!companyHolidayYear.Name}</apex:OutputLink>
+	                            </apex:column>
+	                            
+	                            <!-- START :: 24/03/2017 NPPD-1349 Improve Company page look & feel added by Kumbresh -->
+	                            <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holiday_Year__c.Fields.CreatedDate.Label}">
+	                                    <apex:outputText value="{0,date,dd/MM/yyyy}">
+					    	<apex:param value="{!companyHolidayYear.CreatedDate}"/>
+				            </apex:outputText>
+	                            </apex:column>
+	                            
+	                            <apex:column >
+	                            	<apex:facet name="header">
+	                            	{!$ObjectType.Company_Holiday_Year__c.Fields.Employees_assigned__c.Label}
+	                            	<span id="hlpbtn"> 
+							        	<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Company_Holiday_Year__c.Fields.Employees_assigned__c.inlineHelpText}"
+							               style="{!IF($ObjectType.Company_Holiday_Year__c.Fields.Employees_assigned__c.inlineHelpText == null, 'display:none','')}" />
+							        </span>
+							         </apex:facet>
+	                            	<apex:outputField id="outText1" value="{!companyHolidayYear.xcdhcm__Employees_assigned__c}" />
+	                            </apex:column>
+	                            
+	                            <apex:column >
+	                            	<apex:facet name="header">
+	                            	{!$ObjectType.Company_Holiday_Year__c.Fields.Carry_over_approved__c.Label}
+		                            <span id="hlpbtn"> 
+							        	<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Company_Holiday_Year__c.Fields.Carry_over_approved__c.inlineHelpText}"
+							               style="{!IF($ObjectType.Company_Holiday_Year__c.Fields.Carry_over_approved__c.inlineHelpText == null, 'display:none','')}" />
+							        </span>
+							        </apex:facet>
+	                            	<apex:outputField id="outText2" value="{!companyHolidayYear.xcdhcm__Carry_over_approved__c}" />
+	                            </apex:column>
+	                            <!-- END :: 24/03/2017 NPPD-1349 Improve Company page look & feel added by Kumbresh -->
+	                            
+                            </apex:pageblockTable>                            
+                        </apex:pageBlock>
+                        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div> 
+                    </apex:tab>
+
+                    <!-- Location Detail Page -->
+                    <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                    <apex:tab label="{!$Label.xcdhcm__companystorganisation}" id="comdetails" name="location"
+                        rendered="{!OrganisationTab}">
+                     <!--END :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                        <!-- START :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->  
+                        <apex:form rendered="{!HelpCompanyAdmin}">
+                            <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;" target="_blank" action="{!helpLinkCompanyAdmin}" value="Help" id="theCommandLink"/>
+                        </apex:form>
+                        <!-- END :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+                        <apex:pageBlock title="{!$Label.xcdhcm__companyorganisationlocations}" id="comdetailBlock"
+                            rendered="{!LocationSection}">
+
+                            <apex:pageBlockButtons location="top">
+                                <apex:form >
+                                    <apex:commandButton action="{!newLocationDetail}"
+                                        value="{!$Label.xcdhcm__companystorganisationbnewlocation}" rendered="{!NewLocationButton}"
+                                        style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #99ccff;-webkit-box-shadow: 2px 1px 8px #99ccff;box-shadow:  2px 1px 8px #99ccff;" />
+                                </apex:form>
+                            </apex:pageBlockButtons>
+
+                            <apex:pageblockTable value="{!locations}" var="location"
+                                width="100%">
+
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Location__c.Fields.Name.Label}">
+                                    <apex:outputLink target="_top" title="{!location.Name}"
+                                        value="/{!location.id}">{!location.Name}</apex:OutputLink>
+                                </apex:column>
+
+                                <apex:repeat var="l"
+                                    value="{!$ObjectType.xcdhcm__Location__c.FieldSets.xcdhcm__Location_Summary_Columns}">
+                                    <apex:column value="{!location[l]}" />
+                                </apex:repeat>
+
+                            </apex:pageblockTable>
+                            <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+                             <div style="margin-top: 15px;"></div>
+                        </apex:pageBlock>
+
+                        <!-- Department and Department Codes page -->
+                      <!-- START :: 20/07/2015 NPPD-857 lable Custom settings Added by kamal -->
+                        <apex:pageBlock title="{!$Label.xcdhcm__companyorganisationdepartments}" id="DepartmentBlock"
+                            rendered="{!DepartmentSection}">
+
+                            <apex:pageBlockButtons location="top">
+                                <apex:form >
+                                    <apex:commandButton action="{!newCompanyDepartment}"
+                                        value="{!$Label.xcdhcm__companystorganisationbnewdepartment}" rendered="{!NewDepartmentButton}"
+                                        style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #99ccff;-webkit-box-shadow: 2px 1px 8px #99ccff;box-shadow:  2px 1px 8px #99ccff;" />
+                                </apex:form>
+                     <!-- END :: 20/07/2015 NPPD-857 lable Custom settings Added by kamal -->
+                            </apex:pageBlockButtons>
+
+                            <apex:pageblockTable value="{!departments}" var="department"
+                                width="100%">
+
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Departments__c.Fields.Name.Label}">
+                                    <apex:outputLink target="_top" title="{!department.Name}"
+                                        value="/{!department.id}">{!department.Name}</apex:OutputLink>
+                                </apex:column>
+
+                                <apex:repeat var="d"
+                                    value="{!$ObjectType.xcdhcm__Departments__c.FieldSets.xcdhcm__Department_Summary_Columns}">
+                                    <apex:column value="{!department[d]}" />
+                                </apex:repeat>
+
+                            </apex:pageblockTable>
+                            <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+                        </apex:pageBlock>
+
+                    </apex:tab>
+
+
+                    <!-- Employees page -->
+                    <!-- START :: 18/03/2014 NPPD-233 Company tab - Employees section Modified by Shiva -->
+                     <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                    <apex:tab label="{!$Label.xcdhcm__companystroles}" id="ComEmployees"
+                        rendered="{!CompanyEmployeeTab}" Name="Employee">
+                         <!--END :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                    <!-- END :: 18/03/2014 NPPD-233 Company tab - Employees section Modified by Shiva -->
+                         <!-- START :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+                        <apex:form rendered="{!HelpCompanyAdmin}">
+                            <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;" target="_blank" action="{!helpLinkCompanyAdmin}" value="Help" id="theCommandLink"/>
+                        </apex:form>
+                        <!-- END :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+                        
+
+                        <!-- Job Role page -->
+                        <apex:pageBlock title="{!$Label.xcdhcm__companyrolesjobroles}" id="JobRoleBlock"
+                            rendered="{!CompanyJobRoleSection}">
+
+                            <apex:pageBlockButtons location="top">
+                                <apex:form >
+                                    <apex:commandButton action="{!newCompanyJobRole}"
+                                        value="{!$Label.xcdhcm__companystrolesbnewjobrole}" rendered="{!NewCompanyJobRoleButton}"
+                                        style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #99ccff;-webkit-box-shadow: 2px 1px 8px #99ccff;box-shadow:  2px 1px 8px #99ccff;" />
+                                </apex:form>
+                            </apex:pageBlockButtons>
+
+                            <apex:pageblockTable value="{!jobRole}" var="jobrole1"
+                                width="100%">
+
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Job_Role__c.Fields.Name.Label}">
+                                    <apex:outputLink target="_top" title="{!jobrole1.Name}"
+                                        value="/{!jobrole1.id}">{!jobrole1.Name}</apex:OutputLink>
+                                </apex:column>
+
+                                <apex:repeat var="j"
+                                    value="{!$ObjectType.xcdhcm__Company_Job_Roles__c.FieldSets.xcdhcm__Company_Job_Role_Summary_Columns}">
+                                    <apex:column value="{!jobrole1[j]}" />
+                                </apex:repeat>
+
+                            </apex:pageblockTable>
+                            <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+                             <div style="margin-top: 15px;"></div>
+                        </apex:pageBlock>
+
+                        <!-- Ethnicity Codes page -->
+                        <!-- START :: 07/11/14 NPPD-457 Custom setting bugs. Ethnicities Section on Company. Equality diversity. Employee Security Details Modified by Sabir -->
+                        <!-- START :: 07/05/14 NPPD-226 Ability to remove Ethnicity from Equality and Diversity section Modified by Shiva -->
+                        <apex:pageBlock title="{!$Label.xcdhcm__companyrolesethnicities}" id="EthnicityBlock" rendered="{!EthnicitiesSection}">
+                            <!--rendered="{!EthnicitiesSection}">-->
+                        <!-- END :: 07/05/14 NPPD-226 Ability to remove Ethnicity from Equality and Diversity section Modified by Shiva -->
+                        <!-- END :: 07/11/14 NPPD-457 Custom setting bugs. Ethnicities Section on Company. Equality diversity. Employee Security Details Modified by Sabir -->
+
+                            <apex:pageBlockButtons location="top">
+                                <apex:form >
+                                    <apex:commandButton action="{!newEthnicity}"
+                                        value="{!$Label.xcdhcm__companystrolesbnewethnicity}" rendered="{!NewEthnicityButton}"
+                                        style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #99ccff;-webkit-box-shadow: 2px 1px 8px #99ccff;box-shadow:  2px 1px 8px #99ccff;" />
+                                </apex:form>
+
+                            </apex:pageBlockButtons>
+
+                            <apex:pageblockTable value="{!ethnicity}" var="Ethnicity1"
+                                width="100%">
+
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Ethnicity__c.Fields.Name.Label}">
+                                    <apex:outputLink target="_top" title="{!Ethnicity1.Name}"
+                                        value="/{!Ethnicity1.id}">{!Ethnicity1.Name}</apex:OutputLink>
+                                </apex:column>
+
+                            </apex:pageblockTable>
+                            <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+                        </apex:pageBlock>
+
+                    </apex:tab>
+                    <!-- Company Pension & Benefits page -->
+                     <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                    <apex:tab label="{!$Label.xcdhcm__companystreward}" id="ComBenefits" Name="comBenTab"
+                        rendered="{!RewardTab}">
+                         <!--END :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                        <!-- START :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+                        <apex:form rendered="{!HelpCompanyAdmin}">
+                            <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;" target="_blank" action="{!helpLinkCompanyAdmin}" value="Help" id="theCommandLink"/>
+                        </apex:form>
+                        <!-- END :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+
+                        <!-- Company Pension Scheme Page -->
+                        <apex:pageBlock title="{!$Label.xcdhcm__companyrewardpensionschemes}"
+                            id="comPensionSehemeBlock"
+                            rendered="{!AND(CompanyPensionSchemesSection,result!='en_US')}">
+                           <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                            <apex:pageBlockButtons location="top">
+                                <apex:form >
+                                    <apex:commandButton action="{!newPensionScheme}"
+                                        value="{!$Label.xcdhcm__companystrewardbnewpensionscheme}"
+                                        rendered="{!NewCompanyPensionSchemesButton}" />
+                                </apex:form>
+
+                            </apex:pageBlockButtons>
+                           <!--END :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->    
+                            <apex:pageblockTable value="{!pensionSchemes}"
+                                var="pensionScheme" width="100%">
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Pension_Scheme__c.Fields.Name.Label}">
+                                                                    <apex:outputLink target="_top" title="{!pensionScheme.Name}"
+                                        value="/{!pensionScheme.id}">{!pensionScheme.Name}</apex:OutputLink>
+                                </apex:column>
+
+                                <apex:repeat var="p"
+                                    value="{!$ObjectType.xcdhcm__Company_Pension_Scheme__c.FieldSets.xcdhcm__Company_Pension_Summary_Columns}">
+                                    <apex:column value="{!pensionScheme[p]}" />
+                                </apex:repeat>
+
+                            </apex:pageblockTable>
+                            <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+                             <div style="margin-top: 15px;"></div>
+                        </apex:pageBlock>
+
+                        <apex:pageBlock title="{!$Label.xcdhcm__companyrewardbenefitschemes}" id="comBenefitsBlock"
+                            rendered="{!CompanyBenefitsSection}">
+                           <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                            <apex:pageBlockButtons location="top">
+                                <apex:form >
+                                    <apex:commandButton action="{!newCompanyBenefits}"
+                                        value="{!$Label.xcdhcm__companystrewardbnewbenefitscheme}"
+                                        rendered="{!NewCompanyBenefitButton}"
+                                        style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #99ccff;-webkit-box-shadow: 2px 1px 8px #99ccff;box-shadow:  2px 1px 8px #99ccff;" />
+                                </apex:form>
+
+                            </apex:pageBlockButtons>
+                          <!--END :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                            <apex:pageblockTable value="{!companyBenefits}"
+                                var="companyBenefit" width="100%">
+                                <!-- START :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                               
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Benefits__c.Fields.Name.Label}">
+                                <!-- END :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                    <apex:outputLink target="_top" title="{!companyBenefit.Name}"
+                                        value="/{!companyBenefit.id}">{!companyBenefit.Name}</apex:OutputLink>
+                                </apex:column>
+
+                                <apex:repeat var="b"
+                                    value="{!$ObjectType.Company_Benefits__c.FieldSets.Company_Benefit_Summary_Columns  }">
+                                    <apex:column value="{!companyBenefit[b]}" />
+                                </apex:repeat>
+
+                            </apex:pageblockTable>
+                            <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+                        </apex:pageBlock>
+
+                    </apex:tab>
+                     <!--START :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                    <apex:tab label="{!$Label.xcdhcm__companystperformance}" id="co" Name="comJobRole"
+                        rendered="{!PerformanceTab}">
+                         <!--END :: 17/11/2014 NPPD-598 Custom settings on Tabname Added by kamal-->
+                          <!-- START :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+                            <apex:form rendered="{!HelpCompanyAdmin}">
+                                <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;" target="_blank" action="{!helpLinkCompanyAdmin}" value="Help" id="theCommandLink"/>
+                            </apex:form>
+                            <!-- END :: 09/01/2014 NPPD-108 UserGuide Link Added by Praveen -->
+                       <apex:pageBlock title="{!$Label.xcdhcm__companyperformanceobjective}" rendered="{!CompanyObjectiveSection}">
+                            <apex:pageBlockButtons location="top">
+                                <apex:form >
+                                    <apex:commandButton action="{!newCompanyObjective}"
+                                        value="{!$Label.xcdhcm__companystperformancebnewobjective}" rendered="{!NewObjectiveButton}"
+                                        style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #99ccff;-webkit-box-shadow: 2px 1px 8px #99ccff;box-shadow:  2px 1px 8px #99ccff;" />
+                                </apex:form>
+                            </apex:pageBlockButtons>
+                            <apex:pageblockTable value="{!companyObjective}" var="comobj"
+                                width="100%">
+                                <!-- START :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Company_Objectives__c.Fields.Name.Label}">
+                                <!-- END :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                    <apex:outputLink target="_top" title="{!comobj.Name}"
+                                        value="/{!comobj.id}">{!comobj.Name}</apex:OutputLink>
+                                </apex:column>
+
+                                <apex:repeat var="co"
+                                    value="{!$ObjectType.xcdhcm__Company_Objectives__c.FieldSets.xcdhcm__Company_Objective_Summary_Columns}">
+                                    <apex:column value="{!comobj[co]}" />
+                                </apex:repeat>
+
+                            </apex:pageblockTable>
+                <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+                        </apex:pageBlock>
+                            <!-- START :: 25/09/2014 NPPD-484 Values under performane Added by Sabir -->
+                             <apex:pageBlock title="{!$Label.xcdhcm__companyperformancevalues}" rendered="{!CompanyValueSection}">
+                                <apex:pageBlockButtons location="Top">
+                                    <apex:form >
+                                        <apex:commandButton action="{!newCompanyValue}" value="{!$Label.xcdhcm__companystperformancebnewvalue}" rendered="{!NewValueButton}"
+                                          style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #99ccff;-webkit-box-shadow: 2px 1px 8px #99ccff;box-shadow:  2px 1px 8px #99ccff;" />
+                                    </apex:form>
+                                </apex:pageBlockButtons> 
+                               <apex:pageblockTable value="{!companyValue}" var="comval" width="100%">
+                                <!-- START :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                
+                                <apex:column headervalue="{!$ObjectType.xcdhcm__Company_value__c.Fields.Name.Label}">
+                                <!-- END :: 23/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                    <apex:outputLink target="_top" title="{!comval.Name}"
+                                        value="/{!comval.id}">{!comval.Name}</apex:OutputLink>
+                                </apex:column>
+
+                                <apex:repeat var="cv"
+                                    value="{!$ObjectType.xcdhcm__Company_value__c.FieldSets.xcdhcm__Company_values_summary_columns}">
+                                    <apex:column value="{!comval[cv]}" />
+                                </apex:repeat>
+ 
+                            </apex:pageblockTable>
+                               <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+                             </apex:pageBlock>
+                          <!-- END :: 25/09/2014 NPPD-484 Values under performane Added by Sabir -->
+                    </apex:tab>
+
+                </apex:tabPanel></td>
+            <td valign="Top" width="5%"></td>
+        </tr>
+    </table>
+    </apex:outputPanel>
+</apex:page>

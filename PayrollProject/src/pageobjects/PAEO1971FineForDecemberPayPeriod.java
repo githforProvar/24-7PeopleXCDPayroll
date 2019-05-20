@@ -62,12 +62,12 @@ public class PAEO1971FineForDecemberPayPeriod {
 		@FindBy(xpath = ".//td[11]//div[@class='wave-table-cell-text']")
 		public WebElement protectedEarningsCariedForward;
 		
-		
+		///div[1]/div/span[1]
 		@FindBy(xpath = ".//td[last()-1]/div/div")
-		//@FindBy(xpath = ".//td[last()-1]/div[1]/div/span[1]/span")
+		
 		public WebElement type;
 		
-		@FindBy(xpath = ".//td[last()]/div[1]/div/div")
+		@FindBy(xpath = ".//td[last()]/div/div")
 		public WebElement Am;
 		
 		

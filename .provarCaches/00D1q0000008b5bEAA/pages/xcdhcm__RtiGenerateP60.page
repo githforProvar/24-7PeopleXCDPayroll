@@ -1,0 +1,410 @@
+<!--  START :: 28/11/2018 NPAY-503 P60 and Year End Issues added by Jamil   -->
+<apex:page controller="xcdhcm.RtiGenerateP60Controller"  sidebar="false" >
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+<style type="text/css">
+body .pbBody table.list tr.headerRow th
+{
+  width:1% !important;
+}
+<!-- START:: NPAY-2 class ng-cloak added by Farhan  -->
+.ng-cloak 
+{
+	display: none !important;
+}
+<!-- END:: NPAY-2 class ng-cloak added by Farhan  -->
+<!-- START :: 20/02/206 Pop up message for P60 Jamil-->
+.popupBg 
+{
+	opacity: 4.0;
+	filter: alpha(opacity = 60);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 9998;
+}
+
+.customPopup {
+	line-height: 25px;
+	position: absolute;
+	left: 60%;
+	padding: 10px;
+	z-index: 9999;
+	text-align: center;
+	top: 150px;
+	width: 400px;
+	margin-left: -450px;
+	text-decoration: none;
+	font-weight: bold;
+	background: #ffffff !important;
+	border: 1px solid #ccc !important;
+	-moz-box-shadow: 4px 5px 10px #99ccff;
+	-webkit-box-shadow: 4px 5px 10px #99ccff;
+	box-shadow: 4px 5px 10px #99ccff;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	color: #336699;
+}
+#hlpbtn:hover .titlepopup
+{
+   display: block !important;
+   background: #FEFDB9;
+   padding: 4px;
+   color: #000;
+   position: absolute;
+   z-index: 1;
+   border: 1px solid #FFA603;
+   text-align: justify;
+   white-space: normal;
+   font-weight: normal;
+}
+.input-mysize 
+{ 
+	width: 550px 
+}
+.search-query 
+{
+	padding-left: 469px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC);
+	background-repeat: no-repeat;
+	background-position: 562px 8px;
+}
+</style>
+<script>
+	function checkAll(cb)
+	{
+	    var inputElem = document.getElementsByTagName("input");
+	    for(var i=0; i<inputElem.length; i++)
+	    {
+	        if(inputElem[i].id.indexOf("checkedone")!=-1)
+	        inputElem[i].checked = cb.checked;
+	    }
+	}  
+</script>
+<apex:form id="theForm">
+	<apex:outputPanel id="popup">
+        <apex:outputPanel styleClass="popupBg" layout="block" rendered="{!publishP60popup}"/>
+            <apex:outputPanel styleClass="customPopup"  rendered="{!publishP60popup}">
+                <apex:outputtext value="P60's have now been published to the employee records." rendered="{!publishP60popup}"/>
+                 <br/><br/>    
+                <apex:commandButton value="Publish P60" action="{!updateP60Status}"/>
+                <apex:commandButton value="Cancel" action="{!cancelP60}"/>
+         </apex:outputPanel>
+     </apex:outputPanel>
+     <apex:outputPanel id="popup1">
+      <apex:pageBlock >
+       <apex:pageBlockSection >
+        <apex:outputPanel styleClass="popupBg" layout="block" rendered="{!printP60popup}"/>
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!printP60popup}">
+              <apex:pageBlockSectionItem >
+                  <apex:actionRegion >      
+                       <apex:selectList value="{!printPaySlip}" size="1">
+                           <apex:selectOptions value="{!items}"/>
+                           <apex:actionSupport event="onchange" rerender="myFields"/>
+                        </apex:selectList>                      
+                        <span id="hlpbtn">
+					        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+					        <span style="display: none; width: 320px; left:170px; " class="titlepopup">
+					           <p> Paper payslips, selects all employees with this selected on their records </p>
+					           <p> All, will print everyone </p>
+					        </span>
+				       </span>
+                 </apex:actionRegion>                         
+               </apex:pageBlockSectionItem>
+               <apex:commandButton value="Print P60" onclick="setState()"  rerender="popup1">
+                     <apex:actionFunction name="setState" action="{!printP60StatusPdf}"  reRender="theForm" status="myStatus">  
+                     </apex:actionFunction>                   
+                </apex:commandButton> 
+                <apex:commandButton value="Cancel" action="{!cancelP60}"/>
+            </apex:outputPanel>
+        </apex:pageBlockSection>
+      </apex:pageBlock>
+    </apex:outputPanel>
+ <div ng-controller="ctrlRead">
+ <apex:pageBlock title="Publish P60" id="rows">
+	<apex:PageMessages id="errId" />
+	<html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+	 <head>
+       <meta charset="utf-8"/>
+       <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet"/>       
+       <link rel="stylesheet" href="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css" />
+       <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet"/>
+       <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+       <script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+       <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+       <script type="text/javascript">
+        <!-- Name your application -->
+        var myapp = angular.module('hello', []);
+        var sortingOrder = 'ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Name';
+        var r;
+        <!-- Define Controller  -->
+        var contrl=myapp.controller('ctrlRead', function ($scope, $filter) 
+        {
+            <!--- Initialize Scope Variables --->
+            $scope.sortingOrder = sortingOrder;
+            $scope.reverse = false;
+            $scope.filteredItems = [];
+            $scope.groupedItems = [];
+            $scope.itemsPerPage = 15;
+            $scope.pagedItems = [];
+            $scope.currentPage = 0;
+            $scope.items ={!JSONString };
+            $scope.selectedAll = false;
+            $scope.sel = {};
+            $scope.checkAll =( function(){
+            // START:: Jamil chmage 13/01/2018 NPAY-503 -->
+            /*
+            if($scope.selectedAll)
+            {
+               for(i in $scope.items)
+               {
+               		$scope.sel[$scope.items[i].ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Id]=true;
+               }
+            }
+            else
+            {
+                 for(i in $scope.items)
+                 {
+                 	$scope.sel[$scope.items[i].ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Id]=false;
+                 }
+            }
+            */ 
+            for(i in $scope.items)
+                     {
+                          if($scope.selectedAll)
+                          {
+                            $scope.items[i].selected = true;
+                          }
+                          else
+                          {
+                            $scope.items[i].selected = false;
+                          }
+                     }  
+            // END:: Jamil chmage 13/01/2018 NPAY-503 -->         
+             });                  
+            var searchMatch = function (haystack, needle) 
+            {
+                if (!needle) 
+                {
+                    return true;
+                }
+                return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+            };
+                
+            //Initialize the Search Filters 
+            $scope.search = function () 
+            {
+	            $scope.filteredItems = $filter('filter')($scope.items, function (item) 
+	            {
+	                for (var attr in item) 
+	                {
+	                    if (searchMatch(item.ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Name , $scope.query))
+	                        return true;
+	                }
+	                return false;
+	            });
+	            // Define Sorting Order
+	            if ($scope.sortingOrder !== '') 
+	            {
+	                $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+	            }
+	            $scope.currentPage = 0;
+	            
+	            // Group by pages
+	            $scope.groupToPages();
+            };               
+             // Calculate Total Number of Pages based on Records Queried 
+             $scope.groupToPages = function () {
+                 $scope.pagedItems = [];
+                 for (var i = 0; i < $scope.filteredItems.length; i++) {
+                     if (i % $scope.itemsPerPage === 0) {
+                         $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [$scope.filteredItems[i]];
+                     } else {
+                         $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i]);
+                     }
+                 }
+             };                
+             $scope.range = function (start, end) {
+                 var ret = [];
+                 if (!end) {
+                     end = start;
+                     start = 0;
+                 }
+                 for (var i = start; i < end; i++) {
+                     ret.push(i);
+                 }
+                 return ret;
+             };                
+             $scope.prevPage = function () {
+                 if ($scope.currentPage > 0) {
+                     $scope.currentPage--;
+                 }
+             };               
+             $scope.nextPage = function () {
+                 if ($scope.currentPage < $scope.pagedItems.length - 1) {
+                     $scope.currentPage++;
+                 }
+             };
+             $scope.setPage = function () {
+                 $scope.currentPage = this.n;
+             };
+             // functions have been describe process the data for display
+             $scope.search();               
+             // change sorting order
+             $scope.sort_by = function (newSortingOrder) {
+                 if ($scope.sortingOrder == newSortingOrder)
+                     $scope.reverse = !$scope.reverse;
+                 $scope.sortingOrder = newSortingOrder;
+                 
+                 //START :: 18/07/2016 NPAY-145 Overtime and Timesheet added by Farhan          
+                 // Redefining the sorting order to sort all page's elements.
+                 if ($scope.sortingOrder !== '') {
+                     $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+                 }
+                 $scope.currentPage = 0;
+                 // Group by pages
+                 $scope.groupToPages();                 
+                 // icon setup
+                 $('th i').each(function () {
+                     // icon reset
+                     $(this).removeClass().addClass('icon-sort');
+                 });
+                 if ($scope.reverse)
+                     $('th.' + new_sorting_order + ' i').removeClass().addClass('icon-chevron-up');
+                 else
+                     $('th.' + new_sorting_order + ' i').removeClass().addClass('icon-chevron-down');
+             };  
+             $scope.sendData = function()
+             {
+                saveMethod(JSON.stringify($scope.items));
+             };
+              
+            function callAngNoPayment()
+			{
+				var scope = angular.element(document.getElementById("AngularControl")).scope();
+	    		scope.$apply(function () {
+	    		scope.sendData();
+	    	});
+		}       
+        });    
+        contrl.$inject = ['$scope', '$filter'];
+        </script>
+      </head>
+      <body>
+      	<table>
+      	 <tr>
+      	 	<td>
+                <apex:outputLabel value=" Payroll:"  style="margin-left:10px;" />
+            </td>
+            <td>
+              <apex:selectList value="{!selectedPayroll }" size="1" style="margin-left:10px;">
+                   <apex:actionSupport event="onchange" action="{!choosenTaxYear}"  status="wait"/> 
+                   <apex:selectOptions value="{!Payroll}" />
+               </apex:selectList> 
+           </td>
+           <td>
+               <apex:outputLabel value=" Tax year:"  style="margin-left:120px;" />
+           </td>
+           <td>
+              <apex:selectList value="{!selectedTaxyear}" size="1" style="margin-left:10px;">
+                   <apex:actionSupport event="onchange" action="{!choosenPayroll}"  status="wait"/>
+                   <apex:selectOptions value="{!Taxyear}" />
+               </apex:selectList> 
+           </td>
+           <!-- START :: 07/01/2019 P60 status picklist added by Jamil -->
+           <td>
+                <apex:outputLabel value=" Status:"  style="margin-left:60px;" />
+            </td> 
+           <td>
+              <apex:selectList value="{!selectedP60Status}" size="1" style="margin-left:10px;">
+                   <apex:actionSupport event="onchange" action="{!choosenPayroll}"  status="wait"/>
+                   <apex:selectOptions value="{!P60StatusItems}" />
+               </apex:selectList> 
+           </td>
+           
+           <!-- END :: 07/01/2019 P60 status picklist added by Jamil -->
+           <td>
+               <apex:outputLabel value="Search employee:" style="margin-left:100px;"/>
+           </td>
+            <td>  
+               <input type="text" ng-model="query" ng-change="search()"  placeholder="Search"/>
+           </td>
+      	 </tr>
+      	</table>
+      	<table class="table  table-hover">
+	      	<thead>
+	            <tr>
+	                <th class="paySummary">
+	                     <input type="checkbox"  ng-model="selectedAll" ng-click="checkAll()"/> 
+	                 </th>
+	                <th class="ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Name">Employee<a ng-click="sort_by('ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Name ')"><i class="icon-sort" style="color:black"></i></a></th>
+	                <th class="Final FPS">Final FPS<a ng-click="sort_by('ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Name ')"><i class="icon-sort" style="color:black"></i></a></th>
+	                <th class="Draft P60">Draft P60<a ng-click="sort_by('ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Name ')"><i class="icon-sort" style="color:black"></i></a></th>
+	            </tr>
+	        </thead>
+	        <tbody>
+              <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse" class="ng-cloak">
+                 <td>
+                    <div ng-if="item.ps.xcdhcm__RTI_summary__r.xcdhcm__Final_subm_fr_yr__c === 'yes'">
+                    <!-- START:: Jamil chmage 13/01/2018 NPAY-503 -->
+                     <!-- <input type="checkbox" name="checkbox_{{item.count}}" ng-checked="true" ng-model="sel[item.ps.Employee__r.Personal_L__r.Id]" /> -->
+                     <input type="checkbox"  ng-model="item.selected" /> 
+                     <!-- END:: Jamil chmage 13/01/2018 NPAY-503 -->
+                    </div> 
+                   <div ng-if="item.ps.xcdhcm__RTI_summary__r.xcdhcm__Final_subm_fr_yr__c != 'yes'">
+                      <input type="checkbox" name="checkbox_{{item.count}}" ng-checked="false" ng-model="item.selected" />
+                    </div>  
+                 </td>
+                 <td style="text-align:left"> 
+                    <a href="/one/one.app#/alohaRedirect/{{item.ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Id}}" >{{item.ps.xcdhcm__Employee__r.xcdhcm__Personal_L__r.Name}}</a>     
+                 </td>
+                 <td>
+                   {{item.ps.xcdhcm__RTI_summary__r.xcdhcm__Status__c}}
+                </td>    
+                <td>
+                   <a href="/apex/xcdhcm__P60form?id={{item.ps.xcdhcm__Employee__c}}&taxyear={!selectedTaxyear}&paramPdf=e" target="_blank" class="btn btn-primary active">View draft</a>  
+                </td> 
+              </tr>
+          </tbody>
+          <tfoot>
+             <td colspan="6" style="border: none !important;">
+               <div class="pagination pagination-large pagination-centered">
+                 <ul style="box-shadow: none !important;">
+                     <li ng-class="{disabled: currentPage == 0}">
+                         <a ng-click="prevPage()">Prev</a>
+                     </li>
+                     <li ng-repeat="n in range(pagedItems.length)"
+                     ng-class="{active: n == currentPage}"
+                     ng-click="setPage()">
+                         <a ng-bind="n + 1">1</a>
+                     </li>
+                     <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                         <a ng-click="nextPage()">Next</a>
+                     </li>
+                 </ul>
+               </div>
+             </td>                       
+         </tfoot>
+      	</table>
+      </body>
+	</html>
+	<apex:pageBlockButtons location="Bottom">
+		<apex:commandButton style="display:none;">
+			<input type="button" ng-click="sendData()"
+				value="P60 Publish" class="btn" />
+		</apex:commandButton>
+		<apex:actionFunction name="saveMethod" action="{!publishP60Status}"
+			rerender="errId,hiddenBlock,popup">
+			<apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson"
+				value="x" />
+		</apex:actionFunction>
+		<apex:commandButton value="Print P60" action="{!printP60Status}" rerender="errId,hiddenBlock,popup1"/>
+		<apex:commandButton value="cancel" action="{!Back}" rerender="hiddenBlock" />
+	</apex:pageBlockButtons>
+ </apex:pageBlock>
+ <apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
+ </div>
+</apex:form>
+</apex:page>
+<!--  END :: 28/11/2018 NPAY-503 P60 and Year End Issues added by Jamil   -->

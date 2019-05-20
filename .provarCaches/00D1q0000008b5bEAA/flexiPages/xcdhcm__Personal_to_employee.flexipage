@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata"
+   >
+ <fullName>xcdhcm__Personal_to_employee</fullName>
+  <flexiPageRegions>
+    <componentInstances>
+   <componentInstanceProperties>
+    <name>height</name>
+        <value>300</value>
+   </componentInstanceProperties>
+   <componentInstanceProperties>
+    <name>pageName</name>
+        <value>xcdhcm__PersonalviewRedirect</value>
+   </componentInstanceProperties>
+   <componentName>flexipage:visualforcePage</componentName>
+     </componentInstances>
+    <name>right</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <masterLabel>Personal to employee</masterLabel>
+    <sobjectType>xcdhcm__Personal__c</sobjectType>
+ <template>
+  <name>xcdhcm:VisualForce_Template</name>
+ </template>
+ <type>RecordPage</type>
+</FlexiPage>

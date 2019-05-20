@@ -1,0 +1,188 @@
+<apex:page standardController="xcdhcm__RTI_Submission__c"  extensions="xcdhcm.RtiFPSController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}"/>  
+ 
+<style type="text/css">
+.custPopup 
+{
+	background-color: white;
+	border-width: 2px;
+	border-style: inset;
+	z-index: 9999;
+	left: 50%;
+	padding: 10px;
+	position: absolute;
+	width: 650px;
+	margin-left: -250px;
+	top: 100px;
+}
+.popupBackground 
+{
+	background-color: black;
+	opacity: 0.20;
+	filter: alpha(opacity = 20);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 9998;
+}
+.bPageTitle .ptBody .content
+{
+	display: none;
+}
+body .bPageBlock .pbTitle h2
+{
+	display: none;
+}
+.customnotabTab .tertiaryPalette,.individualPalette .customnotabBlock .tertiaryPalette,.layoutEdit .individualPalette .customnotabBlock .tertiaryPalette
+{
+	background-color: #FFFFFF;
+	border-color: #63a4c5;
+	border-top: 2px solid #63a4c5;
+}
+body .bPageBlock .pbBody .pbSubheader .hideListButton
+{
+	display: none;
+}
+.triangle
+{
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 10px 0 10px 20px;
+	border-color: transparent transparent transparent #4a86e8;
+
+}
+.pagination ul
+{
+	box-shadow: none;
+}
+body .pbBody table.list tr.headerRow th 
+{
+	border-bottom: 2px solid #cde2f5 !important;
+}
+</style>
+
+<apex:form id="course">		
+	<div style="float:right;margin-top:10px;margin-botton:10px;font-size:14px;">
+		<apex:outputText value="New" rendered="{!IF(OR(payRollPeriod.xcdhcm__Payroll_status__c == 'New',payRollPeriod.xcdhcm__Payroll_status__c == 'Additional'),true,false)}" style="background:#0070c0;color:#fff;padding:10px;margin-right:10px;" />
+		<apex:outputText value="" rendered="{!IF(AND(payRollPeriod.xcdhcm__Payroll_status__c != 'New',payRollPeriod.xcdhcm__Payroll_status__c != 'Additional'),true,false)}" style="margin-right:10px;">New</apex:outputText>
+		<apex:outputText value="Draft" rendered="{!payRollPeriod.xcdhcm__Payroll_status__c == 'Draft'}" style="background:#0070c0;color:#fff;padding:10px;margin-right:10px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;vertical-align: middle;"/></apex:outputText> 
+		<apex:outputText value="" rendered="{!payRollPeriod.xcdhcm__Payroll_status__c != 'Draft'}" style="margin-right:10px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;vertical-align: middle;"/>Draft</apex:outputText>
+		<apex:outputText value="" style="margin-right:10px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;    vertical-align: middle;"/>Final</apex:outputText>
+		<apex:outputText value="FPS" rendered="{!payRollPeriod.xcdhcm__Payroll_status__c == 'Final'}" style="background:#0070c0;color:#fff;padding:10px;margin-right:10px;"><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;vertical-align: middle;"/></apex:outputText> 
+		<apex:outputText value="" rendered="{!payRollPeriod.xcdhcm__Payroll_status__c != 'Final'}" style="margin-right:10px;" ><img src="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Triangle.png')}" style="margin-right:10px;    vertical-align: middle;"/>FPS</apex:outputText>					
+    </div>
+	<apex:outputText value="FPS" rendered="{!payRollPeriod.xcdhcm__Payroll_status__c == 'Final'}" style="color:#0070c0;font-size:12pt;font-weight:bold;margin-right:10px;"/>
+    <apex:pageBlock title="" id="rows"> 		
+	    <apex:pageBlockButtons location="top">               
+	        <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	       
+	        <apex:commandButton value="{!$Label.xcdhcm__rtifpssummarybback}" action="{!backPage}" rerender="hiddenBlock">
+	        <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	        	<apex:param name="payrollId" value="{!$CurrentPage.parameters.periodId}" assignTo="{!payrollId}"/>
+	        </apex:commandButton>
+	    </apex:pageBlockButtons>
+	    <!-- START :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+	    <apex:outputText value="{!$CurrentPage.parameters.resMessage}" escape="false" id="errMsg" style="color:red;" rendered="{!$CurrentPage.parameters.resMsgFlag != 'ACCEPTED'}"></apex:outputText> 
+	    <apex:outputText value="{!$CurrentPage.parameters.resMessage}" escape="false" id="sucMsg" style="color:black;" rendered="{!$CurrentPage.parameters.resMsgFlag == 'ACCEPTED'}"></apex:outputText>  
+	    <!-- END ::  13/01/2017 NPAY-71 Year end process Modified by Tutu -->               
+    </apex:pageBlock> 
+    <!-- START :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->    
+	<apex:pageBlock title="" id="rows1" rendered="true">
+	<!-- END :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->   
+    	<apex:pageMessages id="erMsg"/>
+         <apex:pageBlockTable value="{!rtisubmissionRecord}" var="item">
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+         
+            <apex:column headerValue="{!$ObjectType.xcdhcm__RTI_Submission__c.fields.name.label}"  >
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            <!-- START::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+                 <apex:outputLink target="_top" title="{!item.name}" value="/one/one.app#/sObject/{!item.id}" rendered="{!item.xcdhcm__Status__c != 'ACCEPTED'}">{!item.name}
+                 </apex:OutputLink>
+            <!-- END::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+                 <apex:outputText value="{!item.name}" rendered="{!item.xcdhcm__Status__c == 'ACCEPTED'}"/>                                                                                     
+           </apex:column>
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+          	<!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <apex:column headerValue="Type">
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                <apex:outputText value="{!left(item.RecordType.Name,4)}"/>
+            </apex:column>
+            <apex:column value="{!IF(item.Payroll_Period__r.XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c == 'Monthly',item.xcdhcm__Tax_Month_No__c,item.xcdhcm__Tax_Week_No__c)} " headerValue="Tax period"/>
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <apex:column value="{!item.xcdhcm__HMRC_Off_no__c} / {!item.xcdhcm__Emplr_PAYE_ref__c} " headerValue="PAYE reference"/>
+            <apex:column value="{!item.xcdhcm__Final_subm_fr_yr__c} " headerValue="Final submission"/> 
+            <apex:column value="{!item.xcdhcm__No_employee__c} " headerValue="Employees"/>  
+            <apex:column value="{!IF(item.xcdhcm__Statutory_pay__c > 0,'Yes', 'No')} " headerValue="{!$ObjectType.xcdhcm__RTI_Submission__c.fields.xcdhcm__Statutory_pay__c.label}"/>  
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->   
+            <apex:column value="{!item.xcdhcm__Status__c}" headerValue="Status"/> 
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            <!-- <apex:column headerValue="Date created"> -->
+            <apex:column headerValue="Created">
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  --> 
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	            <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+			    	<apex:param value="{!item.CreatedDate}" /> 
+				</apex:outputText>
+            </apex:column>
+            <apex:column >
+             <apex:actionStatus id="proccessStatus">
+              <apex:facet name="stop">
+                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                <!-- START :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+                <!-- START :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+				<apex:commandButton value="{!$Label.xcdhcm__rtifpssummarybsubmit}" action="{!sendFPSData}" status="proccessStatus" rerender="hiddenBlock,erMsg,errMsg,sucMsg,pg,rows1" rendered="{!OR(item.xcdhcm__Status__c == 'Draft', item.xcdhcm__Status__c == 'error')}" >
+                <!-- END :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+				<!-- END :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+                <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                	<apex:param name="currentID" value="{!item.id}" assignTo="{!currentID}" />
+                	<apex:param name="recordTypeName" value="{!item.RecordType.Name}" assignTo="{!recordTypeName}"/>
+                </apex:commandButton>
+              </apex:facet>
+              <apex:facet name="start">  
+                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                
+                <apex:commandButton value="{!$Label.xcdhcm__rtifpssummarybprocessing}" disabled="true"/>
+                <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+              </apex:facet>
+            </apex:actionStatus>
+            	<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            	<!-- START :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+            	<apex:commandButton value="{!$Label.xcdhcm__rtifpssummarybrefresh}" action="{!refreshFPSPage}" rendered="{!item.xcdhcm__Status__c == 'SUBMITTED'}" rerender="hiddenBlock,errMsg,sucMsg">
+                <!-- END :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+		<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                	<apex:param name="currentID" value="{!item.id}" assignTo="{!currentID}"/>
+                	<apex:param name="recordTypeName" value="{!item.RecordType.Name}" assignTo="{!recordTypeName}"/>
+                </apex:commandButton>
+               <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+             
+               <apex:commandButton value="{!$Label.xcdhcm__rtifpssummarybview}" action="{!viewRtiPage}" rendered="{!item.xcdhcm__Status__c == 'ACCEPTED'}" rerender="hiddenBlock">
+               <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->	
+               		<apex:param name="currentID" value="{!item.id}" assignTo="{!currentID}"/>
+               </apex:commandButton>
+          </apex:column>
+          <!-- START :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+          <apex:column >
+          	<!-- START :: 05/03/2018 NPAY-419 Scale up RTI submission to work for 2000 Employees Added/Modified by Tutu. -->
+          	<apex:commandButton id="wheellId" rendered="{!herokuStatusBool}" image="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/loading52.gif')}" style="hight:15px;width:20px;"/>
+          	<!-- END :: 05/03/2018 NPAY-419 Scale up RTI submission to work for 2000 Employees Added/Modified by Tutu. -->
+          </apex:column>
+          <!-- END :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+        </apex:pageBlockTable> 
+    </apex:pageBlock>
+    <apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
+    <!-- START :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+    <apex:pageBlock id="pg">
+      <!-- START :: 05/03/2018 NPAY-419 Scale up RTI submission to work for 2000 Employees Added/Modified by Tutu. -->
+      <apex:pageBlockSection rendered="{!herokuStatusBool}">           
+          <apex:actionPoller interval="10" action="{!fpsReloadPage}" enabled="{!herokuPollerBool}" reRender="pg"/>
+      </apex:pageBlockSection>
+   </apex:pageBlock>
+   <!-- END :: 05/03/2018 NPAY-419 Scale up RTI submission to work for 2000 Employees Added/Modified by Tutu. -->
+   <!-- END :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+</apex:form>
+</apex:page>

@@ -1,0 +1,19 @@
+<apex:page standardcontroller="xcdhcm__Applicant__c" extensions="xcdhcm.NewApplicantOverrideController" sidebar="false" >
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'RecruitmentAppCSS/Recruitmentsub.css')}" /> 
+    <apex:form >
+        <apex:pageBlock title="New applicant">
+            <apex:pageMessages id="msg"/>
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Select the vacancy"/>
+                    <apex:inputField Value="{!applicant.xcdhcm__Vacancy__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton Value="Next" action="{!nextClick}" rerender="msg"/>
+                <apex:commandButton Value="Cancel" action="{!Cancel}" immediate="true"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+         <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+    </apex:form>
+</apex:page>

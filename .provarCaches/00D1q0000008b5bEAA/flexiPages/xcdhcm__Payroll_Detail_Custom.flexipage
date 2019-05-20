@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata"
+   >
+ <fullName>xcdhcm__Payroll_Detail_Custom</fullName>
+  <flexiPageRegions>
+    <componentInstances>
+   <componentInstanceProperties>
+    <name>height</name>
+        <value>800</value>
+   </componentInstanceProperties>
+   <componentInstanceProperties>
+    <name>label</name>
+           </componentInstanceProperties>
+   <componentInstanceProperties>
+    <name>pageName</name>
+        <value>xcdhcm__PayrollDetailView</value>
+   </componentInstanceProperties>
+   <componentName>flexipage:visualforcePage</componentName>
+     </componentInstances>
+    <name>right</name>
+      <type>Region</type>
+ </flexiPageRegions>
+ <masterLabel>Payroll Detail Custom</masterLabel>
+    <sobjectType>xcdhcm__XCD_PAY_Payroll__c</sobjectType>
+ <template>
+  <name>xcdhcm:VisualForce_Template</name>
+ </template>
+ <type>RecordPage</type>
+</FlexiPage>

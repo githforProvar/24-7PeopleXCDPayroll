@@ -1,0 +1,505 @@
+<!--  START :: 26/06/2018  NPAY-470 Additional Pensions added by Jamil -->
+<apex:page standardController="xcdhcm__Employee_Detail__c" extensions="xcdhcm.RewardExtensionController" sidebar="false" showHeader="true" wizard="false" docType="html-5.0" contentType="text/html">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        .bEditBlock .pbSubheader .pbSubExtra 
+        {
+        display: none;
+        }
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: #ccc!important;
+        border-color: #ccc!important;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        border-radius: 4px;
+        color: #54698d!important;
+        font-size: 1.15em;
+        letter-spacing: .0625rem;
+        font-weight: 500; 
+        }
+        body .bEditBlock .pbBody .pbSubheader, body .bWizardBlock .pbBody .pbSubheader
+        {
+        font-size: 1.0em!important;
+        line-height: 1.25!important;
+        color: #54698d!important;
+        letter-spacing: .0625rem!important; 
+        font-weight: normal!important;
+        border-top: white !important;
+        } 
+        .closeIcon
+        {
+        display:none;
+        }
+        input[type='text'] 
+        {
+        width: 100%;
+        }  
+        textarea
+        {
+        width:100%;
+        } 
+        select
+        {
+        width:100%;
+        }
+        body .bPageBlock .pbBody .pbSubheader h3, body .bWizardBlock .bPageBlock .pbBody .pbSubheader label
+        {
+        font-size: 1rem!important;
+        line-height: 1.25!important;
+        color: #54698d!important;
+        letter-spacing: .0625rem!important; 
+        font-weight: normal!important;
+        }
+        .slds-scope button, .slds-scope input, .slds-scope optgroup, .slds-scope select, .slds-scope textarea ,.slds-scope a 
+        {
+        font-size: .8rem;
+        }  
+        .popupBg
+        {
+        opacity: 4.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 60%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 150px;
+        width: 400px;
+        margin-left: -450px;
+        text-decoration: none;
+        font-weight: bold;
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;         
+        -moz-box-shadow: 4px 5px 10px #99ccff;
+        -webkit-box-shadow: 4px 5px 10px #99ccff;
+        box-shadow: 4px 5px 10px #99ccff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+        <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important;
+		   position: sticky !important;  
+		   top: 0px !important;  
+		} 
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S--> 
+		<!-- START :: 21-02-2018 NPPD-1623 LightningPatch1 regression Error message issue Added by Rahul S -->
+		.bPageBlock .detailList .error, .bPageTitle .tagDropDown #tag_edit_error, .bPageTitle .tagDropDown .tagDropDownContent .error, .tagRenameMenu .error, .inlineEditDiv .error, .inlineEditRequiredDiv .error 
+		{
+		     border: 1px solid #d8dde6 !important;
+		}
+		.bPageBlock .detailList .errorMsg 
+		{
+		    display: none !important;
+		}
+		.message .messageText ,  .message .messageTable
+		{
+		    font-size: 1em !important;
+		}
+		<!-- END :: 21-02-2018 NPPD-1623 LightningPatch1 regression Error message issue Added by Rahul S -->
+    </style>
+    
+    <script type="text/javascript">
+    function jsSave()
+    {
+        callSave();
+    }
+    </script>
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form id="theform">
+                
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!backToRewardTab}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Employee_OneOffPension}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                           <apex:actionFunction name="callSave" action="{!createPopup}" />
+                           
+                           <!--  START :: 26/06/2018  NPAY-470 Additional Pensions added by Jamil -->
+                            <apex:outputPanel id="popup3">
+                                <apex:outputpanel styleClass="popupBg" rendered="{!AND(selectedPensionType != '--Select--', displayPopup)}" style="opacity: 0.2;background-color: black;"/>
+                                <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!AND(selectedPensionType != '--Select--', displayPopup)}">
+                                    <center>  
+                                        <apex:outputtext value="{!validationPopupMsg}" rendered="{!AND(selectedPensionType != '--Select--', displayPopup)}"/>
+                                        <br/><br/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!saveEmployeeOneOffPension}" onClick="disableButton(this);" styleclass="slds-button slds-button--neutral"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelPopup}" onClick="disableButton(this);" styleclass="slds-button slds-button--neutral"/>
+                                    </center>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                              <apex:pageBlock mode="edit" id="theBlock">                              
+                                <apex:PageMessages id="errorMsg" />
+                                
+                                <apex:actionRegion >
+                                    <apex:pageBlockSection id="sec" title="Select pension or regular pensions type" columns="1" rendered="{!selectedPensionType == '--Select--'}" collapsible="false">
+                                        <apex:pageBlockSectionItem id="item">
+                                            <apex:outputLabel />
+                                            <apex:SelectList id="List" value="{!selectedPensionType}" size="1" style="width: 20%!important;">
+                                                <apex:actionSupport event="onchange" action="{!choosenPaymentOrDeductionRecord}" reRender="theBlock,theFooter,pMsg" status="recordStatus" />
+                                                <apex:selectOptions value="{!PensionsType}" />
+                                            </apex:SelectList>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        <apex:actionStatus id="recordStatus">                   
+                                            <apex:facet name="start">
+                                                <div class="slds-spinner_container slds-show" style="top:32%; bottom:30%" >
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>
+                                            <apex:facet name="stop">
+                                                <div class="slds-spinner_container slds-hide ">
+                                                    
+                                                </div>
+                                            </apex:facet>                                
+                                        </apex:actionStatus>
+                                    </apex:pageBlockSection>
+                                    
+                                    <apex:repeat value="{!employeeOneOffPension}" var="ePension" rows="1">
+                                        <apex:pageBlockSection columns="1" id="pSec1" rendered="{!AND(ePension.xcdhcm__Earliest_payment_date__c!=null,empDetail.xcdhcm__Payroll_start_date__c!=null,ePension.xcdhcm__Earliest_payment_date__c < empDetail.xcdhcm__Payroll_start_date__c)}">
+                                            <apex:outputPanel id="out1">                        
+                                                <apex:pageMessage id="pMsg" summary="If this payment is to be made by XCD Payroll, set Earliest payment date on or after {!empDetail.xcdhcm__Payroll_start_date__c}" severity="info" strength="1" />
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSection>
+                                        <!-- START :: 31/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                        <apex:actionStatus id="recordStatus">                   
+                                            <apex:facet name="start">
+                                                <div class="slds-spinner_container slds-show" style="top:32%; bottom:30%" >
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>
+                                            <apex:facet name="stop">
+                                                <div class="slds-spinner_container slds-hide "> </div>
+                                            </apex:facet>                                
+                                        </apex:actionStatus>
+                                        <!-- END :: 31/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                        
+                                        <!--  START :: 26/06/2018  NPAY-470 Additional Pensions added by Jamil -->
+                                       <!--  <apex:pageBlockSection columns="2" title="{!selectedPensionType}" collapsible="false" rendered="{!OR(selectedPensionType == regularPensions.Name,selectedPensionType == oneOffPension.Name)}"> -->
+                                       <apex:pageBlockSection columns="2" title="{!selectedPensionType}" collapsible="false" rendered="{!(selectedPensionType == oneOffPension.Name)}"> 
+                                       <!--  END :: 26/06/2018  NPAY-470 Additional Pensions added by Jamil -->
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Pension}" var="i">
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.fields[i].Accessible}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}">
+                                                                    <apex:actionSupport event="onchange" reRender="pSec1" />
+                                                                </apex:inputField>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                            
+                                            <!-- START :: 15/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                            <apex:pageBlockSectionItem >
+                                             <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Variable_contribution_basis__c.Accessible}">
+                                                  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Variable_contribution_basis__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                            	<apex:actionRegion >
+	                                                                <apex:inputField id="type" value="{!ePension.xcdhcm__Variable_contribution_basis__c}">
+	                                                                   <apex:actionSupport event="onchange"  reRender="theform"  status="recordStatus"/>
+	                                                                </apex:inputField>
+                                                                </apex:actionRegion>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!OR(ePension.xcdhcm__Variable_contribution_basis__c == null,ePension.xcdhcm__Variable_contribution_basis__c == '--None--')}">
+                                                <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employer_Contribution__c.Accessible}">
+                                                <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->  
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employer_Contribution__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension.xcdhcm__Employer_Contribution__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!OR(ePension.xcdhcm__Variable_contribution_basis__c == null,ePension.xcdhcm__Variable_contribution_basis__c == '--None--')}" >
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee_Contribution__c.Accessible}">>
+                                                  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->   
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employee_Contribution__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension.xcdhcm__Employee_Contribution__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(ePension.xcdhcm__Variable_contribution_basis__c != null,ePension.xcdhcm__Variable_contribution_basis__c != '--None--')}">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employer_Contribution_Per__c.Accessible}">
+                                                   <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->  
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Employer_Contribution_Per__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension.xcdhcm__Employer_Contribution_Per__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(ePension.xcdhcm__Variable_contribution_basis__c != null,ePension.xcdhcm__Variable_contribution_basis__c != '--None--')}">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee_Contribution_per__c.Accessible}">
+                                                   <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Employee_Contribution_per__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension.xcdhcm__Employee_Contribution_per__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                        <!-- END :: 15/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                        </apex:pageBlockSection>
+                                        <!-- END :: 14/12/2017 NPAY-258 Pensioners payroll added by Rahul S  -->
+                                        <!--  START :: 26/06/2018  NPAY-470 Additional Pensions added by Jamil -->
+                                         <apex:pageBlockSection columns="2" title="{!selectedPensionType}" collapsible="false" rendered="{!(selectedPensionType == regularPensions.Name)}"> 
+                                      
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Regular_Pensions}" var="i">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Benefit__c.fields[i].Accessible}">
+                                                   <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->  
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                            <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                                {!i.label}
+                                                                <span class="LiteHelpText">
+                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                    <span>{!$ObjectType.Benefit__c.fields[i].inlineHelpText}</span>
+                                                                </span>
+                                                            </label>
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}">
+                                                                    <apex:actionSupport event="onchange" reRender="pSec1" />
+                                                                </apex:inputField>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div>  
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                            
+                                            <!-- START :: 15/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                            <apex:pageBlockSectionItem >
+                                                <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Variable_contribution_basis__c.Accessible}">
+                                                 <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Variable_contribution_basis__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+	                                                            <apex:actionRegion >
+	                                                                <apex:inputField id="type" value="{!ePension.xcdhcm__Variable_contribution_basis__c}">
+	                                                                   <apex:actionSupport event="onchange"  reRender="theform"  status="recordStatus"/>
+	                                                                </apex:inputField>
+	                                                            </apex:actionRegion>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!OR(ePension.xcdhcm__Variable_contribution_basis__c == null,ePension.xcdhcm__Variable_contribution_basis__c == '--None--')}">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employer_Contribution__c.Accessible}">
+                                                  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->   
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employer_Contribution__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension.xcdhcm__Employer_Contribution__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!OR(ePension.xcdhcm__Variable_contribution_basis__c == null,ePension.xcdhcm__Variable_contribution_basis__c == '--None--')}" >
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata--> 
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee_Contribution__c.Accessible}">
+                                                  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->  
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                <abbr class="slds-required" title="required">*</abbr>
+                                                                {!$objectType.Benefit__c.fields.Employee_Contribution__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension.xcdhcm__Employee_Contribution__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(ePension.xcdhcm__Variable_contribution_basis__c != null,ePension.xcdhcm__Variable_contribution_basis__c != '--None--')}">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employer_Contribution_Per__c.Accessible}">
+                                                   <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->  
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Employer_Contribution_Per__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension.xcdhcm__Employer_Contribution_Per__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            <apex:pageBlockSectionItem rendered="{!AND(ePension.xcdhcm__Variable_contribution_basis__c != null,ePension.xcdhcm__Variable_contribution_basis__c != '--None--')}">
+                                                 <!-- START:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->
+                                                <apex:outputpanel rendered="{!$objectType.xcdhcm__Benefit__c.fields.xcdhcm__Employee_Contribution_per__c.Accessible}">
+                                                  <!-- END:: 27/11/2018 NPPD-1819 hotfix for FLS issue modify by  Namrata-->   
+                                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                        <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                            <label class="slds-form-element__label" >
+                                                                {!$objectType.Benefit__c.fields.Employee_Contribution_per__c.label}
+                                                            </label> 
+                                                            <div class="slds-form-element__control">
+                                                                <apex:inputField value="{!ePension.xcdhcm__Employee_Contribution_per__c}" required="true"/>
+                                                            </div>                                                                                        
+                                                        </div>
+                                                    </div> 
+                                                </apex:outputpanel>
+                                            </apex:pageBlockSectionItem>
+                                            
+                                            
+                                             <!-- END :: 15/08/2018 NPAY-518 Variable Benefits Added by Wasim -->
+                                        </apex:pageBlockSection>
+                                        <!--  END :: 26/06/2018  NPAY-470 Additional Pensions added by Jamil -->
+                                    </apex:repeat>
+                                </apex:actionRegion>
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer" >
+                            <apex:outputpanel id="theFooter">
+                                <apex:actionRegion >
+	                                <apex:actionStatus id="saveStatus">                   
+	                                    <apex:facet name="stop">
+	                                        <apex:outputPanel >
+	                                            <apex:commandButton value="{!$Label.xcdhcm__new_employee_oneoffpensionbcancel}" action="{!backToRewardTab}" rendered="{!selectedPensionType!='--Select--'}" immediate="true" html-formnovalidate="true" styleclass="slds-button slds-button--neutral" />   
+	                                            <!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->                                   
+	                                            <!-- START :: 21-02-2018 NPPD-1623 LightningPatch1 regression Error message issue row-28 Modified by Rahul S -->
+	                                            <!-- START :: 25-05-2018 NPPD-1654 One off payments and deductions Payment Amount value saves as 0.00 - Lightning view Modified by Kamal -->
+	                                             <apex:commandButton value="{!$Label.xcdhcm__new_employee_oneoffpensionbsave}" action="{!saveEmployeeOneOffPension}"   rendered="{!selectedPensionType!='--Select--'}"   html-formnovalidate="true" status="saveStatus"   styleclass="slds-button slds-button--brand" id="id_saveBtn" >
+	                                               <apex:actionSupport rerender="errorMsg,popup3,id_saveBtn" />
+         										 </apex:commandbutton> 
+	                                            <!-- END :: 25-05-2018 NPPD-1654 One off payments and deductions Payment Amount value saves as 0.00 - Lightning view Modified by Kamal -->
+	                                            <!-- END :: 21-02-2018 NPPD-1623 LightningPatch1 regression Error message issue  row-28  Modified by Rahul S -->
+	                                            <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+	                                        </apex:outputPanel>
+	                                    </apex:facet>
+	                                    <apex:facet name="start">
+	                                        <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+	                                            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+	                                                <div class="slds-spinner__dot-a"></div>
+	                                                <div class="slds-spinner__dot-b"></div>
+	                                            </div> 
+	                                        </div>                    
+	                                    </apex:facet>                                
+	                                </apex:actionStatus> 
+                                </apex:actionRegion>
+                            </apex:outputpanel>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+   <!--  END :: 26/06/2018  NPAY-470 Additional Pensions added by Jamil --> 
+</apex:page>

@@ -1,0 +1,2195 @@
+<!--  START :: 17/04/2018 NPAY-431 Printable P45 - acceptable look & feel added by Jamil -->
+<apex:page standardStylesheets="false" sidebar="false" showHeader="false" applyBodyTag="false" applyHtmlTag="false" doctype="html-5.0" controller="xcdhcm.P45FormController" renderAs="pdf">
+
+<head>  
+  
+      <title>P45 form</title>
+      
+    <style>
+
+       body {
+      background: #fff;
+      font-family: "Arial " !important;  
+    }
+    
+    
+    page {
+      background: white;
+      display: block;
+      margin: 0 auto;
+      margin-bottom: 0.5cm;
+     
+    }
+     
+    page[size="A4"] {  
+      width: 210mm;
+      height: 297mm;
+     
+    }
+    
+    table {
+      border-collapse: collapse;
+    }
+    
+    table, caption, tbody, tfoot, thead, tr, th, td {
+        margin: 0 ;
+        margin-top: 0 ;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: top !important;
+        font-family:"Arial " !important;
+}
+    .spce{
+        width:100%;
+        height:10px;
+        background:#000;
+    }
+    .hrline{
+        width:100%;
+        height:2px;
+        background:#000;
+        margin-top:5px;
+    }
+
+    @media print {
+      body, page {
+        margin: 0;
+        box-shadow: 0;
+      }
+    }
+    </style>
+
+</head>  
+
+<!--  Jamil Code -->
+<apex:pageBlock mode="maindetail">
+<apex:variable var="cnt" value="{!0}" />   
+  <apex:repeat value="{!RecordsToDisplay}" var="p" id="theList">
+  <!-- <div style="page-break-after:always;"> -->
+  <div style="{!if(cnt < 1, 'page-break-before:avoid;','page-break-before:always;')}">
+    <apex:variable var="cnt" value="{!cnt+1}"/> 
+    
+<!--  Jamil Code -->
+
+<!-- ================P45 Part 1A Form Start ===================================================================================== -->
+<!-- Header section start -->
+    <div>
+    <table border="0" style="border-collapse:collapse;width:720px;">              
+                     <tbody>
+                     <tr>
+                       <td></td>
+               
+                        <td style="text-align:left;vertical-align: bottom;padding-bottom: 4px;">
+                       <!--  <span style="font-size:14pt;font-family: Arial !important;font-weight:bold;"> HM Revenue <br/>&#38; Customs  </span> -->
+                        <span style="font-size:14pt;font-family: Arial !important;font-weight:bold;"> <apex:image id="theImage1" value="{!HMRClogo}" width="183" height="57"/> </span> 
+                        </td>   
+                        <td style="text-align:right;vertical-align: bottom;padding-bottom: 4px;">
+                            <span style="font-size:14pt;display:block;font-family: Arial!important;font-weight:bold;">P45 Part 1 A </span>
+                            <span style="font-size:14pt;display:block;font-family: Arial!important;font-weight:bold;"> Details of employee leaving work </span>
+                            <span style="font-size:12pt;display:block;font-family: Arial!important;font-weight:normal;"> Copy for employee</span>
+                        </td>                                                         
+                     </tr>
+                    </tbody>
+    </table>
+    </div>
+<!-- Header section End -->
+    <div class="spce"></div>
+<!-- first section start -->
+
+<div>
+<table style="width:100%;">
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top!important;padding-top:10px;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 1 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Employer PAYE reference</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                           <tr>                                
+                                <td style="text-align:left;padding-left: 30pt;font-family:arial!important;font-size:8.5pt;">Office number</td>
+                                <td></td>  
+                                <td style="text-align:left;padding-left: 5pt;font-family:arial!important;font-size:8.5pt;">Reference number </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <td style="padding-left: 30pt;font-family:arial;font-size:8.5pt;"><div style="width: 16mm;height: 6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.HMRC_Off_no__c}</div></td>  
+                                <td style="font-size:18pt;font-family:arial;font-weight:normal;"> / </td>
+                               <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width: 54mm;height: 6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Emplr_PAYE_ref__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;padding-top:5px;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 5 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Student Loan deductions</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.rti.Std_Loan_deduction__c} </div> </td>
+                                <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;">Student Loan deductions to continue</td>                               
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+    
+    </tr>
+    
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 2 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Employees National Insurance number</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.NI_no__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 6 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Tax code at leaving date</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                               <!-- START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil-->
+                               <!--  <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;">{!p.rti.Tax_Code__c} </div> </td> -->
+                               <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;">{!p.TaxCode} </div> </td>
+                               <!--END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <span style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">If week 1 or month 1 applies, enter 'X' in the box below.</span>
+                                                               
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+     </tr>
+      
+</table>            
+</div>
+
+
+<div>
+<table style="width:100%;vertical-align:top;">
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 3 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Title - enter MR, MRS, MISS, MS or other title</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                           <tr>                                                             
+                               <td style="padding-left: 30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Title__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week 1/month 1</td>
+                                <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;">{!p.wk_month_indicator} </div> </td>                               
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+    
+    
+    
+    </tr>
+    
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                     <td style="width:10px;">
+                     <span style="padding-left:30pt;font-family:arial!important;font-size:8.5pt;">Surname or family name</span> 
+                     </td>                             
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Surname__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                   
+                 <tr>
+                    <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;vertical-align: middle;"> 7 </div> </td>  
+                    <td style="padding-left: 7pt;font-family:arial;font-size:8.5pt;vertical-align: top;"><div>Last entries on Payroll record/Deductions Working Sheet.</div>
+                                <div><strong>Complete only if tax code is cumulative.</strong> If there is an 'X'</div>
+                                <div>at box 6 there will be no entries here.</div>
+                    </td>  
+                </tr>
+           </table>
+            </td>
+     </tr>
+     
+     <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                     <td style="width:10px;">
+                     <span style="padding-left:30pt;font-family:arial!important;font-size:8.5pt;">First name(s)</span> 
+                     </td>                             
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Forename__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  -->
+                <!--    
+                 <tr>
+                    <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week number </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Tax_Week_No__c} </div> </td>                                                              
+                    <td style="padding-left: 10pt;font-family:arial;font-size:8.5pt;">Month number  </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Tax_Month_No__c} </div> </td>                                                              
+                                                                
+                 </tr>
+                 -->
+                 <tr>
+                    <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week number </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.strWeekNo} </div> </td>                                                              
+                    <td style="padding-left: 10pt;font-family:arial;font-size:8.5pt;">Month number  </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.strMonthNo} </div> </td>                                                              
+                                                                
+                 </tr>
+                <!--  END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  --> 
+                  
+           </table>
+            </td>
+     </tr>
+     
+     <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 4 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div> Leaving date DD MM YYYY </div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,dd}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,MM}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,yyyy}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>                         
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                   
+                 <tr>
+                    <td style="text-align:left;width:10px;">   
+                    <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Total pay to date</span>
+                    </td>                   
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> &pound;</div> </td>
+                              <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                               <!--  <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;">{!p.rti.Taxable_Pay_to_Dt__c}</div> </td> -->
+                                 <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;">{!p.comuTaxablePaytoDt}</div> </td> 
+                               <!--  END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>
+                 <tr>
+                    <td style="text-align:left;width:10px;">   
+                    <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Total tax to date</span>
+                    </td>                   
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> &pound;</div> </td>
+                               <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                               <!--  <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.rti.Total_Tax_to_dt__c}</div> </td> -->
+                                 <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.comuTotalTaxtoDt}</div> </td> 
+                                <!--  END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr> 
+           </table>
+            </td>
+     </tr>
+      
+</table>            
+</div>
+<div class="hrline"></div>  
+<!-- first section End -->
+
+<div>
+<table style="width:100%;">
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;padding-top:10px;">
+            <table border="0" style="border-collapse: collapse;">  
+                <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 8 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>This employment pay and tax. If no entry here, the amounts</div>
+                                        <div>are those shown at box 7.</div>
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                
+                <tr>
+                    <td style="text-align:left;width:10px;vertical-align: top;">   
+                    <span style="text-align:left;padding-left:29pt;font-family:arial;font-size:8.5pt;">Tax code at leaving date/Total pay in this employment</span>
+                    </td>                   
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;vertical-align: top;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 29pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;">&pound;</div> </td>
+                                <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                               <!--  <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;">{!p.rti.Taxable_Pay_to_Dt__c}</div> </td> -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;">{!p.monthTaxablePaytoDt}</div> </td>
+                               <!--  END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>
+                 <tr>
+                    <td style="text-align:left;width:10px;">   
+                    <span style="text-align:left;padding-left:29pt;font-family:arial;font-size:8.5pt;">Tax code at leaving date/Total tax in this employment</span>
+                    </td>                   
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 29pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;">&pound;</div> </td>
+                                 <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                               <!--  <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.rti.Total_Tax_to_dt__c}</div> </td> -->
+                               <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.monthTotalTaxtoDt}</div> </td> 
+                                <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>
+                 
+                 
+                
+           </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;padding-top:10px;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:18px;border: 1px solid #000;padding-left:10pt;"> 12 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Employees private address</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                               <!--  <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:72mm;height:18mm;border:1px solid #999;"> 83 Aston St, Birmingham B4 7DA, UK</div> </td> -->
+                               <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:72mm;height:18mm;border:1px solid #999;"> {!p.rti.Address1__c}<br/> {!p.rti.Address2__c} <br/>  {!p.rti.Address3__c}<br/> {!p.rti.Address4__c}</div> </td>
+ 
+                                                               
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>
+                 <tr>
+                    <td style="text-align:left;width:10px;">  
+                    <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Postcode</span>
+                    </td>                   
+                 </tr>
+                 <tr>                                                             
+                  <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;">{!p.rti.UK_postcode__c} </div> </td>
+                 </tr>
+                                                               
+            </table>
+            </td>
+    
+    
+    
+    </tr>
+    
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;vertical-align: top;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 9 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Works number/Payroll number and Department or branch</div>
+                                        <div>(if any)</div>
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                
+                                                               
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                    <td style="text-align:left;width:10px;vertical-align: top;text-align:center;"><div style="width:18px;border: 1px solid #000;padding-left:10pt;"> 13 </div></td>  
+                    <td style="padding-left: 7pt;font-family:arial;font-size:8.5pt;"><div>I certify that the details entered in items 1 to 11 on</div>
+                                <div>this form are correct.</div><br></br>
+                                <div>Employer name and address</div>
+                    </td>  
+                </tr>
+                
+                                                             
+            </table>
+            </td>
+     </tr>
+     
+     <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 
+                  <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 12mm;border:1px solid #999;">{!p.rti.Payroll_Id__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: middle;"><div style="width:17px;border: 1px solid #000;padding-left:10pt;"> 10 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;vertical-align: top;"><div>Gender. Enter 'X' in the appropriate box</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                
+                <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;">Male</td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 5mm;height: 6mm;border:1px solid #999;">{!p.male}</div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;">Female</td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 5mm;height: 6mm;border:1px solid #999;">{!p.female}</div></td>                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 
+                 
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:18px;border: 1px solid #000;padding-left:10pt;"> 11 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Date of birth DD MM YYYY</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                              <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,dd}">
+                                    <apex:param value="{!p.rti.xcdhcm__DOB__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,MM}">
+                                    <apex:param value="{!p.rti.xcdhcm__DOB__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,yyyy}">
+                                    <apex:param value="{!p.rti.xcdhcm__DOB__c}" /></apex:outputText></div></td>                             </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                               
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                               <!--  <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:72mm;height:24mm;border:1px solid #999;"> 83 Aston St, Birmingham B4 7DA, UK</div> </td> -->
+                               <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:72mm;height:24mm;border:1px solid #999;"> {!p.rti.RTI_summary__r.Company_name__c}<br/>
+                                {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Address_line_1__c}<br/>
+                                {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.City__c}<br/>
+                                {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Address_line_2__c}<br/>
+                                {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Country__c}</div> </td> 
+                               
+                                                               
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>
+                 
+                 <tr>
+                    <td style="text-align:left;width:10px;">  
+                    <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Postcode</span>
+                    </td>                   
+                 </tr>
+                 <tr>                                                             
+                  <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Postcode__c} </div> </td>
+                 </tr>
+                 
+                 <tr>
+                     <td style="width:10px;">
+                     <span style="padding-left:33pt;font-family:arial!important;font-size:8.5pt;">Date DD MM YYYY</span> 
+                     </td>                             
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                              <td style="padding-left:33pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,dd}">
+                                    <apex:param value="{!p.dtoday}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,MM}">
+                                    <apex:param value="{!p.dtoday}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,yyyy}">
+                                    <apex:param value="{!p.dtoday}" /></apex:outputText></div></td>                          
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>
+                                                             
+            </table>
+            </td>
+     </tr>
+      
+</table>            
+</div>
+<div>
+    <table style="width:100%;">
+    <tr>
+    <!-- leftside form section -->
+            <td style="width:390px;vertical-align: top;padding-top:10px;padding-right:10px">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                   <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:10.5pt;font-weight:bold;">
+                                <div>To the employee</div>
+                    </td>                             
+                 </tr>
+                 <tr>
+                    <td style="text-align:left;"> 
+                       <table>
+                            <tr>
+                                <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">The P45 is in 3 parts. Please keep this part (Part 1A) safe.
+Copies are not available. You might need the information in
+Part 1A to fill in a tax return if you are sent one.</td>                             
+                             </tr>
+                             <tr>
+                                <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">Please read the notes in Part 2 that accompany Part 1A.
+The notes give some important information about what you
+should do next and what you should do with Parts 2 and 3 of
+this form.</td>                             
+                             </tr>
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+            </td>
+    <!-- leftside form section -->
+    <!-- rightside form section -->
+            <td style="width:390px; vertical-align:top;padding-top:10px;padding-left:10px">
+            <table border="0" style="border-collapse: collapse;">  
+                  <tr>
+                   <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:9.5pt;font-weight:bold;">
+                                <div>Tax credits and Universal Credit</div>
+                    </td>                             
+                 </tr>
+                 <tr>
+                    <td style="text-align:left;"> 
+                       <table>
+                            <tr>
+                                <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">Tax credits and Universal Credit are flexible. They adapt to
+changes in your life, such as leaving a job. If you need to let us
+know about a change in your income, phone <strong>0345 300 3900.</strong></td>                             
+                             </tr>
+                             <tr>
+                               <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:10.5pt;font-weight:bold;">
+                                    <div>To the new employer</div>
+                                </td>                             
+                             </tr>
+                             
+                             <tr>
+                                <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">If your new employee gives you this Part 1A, please return it to
+them. Check the information on Parts 2 and 3 of this form is correct
+and transfer the information onto the Payroll record/Deductions
+Working Sheet.</td>                             
+                             </tr>
+                       </table>
+                    </td>                                                                
+                 </tr>                                               
+            </table>
+            </td>
+    <!-- rightside form section -->
+    </tr>
+    </table>
+</div>
+
+<div>
+    <table style="width:100%;">
+    <tr>
+    <!-- leftside form section -->
+            <td style="width:390px;vertical-align: top;padding-top:20px;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                   <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;font-weight:bold;">
+                                <div>P45(Online) Part 1A</div>
+                    </td>                             
+                 </tr>
+           </table>
+            </td>
+    <!-- leftside form section -->
+    <!-- rightside form section -->
+            <td style="width:390px; vertical-align:top;text-align:right;padding-top:30px;">
+            <table border="0" style="border-collapse: collapse;">  
+                  <tr>
+                     <td style="padding-left:230pt;font-family:arial;font-size:8.5pt;font-weight:normal;">
+                                    <div>HMRC 03/15</div>
+                    </td>                             
+                  </tr>
+                                                                  
+            </table>
+            </td>
+    <!-- rightside form section -->
+    </tr>
+    </table>
+</div>
+<!-- ================P45 Part 1A Form End ===================================================================================== -->
+
+<!-- ================P45 Part 2 Form Start ===================================================================================== -->
+
+<div>
+    <table border="0" style="border-collapse:collapse;width:720px;">              
+                     <tbody>
+                     <tr>
+                        <td style="text-align:left;vertical-align: bottom;padding-bottom: 4px;"> 
+                        <!-- <span style="font-size:14pt;font-family: Arial !important;font-weight:bold;"> HM Revenue <br/>&#38;Customs  </span> -->
+                       <span style="font-size:14pt;font-family: Arial !important;font-weight:bold;"> <apex:image id="theImage2" value="{!HMRClogo}" width="183" height="57"/> </span>
+                        </td>   
+                        <td style="text-align:right;vertical-align: bottom;padding-bottom: 4px;">
+                            <span style="font-size:14pt;display:block;font-family: Arial!important;font-weight:bold;">P45 Part 2 </span>
+                            <span style="font-size:14pt;display:block;font-family: Arial!important;font-weight:bold;"> Details of employee leaving work </span>
+                            <span style="font-size:12pt;display:block;font-family: Arial!important;font-weight:normal;"> Copy for employee</span>
+                        </td>                                                         
+                     </tr>
+                    </tbody>
+    </table>
+    </div>
+<!-- Header section End -->
+    <div class="spce"></div>
+<!-- first section start -->
+
+<div>
+<table style="width:100%;">
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top;padding-top:10px;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 1 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Employer PAYE reference</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                           <tr>                                
+                                <td style="text-align:left;padding-left: 30pt;font-family:arial!important;font-size:8.5pt;">Office number</td>
+                                <td></td>  
+                                <td style="text-align:left;padding-left: 5pt;font-family:arial!important;font-size:8.5pt;">Reference number </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <td style="padding-left: 30pt;font-family:arial;font-size:8.5pt;"><div style="width: 16mm;height: 6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.HMRC_Off_no__c}</div></td>  
+                                <td style="font-size:18pt;font-family:arial;font-weight:normal;"> / </td>
+                               <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width: 54mm;height: 6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Emplr_PAYE_ref__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;padding-top:5px;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 5 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Student Loan deductions</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.rti.Std_Loan_deduction__c} </div> </td>
+                                <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;">Student Loan deductions to continue</td>                               
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+    
+    </tr>
+    
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 2 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Employees National Insurance number</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.NI_no__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 6 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Tax code at leaving date</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                
+                                <!-- START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                               <!-- <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;"> {!p.rti.Tax_Code__c}</div> </td> -->
+                               <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;">{!p.TaxCode} </div> </td>
+                               <!--END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <span style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">If week 1 or month 1 applies, enter 'X' in the box below.</span>
+                                                               
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+     </tr>
+      
+</table>            
+</div>
+
+
+<div>
+<table style="width:100%;vertical-align:top;">
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 3 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Title - enter MR, MRS, MISS, MS or other title</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                           <tr>                                                             
+                               <td style="padding-left: 30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Title__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week 1/month 1</td>
+                                <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;">{!p.wk_month_indicator} </div> </td>                               
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+    
+    
+    
+    </tr>
+    
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                     <td style="width:10px;">
+                     <span style="padding-left:30pt;font-family:arial!important;font-size:8.5pt;">Surname or family name</span> 
+                     </td>                             
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Surname__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                   
+                 <tr>
+                    <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;vertical-align: middle;"> 7 </div> </td>  
+                    <td style="padding-left: 7pt;font-family:arial;font-size:8.5pt;vertical-align: top;"><div>Last entries on Payroll record/Deductions Working Sheet.</div>
+                                <div><strong>Complete only if tax code is cumulative.</strong> If there is an 'X'</div>
+                                <div>at box 6 there will be no entries here.</div>
+                    </td>  
+                </tr>
+           </table>
+            </td>
+     </tr>
+     
+     <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                     <td style="width:10px;">
+                     <span style="padding-left:30pt;font-family:arial!important;font-size:8.5pt;">First name(s)</span> 
+                     </td>                             
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Forename__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">
+             <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  -->  
+                <!--    
+                 <tr>
+                     <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week number </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Tax_Week_No__c} </div> </td>                                                              
+                    <td style="padding-left: 10pt;font-family:arial;font-size:8.5pt;">Month number  </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Tax_Month_No__c} </div> </td>                                                              
+                                                                
+                 </tr>
+               --->
+                <tr>
+                    <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week number </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.strWeekNo} </div> </td>                                                              
+                    <td style="padding-left: 10pt;font-family:arial;font-size:8.5pt;">Month number  </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.strMonthNo} </div> </td>                                                              
+                                                                
+                 </tr>  
+                <!--  END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  -->   
+           </table>
+            </td>
+     </tr>
+     
+     <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 4 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Leaving date DD MM YYYY</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,dd}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,MM}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,yyyy}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>                             </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                   
+                 <tr>
+                    <td style="text-align:left;width:10px;">   
+                    <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Total pay to date</span>
+                    </td>                   
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> &pound;</div> </td>
+                                <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <!-- <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.rti.Taxable_Pay_to_Dt__c}</div> </td> -->
+                                 <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.comuTaxablePaytoDt}</div> </td> 
+                                <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>
+                 <tr>
+                    <td style="text-align:left;width:10px;">   
+                    <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Total tax to date</span>
+                    </td>                   
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;">&pound;</div> </td>
+                                <!-- START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                               <!--  <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.rti.Total_Tax_to_dt__c}</div> </td> -->
+                               <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.comuTotalTaxtoDt}</div> </td>                                <!--   -->
+                               <!--  END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr> 
+           </table>
+            </td>
+     </tr>
+      
+</table>            
+</div>
+<div class="hrline"></div>  
+<!-- first section End -->
+
+
+<div>
+   <table style="width:100%;margin-top:10px;">
+      <tbody>
+         <tr>
+            <!-- leftside form section -->
+            <td style="width:278px;vertical-align: top;">
+               <table border="0" style="border-collapse: collapse;">
+                  <tbody>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:10.5pt;font-weight:bold;">
+                           <div>To the employee</div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td style="text-align:left;">
+                           <p></p>
+                           <table>
+                              <tbody>
+                                 <tr>
+                                    <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">This form is important to you. Take good care of it
+                                       and keep it safe. Copies are not available. Please keep Parts 2 and 3 of the form together and do not alter them in any way.
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:9pt;font-weight:normal;">Going to a new job</td>
+                                 </tr>
+                                 <tr>
+                                    <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">Give Parts 2 and 3 of this form to your new employer,
+                                       or you will have tax deducted using the emergency code and may pay too much tax. If you do not want your new employer to know the details on this form,
+                                       send it to your HM Revenue &amp; Customs (HMRC) office immediately with a letter saying so and giving the name and address of your new employer. HMRC can
+                                       make special arrangements, but you may pay too much tax for a while as a result of this.
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:9pt;font-weight:normal;">Going abroad</td>
+                                 </tr>
+                                 <tr>
+                                    <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">If you are going abroad or returning to a country
+                                       outside the UK fill in form P85, ?Leaving the United Kingdom?, go to <a href="www.hmrc.gov.uk/contactus/contact-forms.htm">www.hmrc.gov.uk/contactus/contact-forms.htm</a>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:9pt;font-weight:normal;">Becoming self-employed</td>
+                                 </tr>
+                                 <tr>
+                                    <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">You must register with HMRC within 3 months of
+                                       becoming self-employed or you could incur a penalty. To register as newly self-employed, go to <a href="www.hmrc.gov.uk/selfemployed/index.shtml">www.hmrc.gov.uk/selfemployed/index.shtml</a>
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <!-- leftside form section -->
+            <!-- rightside form section -->
+            <td style="width:350px; text-align:left;padding-left: 120px;padding-top: 20px;">
+               <table border="0" style="border-collapse: collapse;">
+                  <tbody>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:9pt;font-weight:normal;">
+                           <div>Claiming Jobseeker's Allowance or</div>
+                           <div>Employment and Support Allowance (ESA)</div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">Take this form to your Jobcentre Plus office. They will pay you
+                           any tax refund you may be entitled to when your claim ends, or at 5 April if this is earlier.
+                        </td>
+                     </tr>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:9pt;font-weight:normal;">
+                           <div>If you need more help, go to</div>
+                           <div><a href="www.hmrc.gov.uk/individuals/index.shtml">www.hmrc.gov.uk/individuals/index.shtml</a></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">If you have paid tax and wish to claim a refund fill in
+                           form P50, ?Claiming tax back when you have stopped working?, go to <a href="www.hmrc.gov.uk/contactus/contact-forms.htm">www.hmrc.gov.uk/contactus/contact-forms.htm</a>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:10.5pt;font-weight:bold;">
+                           <div>Help</div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:9pt;font-weight:normal;">
+                           <div>Not working and not claiming Jobseeker's Allowance or</div>
+                           <div>Employment and Support Allowance (ESA)</div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:10.5pt;font-weight:bold;">
+                           <div>To the new employer</div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;">Check this form, record the start date and report it to HMRC in the
+                           first Full Payment Submission for your employee. Prepare a Payroll record/Deductions Working Sheet. Follow the instructions at <a href="www.hmrc.gov.uk/payerti/getting-started/payroll-system.htm">www.hmrc.gov.uk/payerti/getting-started/payroll-system.htm</a>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <!-- rightside form section -->
+         </tr>
+      </tbody>
+   </table>
+</div>
+
+<div>
+    <table style="width:100%;margin-top:160px;">
+    <tbody><tr>
+    <!-- leftside form section -->
+            <td style="width:390px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tbody><tr>
+                   <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;font-weight:bold;">
+                                <div>P45(Online) Part 2</div>
+                    </td>                             
+                 </tr>
+           </tbody></table>
+            </td>
+    <!-- leftside form section -->
+    <!-- rightside form section -->
+            <td style="width:390px; vertical-align:top;text-align: -webkit-right;">
+            <table border="0" style="border-collapse: collapse;">  
+                  <tbody><tr>
+                     <td style="text-align:right;padding-left:230pt;font-family:arial;font-size:8.5pt;font-weight:normal;">
+                                    <div>HMRC 03/15</div>
+                    </td>                             
+                  </tr>
+                                                                  
+            </tbody></table>
+            </td>
+    <!-- rightside form section -->
+    </tr>
+    </tbody></table>
+</div>
+
+<!-- ================P45 Part 3 Form Start ===================================================================================== -->
+
+<div>
+    <table border="0" style="border-collapse:collapse;width:720px;">              
+                     <tbody>
+                     <tr>
+                        <td style="text-align:left;vertical-align: bottom;padding-bottom: 4px;"> 
+                        <!-- <span style="font-size:14pt;font-family: Arial !important;font-weight:bold;"> HM Revenue <br/>&#38; Customs  </span> --> 
+                      <span style="font-size:14pt;font-family: Arial !important;font-weight:bold;"> <apex:image id="theImage3" value="{!HMRClogo}" width="183" height="57"/> </span>
+                        </td>   
+                        <td style="text-align:right;vertical-align: bottom;padding-bottom: 4px;">
+                            <span style="font-size:14pt;display:block;font-family: Arial!important;font-weight:bold;">P45 Part 3 </span>
+                            <span style="font-size:14pt;display:block;font-family: Arial!important;font-weight:bold;"> Details of employee leaving work </span>
+                            <span style="font-size:12pt;display:block;font-family: Arial!important;font-weight:normal;"> Copy for employee</span>
+                        </td>                                                         
+                     </tr>
+                    </tbody>
+    </table>
+    </div>
+<!-- Header section End -->
+    <div class="spce"></div>
+<!-- first section start -->
+
+<div>
+<table style="width:100%;">
+    <tr><td style="float:left;font-family:arial;font-size:8.5pt;padding-top:5px;">Use capital letters when completing this form</td></tr>
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top;padding-top:10px;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;">1 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Employer PAYE reference</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                           <tr>                                
+                                <td style="text-align:left;padding-left: 30pt;font-family:arial!important;font-size:8.5pt;">Office number</td>
+                                <td></td>  
+                                <td style="text-align:left;padding-left: 5pt;font-family:arial!important;font-size:8.5pt;">Reference number </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <td style="padding-left: 30pt;font-family:arial;font-size:8.5pt;"><div style="width: 16mm;height: 6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.HMRC_Off_no__c}</div></td>  
+                                <td style="font-size:18pt;font-family:arial;font-weight:normal;"> / </td>
+                               <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width: 54mm;height: 6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Emplr_PAYE_ref__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;padding-top:5px;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;">5 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Student Loan deductions</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;"> {!p.rti.Std_Loan_deduction__c}</div> </td>
+                                <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;">Student Loan deductions to continue</td>                               
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+    
+    </tr>
+    
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;">2 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Employees National Insurance number</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.NI_no__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;">6 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Tax code at leaving date</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <!-- START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                               <!-- <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;"> {!p.rti.Tax_Code__c}</div> </td> -->
+                               <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;">{!p.TaxCode} </div> </td>
+                               <!--END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <span style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">If week 1 or month 1 applies, enter 'X' in the box below.</span>
+                                                               
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+     </tr>
+      
+</table>            
+</div>
+
+<div>
+<table style="width:100%;vertical-align:top;">
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;">3 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Title - enter MR, MRS, MISS, MS or other title</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                           <tr>                                                             
+                               <td style="padding-left: 30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Title__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week 1/month 1</td>
+                                <!-- START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                                <!-- <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> </div> </td> -->
+                                <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;">{!p.wk_month_indicator} </div> </td>                               
+                                <!-- END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  -->
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>                                              
+            </table>
+            </td>
+    
+    </tr>
+    
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                     <td style="width:10px;">
+                     <span style="padding-left:30pt;font-family:arial!important;font-size:8.5pt;">Surname or family name</span> 
+                     </td>                             
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Surname__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                   
+                 <tr>
+                    <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;"> 7 </div> </td>  
+                    <td style="padding-left: 7pt;font-family:arial;font-size:8.5pt;vertical-align: top;"><div>Last entries on Payroll record/Deductions Working Sheet.</div>
+                                <div><strong>Complete only if tax code is cumulative.</strong> If there is an 'X'</div>
+                                <div>at box 6 there will be no entries here.</div>
+                    </td>  
+                </tr>
+           </table>
+            </td>
+     </tr>
+     
+     <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                     <td style="width:10px;">
+                     <span style="padding-left:30pt;font-family:arial!important;font-size:8.5pt;">First name(s)</span> 
+                     </td>                             
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width: 76.5mm;height: 6mm;border:1px solid #999;">{!p.rti.Forename__c}</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;"> 
+             <!--  START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  --> 
+                <!--    
+                 <tr>
+                   <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week number </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Tax_Week_No__c} </div> </td>                                                              
+                    <td style="padding-left: 10pt;font-family:arial;font-size:8.5pt;">Month number  </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.rti.RTI_summary__r.Tax_Month_No__c} </div> </td>                                                                
+                 </tr>
+                --->
+                 <tr>
+                    <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Week number </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.strWeekNo} </div> </td>                                                              
+                    <td style="padding-left: 10pt;font-family:arial;font-size:8.5pt;">Month number  </td>
+                    <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width:10mm;height:6mm;border:1px solid #999;">{!p.strMonthNo} </div> </td>                                                              
+                                                                
+                 </tr> 
+                  <!-- END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  -->
+                  
+           </table>
+            </td>
+     </tr>
+     
+     <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;">4</div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>New employer PAYE reference</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                              <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,dd}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,MM}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,yyyy}">
+                                    <apex:param value="{!p.rti.xcdhcm__Dt_of_Leaving__c}" /></apex:outputText></div></td>                             </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                   
+                 <tr>
+                    <td style="text-align:left;width:10px;">   
+                    <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Total pay to date</span>
+                    </td>                   
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> &pound;</div> </td>
+                                <!-- START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  -->
+                               <!--  <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.rti.Taxable_Pay_to_Dt__c}</div> </td> -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;"> {!p.comuTaxablePaytoDt}</div> </td> 
+                               
+                                <!-- END  03/07/2018 NPAY-568 P45 issues modified by Jamil  -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>
+                 <tr>
+                    <td style="text-align:left;width:10px;">   
+                    <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Total tax to date</span>
+                    </td>                   
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> &pound;</div> </td>
+                               <!--  START :: 03/07/2018 NPAY-568 P45 issues modified by Jamil -->
+                               <!--  <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;">{!p.rti.Total_Tax_to_dt__c}</div> </td> -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div align="right" style="width:60mm;height:6mm;border:1px solid #999;">{!p.comuTotalTaxtoDt}</div> </td>
+                               <!-- END :: 03/07/2018 NPAY-568 P45 issues modified by Jamil  -->
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr> 
+           </table>
+            </td>
+     </tr>
+      
+</table>            
+</div>
+<!-- first section End -->
+<!-- Middle part text here start -->
+<div style="padding-left: 0pt;font-family:arial;font-size:11pt;padding-top:10px;"><strong>To the new employer </strong> <span style="padding-left: 10pt;font-family:Arial;font-size:11pt;">You will need these details to complete your Full Payment Submission</span></div>
+<!-- Middle part text here end-->
+
+<div>
+<table style="width:100%;">
+    <tr><td style="float:left;font-family:arial;font-size:8.5pt;padding-top:5px;">Use capital letters when completing this form</td></tr>
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;vertical-align:top;padding-top:10px;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;">8</div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>New employer PAYE reference</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                           <tr>                                
+                                <td style="text-align:left;padding-left: 30pt;font-family:arial!important;font-size:8.5pt;">Office number</td>
+                                <td></td>  
+                                <td style="text-align:left;padding-left: 5pt;font-family:arial!important;font-size:8.5pt;">Reference number </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <td style="padding-left: 30pt;font-family:arial;font-size:8.5pt;"><div style="width: 16mm;height: 6mm;border:1px solid #999;">&nbsp;</div></td>  
+                                <td style="font-size:18pt;font-family:arial;font-weight:normal;"> / </td>
+                               <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div style="width: 54mm;height: 6mm;border:1px solid #999;">&nbsp;</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:10px;border: 1px solid #000;padding-left:15pt;">9</div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Date new employment started DD MM YYYY</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;">&nbsp;</div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;">&nbsp;</div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;">&nbsp;</div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;padding-top:5px;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width:18px;border: 1px solid #000;padding-left:10pt;"> 15 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;"><div>Employees private address</div>
+                                        
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 
+                           <tr>                                                             
+                               <!--  <td style="padding-left: 35pt;font-family:arial;font-size:8.5pt;"><div style="width:74mm;height:18mm;border:1px solid #999;"> 83 Aston St, Birmingham B4 7DA, UK </div> </td> -->
+                                <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:72mm;height:18mm;border:1px solid #999;"> {!p.rti.Address1__c}<br/> {!p.rti.Address2__c} <br/>  {!p.rti.Address3__c}<br/> {!p.rti.Address4__c}</div> </td>
+                                                               
+                           </tr> 
+                                        
+                 <tr>
+                    <td style="text-align:left;width:10px;">  
+                    <span style="text-align:left;padding-left:35pt;font-family:arial;font-size:8.5pt;">Postcode</span>
+                    </td>                   
+                 </tr>
+                 <tr>                                                             
+                  <td style="padding-left: 35pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;">{!p.rti.UK_postcode__c} </div> </td>
+                 </tr>      
+                                                                     
+            </table>
+            </td>
+    
+    </tr>
+    
+   
+      
+</table>            
+</div>
+
+<div>
+<table style="width:100%;">
+    
+    <tr>
+    <!-- leftside form section -->
+    <td style="width:350px;padding-top:5px;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width: 16pt;border: 1px solid #000;padding-left: 10px;"> 10 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;vertical-align: middle;"><div>Works number/Payroll number and Department or branch</div>
+                                        <div>(if any)</div>
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                              <!-- START ::  03/07/2018 NPAY-568 P45 issues modified by Jamil  -->
+                              <!--  <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width:76.5mm;height:12mm;border:1px solid #999;">{!p.rti.Payroll_Id__c}</div></td> -->
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;"><div style="width:76.5mm;height:12mm;border:1px solid #999;">{!p.rti.Payroll_Id__c}</div></td>
+                              <!-- END ::  03/07/2018 NPAY-568 P45 issues modified by Jamil -->                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                         <tr>
+                            <td style="text-align:left;width:10px;padding-top:0px;vertical-align: middle;"><div style="width: 16pt;border: 1px solid #000;padding-left: 10px;"> 11 </div> </td> 
+                            <td style="text-align:left;padding-left:5pt;font-family:arial;font-size:8.5pt;padding-top:0px;"><div>Enter 'P' here if employee will not be paid by you</div>
+                                    <div>between the date employment began and the</div> 
+                                    <div>next 5 April.</div>
+                            </td>
+                            <td style="text-align:left;padding-left:7pt;font-family:arial;font-size:8.5pt;padding-top:18px;"><div style="width:5mm;height:6mm;border:1px solid #999;"></div></td>
+                        </tr>
+                        </table>
+                    </td>                                                                
+                 </tr>
+                 
+                 
+                 <tr>
+                    <td style="padding-top:2px;"> 
+                       <table>
+                           <tr>
+                             <td style="width:10px;"><div style="width: 16pt;border: 1px solid #000;padding-left: 10px;vertical-align: middle;"> 12 </div></td>
+                             <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;vertical-align: top;"><div>Enter tax code in use if different to the tax code at box 6.</div> 
+                             </td>                             
+                           </tr>
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 <tr>
+                    <td style="padding-top:2px;"> 
+                       <table>
+                            
+                           <tr>                                                             
+                              <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 43mm;height: 6mm;border:1px solid #999;"></div></td>
+                           </tr>       
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 
+                 <tr>
+                    <td style="padding-top:3px;"> 
+                       <table>
+                            
+                           <tr>                                                             
+                              <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;">If week 1 or month 1 applies, enter 'X' in the box below.</td>
+                           </tr> 
+                                
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 <tr>
+                    <td style="padding-top:3px;"> 
+                       <table>
+                            
+                           <tr>                                                             
+                              <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;">Week 1/month 1</td>
+                              <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 5mm;height: 6mm;border:1px solid #999;">{!p.wk_month_indicator}</div></td>
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                         <tr>
+                            <td style="text-align:left;width:10px;padding-top:0px;"><div style="width: 16pt;border: 1px solid #000;padding-left: 10px;vertical-align: middle;"> 13 </div> </td> 
+                            <td style="text-align:left;padding-left:5pt;font-family:arial;font-size:8.5pt;padding-top:0px;vertical-align: top;"><div>If the tax figure you are entering on Payroll</div>
+                                    <div>record/Deductions Working Sheet differs from box 7</div> 
+                                    <div>please enter the figure here.</div>
+                            </td>
+                            
+                        </tr>
+                        </table>
+                    </td>                                                                
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;padding-top:2px;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 29pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> &pound;</div> </td>
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:60mm;height:6mm;border:1px solid #999;"> &nbsp;</div> </td>
+                                <td style="padding-left: 2pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;"> p</div> </td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr> 
+                 
+                 <tr>
+                    <td> 
+                       <table>
+                         <tr>
+                            <td style="text-align:left;width:10px;padding-top:0px;"><div style="width: 16pt;border: 1px solid #000;padding-left: 10px;"> 14 </div> </td> 
+                            <td style="text-align:left;padding-left:5pt;font-family:arial;font-size:8.5pt;"><div>New employees job title or job description</div>
+                                    
+                            </td>
+                            
+                        </tr>
+                        </table>
+                    </td>                                                                
+                 </tr>
+                 <tr>
+                   
+                    <td style="text-align:left;padding-top:2px;"> 
+                       <table>
+                           <tr>                                                             
+                                <td style="padding-left: 29pt;font-family:arial;font-size:8.5pt;"><div style="width:76mm;height:6mm;border:1px solid #999;"> </div> </td>
+                                
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                              
+                 </tr>
+                                                               
+            </table>
+    </td>
+    <!-- rightside form section -->
+            <td style="width:350px;padding-top:10px;vertical-align:top;">
+            <table border="0" style="border-collapse: collapse;">  
+                             
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width: 16pt;border: 1px solid #000;padding-left: 10px;"> 16 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;vertical-align: middle;"><div>Gender. Enter 'X' in the appropriate box</div>
+                                        <div>(if any)</div>
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                 <td style="padding-top:3px;">
+                 <table>
+                  <tr>
+                    <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;">Male </td>
+                    <td style="padding-left: 15pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;">{!p.male} </div> </td>                                                              
+                    <td style="padding-left: 10pt;font-family:arial;font-size:8.5pt;">Female </td>
+                    <td style="padding-left: 15pt;font-family:arial;font-size:8.5pt;"><div style="width:5mm;height:6mm;border:1px solid #999;">{!p.female}</div> </td>                                                              
+                     </tr>
+                     </table>
+                     </td>
+                                                                
+                 </tr>
+                 
+                 <tr>
+                      <td style="text-align:left;"> 
+                       <table>   
+                         <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;"><div style="width: 16pt;border: 1px solid #000;padding-left: 10px;"> 17 </div> </td>  
+                            <td style="padding-left: 5pt;font-family:arial;font-size:8.5pt;vertical-align: middle;"><div>Date of birth DD MM YYYY</div>
+                                        <div>(if any)</div>
+                            </td>  
+                        </tr>
+                     </table>
+                     </td>
+                </tr>
+                 <tr>
+                    <td style="padding-top:2px;"> 
+                       <table>
+                            
+                           <tr>                                                             
+                               <!-- 
+                               <td style="padding-left:33pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;">28</div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;">04</div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;">2018</div></td>                        
+                               -->
+                               <td style="padding-left:30pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,dd}">
+                                    <apex:param value="{!p.rti.xcdhcm__DOB__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,MM}">
+                                    <apex:param value="{!p.rti.xcdhcm__DOB__c}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,yyyy}">
+                                    <apex:param value="{!p.rti.xcdhcm__DOB__c}" /></apex:outputText></div></td> 
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>
+                 <tr><td style="text-align:left;padding-left: 0pt;font-family:arial;font-size:10.5pt;font-weight:bold;"><div>Declaration</div></td></tr>
+                 
+                  <tr>
+                    <td> 
+                       <table>
+                       <tr>
+                            <td style="text-align:left;width:10px;vertical-align: top;text-align:center;"><div style="width:18px;border: 1px solid #000;padding-left:10pt;"> 18 </div></td>  
+                            <td style="padding-left: 7pt;font-family:arial;font-size:8.5pt;"><div>I have prepared a Payroll record/Deductions Working</div>
+                                        <div>Sheet in accordance with the details above.</div><br></br>
+                                        <div>Employer name and address</div>
+                            </td>  
+                      </tr>
+                      </table>
+                    </td>                                                                
+                 </tr>
+                 <tr>
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>                                                             
+                               <!--  <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:72mm;height:24mm;border:1px solid #999;"> 83 Aston St, Birmingham B4 7DA, UK</div> </td> -->
+                               <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:72mm;height:24mm;border:1px solid #999;"> {!p.rti.RTI_summary__r.Company_name__c}<br/>
+                                                {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Address_line_1__c}<br/>
+                                                {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.City__c}<br/>
+                                                {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Address_line_2__c}<br/>
+                                                {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Country__c}</div> </td> 
+                               
+                                                               
+                           </tr>      
+                       </table>
+                    </td>                                                              
+                 </tr>
+                 
+                 <tr>
+                    <td style="text-align:left;"> 
+                       <table>
+                           <tr>
+                            <td style="text-align:left;width:10px;">  
+                            <span style="text-align:left;padding-left:33pt;font-family:arial;font-size:8.5pt;">Postcode</span>
+                            </td>                   
+                         </tr>
+                      </table>
+                   </td>                                                              
+                </tr>
+                <tr>
+                    <td style="text-align:left;"> 
+                       <table> 
+                             <tr>                                                             
+                              <td style="padding-left: 33pt;font-family:arial;font-size:8.5pt;"><div style="width:43mm;height:6mm;border:1px solid #999;"> {!p.rti.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Postcode__c}</div> </td>
+                             </tr>
+                        </table>
+                   </td>                                                              
+                </tr>
+                 <tr>
+                    <td style="text-align:left;"> 
+                       <table>
+                             <tr>
+                             <td >
+                             <span style="padding-left:33pt;font-family:arial!important;font-size:8.5pt;">Date  DD MM YYYY</span> 
+                             </td>                             
+                            </tr>
+                      </table>
+                   </td>                                                              
+                </tr>
+                 <tr>
+                    <td> 
+                       <table>
+                            
+                           <tr>                                                             
+                               
+                              <td style="padding-left:33pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,dd}">
+                                    <apex:param value="{!p.dtoday}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 10mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,MM}">
+                                    <apex:param value="{!p.dtoday}" /></apex:outputText></div></td>
+                               <td style="padding-left:10pt;font-family:arial;font-size:8.5pt;text-align:center;"><div style="width: 20mm;height: 6mm;border:1px solid #999;"><apex:outputText value="{0,date,yyyy}">
+                                    <apex:param value="{!p.dtoday}" /></apex:outputText></div></td>                          
+                             </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>      
+                                                                     
+            </table>
+            </td>
+    
+    </tr>
+      
+</table>            
+</div>
+<div>
+    <table style="width:100%;">
+    <tr>
+    <!-- leftside form section -->
+            <td style="width:390px;vertical-align: top;">
+            <table border="0" style="border-collapse: collapse;">  
+                 <tr>
+                   <td style="text-align:left;padding-left:0pt;font-family:arial;font-size:8.5pt;font-weight:bold;">
+                                <div>P45(Online) Part 3</div>
+                    </td>                             
+                 </tr>
+           </table>
+            </td>
+    <!-- leftside form section -->
+    <!-- rightside form section -->
+            <td style="width:390px; vertical-align:top;text-align: -webkit-right;">
+            <table border="0" style="border-collapse: collapse;">  
+                  <tr>
+                     <td style="text-align:right;padding-left:230pt;font-family:arial;font-size:8.5pt;font-weight:normal;">
+                                    <div>HMRC 03/15</div>
+                    </td>                             
+                  </tr>
+                                                                  
+            </table>
+            </td>
+    <!-- rightside form section -->
+    </tr>
+    </table>
+</div>
+
+
+
+<!-- ================P45 Part 3 Form End  ===================================================================================== -->
+
+</div>
+ </apex:repeat>
+  </apex:pageBlock>
+</apex:page>
+<!--  END :: 17/04/2018 NPAY-431 Printable P45 - acceptable look & feel added by Jamil -->

@@ -1,0 +1,33 @@
+<apex:page Controller="xcdhcm.ManageExpenseController" action="{!dispalyImageAsPDF}" sidebar="false" 
+showHeader="true" wizard="false"  applyBodyTag="false"  renderAS="pdf">
+    <head>
+<style>
+
+	table {
+	    table-layout: fixed;
+	}
+	</style>
+	<style>
+	@page {
+	    margin-left: 1cm;
+	    margin-right: 1cm;
+	}
+
+</style>
+</head>
+	<body>
+		<apex:outputLabel value="{!$Label.xcdhcm__claim_pdf_header}"  style="font-weight: bold;"/>
+			<apex:pageMessages />
+			<div style="border-bottom: 2px solid #63a4c5 !important;"/><br /><br />
+			<table width="100%">
+				<apex:repeat value="{!wrapperList}" var="var">
+					<tr>   
+					 	<td>
+							<apex:image url="/sfc/servlet.shepherd/version/download/{!var.uploadedFileInstanceVersion.Id}" height="500" width="700"/><br /><br />
+							<apex:outputLabel value="Reciept for:{!var.exp.Name}" style="font-weight: bold; padding-left:250px"/>
+					 	</td>
+					</tr>
+	 			</apex:repeat>
+	 	</table>
+	</body>
+</apex:page>

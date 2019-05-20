@@ -1,0 +1,125 @@
+<apex:page standardController="xcdhcm__Pay_Summary__c"
+    extensions="xcdhcm.PayrollOverviewController" sidebar="false"
+    showHeader="true" wizard="false" cache="false" readOnly="false">
+
+    <!--<apex:stylesheet value="{!URLFOR($Resource.Css,'EmpDetPageCSS.css')}" /> -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'EmpDetPageCSS.css')}" /> 
+
+    <style>
+body .pbBody table.list tr.headerRow th {
+    background: #1797c0 !important;
+    border-color: #1797c0 !important;
+    color: #fff !important;
+    width: 20%;
+}
+</style>
+
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="back" action="{!back}"
+                    style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #a6d6ff;-webkit-box-shadow: 2px 1px 8px #a6d6ff;box-shadow:  2px 1px 8px #a6d6ff;" />
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.xcdhcm__Pay_Summary__c.Fields.xcdhcm__Employee__c.Label}" />
+                    <apex:outputField value="{!paysummary.xcdhcm__Employee__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$objectType.xcdhcm__Pay_Period__c.Fields.Name.Label}" />
+                    <apex:outputField value="{!paysummary.XCD_PAY_Period__r.Name}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$objectType.xcdhcm__Pay_Summary__c.Fields.xcdhcm__Additions__c.Label}" />
+                    <apex:outputField value="{!paysummary.xcdhcm__Additions__c}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$objectType.xcdhcm__Pay_Summary__c.Fields.xcdhcm__Deductions__c.Label}" />
+                    <apex:outputField value="{!paysummary.xcdhcm__Deductions__c}" />
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+
+        <apex:pageBlock title="Payments" id="paymentblock">
+
+            <apex:pageBlockTable align="center" value="{!paymentRecords}" var="p">
+                <apex:column headervalue="{!$ObjectType.xcdhcm__Pay_Detail__c.Fields.xcdhcm__Type__c.Label}">
+                    <apex:outputLink target="_top" title="{!p.RecordType}"
+                        value="/{!p.id}">{!p.xcdhcm__Type__c}</apex:OutputLink>
+                </apex:column>
+                <apex:column headervalue="{!$ObjectType.xcdhcm__Pay_Detail__c.Fields.xcdhcm__Amount__c.Label}"
+                    value="{!p.xcdhcm__Amount__c}" />
+                <apex:column headervalue="Notes" value="{!p.Benefit__r.xcdhcm__Notes__c}" />
+            </apex:pageBlockTable>
+            <!--START :: 17/03/2015 NPPD-686 One off Payment added directly from payslip does not triggers the validation rule Modify by Sabir -->
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="New one off payment"
+                    action="{!newOneOffPayment}" rendered="{!paySummary.XCD_PAY_Period__r.xcdhcm__Payroll_status__c!='Final'}"
+                    style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #a6d6ff;-webkit-box-shadow: 2px 1px 8px #a6d6ff;box-shadow:  2px 1px 8px #a6d6ff;" />
+            </apex:pageBlockButtons>
+            <!--END :: 17/03/2015 NPPD-686 One off Payment added directly from payslip does not triggers the validation rule Modify by Sabir -->
+        </apex:pageBlock>
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+        
+        <apex:pageBlock title="Deductions">
+            <apex:pageBlockTable align="center" value="{!deductionRecords}"
+                var="p">
+                <apex:column headervalue="{!$ObjectType.xcdhcm__Pay_Detail__c.Fields.xcdhcm__Type__c.Label}">
+                    <apex:outputLink target="_top" title="{!p.RecordType}"
+                        value="/{!p.id}">{!p.xcdhcm__Type__c}</apex:OutputLink>
+                </apex:column>
+                <apex:column headervalue="{!$ObjectType.xcdhcm__Pay_Detail__c.Fields.xcdhcm__Amount__c.Label}"
+                    value="{!p.xcdhcm__Amount__c}" />
+                <apex:column headervalue="Notes" value="{!p.Benefit__r.xcdhcm__Notes__c}" />
+            </apex:pageBlockTable>
+            <!--START :: 17/03/2015 NPPD-686 One off Payment added directly from payslip does not triggers the validation rule Modify by Sabir -->
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="New one off deduction"
+                    action="{!newOneOffDeduction}" rendered="{!paySummary.XCD_PAY_Period__r.xcdhcm__Payroll_status__c!='Final'}"
+                    style="border: 1px solid #d9d9d9;color:#999999;background-color :#fff;background-image:none;-moz-box-shadow: 2px 1px 8px #a6d6ff;-webkit-box-shadow: 2px 1px 8px #a6d6ff;box-shadow:  2px 1px 8px #a6d6ff;" />
+            </apex:pageBlockButtons>
+            <!--END :: 17/03/2015 NPPD-686 One off Payment added directly from payslip does not triggers the validation rule Modify by Sabir -->
+        </apex:pageBlock>
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+
+        <apex:pageBlock title="Third party benefits">
+            <apex:pageBlockTable align="center" value="{!thirdPartyRecords}"
+                var="p">
+                <apex:column headervalue="{!$ObjectType.xcdhcm__Pay_Detail__c.Fields.xcdhcm__Type__c.Label}">
+                    <apex:outputLink target="_top" title="{!p.RecordType}"
+                        value="/{!p.id}">{!p.xcdhcm__Type__c}</apex:OutputLink>
+                </apex:column>
+                <apex:column headervalue="{!$ObjectType.xcdhcm__Pay_Detail__c.Fields.xcdhcm__Amount__c.Label}"
+                    value="{!p.xcdhcm__Amount__c}" />
+                <apex:column headervalue="Notes" value="{!p.Benefit__r.xcdhcm__Notes__c}" />
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+
+        <!-- 
+        <apex:pageBlock title="Statutory payments">
+            <apex:pageBlockTable align="center"
+                value="{!StatutoryPaymentRecords}" var="p">
+                <apex:column headervalue="{!$ObjectType.xcdhcm__Pay_Detail__c.Fields.xcdhcm__Type__c.Label}">
+                    <apex:outputLink target="_top" title="{!p.RecordType}"
+                        value="/{!p.id}">{!p.xcdhcm__Type__c}</apex:OutputLink>
+                </apex:column>
+                <apex:column headervalue="Notes" value="{!p.Benefit__r.xcdhcm__Notes__c}" />
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>
+         -->
+        
+        <apex:pageBlock rendered="false">
+            <apex:outputField value="{!xcdhcm__Pay_Summary__c.Employee__r.Name}" />
+            <apex:outputField value="{!xcdhcm__Pay_Summary__c.xcdhcm__Employee__c}" />
+            <apex:outputField value="{!xcdhcm__Pay_Summary__c.xcdhcm__XCD_PAY_Period__c}" />
+            <apex:outputField value="{!xcdhcm__Pay_Summary__c.XCD_PAY_Period__r.Name}" />
+            <apex:outputField value="{!xcdhcm__Pay_Summary__c.xcdhcm__Additions__c}" />
+            <apex:outputField value="{!xcdhcm__Pay_Summary__c.xcdhcm__Deductions__c}" />
+            <apex:outputField value="{!Pay_Summary__c.XCD_PAY_Period__r.Payroll_status__c }" />
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

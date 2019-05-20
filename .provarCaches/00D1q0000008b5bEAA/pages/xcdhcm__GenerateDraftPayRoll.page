@@ -1,0 +1,19 @@
+<apex:page standardController="xcdhcm__Pay_Period__c"
+	extensions="xcdhcm.GenerateEmployeePayRollController"
+	action="{!generateDraftPayRoll}">
+	<apex:form >
+	<!-- START :: 25/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+
+	 <apex:commandButton value="{!$Label.xcdhcm__generatedraftpayrollbback}" action="{!Back}"/>
+	 <!-- END :: 25/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	<apex:PageMessages />
+	<!-- START :: 25/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+
+	<apex:sectionHeader title="{!$Label.xcdhcm__generatedraftpayrollgenerateemployeepayroll}" />
+	<!-- END :: 25/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	<apex:outputPanel >
+      You tried generating employee pay roll.  If you see this page, something went wrong.	You should have 
+      been redirected back to the record you clicked the button from.
+  </apex:outputPanel>
+  </apex:form>
+</apex:page>

@@ -1,0 +1,423 @@
+<apex:page showHeader="true" sidebar="flase" controller="xcdhcm.SalaryReviewController" tabStyle="xcdhcm__Company__c">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />       
+    <style> 
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        font-family:Salesforce Sans,Arial,sans-serif!important;
+        font-size: 1.4rem!important;
+        color: #16325c;
+        margin-left: 1mm;
+        }
+        /*column header*/
+        .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>th 
+        {
+        font-size: 1.1rem!important;;
+        color: #54698d;
+        font-weight: normal;
+        font-family: 'Salesforce Sans',Arial,sans-serif;
+        line-height: 1.25; 
+        letter-spacing:.0625rem;
+        }
+        /*column data*/
+        .table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td 
+        {
+        font-size: 1.2rem!important;;
+        color: #16325c;
+        font-weight: normal;
+        font-family: 'Salesforce Sans',Arial,sans-serif;
+        
+        }
+        #LiteHelpTextID span 
+        {
+        display: none;
+        }
+        #LiteHelpTextID:hover span 
+        {
+        display: block !important;
+        width: 300px;
+        background-color: #16325c!important;   
+        border: 1px solid #16325c!important;
+        padding: 4px;
+        color: white;
+        position: absolute;
+        z-index: 1;
+        top:100%;
+        right:20%;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;  
+        border-radius: 4px!important;    
+        left:5% !important;     
+        }
+        #LiteHelpTextID:hover 
+        {
+        position: inherit;
+        }
+        input[type="text"] 
+        {
+        width: 100px !important;
+        }
+        input[type="float"] 
+        {
+        width: 85px !important;
+        }
+        input[type="float"] 
+        {
+        height: 20px !important;
+        }
+        .fa 
+        {
+        font-size: 8pt!important;
+        }
+        .slds-scope button, .slds-scope input, .slds-scope optgroup, .slds-scope select, .slds-scope textarea 
+        {
+        font-size: 12px;
+        }
+        .slds-scope table 
+        {
+        font-size: 13px;
+        }
+        .modal-content 
+        {
+        width: 80%;
+        }
+        .slds-scope .slds-truncate 
+        {
+        white-space: normal;
+        width:180px;
+        word-break: break-all;
+        }
+        .msgIcon
+        {
+        display: none;
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="salaryReviewApp" lang="en">
+        <head>
+            <meta charset="utf-8"/>
+            <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+            <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+            <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+            <apex:slds />
+        </head>
+        
+        <script type="text/javascript">
+        document.onkeypress = function (e) 
+        {
+            e = e || window.event;
+            var charCode = (typeof e.which == "number") ? e.which : e.keyCode; 
+            if(charCode == 13)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        };
+        </script>
+        
+        <script type="text/javascript">
+        var myapp = angular.module('salaryReviewApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+        var contrl=myapp.controller('ctrlRead', function ($scope, $filter ,$uibModal) 
+        {           
+            $scope.items = {!CollectSalaryIncrementJSON};       
+            $scope.userDefaultCurrency ={!userDefaultCurrencyJson};
+            $scope.filteredItems = [];
+            $scope.itemsPerPage = 25;
+            $scope.currentPage = 1;
+            $scope.maxlength = 5;
+            
+            //Default dropdown value
+            $scope.selecteDropDown = "Increment due before current month end";
+            $scope.itemCollection =[];
+            
+            $scope.dropDownsearch = function (dropDownFilter) 
+            {
+                
+                $scope.itemCollection =[];
+                $scope.filteredItems = $filter('filter')($scope.items, function (item) 
+                {
+                    for (var attr in item) 
+                    {
+                        //for unchecked
+                        item.selected = false;
+                        $scope.deleteAll = false;
+                        
+                        if(item.compensation.xcdhcm__Next_increment_due__c != null)
+                        {
+                            var date2 = new Date();
+                            var CurrentMonth = date2.getMonth()+1;         
+                            
+                            var date1 = new Date(item.compensation.xcdhcm__Next_increment_due__c);
+                            var next_increment = date1.getMonth()+1;    
+                            
+                            var date3 = new Date();
+                            var nextMonth = date3.getMonth()+2;
+                            
+                            if(dropDownFilter == "Increment due before current month end")
+                            {                      
+                                if($scope.selectedValue != "--Select--" && CurrentMonth == next_increment)
+                                {
+                                    $scope.itemCollection.push(item);
+                                    return true; 
+                                }
+                            }
+                            else
+                            {
+                                if($scope.selectedValue != "--Select--" && (CurrentMonth == next_increment || nextMonth == next_increment))
+                                {
+                                    $scope.itemCollection.push(item);
+                                    return true; 
+                                }
+                                
+                            }
+                        }       
+                    }
+                    return false;
+                });
+            };
+            
+            $scope.dropDownsearch("Increment due before current month end");
+            
+            //Initialize the Search Filters 
+            var searchMatch = function (haystack, needle)  
+            {
+                if (!needle) 
+                {
+                    return true;
+                }
+                return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+            };
+            
+            $scope.search = function () 
+            {
+                $scope.filteredItems = $filter('filter')($scope.itemCollection, function (item) 
+                {
+                    for (var attr in item) 
+                    {
+                        if (searchMatch(item.compensation.xcdhcm__Employee__r.Name , $scope.query))
+                            return true;
+                    }
+                    return false;
+                });
+            };
+            
+            // functions have been describe process the data for display
+            // $scope.search();
+            
+            //<=============================START::For select and select all from check box as per current page wise ============================>
+            $scope.selectedAll = false;
+            $scope.deleteAll = false;
+            $scope.selectedAll = function()
+            {
+                for(var i=  ($scope.currentPage -1)* $scope.itemsPerPage; i< $scope.currentPage * $scope.itemsPerPage; i++)
+                {
+                    if($scope.deleteAll)
+                    {
+                        $scope.filteredItems[i].selected = true;
+                    }
+                    else
+                    {
+                        $scope.filteredItems[i].selected = false;
+                    }
+                }
+            };
+            
+            //call from pagination 
+            $scope.uncheck = function()
+            {
+                $scope.deleteAll = false;
+            };          
+            //<=============================END::For select and select all from check box as per current page wise ============================>
+            
+            
+            //For all bottom buttons 
+            $scope.sendData = function()
+            {
+                //while saving removing ConvertedCurrentSalary
+                for(var i=0; i<$scope.items.length; i++)
+                {   
+                    delete $scope.items[i].compensation.ConvertFTECompensationSalary;
+                    delete $scope.items[i].payspine.ConvertFTEPayspineSalary;
+                }
+                saveMethod(JSON.stringify($scope.items));
+            };  
+            
+            $scope.publishData = function()
+            {
+                //while saving removing ConvertedCurrentSalary
+                for(var i=0; i<$scope.items.length; i++)
+                {   
+                    delete $scope.items[i].compensation.ConvertFTECompensationSalary;
+                    delete $scope.items[i].payspine.ConvertFTEPayspineSalary;
+                }
+                publishMethod(JSON.stringify($scope.items));
+            };  
+            
+        });       
+        
+        //For Date format 
+        myapp.filter('toDayMonthYear', function ($filter) 
+        {
+            return function (dateString) 
+            {
+                var dateObject = new Date(dateString);
+                var result;
+                if(!isNaN(dateObject))
+                {
+                    var dispayDate = $filter('date')(dateObject, 'dd');
+                    var displayMonth = $filter('date')(dateObject, 'MM');
+                    var displayYear = dateObject.getFullYear();
+                    result = dispayDate+'/'+displayMonth+'/'+displayYear;
+                }
+                else
+                {
+                    result ='';
+                }
+                return result;
+            };
+        });
+        
+        //For percentage format 
+        myapp.filter('percentage', function($filter) 
+        {
+            return function(input) 
+            {
+                var check;
+                if(!isNaN(input))
+                {
+                    check = input + '%';
+                }
+                else
+                {
+                    check ='';
+                }
+                return check;
+            };
+        });     
+        </script>
+        
+        <body class="slds-scope"  ng-controller="ctrlRead">
+            <apex:form id="frmid">
+                <apex:pageBlock title="{!$Label.xcdhcm__salaryreviewsalaryreview}"  id="block1"> 
+                    <apex:pageMessages id="errorId"/>
+                    <apex:pageMessage summary="{!$Label.xcdhcm__salaryreviewimselectemployees}" severity="info" strength="1" />
+                    <br />
+                    <span  style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">Filters:</span>
+                    <select ng-model="selecteDropDown" ng-change="dropDownsearch(selecteDropDown)" style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">
+                        <option value="Increment due before current month end" >Increment due before current month end</option>
+                        <option value="Increment due in current and next month" >Increment due in current and next month</option>
+                    </select>
+                    
+                    <span style="font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;margin-left:10rem">{!$Label.SalaryReviewEmployeesearch} </span>
+                    <input type="text" ng-model="query" ng-change="search()"  placeholder="Search"/>
+                    <br /><br />
+                    <table  class="table  table-hover;" > 
+                        <tr class="slds-text-title_caps" >
+                            <th colspan="1" ><!--{!$Label.SalaryReviewAction}  --></th>
+                            <th colspan="6" ></th>
+                            <th colspan="2" >{!$Label.SalaryReviewCurrentSalary}</th>
+                            <th colspan="2" >{!$Label.SalaryReviewLastPerformanceReview}</th>
+                            <th colspan="3">{!$Label.SalaryReviewRevisedSalarywithincrement}</th>
+                        </tr>
+                        <tr class="slds-text-title_caps" >
+                            <th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /></th>
+                            <th>{!$ObjectType.Job_Role__c.Fields.Employee_Details__c.label}</th>
+                            <th>{!$ObjectType.Job_Role__c.Fields.Name.label}</th>
+                            <th>{!$ObjectType.Job_Role__c.Fields.Start_Date__c.label}</th>
+                            <th>{!$ObjectType.Compensation__c.Fields.Next_increment_due__c.Label}</th>
+                            <th>{!$ObjectType.Job_Role__c.Fields.FTE_Ratio__c.label}</th>
+                            <th>{!$ObjectType.Post__c.Fields.Grade__c.Label}</th>
+                            <th>{!$ObjectType.Pay_Spine__c.Fields.Spinal_point__c.Label}</th>
+                            <th>{!$ObjectType.Compensation__c.Fields.FTE_salary__c.Label}</th>
+                            <th>{!$ObjectType.Employee_Review__c.Fields.Prob_Start_Date__c.Label}</th>
+                            <th>{!$ObjectType.Employee_Review__c.Fields.Average_Rating__c.Label}</th>
+                            <th>{!$ObjectType.Pay_Spine__c.Fields.Spinal_point__c.Label}</th>
+                            <th>{!$ObjectType.Compensation__c.Fields.FTE_salary__c.Label}</th>
+                            <th>{!$ObjectType.Compensation__c.Fields.Revised_notes__c.label}</th>
+                        </tr>
+                        <tbody>
+                            <tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" >
+                                <td><input type="checkbox"  ng-model="item.selected"/></td>
+                                <td>{{item.compensation.xcdhcm__Employee__r.Name}}</td>
+                                <td>{{item.compensation.xcdhcm__Role_L__r.Name}}</td>
+                                <td>{{item.compensation.xcdhcm__Role_L__r.xcdhcm__Start_Date__c | toDayMonthYear}}</td>
+                                <td>{{item.compensation.xcdhcm__Next_increment_due__c | toDayMonthYear}}</td>
+                                <td>{{item.compensation.xcdhcm__Role_L__r.xcdhcm__FTE_Ratio__c  | number:2 | percentage}}</td>
+                                <td>{{item.compensation.xcdhcm__Grade_L__r.Name}}</td>
+                                <td style="text-align: center;">{{item.compensation.xcdhcm__Spinal_point_L__r.xcdhcm__Spinal_point__c}}</td>
+                                
+                                <td>
+                                    <span ng-if = "userDefaultCurrency == item.compensation.CurrencyIsoCode"> {{item.compensation.CurrencyIsoCode }} {{item.compensation.xcdhcm__FTE_salary__c | number:2}}</span>
+                                    <span ng-if = "userDefaultCurrency != item.compensation.CurrencyIsoCode "> {{item.compensation.CurrencyIsoCode }} {{item.compensation.xcdhcm__FTE_salary__c | number:2}} ({{userDefaultCurrency}} {{item.compensation.ConvertFTECompensationSalary | number:2}})</span>
+                                </td>
+                                <td>{{item.latestReview.xcdhcm__Prob_Start_Date__c | toDayMonthYear}}</td>
+                                <td style="text-align: center;">{{item.latestReview.xcdhcm__Average_Rating__c}}</td>
+                                <td  style="text-align: center;">{{item.payspine.xcdhcm__Spinal_point__c}}</td>
+                                <td>
+                                    <span ng-if = "userDefaultCurrency == item.payspine.CurrencyIsoCode"> {{item.payspine.CurrencyIsoCode }} {{item.payspine.xcdhcm__FTE_salary__c | number:2}}</span>
+                                    <span ng-if = "userDefaultCurrency != item.payspine.CurrencyIsoCode "> {{item.payspine.CurrencyIsoCode }} {{item.payspine.xcdhcm__FTE_salary__c | number:2}} ({{userDefaultCurrency}} {{item.payspine.ConvertFTEPayspineSalary | number:2}})</span>
+                                </td> 
+                                
+                                <td>
+                                    <textarea rows="1" cols="15"  ng-model="item.compensation.xcdhcm__Revised_notes__c" />                                  
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </apex:pageBlock>
+                
+                <!-- =========================================START Pagination=================================================== -->
+                <table width="100%">
+                    <tfoot>
+                        <tr>
+                            <td width="50%">
+                                <ul uib-pagination ="x"  total-items="filteredItems.length" ng-model="currentPage" items-per-page="itemsPerPage" 
+                                    max-size="maxlength" class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="uncheck();">
+                                </ul>
+                            </td>   
+                            
+                            <td style="text-align:right" width="50%">
+                                <apex:actionStatus id="saveStatus">
+                                    <apex:facet name="stop">
+                                        <apex:outputPanel >
+                                            <apex:commandButton value="{!$Label.xcdhcm__salaryreviewbcancel}" action="{!cancelReview}"  styleclass="slds-button slds-button--neutral"
+                                                                status="saveStatus" reRender="errorId" style="padding: 5px;width: 90px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;"/>
+                                            
+                                            <input type="button" ng-click="sendData()" value="{!$Label.SalaryReviewBSavedraft}" class="slds-button slds-button--neutral" 
+                                                   style="padding: 5px;width: 90px;border: 1px solid #d8dde6;position: relative;display: inline-block;font-size: 1.2rem;" />
+                                            
+                                            <input type="button" ng-click="publishData()" value="{!$Label.SalaryReviewBPublish}" class="slds-button slds-button--brand" 
+                                                   style="padding: 5px;width: 90px;border: 1px solid #d8dde6;position: relative;display: inline-block;font-size: 1.2rem;" />
+                                        </apex:outputPanel>
+                                    </apex:facet>
+                                    <apex:facet name="start">
+                                        <div class="slds-spinner_container slds-show" style="height:200rem">
+                                            <div class="slds-spinner--brand slds-spinner slds-spinner--large" aria-hidden="false" role="alert">
+                                                <div class="slds-spinner__dot-a"></div>
+                                                <div class="slds-spinner__dot-b"></div>
+                                            </div> 
+                                        </div>                    
+                                    </apex:facet>                                
+                                </apex:actionStatus>
+                            </td>
+                            
+                            <apex:actionFunction name="saveMethod" action="{!saveDraft}" oncomplete=""  status="saveStatus"  reRender="errorId">  
+                                <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                            </apex:actionFunction>
+                            
+                            <apex:actionFunction name="publishMethod" action="{!publish}" oncomplete=""   status="saveStatus"  reRender="errorId">  
+                                <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                            </apex:actionFunction>
+                        </tr> 
+                    </tfoot>
+                </table>
+                <!-- =========================================END Pagination================================================================================ -->
+            </apex:form>
+        </body>       
+    </html>
+</apex:page>

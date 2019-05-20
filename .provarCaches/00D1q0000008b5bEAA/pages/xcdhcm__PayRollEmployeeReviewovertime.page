@@ -1,0 +1,495 @@
+<!-- START :: 09/12/2016 NPAY-239 Payroll4Patch1 issue modified by Farhan  -->
+<apex:page controller="xcdhcm.PayrollEmployeesController" action="{!searchEmployer}" sidebar="false" >
+<!-- END :: 09/12/2016 NPAY-239 Payroll4Patch1 issue modified by Farhan  -->
+<!--  <apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+ <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+    
+    <style>
+    body .pbBody table.list tr.headerRow th 
+    {
+      width:1% !important;
+    }
+    <!-- START:: NPAY-2 class ng-cloak added by Farhan  -->
+    .ng-cloak 
+    {
+        display: none !important;
+    }
+    <!-- END:: NPAY-2 class ng-cloak added by Farhan  -->
+    /* START :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  */
+    /*popup*/ 
+		.popupBg 
+		{
+			background-color:black;
+			opacity: 0.2;
+			filter: alpha(opacity =   70);
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			z-index: 9998;
+			background: black !important;
+		}
+		.customPopup 
+		{
+			line-height: 25px;
+			position: absolute;
+			left: 50%;
+			padding: 10px;
+			z-index: 9999;
+			text-align: center;
+			top: 150px;
+			width: 500px;
+			margin-left: -250px;
+			text-decoration: none;
+			font-weight: bold;
+			background: #ffffff !important;
+			border: 1px solid #ccc !important;
+			/*-moz-box-shadow: 4px 5px 10px #99ccff;
+			-webkit-box-shadow: 4px 5px 10px #99ccff;
+			box-shadow: 4px 5px 10px #99ccff; */
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			color: #336699;
+		}
+		.butt 
+		{
+			border: 1px solid #d9d9d9 !important;
+			color: #999999 !important;
+			background-color: #fff !important;
+			background-image: none !important;
+			-moz-box-shadow: 2px 1px 8px #a6d6ff;
+			-webkit-box-shadow: 2px 1px 8px #a6d6ff;
+			box-shadow: 2px 1px 8px #a6d6ff;
+		}
+		/*popup*/
+		/* END :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan */
+    </style>
+
+     <apex:form id="theForm"> 
+        <apex:PageMessages id="errId" />
+    
+   <html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+        <head>
+            <meta charset="utf-8"/>
+            <!-- START :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	    <!-- END :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+            <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet"/>
+            
+            <link rel="stylesheet" href="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css" />
+            <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet"/>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+            <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"/>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+            
+           
+            <style>
+                .input-mysize { width: 550px }
+                .search-query {
+                padding-left: 469px;
+                background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC);
+                background-repeat: no-repeat;
+                background-position: 562px 8px;
+                }
+                
+                
+            </style>
+        </head>
+       <!--- Javascript -->
+        <script type="text/javascript">
+        <!-- Name your application -->
+            var myapp = angular.module('hello', []);
+        var sortingOrder = 'ot.xcdhcm__Employee_Details__r.Name';
+        <!-- Define Controller  -->
+            var contrl=myapp.controller('ctrlRead', function ($scope, $filter) {
+                <!--- Initialize Scope Variables --->
+                    $scope.sortingOrder = sortingOrder;
+                $scope.reverse = false;
+                $scope.filteredItems = [];
+                $scope.groupedItems = [];
+                $scope.itemsPerPage = 40;
+                $scope.pagedItems = [];
+                $scope.currentPage = 0;
+                $scope.items ={!conListJSON };
+                $scope.selectedAll = false;
+                
+
+                     $scope.sel = {};
+                     $scope.checkAll =( function(){
+		     		//START :: 22/01/2018 Lightning regression 1 & 2 issue list modified by Farhan(code had overriden)
+                     for(i in $scope.items)
+                     {
+                          if($scope.selectedAll)
+                          {
+                          	$scope.items[i].selected = true;
+                          }
+                          else
+                          {
+                          	$scope.items[i].selected = false;
+                          }
+                     }
+                     
+                    
+		     		//END :: 22/01/2018 Lightning regression 1 & 2 issue list modified by Farhan(code had overriden)
+                     
+                      });
+                 
+                               
+                var searchMatch = function (haystack, needle) {
+                    if (!needle) {
+                        return true;
+                    }
+                    return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+                };
+                
+                //Initialize the Search Filters 
+                $scope.search = function () {
+                    $scope.filteredItems = $filter('filter')($scope.items, function (item) {
+                        for (var attr in item) {
+                            if (searchMatch(item.ot.xcdhcm__Employee_Details__r.Name , $scope.query))
+                                return true;
+                        }
+                        return false;
+                    });
+                    // Define Sorting Order
+                    if ($scope.sortingOrder !== '') {
+                        $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+                    }
+                    $scope.currentPage = 0;
+                    
+                    // Group by pages
+                    $scope.groupToPages();
+                };
+                
+                // Calculate Total Number of Pages based on Records Queried 
+                $scope.groupToPages = function () {
+                    $scope.pagedItems = [];
+                    for (var i = 0; i < $scope.filteredItems.length; i++) {
+                        if (i % $scope.itemsPerPage === 0) {
+                            $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [$scope.filteredItems[i]];
+                        } else {
+                            $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i]);
+                        }
+                    }
+                };
+                
+                $scope.range = function (start, end) {
+                    var ret = [];
+                    if (!end) {
+                        end = start;
+                        start = 0;
+                    }
+                    for (var i = start; i < end; i++) {
+                        ret.push(i);
+                    }
+                    return ret;
+                };
+                
+                $scope.prevPage = function () {
+                    if ($scope.currentPage > 0) {
+                        $scope.currentPage--;
+                    }
+                };
+                
+                $scope.nextPage = function () {
+                    if ($scope.currentPage < $scope.pagedItems.length - 1) {
+                        $scope.currentPage++;
+                    }
+                };
+                $scope.setPage = function () {
+                    $scope.currentPage = this.n;
+                };
+                // functions have been describe process the data for display
+                $scope.search();
+                
+                // change sorting order
+                $scope.sort_by = function (newSortingOrder) {
+                    if ($scope.sortingOrder == newSortingOrder)
+                        $scope.reverse = !$scope.reverse;
+                    $scope.sortingOrder = newSortingOrder;
+                    
+                    //START :: 18/07/2016 NPAY-145 Overtime and Timesheet added by Farhan          
+                    // Redefining the sorting order to sort all page's elements.
+                    if ($scope.sortingOrder !== '') {
+                        $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+                    }
+                    $scope.currentPage = 0;
+                    
+                    // Group by pages
+                    $scope.groupToPages();
+                    //END :: 18/07/2016 NPAY-145 Overtime and Timesheet added by Farhan
+                    
+                    // icon setup
+                    $('th i').each(function () {
+                        // icon reset
+                        $(this).removeClass().addClass('icon-sort');
+                    });
+                    if ($scope.reverse)
+                        $('th.' + new_sorting_order + ' i').removeClass().addClass('icon-chevron-up');
+                    else
+                        $('th.' + new_sorting_order + ' i').removeClass().addClass('icon-chevron-down');
+                };
+                //START :: 03/08/2016 NPAY-193 Payroll4 issues added by Farhan
+                $scope.sendData = function()
+                {
+                    saveMethod(JSON.stringify($scope.items));
+                };
+                //END :: 03/08/2016 NPAY-193 Payroll4 issues added by Farhan
+                
+                //START :: 20/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan
+                $scope.sendNoPaymentData = function()
+                {
+                	//console.log('Make no paymnet invoked');
+                	//console.log(JSON.stringify($scope.items));
+                    noPaymentMethod(JSON.stringify($scope.items));
+                };
+                //END :: 20/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan
+                               
+            });
+        
+        contrl.$inject = ['$scope', '$filter'];
+		// START :: 09/12/2016 NPAY-239 Payroll4Patch1 issue added by Farhan
+        function callOnAjaxRefresh() 
+        {
+        	callMethod();
+        }
+		// END :: 09/12/2016 NPAY-239 Payroll4Patch1 issue added by Farhan
+		
+		//START :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan
+		function disableButton(objBtn) 
+		{
+		    //objBtn.disabled = true;
+		    objBtn.style.color='#336699';
+		    objBtn.value='Processing...';
+		    $("[id$='continueBPopUp']").prop('disabled', true);
+		    $("[id$='cancelBPopUp']").prop('disabled', true);
+		}
+		function callAngNoPayment()
+		{
+			var scope = angular.element(document.getElementById("AngularControl")).scope();
+		    scope.$apply(function () {
+		    scope.sendNoPaymentData();
+		    });
+		}
+		//END :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan
+        </script>
+       
+        <body>
+ 
+        <apex:pageBlock title="{!$Label.xcdhcm__phpayrollemployeereviewovertime}" id="rows1"> 
+        </apex:pageBlock>             
+            
+            <!-- =========== Binding Controller to Body of Page ============= -->
+            <!-- START :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+            <div ng-controller="ctrlRead" id="AngularControl">
+            <!-- END :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+                <table>
+                      
+                        <tr>
+                          <td>
+                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    
+                           </td>    
+                           <!-- START  :: 27/06/2016 NPAY-130 Review Overtime page  by Jamil --> 
+                             <td>
+                                <apex:outputLabel value="Filter by :" />
+                            </td>
+                            <td>
+                                <apex:selectList size="1" value="{!department}" >
+                                	<apex:selectOptions Value="{!getDepartments }"></apex:selectOptions> 
+                                	<!-- START :: 09/12/2016 NPAY-239 Payroll4Patch1 issue modified by Farhan  -->
+									<apex:actionSupport event="onchange" reRender="b" status="counterStatus" oncomplete="callOnAjaxRefresh();" />
+                                	<!-- END :: 09/12/2016 NPAY-239 Payroll4Patch1 issue modified by Farhan  -->
+								</apex:selectList>
+                               </td> 
+                           <td>
+                                <apex:outputLabel value="" style="margin-left:10px;" />
+                            </td>
+                            <td>
+                                <apex:selectList size="1" value="{!company}" id="b" style="margin-left:10px;">
+                                	<!-- START :: 09/12/2016 NPAY-239 Payroll4Patch1 issue added by Farhan  -->
+									<apex:actionSupport event="onchange" action="{!searchEmployer}" status="counterStatus"/>
+                                	<!-- END :: 09/12/2016 NPAY-239 Payroll4Patch1 issue added by Farhan  -->
+									<apex:selectOptions value="{!Companies}"/>
+                                </apex:selectList>
+                                <apex:actionstatus id="counterStatus">
+                                    <apex:facet name="start">
+                                        <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                                            <div class="waitingHolder" style="top: 100px; width: 91px;">
+                                            <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                                            <span class="waitingDescription">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </apex:facet>
+                                </apex:actionstatus>
+                              </td>     
+                            <!-- END :: 27/06/2016 NPAY-130 Review Overtime page  by Jamil -->   
+                            <td>
+                               <apex:selectList value="{!selectedFilter}" size="1" style="margin-left:10px;width:160px !important;">
+                                    <apex:actionSupport event="onchange" action="{!searchEmployer}"  status="wait"/>
+                                    <apex:selectOptions value="{!overtimeFilters}" />
+                                </apex:selectList> 
+                            </td>
+                        </tr>
+                        
+                    
+                       <tr> 
+                        <td>
+                             &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 
+                        </td>   
+                        <td>
+                                <apex:outputLabel value="Search employee:" />
+                            </td>
+                         <td>  
+                            
+                            <input type="text" ng-model="query" ng-change="search()"  placeholder="Search"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table  table-hover">
+                    <thead>
+                        <tr>
+                            <th class="paySummary">
+                                 <input type="checkbox"  ng-model="selectedAll" ng-click="checkAll()"/> 
+                             </th>
+                           
+                            <th class="Employee_Details__r.Name">Employee&nbsp;<a ng-click="sort_by('ot.xcdhcm__Employee_Details__r.Name ')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <th class="Name">Overtime request ID&nbsp;<a ng-click="sort_by('ot.Name')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <th class="Overtime_Category__c">Reason&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a ng-click="sort_by('ot.xcdhcm__Overtime_Category__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <th class="Date__c">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a ng-click="sort_by('ot.xcdhcm__Date__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <th class="Payablehours">Payable hours&nbsp;<a ng-click="sort_by('ot.xcdhcm__Payable_Hours__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <!--  START :: 07/11/2018 NPAY-639 Overtime presentation added by Farhan -->
+                            <th class="Overtimerate">{!$ObjectType.Overtime__c.Fields.Overtime_payment_rate__c.Label} &nbsp;<a ng-click="sort_by('ot.xcdhcm__Overtime_payment_rate__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <!--  END :: 07/11/2018 NPAY-639 Overtime presentation added by Farhan -->
+                            <!--  START :: 07/11/2018 NPAY-639 Overtime presentation commented by Farhan -->
+                            <!--  
+                            <th class="Rate_of_pay__c">Standard rate&nbsp;<a ng-click="sort_by('ot.xcdhcm__Overtime_Amount__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <th class="Overtime_Amount__c">Times hourly rate&nbsp;<a ng-click="sort_by('ot.xcdhcm__Overtime_Rate__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            -->
+                            <!--  END :: 07/11/2018 NPAY-639 Overtime presentation commented by Farhan -->
+                            <th class="Payable_Hours__c">Payment amount&nbsp;<a ng-click="sort_by('ot.xcdhcm__Payment_Amount__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <th class="'Notes__c">Notes&nbsp;<a ng-click="sort_by('ot.xcdhcm__Notes__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <!-- START :: 01/07/2016 NPAY-145 Overtime and Timesheet added by Farhan -->
+                            <th class="">Authorised for overtime&nbsp;<a ng-click="sort_by('ot.xcdhcm__Rate_of_pay__r.xcdhcm__Role_L__r.xcdhcm__Authorised_for_Overtime__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                            <!-- END :: 01/07/2016 NPAY-145 Overtime and Timesheet added by Farhan -->
+                            <th class="Approval_Status__c">Approval status&nbsp;<a ng-click="sort_by('ot.xcdhcm__Approval_Status__c')"><i class="icon-sort" style="color:black"></i></a></th>
+                           
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <td colspan="6">
+                            <div class="pagination pagination-large pull-left">
+                                <ul>
+                                    <li ng-class="{disabled: currentPage == 0}">
+                                        <a ng-click="prevPage()">Prev</a>
+                                    </li>
+                                    <li ng-repeat="n in range(pagedItems.length)"
+                                    ng-class="{active: n == currentPage}"
+                                    ng-click="setPage()">
+                                        <a ng-bind="n + 1">1</a>
+                                    </li>
+                                    <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                        <a ng-click="nextPage()">Next</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>                       
+                    </tfoot>
+                     <tbody>
+                        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse" class="ng-cloak">
+                            <td>
+			    					<!-- START :: 22/01/2018 Lightning regression 1 & 2 issue list modified by Farhan(code had overriden)-->
+                                   <input type="checkbox" ng-model="item.selected" />
+			    					<!-- END :: 22/01/2018 Lightning regression 1 & 2 issue list modified by Farhan(code had overriden) -->                           
+                           </td>
+                         
+                           <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                           <td>
+                           <a href="/one/one.app#/alohaRedirect/{{item.ot.xcdhcm__Employee_Details__r.Id}}" >{{item.ot.xcdhcm__Employee_Details__r.Name}}</a>
+                           </td>
+                           <!-- END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                            
+                            <td> 
+                             <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+                              <a href="/one/one.app#/alohaRedirect/{{item.ot.Id}}" >{{item.ot.Name}}</a>  
+                              <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->  
+                            </td>
+                            <td style="text-align:left">{{item.ot.xcdhcm__Overtime_Category__c}}</td>
+                            <td style="text-align:left">{{item.ot.xcdhcm__Date__c | date:'dd-MM-yyyy' }}</td>
+                            <td style="text-align:left">{{item.ot.xcdhcm__Payable_Hours__c| number:2 }}</td>
+                            
+                            <!--  START :: 07/11/2018 NPAY-639 Overtime presentation added by Farhan -->
+                            <td style="text-align:left">{{item.ot.xcdhcm__Overtime_payment_rate__c | number : 2}}</td>
+                            <!--  END :: 07/11/2018 NPAY-639 Overtime presentation added by Farhan -->
+                            
+                            <!--  START :: 07/11/2018 NPAY-639 Overtime presentation commented by Farhan -->
+                            <!--   
+                            <td style="text-align:left">{{item.ot.xcdhcm__Overtime_Amount__c | number : 2}}</td>
+                            <td style="text-align:left">{{item.ot.xcdhcm__Overtime_Rate__c | number : 2}}</td>
+                            -->  
+                            <!--  END :: 07/11/2018 NPAY-639 Overtime presentation commented by Farhan -->
+                            <td style="text-align:left"><b>{{item.ot.xcdhcm__Payment_Amount__c | number : 2}}</b></td>
+                            <td style="text-align:left">{{item.ot.xcdhcm__Notes__c}}</td>
+                            <!-- START :: 01/07/2016 NPAY-145 Overtime and Timesheet added by Farhan -->
+                            <td style="text-align:left">{{item.ot.xcdhcm__Rate_of_pay__r.xcdhcm__Role_L__r.xcdhcm__Authorised_for_Overtime__c}}</td>
+                            <!-- END :: 01/07/2016 NPAY-145 Overtime and Timesheet added by Farhan -->
+                            <td style="text-align:left">{{item.ot.xcdhcm__Approval_Status__c}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- START :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+                <apex:outputPanel id="popup">
+            		<apex:outputpanel styleClass="popupBg" rendered="{!displayPopUp}" />
+            		<apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+            		<center>  
+                   		<apex:outputtext value="This functionality is used to remove a cancelled Overtime request and its contra-entry if neither has been paid. Are you sure you would like to do this?" rendered="{!displayPopUp}" escape="false"/>
+                     	<br/><br/>
+                        <apex:commandButton value="{!$Label.xcdhcm__payrollemployeereviewovertimebcontinue}" id="continueBPopUp" style="width: 100px;" onClick="disableButton(this); callAngNoPayment();" rerender="popup,errorId" styleClass="btn"/>
+						<apex:commandButton value="{!$Label.xcdhcm__payrollemployeereviewovertimebcancel}" id="cancelBPopUp" action="{!hidePopUp}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId" styleClass="btn"/>
+			   		</center>
+            		</apex:outputPanel>
+            		<br/>
+        		</apex:outputPanel>
+        		<!-- END :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+        	
+               <!--  <apex:pageBlock title="" id="rows"> 
+                        <apex:pageBlockButtons location="top">  -->
+                   <div style="margin-top: -40px;">   
+                     <center> 
+						<!-- START :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+						<apex:commandButton value="{!$Label.xcdhcm__payrollemployeereviewovertimebmarknopayment}" action="{!showPopUp}" rendered="{!selectedFilter == 'Cancelled'}" rerender="popup"/>
+						<!-- END :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+                     <!-- START :: 03/08/2016 NPAY-193 Payroll4 issues by Farhan  -->
+                     <!-- START :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality modified by Farhan  -->
+                       <apex:commandButton style="display:none;" rendered="{!selectedFilter != 'Cancelled'}">
+                       <!-- END :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality modified by Farhan  -->
+                       		<input type="button" ng-click="sendData()" value="{!$Label.PayRollEmployeeReviewovertimeBSaveandconfirmpayment}" class="btn"/>
+                       </apex:commandButton>
+                      	<!-- END :: 03/08/2016 NPAY-193 Payroll4 issues modified by Farhan
+                       <apex:commandButton value="Save and confirm payment" action="{!processSelected}" id="theButton"/>
+                        -->
+                       <!-- START :: 28/01/2016 NPPD-1072 Payroll 2 issue list added by Shiva -->
+                       <apex:commandButton value="{!$Label.xcdhcm__payrollemployeereviewovertimebback}" action="{!backPayrollPeriod}" rerender="errorId"/>
+                       <!--<apex:commandButton value="Back" action="{!backPayrollEmployees}" rerender="errorId"/>  -->
+                       <!-- END :: 28/01/2016 NPPD-1072 Payroll 2 issue list added by Shiva -->
+                     </center>  
+                   </div> 
+                   <!-- START :: 03/08/2016 NPAY-193 Payroll4 issues added by Farhan  -->
+                   <apex:actionFunction name="saveMethod" action="{!processSelected}" oncomplete="" >
+                            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                   </apex:actionFunction>
+                   	<!-- END :: 03/08/2016 NPAY-193 Payroll4 issues added by Farhan  -->
+                   	<!-- START :: 09/12/2016 NPAY-239 Payroll4Patch1 issue added by Farhan  -->
+		   			<apex:actionFunction name="callMethod" action="{!searchEmployer}"/>
+		   			<!-- END :: 09/12/2016 NPAY-239 Payroll4Patch1 issue added by Farhan  -->
+		   			<!-- START :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+		   			<apex:actionFunction name="noPaymentMethod" action="{!updateNoPaymentOvertime}" oncomplete="" reRender="theForm">
+                            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                   </apex:actionFunction>
+                   <!-- END :: 15/06/2017 NPPD-1353 Improvements to Overtime/Timesheet functionality added by Farhan  -->
+            </div>
+        </body>
+    </html>
+    </apex:form>
+</apex:page>

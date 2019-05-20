@@ -1,0 +1,2785 @@
+<!-- Commented by Farhan
+    P45form is viewed through the Payments tab and View payslips page.
+    P45forleaver page was used to view the P45 from Payment tab and P45Form page was used to view P45 from view payslip page. Both pages had same code. 
+    Upon discussion with Jamil we are currently using P45forleaver page to view the P45 from both Payments tab and View payslip page.  
+    As P45Form page is not used anywhere, this is commented-->
+
+<apex:page >
+<!--  
+<html lang="en" ng-app="demoApp">
+<head>  
+   <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>P45 form</title>
+       <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/> 
+      
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+      
+      
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+            
+            <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+    <script>
+      // define the app
+      var demoApp = angular.module('demoApp', []);
+      // add the controller
+      demoApp.controller('DemoCtrl', function ($scope) {
+          
+            $scope.contacts = {!Contacts}
+            $scope.date = new Date();
+      });
+    </script>
+    
+    <STYLE TYPE="text/css">
+
+        TD{font-family: Arial; font-size: 8.5pt;}
+        p{
+          font-family: Arial;
+        }
+        body{
+          font-family: Arial;
+         }
+        body {
+        height: 297mm;/*297*/
+        width: 210mm;
+    }
+   }
+    </STYLE>
+
+</head>  
+<body class="container" ng-controller="DemoCtrl">
+<div style="margin-left:13pt!important;">
+<div ng-repeat="contact in contacts"> 
+<table border="0" style="border-collapse: collapse;width:100%">
+
+    <tr>
+        <td>
+              <table border="0" style="border-collapse: collapse;width:200%;border-bottom: 9pt solid #000!important;">              
+                 <tr>
+                    
+                     
+                    <td style="float:left;"><p style="font-size:14pt;" >HM Revenue <br/> &#38; Customs</p> </td>   
+                    <td style="float:right;"><p style="font-size:14pt;">P45 Part 1 A </p><p style="font-size:14pt;" > Details of employee leaving work </p><p style="font-size:12pt;" > Copy for employee</p></td>                                                         
+                 </tr>
+            </table>
+        </td>      
+    </tr>
+    <tr>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                     <td style="float:left;width:10px;"><div style="width:10px;border: 1px solid #000;padding-left:15pt"> 1 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Employer PAYE reference </td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 22pt;">Office number</td>
+                                <td></td>  
+                                <td style="padding-left: 22pt;">Reference number </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:80px;">{{contact.RTI_summary__r.HMRC_Off_no__c}} </div></td>  
+                                <td> / </td>
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:152px;"> {{contact.RTI_summary__r.Emplr_PAYE_ref__c}} </div></td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>  
+        <td>
+           <table border="0" style="border-collapse: collapse;width:35%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10px;border: 1px solid #000;padding-left:15pt"> 5 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Student Loan deductions</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Std_Loan_deduction__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        </tr>            
+        <!--- Employee's National Insurance number   
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10px;border: 1px solid #000;padding-left:15pt"> 2 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Employee's National Insurance number</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="float:left;padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.NI_no__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10px;border: 1px solid #000;padding-left:15pt"> 6 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Tax code at leaving date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Tax_Code__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     Employee's National Insurance number                         -->
+        
+    
+   
+    <!--- Title - enter MR, MRS, MISS, MS or other title     
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10px;border: 1px solid #000;padding-left:15pt"> 3 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Title - enter MR, MRS, MISS, MS or other title</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="float:left;padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Title__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                    <td style="float:left;padding-left: 22pt;">If week 1 or month 1 applies, enter 'X' in the box below</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr ng-if="contact.wk_month_indctr__c!=null"  >                                                            
+                               <!-- <td>Week 1/month 1</td><td style="padding-left: 10px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.wk_month_indctr__c}}" aria-label="Readonly field"/>  </td>  
+                                <td style="padding-left: 22pt;">Week 1/month 1</td><td style="padding-left: 2px;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                           </tr> 
+                           
+                           <!--
+                           <tr ng-if="contact.Tax_Week_No__c>0"  >                                                            
+                              
+                                <td style="padding-left: 22pt;">Week 1/month 1</td><td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                           </tr>
+                               
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     Title - enter MR, MRS, MISS, MS or other title                         -->
+        
+        <!--- surname    
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:75%">  
+                 <tr><td style="float:left;padding-left:22pt;"> Surname or family name </td></tr>                       
+                 <tr>
+                     
+                    <td style="float:left;padding-left: 10px;">&nbsp;</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="float:left;padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Surname__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                  
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 7 </div> </td>  
+                       
+                    <td style="float:left;padding-left:22pt;">Last entries on Payroll record/Deductions Working Sheet.<b>Complete only if tax code is cumulative.</b> If there is an 'X'
+<br/>at box 6 there will be no entries here.</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr> 
+                                <td style="float:left;padding-left: 22pt;">Week number</td>                                                             
+                                <td style="padding-left: 22px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.RTI_summary__r.Tax_Week_No__c}}" aria-label="Readonly field"/>  </td>  
+                                <td style="float:left;padding-left: 22pt;">Month number</td>                                                             
+                                <td style="padding-left: 22px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.RTI_summary__r.Tax_Month_No__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     surname                       -->
+        
+        <!--- First Name    
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:75%">  
+                                      
+                 <tr>
+                     
+                   <td style="float:left;padding-left:22pt;">First name(s)</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="float:left;padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Forename__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                    
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>   
+                     <td style="float:left;padding-left: 10px;"></td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;">  </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     First name                      -->
+        
+        <!--- Leaving date DD MM YYYY   
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 4 </div> </td>   
+                     <td style="float:left;padding-left:22pt;">Leaving date DD MM YYYY</td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;">  </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>        </td>
+        <td>
+        
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                       
+                 <tr>
+                    <td style="float:left;width:10px;"></td>  
+                       
+                    <td style="float:left;padding-left: 22pt;">Total pay to date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                                <td style="float:left;padding-left:2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_Pay_to_Dt__c}}</div></td>  
+                                <td style="float:left;padding-left:2pt;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                             
+            </table>
+        </td>  
+                   
+        </tr>
+               
+        <!--      DD MM YYYY                    
+        
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                     
+                     
+                     <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.Dt_of_Leaving__c  | date:'dd'}}</div> </td>  
+                     
+                     <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.Dt_of_Leaving__c  | date:'MM'}}</div> </td>
+                    
+                     <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:60px;">{{contact.Dt_of_Leaving__c  | date:'yyyy'}}</div></td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                       
+                    <td style="float:left;padding-left: 22pt;">Total tax to date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                                <!--START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c -->
+                               <!-- <td style="padding-left: 2px;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td> 
+                             <td style="padding-left: 2px;"><div style="border: 1px solid #000;width:70px;">{{contact.Total_Tax_to_dt__c}}</div></td> 
+                               <!--START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c 
+                                <td style="padding-left: 2px;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--      DD MM YYYY                     -->
+         <!-- start  amulya-     
+        <!-- This employment pay and tax. If no entry here, the amounts 
+         <tr  style="width:100%; border-top:2px solid #000;">
+         <td style="padding-top:10px;">
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 
+                 <!--                    
+                 <tr>
+                   
+                   <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 8 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">This employment pay and tax. If no entry here, the amounts are those shown at box 7.</td>                             
+                    <td style="float:left;padding-left: 10px;"></td>
+                 </tr>
+                 
+                  <tr>
+                    <td style="float:left;width:5px;"><div style="width:16pt;border: 1px solid #000;padding-left:6pt"> 8 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">This employment pay and tax. If no entry here,</td>
+                     <td style="float:left;padding-left:22pt;"> the amounts are those shown at box 7.</td>                             
+                 </tr>
+                 <!--  STRAT Jamil 15 12-2016 Total pay in this employment 
+                 <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                  <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                    <td style="float:left;padding-left: 22pt;">Total pay in this employment</td>                             
+                 </tr>
+                 <!--  END Jamil 15 12-2016  Total pay in this employment
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>                                
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                               <!-- START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c  -->
+                               <!-- <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td>  
+                               <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_Pay_to_Dt__c}}</div></td>
+                               <!--END : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c 
+                                <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                   
+                 <tr>
+                   <td style="float:left;width:10px;"><div style="width:14pt;border: 1px solid #000;padding-left:11pt"> 12 </div> </td>    
+                    <td style="float:left;padding-left:22pt;">Employee s private address</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+ 
+                                <td style="padding-left: 22pt;"><textarea  readonly="readonly" rows="3">{{contact.Address1__c}} , {{contact.Address2__c}}  {{contact.Address3__c}}  {{contact.Address4__c}}</textarea> </td>
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+       <!-- This employment pay and tax. If no entry here, the amounts -->
+       <!-- End amulya-->
+        <!-- Total tax in this employment 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                       
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                    <td style="float:left;padding-left: 22pt;">Total tax in this employment</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>                                
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                                <!-- START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c -->
+                                <!--<td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td>  
+                                <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Total_Tax_to_dt__c}}</div></td>
+                                <!--END : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c 
+                                <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                      
+                 <tr>
+                   <td style="float:left;width:10px;"> </td>    
+                    <td style="float:left;padding-left: 22pt;">Postcode</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+ 
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.UK_postcode__c}}" aria-label="Readonly field"/>  </td>
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+       <!-- Total tax in this employment -->
+       
+       
+               <!-- Works number/Payroll number and Department or branch 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 9 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Works number/Payroll number and Department or </td>
+                    <td style="float:left;padding-left:22pt;">branch (if any)</td>                              
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>                                
+                               <!-- START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c--> 
+                               <!-- <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td> 
+                               <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Payroll_Id__c}}</div></td>                         
+                              <!-- START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c 
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 13  </div> </td>    
+                    <td style="float:left;padding-left:22pt;">
+                        I certify that the details entered in items 1 to 11 on
+                        this form are correct.Employer name and address
+                    </td>                             
+                 </tr>  
+                 <tr>
+                     <td colspan="2" style="padding-left: 5% !important;">
+                        <p style="border: 1px solid #000;width: 22% !important;padding: 2px 2px 2px 2px;">
+                            {{contact.RTI_summary__r.Company_name__c}}<br/>
+                            {{contact.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Address_line_1__c}}<br/>
+                            {{contact.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.City__c}}<br/>
+                            {{contact.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Address_line_2__c}}<br/>
+                            {{contact.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Country__c}}
+                            </p>
+                     </td>
+                 </tr>
+            </table>    
+        </td>            
+        </tr>         
+       <!-- Works number/Payroll number and Department or branch -->
+       
+       
+       
+       
+             <!--Gender. Enter 'X' in the appropriate box 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 10 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Gender. Enter 'X' in the appropriate box</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr ng-if="contact.Gender__c=='M'">                                
+                               
+                                <td style="padding-left: 22pt;">Male</td><td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                                <td style="padding-left: 10px;"></td>
+                                <td style="padding-left: 22pt;">Female</td><td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:30px;">&nbsp;&nbsp;&nbsp;</div></td>    
+                               </tr> 
+                                                   
+                               <tr ng-if="contact.Gender__c=='F'">
+                                  
+                                <td style="padding-left: 22pt;">Male</td><td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:30px;">&nbsp;&nbsp;&nbsp;</div></td>
+                                <td style="padding-left: 10px;"></td>
+                                <td style="padding-left: 22pt;">Female</td><td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:30px; padding-left:8pt">X</div></td>  
+                               </tr>                         
+                              
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           
+        </td>            
+        </tr>         
+       <!-- Gender. Enter 'X' in the appropriate box -->
+       
+       
+                      <!-- Date of birth DD MM YYYY 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 11 </div> </td>  
+                    <td style="float:left;padding-left:25pt;">Date of birth DD MM YYYY</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>                                
+                                
+                                 <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.DOB__c  | date:'dd'}}</div> </td>  
+                     
+                                 <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.DOB__c  | date:'MM'}}</div> </td>
+                    
+                                 <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:60px;">{{contact.DOB__c  | date:'yyyy'}}</div></td>  
+                                                       
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                   
+                 <tr>
+                   <td style="float:left;width:10px;"> </td>    
+                    <td style="float:left;padding-left: 22pt;">Postcode</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+ 
+                               <!--  <td style="padding-left: 10px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{account .Company_name__c}}" aria-label="Readonly field"/>  </td> 
+                                 <td style="padding-left: 22pt;"><textarea  readonly="readonly">{{contact.UK_postcode__c}}</textarea> </td>
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!-- Date of birth DD MM YYYY -->
+        
+        
+        
+                      <!-- Today Date  DD MM YYYY 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"></td>  
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                               
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                   <td style="float:left;width:10px;"></td>    
+                    <td style="float:left;padding-left: 22pt;">Date DD MM YYYY</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                 <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:20px;">{{date   | date:'dd'}}</div> </td>  
+                     
+                                 <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:20px;">{{date   | date:'MM'}}</div> </td>
+                    
+                                 <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:60px;">{{date   | date:'yyyy'}}</div></td>  
+                          </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!-- Today Date  DD MM YYYY -->
+        
+        
+              <!--To the employee 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:300px;"><p style="font-size:10.5pt;"><b>To the employee </b> </p> </td>  
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                              
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                   <td style="float:left;width:300px;"><p style="font-size:9pt;"><b>Tax credits and Universal Credit</b></p> </td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                                
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+          <!--To the employee -->
+          
+                <!--To the employee 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:100%;">The P45 is in 3 parts. Please keep this part (Part 1A) safe.
+Copies are not available. You might need the information in
+Part 1A to fill in a tax return if you are sent one. </td>  
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                              
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                     
+                 <tr>
+                   <td style="float:left;width:100%;">Tax credits and Universal Credit are flexible. They adapt to
+changes in your life, such as leaving a job. If you need to let us
+know about a change in your income, <p style="font-size:8.5pt;"><b>phone 0345 300 3900. </b></p></td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                                
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+          <!--To the employee -->
+          
+          
+                  <!--To the employee
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                  
+                 <tr>
+                    <td style="float:left;width:100%;">Please read the notes in Part 2 that accompany Part 1A.
+The notes give some important information about what you
+should do next and what you should do with Parts 2 and 3 of
+this form. </td>  
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                              
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                    
+                 <tr>
+                   <td style="float:left;width:100%; "><p style="font-size:10.5pt;"><b>To the new employer </b></p> </td>    
+                    <td style="float:left;padding-left: width:100%;">If your new employee gives you this Part 1A, please return it to
+them. Check the information on Parts 2 and 3 of this form is correct
+and transfer the information onto the Payroll record/Deductions
+Working Sheet.</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           
+                                
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+          <!--P45(Online) Part 1A 
+         
+          
+           <tr>
+         <td >
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:100%;"></td>  
+                    <td style="float:left;padding-left: 10px;"><p style="font-size:8.5pt;"><b>P45(Online) Part 1A</b></p></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                              
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                   <td style="float:left;width:100%;"> </td>    
+                    <td style="float:right;padding-right: width:100%;"><p style="font-size:10.5pt;">HMRC 03/15 </p></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                                
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+          <!--P45(Online) Part 1A 
+          </table>
+          <!-- ---P45 Part 2 ------------------
+          <table border="0" style="border-collapse: collapse;width:100%">
+
+    <tr>
+        <td>
+              <table border="0" style="border-collapse: collapse;width:150%;border-bottom: 9pt solid #000!important;">              
+                 <tr>
+                    
+                     
+                    <td style="float:left;"><p style="font-size:14pt;" >HM Revenue <br/> &#38; Customs</p> </td>   
+                    <td style="float:right;"><p style="font-size:14pt;">P45 Part 2 </p><p style="font-size:14pt;" > Details of employee leaving work</p><p style="font-size:12pt;" > Copy for new employer</p></td>                                                         
+                 </tr>
+            </table>
+        </td>      
+    </tr>
+    
+    <tr>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 1 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Employer PAYE reference </td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 22pt;">Office number</td>
+                                <td></td>  
+                                <td style="padding-left: 22pt;">Reference number </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:80px;">{{contact.RTI_summary__r.HMRC_Off_no__c}} </div> </td>  
+                                <td> / </td>
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:152px;"> {{contact.RTI_summary__r.Emplr_PAYE_ref__c}} </div> </td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>  
+        <td>
+           <table border="0" style="border-collapse: collapse;width:35%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 5 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Student Loan deductions</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Std_Loan_deduction__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        <!--- Employee's National Insurance number    
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 2 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Employee's National Insurance number</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="float:left;padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.NI_no__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 6 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Tax code at leaving date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Tax_Code__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     Employee's National Insurance number                         
+        
+    </tr>
+   
+    <!--- Title - enter MR, MRS, MISS, MS or other title     
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 3 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Title - enter MR, MRS, MISS, MS or other title</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="float:left;padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Title__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                    <td style="float:left;padding-left: 22pt;">If week 1 or month 1 applies, enter 'X' in the box below</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr ng-if="contact.wk_month_indctr__c!=null"  >                                                            
+                               <!-- <td>Week 1/month 1</td><td style="padding-left: 10px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.wk_month_indctr__c}}" aria-label="Readonly field"/>  </td>  
+                                <td style="padding-left: 22pt;">Week 1/month 1</td><td style="padding-left: 2px;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                           </tr>
+                           <!-- 
+                           <tr ng-if="contact.Tax_Week_No__c>0"  >                                                            
+                               
+                                <td style="padding-left: 22pt;">Week 1/month 1</td><td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                           </tr>
+                                 
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     Title - enter MR, MRS, MISS, MS or other title                         -->
+        
+        <!--- surname   - 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:75%">  
+                 <tr><td style="float:left;padding-left:22pt;"> Surname or family name </td></tr>                       
+                 <tr>
+                     
+                    <td style="float:left;padding-left: 10px;">&nbsp;</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="float:left;padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Surname__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 7 </div> </td>  
+                       
+                    <td style="float:left;padding-left:22pt;">Last entries on Payroll record/Deductions Working Sheet.<b>Complete only if tax code is cumulative.</b> If there is an 'X'
+<br/>at box 6 there will be no entries here.</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr> 
+                                <td style="float:left;padding-left: 22pt;">Week number</td>                                                             
+                                <td style="padding-left: 22px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.RTI_summary__r.Tax_Week_No__c}}" aria-label="Readonly field"/>  </td>  
+                                <td style="float:left;padding-left: 22pt;">Month number</td>                                                             
+                                <td style="padding-left: 22px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.RTI_summary__r.Tax_Month_No__c}}" aria-label="Readonly field"/>  </td>   
+                           </tr>       
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     surname                       -->
+        
+        <!--- First Name     
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:75%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                     
+                   <td style="float:left;padding-left:22pt;">First name(s)</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="float:left;padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Forename__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>   
+                     <td style="float:left;padding-left: 10px;"></td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;">  </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     First name                      -->
+        
+        <!--- Leaving date DD MM YYYY     
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 4 </div> </td>   
+                     <td style="float:left;padding-left:22pt;">Leaving date DD MM YYYY</td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;">  </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"></td>  
+                       
+                    <td style="float:left;padding-left: 22pt;">Total pay to date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                                <td style="float:left;padding-left:2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_Pay_to_Dt__c}}</div></td>  
+                                <td style="float:left;padding-left:2pt;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--      DD MM YYYY                     -->
+        <!-- start  amulaya  
+        
+         <tr style="width:100%; border-bottom:2px solid #000;">
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                     
+                     
+                     <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.Dt_of_Leaving__c  | date:'dd'}}</div> </td>  
+                     
+                     <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.Dt_of_Leaving__c  | date:'MM'}}</div> </td>
+                    
+                     <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:60px;">{{contact.Dt_of_Leaving__c  | date:'yyyy'}}</div></td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                       
+                    <td style="float:left;padding-left: 22pt;">Total tax to date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                                <!--START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c -
+                               <!-- <td style="padding-left: 2px;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td>  -
+                               <td style="padding-left: 2px;"><div style="border: 1px solid #000;width:70px;">{{contact.Total_Tax_to_dt__c}}</div></td>
+                                <!--END : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c -
+                                <td style="padding-left: 2px;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--      DD MM YYYY                     -->
+        <!-- End  amulya-->
+                  
+                  <!--To the employee 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                 <tr><td> <br/> </td></tr>  
+                 <tr>
+                   <td style="float:left;width:100%; "><p style="font-size:10.5pt;"><b>To the employee </b></p> </td>
+                 </tr>                        
+                 <tr>
+                    <td style="float:left;width:100%;"><p style="font-size:8.5pt;">This form is important to you. Take good care of it
+and keep it safe. Copies are not available. Please keep
+Parts 2 and 3 of the form together and do not alter them
+in any way. </p></td>  
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                
+                                 <td style="float:left;width:100%; "><p style="font-size:9pt;">Going to a new job </p> </td>  
+                                                           
+                           </tr> 
+                           <tr>                                
+                                
+                                 <td style="float:left;width:100%; "><p style="font-size:8.5pt;">Give Parts 2 and 3 of this form to your new employer,
+or you will have tax deducted using the emergency
+code and may pay too much tax. If you do not want
+your new employer to know the details on this form,
+send it to your HM Revenue &#38; Customs (HMRC) office
+immediately with a letter saying so and giving the
+name and address of your new employer. HMRC can
+make special arrangements, but you may pay too
+much tax for a while as a result of this. </p> </td>  
+                                                           
+                           </tr>
+                           <tr>                                
+                                
+                                 <td style="float:left;width:100%; "><p style="font-size:9pt;">Going abroad </p> </td>  
+                                                           
+                           </tr>
+                           <tr>                                
+                                
+                                 <td style="float:left;width:100%; "><p style="font-size:8.5pt;">If you are going abroad or returning to a country
+outside the UK fill in form P85, â€˜Leaving the United Kingdomâ€™, go to
+<b>www.hmrc.gov.uk/contactus/contact-forms.htm</b> </p> </td>  
+                                                           
+                           </tr>
+                            <tr>                                
+                                
+                                 <td style="float:left;width:100%; "><p style="font-size:9pt;">Becoming self-employed </p> </td>  
+                                                           
+                           </tr> 
+                           <tr>                                
+                                
+                                 <td style="float:left;width:100%; "><p style="font-size:8.5pt;">You must register with HMRC within 3 months of
+becoming self-employed or you could incur a penalty.
+To register as newly self-employed, go to
+<b>www.hmrc.gov.uk/selfemployed/index.shtml</b> </p> </td>  
+                                                           
+                           </tr> 
+                              
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                 <tr><td> <br/> </td></tr>
+                 <tr><td style="float:left;width:100%; "><p style="font-size:9pt;">Claiming Jobseeker's Allowance or</p></td></tr>
+
+                 <tr><td style="float:left;width:100%; "><p style="font-size:9pt;">Employment and Support Allowance (ESA)</p></td></tr>
+                 <tr><td style="float:left;width:100%; "><p style="font-size:8.5pt;">Take this form to your Jobcentre Plus office. They will pay you
+any tax refund you may be entitled to when your claim ends,
+or at 5 April if this is earlier.</p></td></tr>
+                  <tr><td style="float:left;width:100%; "><p style="font-size:9pt;">Not working and not claiming Jobseeker's Allowance or</p></td></tr>
+                  <tr><td style="float:left;width:100%; "><p style="font-size:9pt;">Employment and Support Allowance (ESA)</p></td></tr>
+                  <tr><td style="float:left;width:100%; "><p style="font-size:8.5pt;">If you have paid tax and wish to claim a refund fill in
+form P50, â€˜Claiming tax back when you have stopped workingâ€™,
+go to <b>www.hmrc.gov.uk/contactus/contact-forms.htm</b></p></td> </tr>
+                
+                 <tr><td style="float:left;width:100%; "><p style="font-size:10.5pt;"><b> Help </b></p></td></tr>
+                 <tr>
+                 <td style="float:left;padding-left: width:100%;"><p style="font-size:8.5pt;">If you need more help, go to
+<b>www.hmrc.gov.uk/individuals/index.shtml</b></p></td>  
+                 </tr>                        
+                 <tr>
+                   <td style="float:left;width:100%; "><p style="font-size:10.5pt;"><b>To the new employer </b></p> </td>    
+                    <td style="float:left;padding-left: width:100%;"><p style="font-size:8.5pt;">Check this form, record the start date and report it to HMRC in the
+first Full Payment Submission for your employee. Prepare a Payroll
+record/Deductions Working Sheet. Follow the instructions at
+<b>www.hmrc.gov.uk/payerti/getting-started/payroll-system.htm</b></p></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                                
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+          <!--P45(Online) Part 2 
+          <p style="page-break-after:always;"></p>
+           <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">
+                 <tr><td> <br/> </td></tr>                       
+                 <tr>
+                    <td style="float:left;width:100%;"></td>  
+                    <td style="float:left;padding-left: 10px;"><p style="font-size:8.5pt;"><b>P45(Online) Part 2</b></p></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                      
+                       
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                              
+                       </table>
+                        
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                        
+                 <tr>
+                   <td style="float:left;width:100%;"> </td>    
+                    <td style="float:right;padding-right: width:100%;"><p style="font-size:10.5pt;">HMRC 03/15 </p></td>                             
+                 </tr>
+                 
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                                
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+          <!--P45(Online) Part 2 -
+
+</table>
+          
+          <!-- end of P45 Part 2 ---
+          <!--- P45 Part 3 ----
+          <p style="page-break-after:always;"></p>
+          <table border="0" style="border-collapse: collapse;width:100%">
+   <!-- 
+    <tr >
+        <td> 
+             <table border="0" style="border-collapse: collapse;width:200%;border-bottom: 9pt solid #000!important;float:left;margin-top:400px;">               
+                 <tr>
+                    <td style="float:left;"><p style="font-size:14pt;" >HM Revenue <br/> &#38; Customs</p> </td>   
+                    <td style="float:right;"><p style="font-size:14pt;">P45 Part 3 </p><p style="font-size:14pt;" >New employee details </p><p style="font-size:12pt;" > For completion by new employer</p></td>                             
+                 </tr>
+            </table>
+        </td>       
+    </tr>
+  -
+   <tr>
+        <td>
+              <table border="0" style="border-collapse: collapse;width:150%;border-bottom: 9pt solid #000!important;">              
+                 <tr>
+                    
+                     
+                    <td style="float:left;"><p style="font-size:14pt;" >HM Revenue <br/> &#38; Customs</p> </td>   
+                    <td style="float:right;"><p style="font-size:14pt;">P45 Part 3 </p><p style="font-size:14pt;" > New employee details</p><p style="font-size:12pt;" > For completion by new employer</p></td>                                                         
+                 </tr>
+            </table>
+        </td>      
+    </tr>
+    <tr>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                <!--  Jamil 26-09-2016 <tr><td> <br/> </td></tr>                     
+                 <tr>
+                    <td style="float:left;width:15pt;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 1 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Employer PAYE reference </td>                             
+                 </tr>
+                 <tr>
+                   
+                    <td style="float:left;"> <div style=";width:5pt;"></div> </td>  
+                    <td style="float:left;"> 
+                   
+                       <table>  
+                           <tr>                                
+                                <td style="padding-left: 22pt;">Office number </td>
+                                <td></td>  
+                                <td style="padding-left: 22pt;">Reference number </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <!-- <td style="padding-left:22pt;"><div style="text-align:right ;border: 1pt solid #000;width:80pt;">{{account .HMRC_Off_no__c}} </div> </td>  
+                                 <td style="padding-left:22pt;"><div style="border: 1pt solid #000;width:80pt;">{{contact.RTI_summary__r.HMRC_Off_no__c}} </div> </td> 
+                                <td> &nbsp;/ </td>
+                                <td style="padding-left:22pt;"><div style="border: 1pt solid #000;width:152pt;"> {{contact.RTI_summary__r.Emplr_PAYE_ref__c}} </div> </td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>  
+        <td>  
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                       
+                 <tr>
+                    <td style="float:left;width:22pt;"><div style="width:10pt;border: 1pt solid #000;padding-left:15pt"> 5 </div> </td>  
+                    <td style="float:left;padding-left: 22pt;">Student Loan deductions</td>                             
+                 </tr>  
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5pt;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                       <!-- Jamil 26-09-2016
+                           <tr>                                
+                                <td style="padding-left: 10pt;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10pt;"> </td>                            
+                           </tr> 
+                             
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Std_Loan_deduction__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        <!--- Employee's National Insurance number    
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                        
+                 <tr> 
+                    <td style="float:left;width:22pt;"><div style="width:10pt;border: 1pt solid #000;padding-left:15pt"> 2 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Employee's National Insurance number</td>                             
+                 </tr>
+                 <tr>  
+                    <td style="float:left;"> <div style=";width:5pt;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                       <!-- Jamil 26-09-2016
+                           <tr>                                
+                                <td style="padding-left: 10pt;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10pt;"> </td>                            
+                           </tr> 
+                           
+                           <tr>                                                             
+                                <td style="padding-left:22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.NI_no__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10pt;"><div style="width:10pt;border: 1pt solid #000;padding-left:15pt;"> 6 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Tax code at leaving date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5pt;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10pt;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10pt;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Tax_Code__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                                
+            </table>
+        </td>            
+        </tr>         
+        <!--     Employee's National Insurance number                        
+        
+    </tr>
+   
+    <!--- Title - enter MR, MRS, MISS, MS or other title    
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                        
+                 <tr>
+                    <td style="float:left;width:22pt;"><div style="width:10pt;border: 1pt solid #000;padding-left:15pt"> 3 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Title - enter MR, MRS, MISS, MS or other title</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5pt;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10pt;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10pt;"> </td>                            
+                           </tr>  
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Title__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>  
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                    
+                 <tr>
+                    <td style="float:left;width:10px;"></td>  
+                    <td style="float:left;padding-left: 22pt;">If week 1 or month 1 applies, enter 'X' in the box below</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <!--
+                           <tr>                                                             
+                                 <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.wk_month_indctr__c}}" aria-label="Readonly field"/>  </td>  
+                               
+                                <tr ng-if="contact.wk_month_indctr__c!=null"  >                                                            
+                               <!-- <td>Week 1/month 1</td><td style="padding-left: 10px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.wk_month_indctr__c}}" aria-label="Readonly field"/>  </td> - 
+                                <td style="padding-left: 22pt;">Week 1/month 1</td><td style="padding-left: 2px;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                           </tr> 
+                           <!--
+                           <tr ng-if="contact.Tax_Week_No__c>0"  >                                                            
+                               
+                                <td style="padding-left: 22pt;">Week 1/month 1</td><td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                           </tr>
+                           -->    
+                          <!-- </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     Title - enter MR, MRS, MISS, MS or other title                         -->
+        
+        <!--- surname     
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:75%">  
+                 <tr><td style="float:left;padding-left: 22pt;"> Surname or family name </td></tr>                       
+                 <tr>
+                     
+                    <td style="float:left;padding-left: 10px;">&nbsp;</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Surname__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 7 </div> </td>  
+                       
+                    <td style="float:left;padding-left:22pt;">Last entries on Payroll record/Deductions Working Sheet.Complete only if tax code is cumulative. If there is an 'X'
+<br/>at box 6 there will be no entries here.</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr> 
+                                <td style="float:left;padding-left: 22pt;">Week number</td>                                                             
+                               <td style="padding-left: 22px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.RTI_summary__r.Tax_Week_No__c}}" aria-label="Readonly field"/>  </td>  
+                                <td style="float:left;padding-left: 22pt;">Month number</td>                                                             
+                                <td style="padding-left: 22px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.RTI_summary__r.Tax_Month_No__c}}" aria-label="Readonly field"/>  </td>    
+                           </tr>       
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     surname                       -->
+        
+        <!--- First Name     
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:75%">  
+                                    
+                 <tr>
+                     
+                    <td style="float:left;padding-left: 22pt;">First name(s)</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.Forename__c}}" aria-label="Readonly field"/>  </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"></td>   
+                     <td style="float:left;padding-left: 10px;"></td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--     First name                      -->
+        
+        <!--- Leaving date DD MM YYYY    
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 4 </div> </td>   
+                     <td style="float:left;padding-left:22pt;">Leaving date DD MM YYYY</td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                       
+                 <tr>
+                    <td style="float:left;width:10px;"></td>  
+                       
+                    <td style="float:left;padding-left: 22pt;">Total pay to date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr> 
+                                                             
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                                <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_Pay_to_Dt__c}}</div></td>  
+                                <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                             
+                             
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--      DD MM YYYY                    
+        
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                       
+                 <tr>
+                     
+                    <!-- 
+                     <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.Dt_of_Leaving__c  | date:'dd'}}</div> </td>  
+                     
+                     <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:20px;">{{contact.Dt_of_Leaving__c  | date:'MM'}}</div> </td>
+                    
+                     <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:60px;">{{contact.Dt_of_Leaving__c  | date:'yyyy'}}</div></td>    
+                    
+                     
+                     <td style="float:left;padding-left:22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.Dt_of_Leaving__c  | date:'dd'}}</div> </td>  
+                     
+                     <td style="float:left;padding-left:2pt;"><div style="border: 1px solid #000;width:20px;">{{contact.Dt_of_Leaving__c  | date:'MM'}}</div> </td>
+                    
+                     <td style="float:left;padding-left:2pt;"><div style="border: 1px solid #000;width:60px;">{{contact.Dt_of_Leaving__c  | date:'yyyy'}}</div></td>    
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                       
+                    <td style="float:left;padding-left: 22pt;">Total tax to date</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                                 <!--START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c 
+                               <!-- <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td>  
+                               <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Total_Tax_to_dt__c}}</div></td> 
+                                <!--END : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c 
+                                <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!--      DD MM YYYY                     -->
+        
+        <!-- This employment pay and tax. If no entry here, the amounts 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                       
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                    <td style="float:left;padding-left: 22pt;"><b>To the new employer You will need these details to complete your Full Payment Submission</b></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 8 </div></td> 
+                    
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="float:left;padding-left:22pt;">New employer PAYE reference </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 22pt;">Office number </td>
+                                <td></td>  
+                                <td style="padding-left: 22pt;">Reference number </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:50px;">&nbsp; </div> </td>  
+                                <td> / </td>
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:152px;"> &nbsp; </div> </td>                        
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>        
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                     
+                 <tr>
+                   <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 15 </div> </td>    
+                    <td style="float:left;padding-left:22pt;">Employee s private address</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+ 
+                                <td style="padding-left: 22pt;"><textarea  readonly="readonly">{{contact.Address1__c}} , {{contact.Address2__c}}  {{contact.Address3__c}}  {{contact.Address4__c}}</textarea> </td>
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+       <!-- 
+        If no entry here, the amounts -->
+       
+        <!-- Date new employment started DD MM YYYY 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:10pt;border: 1px solid #000;padding-left:15pt"> 9 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Date new employment started DD MM YYYY</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>                                
+                               <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:20px;">&nbsp;</div> </td>  
+                     
+                                 <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:20px;">&nbsp;</div> </td>
+                    
+                                 <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:60px;">&nbsp;</div></td>    
+                                 <td style="float:left;padding-left: 10px;"></td> 
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:50%">  
+                                       
+                 <tr>
+                   <td style="float:left;width:10px;"> </td>    
+                    <td style="float:left;padding-left: 22pt;">Postcode</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+ 
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.UK_postcode__c}}" aria-label="Readonly field"/>  </td>
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+       <!-- Date new employment started DD MM YYYY -->
+       
+       
+               <!-- Works number/Payroll number and Department or branch 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 10 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Works number/Payroll number and Department or branch</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>                                
+                                <!--START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c -->
+                                <!-- <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td>  
+                                 <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:70px;">&nbsp;</div></td> 
+                                <!--END : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c  
+                                                       
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 16 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Gender. Enter 'X' in the appropriate box</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr ng-if="contact.Gender__c=='M'">                                
+                               
+                                <td style="padding-left: 22pt;">Male</td><td style="padding-left: 2px;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                                <td style="padding-left: 22pt;">Female</td><td style="padding-left: 2px;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">&nbsp;&nbsp;&nbsp;</div></td>    
+                               </tr> 
+                                                   
+                               <tr ng-if="contact.Gender__c=='F'">
+                                  
+                                <td style="padding-left: 22pt;">Male</td><td style="padding-left: 2px;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">&nbsp;&nbsp;&nbsp;</div></td>
+                                <td style="padding-left: 22pt;">Female</td><td style="padding-left: 2px;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>  
+                               </tr>                         
+                              
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           
+        </td>            
+        </tr>             
+       <!-- Works number/Payroll number and Department or branch -->
+       
+       
+       
+       
+             <!--Enter 'P' here if employee will not be paid by you between the date employment began and the 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 11 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Enter 'P' here if employee will not be paid by you
+</td> 
+<td style="float:left;padding-left:22pt;">between the date employment began and the next 5 April.</td>                               
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                    
+                       <table>
+                       <!--
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                        
+                               <tr>
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:70px;">&nbsp;</div></td>  
+                               </tr>                         
+   
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 17 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Date of birth DD MM YYYY</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                       
+                       <!--
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr>
+                            
+                           <tr>                                                             
+                               <tr>                                
+                                
+                                 <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:20px;">{{contact.DOB__c  | date:'dd'}}</div> </td>  
+                     
+                                 <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:20px;">{{contact.DOB__c  | date:'MM'}}</div> </td>
+                    
+                                 <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:60px;">{{contact.DOB__c  | date:'yyyy'}}</div></td>  
+                                                       
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+       <!-- Enter 'P' here if employee will not be paid by you between the date employment began and the -->
+       
+       
+          <!-- Date of birth DD MM YYYY 
+         <tr>
+         
+         </tr>         
+        <!-- Date of birth DD MM YYYY 
+        
+        
+        
+                      <!-- Today Date  DD MM YYYY 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                      
+                 <tr>
+                    <td style="float:left;width:10px;"></td>  
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                               
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                      
+                 <tr>
+                   <td style="float:left;width:10px;"></td>    
+                    <td style="float:left;padding-left: 10px;"><b>Declaration</b></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                             </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+        <!-- Today Date  DD MM YYYY -->
+        
+        
+         <!--Enter tax code in use if different to the tax code at box 6. 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                   
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 12 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">Enter tax code in use if different to the tax code at box 6.</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                             
+                               <tr>
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:60px;">&nbsp;</div></td>   
+                               </tr>                         
+                              
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                        
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 18 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">I have prepared a Payroll record/Deductions Working
+                    </td> 
+                    <td style="float:left;padding-left:22pt;">Sheet in accordance with the details above.</td>                               
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>                                
+                                     
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+       <!-- Enter tax code in use if different to the tax code at box 6. -->
+       
+       
+       
+         
+        
+         <!--If week 1 or month 1 applies, enter 'X' in the box below 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                       
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                    <td style="float:left;padding-left: 22pt;">If week 1 or month 1 applies, enter 'X' in the box below</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                                             
+                               <tr ng-if="contact.wk_month_indctr__c!=null"  >                                                            
+                               <!-- <td>Week 1/month 1</td><td style="padding-left: 10px;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.wk_month_indctr__c}}" aria-label="Readonly field"/>  </td> - 
+                                <td style="padding-left: 22pt;">Week 1/month 1</td><td style="padding-left: 2px;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">&nbsp;</div></td>
+                           </tr> 
+                           
+                           <!--
+                           <tr ng-if="contact.Tax_Week_No__c>0"  >                                                            
+                              
+                                <td style="padding-left: 22pt;">Week 1/month 1</td><td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:30px;padding-left:8pt">X</div></td>
+                           </tr>
+                                                       
+                              
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+            <table border="0" style="border-collapse: collapse;width:150%">  
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 13  </div> </td>    
+                    <td style="float:left;padding-left:22pt;">
+                        I certify that the details entered in items 1 to 11 on
+                        this form are correct.Employer name and address
+                    </td>                             
+                 </tr>  
+                 <tr>
+                     <td colspan="2" style="padding-left: 5% !important;">
+                        <p style="border: 1px solid #000;width: 22% !important;padding: 2px 2px 2px 2px;">
+                            {{contact.RTI_summary__r.Company_name__c}}<br/>
+                            {{contact.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Address_line_1__c}}<br/>
+                            {{contact.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.City__c}}<br/>
+                            {{contact.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Address_line_2__c}}<br/>
+                            {{contact.RTI_summary__r.Payroll_Period__r.XCD_PAY_Payroll__r.Employer__r.Country__c}}
+                            </p>
+                     </td>
+                 </tr>
+            </table>                        
+        </td>    
+        </tr>         
+       <!-- If week 1 or month 1 applies, enter 'X' in the box below -->
+       
+       
+        <!--If week 1 or month 1 applies, enter 'X' in the box below 
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                       
+                 <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 13 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">If the tax figure you are entering on Payroll
+</td>
+<td style="float:left;padding-left:22pt;">record/Deductions Working Sheet differs from box 7</td>                               
+                 </tr>
+                 <tr>
+                    <td style="float:left;padding-left:22pt;"> please enter the figure here. </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>
+                               </tr>                         
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"></td>  
+                    <td style="float:left;padding-left: 10px;"></td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                           <tr>                                                             
+                               <tr>                                
+                                     
+                           </tr>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr>         
+       <!-- If the tax figure you are entering on Payroll record/Deductions Working Sheet differs from box 7 -->
+       
+       
+          <!--- Postcode   -
+        
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                  <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                             <tr>                                
+                                <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:10px;">&pound;</div></td>
+                                <!-- START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c-->
+                                <!-- <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td> --> 
+                                <!-- <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:70px;"></div></td> 
+                                 <td style="padding-left: 2pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="" aria-label="Readonly field"/>  </td>  
+                                <!-- END : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c-
+                                <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:10px;">p</div></td>                            
+                  </tr>
+                           
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                    
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                       
+                    <td style="float:left;padding-left: 22pt;">Postcode</td>                             
+                 </tr>
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                               
+                                 <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE="{{contact.RTI_summary__r.Postal_zipcode__c}}" aria-label="Readonly field"/>  </td>
+                                                            
+                           </tr> 
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+        </td>            
+        </tr> 
+        <!--- Postcode   --->
+        
+        
+        
+                  <!--- New employee's job title or job description   --- 
+        
+         <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                      
+                  <tr>
+                    <td style="float:left;width:10px;"><div style="width:16pt;border: 1px solid #000;padding-left:11pt"> 14 </div> </td>  
+                    <td style="float:left;padding-left:22pt;">New employee's job title or job description</td>
+                    </tr>
+                    <tr>
+                    <td style="float:left;"> 
+                       <table>
+                              <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                              </tr>                             
+                                <tr>                                
+                                <!--START : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c -->
+                               <!-- <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:70px;">{{contact.Taxable_pay_in_period__c}}</div></td>  -->
+                               <!-- <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:70px;">NA</div></td> --
+                                <td style="padding-left: 22pt;"><INPUT ng-readonly="true" NAME="realname1" VALUE=" " aria-label="Readonly field"/>  </td>  
+                                <!--END : :NPAY239 13/12/2016 P45 field problem Total_Tax_to_dt__c --                           
+                              </tr>
+                           
+                           
+                           <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr>      
+                       </table>
+                    </td>                                                                
+                 </tr>                                              
+            </table>
+            </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:10px;"> </td>  
+                       
+                    <td style="float:left;padding-left: 22pt;">Date DD MM YYYY</td>                             
+                 </tr>
+                 
+                 <!-- Jamil 26-09-2016
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                 -- 
+                       <table>
+                           <tr>                                
+                             <td style="padding-left: 22pt;"><div style="border: 1px solid #000;width:20px;">{{date  | date:'dd'}}</div> </td>  
+                     
+                             <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:20px;">{{date    | date:'MM'}}</div> </td>
+                    
+                             <td style="padding-left: 2pt;"><div style="border: 1px solid #000;width:60px;">{{date    | date:'yyyy'}}</div></td>
+                          </tr> 
+                          <tr>                                                             
+                                <td style="padding-left: 10px;"> </td>  
+                           </tr> 
+                             
+                       </table>
+                   <!-- Jamil 26-09-2016    
+                    </td>                                                                
+                 </tr> 
+                 -                                           
+            </table>
+        </td>            
+        </tr> 
+        <!--- New employee's job title or job description   --->
+          
+          <!--P45(Online) Part 3 -
+          
+           <tr>
+         <td>
+           <table border="0" style="border-collapse: collapse;width:100%">  
+                                     
+                 <tr>
+                    <td style="float:left;width:100%;"></td>  
+                   <!-- <td style="float:left;padding-left: 10px;">P45(Online) Part 3</td> -
+                     <td style="float:left;padding-left: 10px;"><p style="font-size:8.5pt;"><b>P45(Online) Part 3</b></p></td>                              
+                 </tr>
+                 <!-- Jamil 26-09-2016
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td> 
+                    <td style="float:left;"> 
+                       
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                              
+                       </table>
+                    </td>                                                                
+                 </tr> 
+                 -                                             
+            </table>
+        </td>
+        <td>
+           <table border="0" style="border-collapse: collapse;width:150%">  
+                                       
+                 <tr>
+                   <td style="float:left;width:100%;"> </td>    
+                   
+                    <td style="float:right;padding-right: width:100%;"><p style="font-size:10.5pt;">HMRC 03/15 </p></td>                               
+                 </tr>
+                 <!-- Jamil 26-09-2016   
+                 <tr>
+                    <td style="float:left;"> <div style=";width:5px;"></div> </td>
+                    
+                    
+                    
+                    <td style="float:left;"> 
+                       <table>
+                           <tr>                                
+                                <td style="padding-left: 10px;"> </td>
+                                <td>&nbsp;</td>  
+                                <td style="padding-left: 10px;"> </td>                            
+                           </tr> 
+                                
+                       </table>
+                    </td> 
+                                                                                
+                 </tr>  
+                  -                                            
+            </table>
+        </td>            
+        </tr>
+             
+          <!--P45(Online) Part 3 --
+
+</table>
+          <!-- end of part 3 ---
+
+</div>
+</div>  
+</body>  
+</html> -->
+</apex:page>

@@ -1,0 +1,1829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Stores employee salary reviews for up to 3 levels of reviewer
+When published, creates new Salary and Bonus records</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>Private</externalSharingModel>
+    <fieldSets>
+        <fullName>xcdhcm__ViewSalaryReview</fullName>
+        <availableFields>
+            <field>xcdhcm__Calculate_date_difference__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Company__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Compensation__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Conversion_rate__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CreatedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>CurrencyIsoCode</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employee_dept__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employee_leaving_date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employee_number__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Employment_status__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Id</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>IsDeleted</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastActivityDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedById</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>LastModifiedDate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Last_annual_bonus__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Last_bonus_award_date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Leaver_before_data_retention_period__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Line_manager__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Location__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>Name</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>OwnerId</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Payroll_no__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Performance_rating__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Performance_review__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_amount_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_amount_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_amount_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_amount_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_per_salary_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_per_salary_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_per_salary_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_per_salary_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_per_target_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_per_target_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_per_target_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_bonus_per_target_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_increase_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_increase_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_increase_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_increase_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_increase_per_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_increase_per_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_increase_per_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_increase_per_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_next_year_target_bonus_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_next_year_target_bonus_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_next_year_target_bonus_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_next_year_target_bonus_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_salary_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_salary_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_salary_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Proposed_salary_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Published_bonus__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Published_bonus_status__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Published_compensation__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Published_compensation_status__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Review_meeting_date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Review_notes_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Review_notes_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Review_notes_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Review_notes_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Review_status__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewe_title_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer1_email__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer2_email__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer3_email__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_1_submitted__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_1_title__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_2__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_2_submitted__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_2_title__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_3_submitted__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_3_title__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_4__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_4_email__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_4_name__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_4_submitted__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_4_title__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_title_1__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Reviewer_title_3__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Salary_Review__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Salary_review_name__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__Start_date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>SystemModstamp</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <availableFields>
+            <field>xcdhcm__View_salary_review__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </availableFields>
+        <description>used in salaryrevie</description>
+        <displayedFields>
+            <field>xcdhcm__Job_title__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Current_salary__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Effective_from__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Last_bonus_payment__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Target_bonus__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Target_bonus_per__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Status__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>xcdhcm__Continuous_service_date__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>ViewSalaryReview</label>
+    </fieldSets>
+    <fields>
+        <fullName>xcdhcm__Calculate_date_difference__c</fullName>
+        <deprecated>false</deprecated>
+        <description>If the current comp effective from is less than 365 days before the Salary Review effective from, highlight the current Comp effective from in bold</description>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Salary_Review__r.xcdhcm__Salary_increase_effective_from__c - xcdhcm__Effective_from__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Calculate date difference</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Company__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Company</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Compensation__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Compensation</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>xcdhcm__Compensation__c.Id</field>
+                <operation>notEqual</operation>
+                <value></value>
+            </filterItems>
+            <isOptional>true</isOptional>
+        </lookupFilter>
+        <referenceTo>xcdhcm__Compensation__c</referenceTo>
+        <relationshipLabel>Employee Salary Reviews</relationshipLabel>
+        <relationshipName>Employee_Salary_Reviews</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Continuous_service_date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The reviewer may be interested in how long the person has been with the company</description>
+        <externalId>false</externalId>
+        <label>Continuous service date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Conversion_rate__c</fullName>
+        <defaultValue>1</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Use field when bonuses are awarded in Corporate currency.  Set the rate equal to the Employee&apos;s Local Currency Conversion Rate (see Manage Currencies or update from Company).  Note Currency values must not be changed while the Salary Review is under way.</inlineHelpText>
+        <label>Bonus currency conversion rate</label>
+        <precision>16</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Current_salary__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Current salary</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Effective_from__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Effective from</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_dept__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Role_L__r.xcdhcm__Department_L__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Department</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_leaving_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Employee_leaving_date__c</formula>
+        <label>Employee leaving date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employee_number__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee number</label>
+        <length>30</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Employment_status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field used to display employment status.</description>
+        <externalId>false</externalId>
+        <formula>TEXT(xcdhcm__Compensation__r.xcdhcm__Role_L__r.xcdhcm__Employment_Status__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Employment status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Job_title__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Job title associated with the compensation record</inlineHelpText>
+        <label>Job title</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Last_annual_bonus__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Links to last bonus award record</inlineHelpText>
+        <label>Last annual bonus</label>
+        <referenceTo>xcdhcm__Benefit__c</referenceTo>
+        <relationshipLabel>Employee Salary Reviews</relationshipLabel>
+        <relationshipName>Employee_Salary_Reviews</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Last_bonus_award_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the last bonus was awarded</inlineHelpText>
+        <label>Last bonus award date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Last_bonus_payment__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Most recent annual bonus award</inlineHelpText>
+        <label>Last bonus payment</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leaver_before_data_retention_period__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>If( 
+not(isblank( xcdhcm__Compensation__r.xcdhcm__Role_L__r.xcdhcm__Companies__r.xcdhcm__GDPR_data_retention_threshold__c)), 
+xcdhcm__Employee_leaving_date__c &lt; xcdhcm__Compensation__r.xcdhcm__Role_L__r.xcdhcm__Companies__r.xcdhcm__GDPR_data_retention_threshold__c, 
+xcdhcm__Employee_leaving_date__c &lt; xcdhcm__Compensation__r.xcdhcm__Role_L__r.xcdhcm__Companies__r.xcdhcm__HMRC_data_retention_threshold__c 
+)</formula>
+        <label>Leaver before data retention period</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Line_manager__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field used to display line manager</description>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Compensation__r.xcdhcm__Role_L__r.xcdhcm__Manager_F__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Manager</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Location</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Payroll_no__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Payroll no</label>
+        <length>18</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Performance_rating__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Rating in last performance review</inlineHelpText>
+        <label>Performance rating</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Performance_review__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Links to last performance review record</inlineHelpText>
+        <label>Performance review</label>
+        <referenceTo>xcdhcm__Employee_Review__c</referenceTo>
+        <relationshipLabel>Employee Salary Reviews</relationshipLabel>
+        <relationshipName>Employee_Salary_Reviews</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_amount_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bonus payment - as recommended by Reviewer 1</inlineHelpText>
+        <label>Proposed bonus amount 1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_amount_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bonus payment - as recommended by Reviewer 2</inlineHelpText>
+        <label>Proposed bonus amount 2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_amount_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bonus payment - final recommendation</inlineHelpText>
+        <label>Proposed bonus amount 3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_amount_4__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bonus payment - final recommendation</inlineHelpText>
+        <label>Proposed bonus amount final</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_per_salary_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bonus as % salary - as recommended by Reviewer 1</inlineHelpText>
+        <label>Proposed bonus % salary 1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_per_salary_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bonus as % salary - as recommended by Reviewer 2</inlineHelpText>
+        <label>Proposed bonus % salary 2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_per_salary_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bonus as % salary - final recommendation</inlineHelpText>
+        <label>Proposed bonus % salary 3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_per_salary_4__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Bonus as % salary - final recommendation</inlineHelpText>
+        <label>Proposed bonus % salary final</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_per_target_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Proposed bonus % target 1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_per_target_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Proposed bonus % target 2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_per_target_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Proposed bonus % target 3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_bonus_per_target_4__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Proposed bonus % target final</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_increase_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Salary increase amount - Reviewer 1 recommendation</inlineHelpText>
+        <label>Proposed increase 1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_increase_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Salary increase amount - Reviewer 2 recommendation</inlineHelpText>
+        <label>Proposed increase 2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_increase_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Salary increase amount - final recommendation</inlineHelpText>
+        <label>Proposed increase 3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_increase_4__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Salary increase amount - final recommendation</inlineHelpText>
+        <label>Proposed increase final</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_increase_per_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Salary increase as % of current salary - Reviewer 1 recommendation</inlineHelpText>
+        <label>Proposed increase % 1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_increase_per_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Salary increase as % of current salary - Reviewer 2 recommendation</inlineHelpText>
+        <label>Proposed increase % 2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_increase_per_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Salary increase as % of current salary - final recommendation</inlineHelpText>
+        <label>Proposed increase % 3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_increase_per_4__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Salary increase as % of current salary - final recommendation</description>
+        <externalId>false</externalId>
+        <label>Proposed increase final %</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_next_year_target_bonus_1__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field used to display Bonus OTE% from compensation</description>
+        <externalId>false</externalId>
+        <label>Proposed next year target bonus % 1</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_next_year_target_bonus_2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field used to display Bonus OTE% from compensation</description>
+        <externalId>false</externalId>
+        <label>Proposed next year target bonus % 2</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_next_year_target_bonus_3__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field used to display Bonus OTE% from compensation</description>
+        <externalId>false</externalId>
+        <label>Proposed next year target bonus % 3</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_next_year_target_bonus_4__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field used to display Bonus OTE% from com</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Proposed target bonus for next year as % next year&apos;s (new) base salary</inlineHelpText>
+        <label>Proposed next year target bonus % final</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_salary_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Base salary for next year - Reviewer 1 recommendation</inlineHelpText>
+        <label>Proposed salary 1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_salary_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Base salary for next year - Reviewer 2 recommendation</inlineHelpText>
+        <label>Proposed salary 2</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_salary_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Base salary for next year - final recommendation</inlineHelpText>
+        <label>Proposed salary 3</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Proposed_salary_4__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Base salary for next year - final recommendation</inlineHelpText>
+        <label>Proposed salary final</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Published_bonus__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Store benefit after published</description>
+        <externalId>false</externalId>
+        <label>Published bonus</label>
+        <referenceTo>xcdhcm__Benefit__c</referenceTo>
+        <relationshipLabel>Employee Salary Reviews (Published bonus)</relationshipLabel>
+        <relationshipName>Employee_Salary_Reviews1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Published_bonus_status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(
+AND(ispickval(xcdhcm__Status__c , &quot;Published&quot;), NOT(ISBLANK(xcdhcm__Published_bonus__c)),
+CEILING(xcdhcm__Published_bonus__r.xcdhcm__Payment_amount__c/ xcdhcm__Conversion_rate__c) =  CEILING(xcdhcm__Proposed_bonus_amount_4__c)
+)
+, 
+IMAGE(&quot;/img/samples/color_green.gif&quot;, &quot;green&quot;, 20, 40),  
+IMAGE(&quot;/img/samples/color_red.gif&quot;, &quot;red&quot;, 20, 40) 
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Published bonus check</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Published_compensation__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Store compensation after published</description>
+        <externalId>false</externalId>
+        <label>Published compensation</label>
+        <referenceTo>xcdhcm__Compensation__c</referenceTo>
+        <relationshipLabel>Employee Salary Reviews (Published compensation)</relationshipLabel>
+        <relationshipName>Employee_Salary_Reviews1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Published_compensation_status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>IF(AND(ispickval(xcdhcm__Status__c , &quot;Published&quot;), NOT(ISBLANK(xcdhcm__Published_compensation__c)),
+xcdhcm__Published_compensation__r.xcdhcm__Base_Salary__c= xcdhcm__Proposed_salary_4__c)
+,
+IMAGE(&quot;/img/samples/color_green.gif&quot;, &quot;green&quot;, 20, 40),
+IMAGE(&quot;/img/samples/color_red.gif&quot;, &quot;red&quot;, 20, 40)
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Published compensation check</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Review_meeting_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Performance review took place on this date</inlineHelpText>
+        <label>Review meeting date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Review_notes_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Reviewer 1 notes on salary or bonus proposals</inlineHelpText>
+        <label>Review notes 1</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Review_notes_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Reviewer 2 notes on salary or bonus proposals</inlineHelpText>
+        <label>Review notes 2</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Review_notes_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Reviewer 3 notes on salary or bonus proposals</inlineHelpText>
+        <label>Review notes 3</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Review_notes_4__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Reviewer 4 notes on salary or bonus proposals</inlineHelpText>
+        <label>Review notes final</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Review_status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>TEXT(xcdhcm__Salary_Review__r.xcdhcm__Review_status__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Salary review status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewe_title_2__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Reviewer_2__r.Title</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Reviewer 2 title</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer1_email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer1 email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer2_email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer2 email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer3_email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 3 email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_1__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 1</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Employee_Salary_Reviews</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_1_submitted__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Checks where Reviewer 1 has submitted a recommendation</inlineHelpText>
+        <label>Reviewer 1 submitted</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_1_title__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 1 name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_2__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 2</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Employee_Salary_Reviews1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_2_submitted__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Checks where Reviewer 2 has submitted a recommendation</inlineHelpText>
+        <label>Reviewer 2 submitted</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_2_title__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 2 name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_3__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 3</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Employee_Salary_Reviews2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_3_submitted__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Checks where Reviewer 3 has submitted a recommendation</inlineHelpText>
+        <label>Reviewer 3 submitted</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_3_title__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 3 name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_4__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 4</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Employee_Salary_Reviews3</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_4_email__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 4 email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_4_name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Reviewer 4 name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_4_submitted__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Checks where Reviewer 4 has submitted a recommendation</inlineHelpText>
+        <label>Reviewer 4 submitted</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_4_title__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Reviewer_4__r.Title</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Reviewer 4 title</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_title_1__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Reviewer_1__r.Title</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Reviewer 1 title</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Reviewer_title_3__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Reviewer_3__r.Title</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Reviewer 3 title</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Salary_Review__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Salary review</label>
+        <referenceTo>xcdhcm__Salary_Review__c</referenceTo>
+        <relationshipLabel>Employee Salary Reviews</relationshipLabel>
+        <relationshipName>Employee_Salary_Reviews</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Salary_review_name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Salary_Review__r.Name</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Salary review name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Start_date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Start date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Employee salary review status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>xcdhcm__Status</valueSetName>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Target_bonus__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>On target bonus for year under review</inlineHelpText>
+        <label>Target bonus</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Target_bonus_per__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>On target bonus as % current salary</inlineHelpText>
+        <label>Target bonus %</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__View_salary_review__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This field used to redirect to my team page</description>
+        <externalId>false</externalId>
+        <formula>LEFT($Api.Partner_Server_URL_260, FIND( &apos;/services&apos;, $Api.Partner_Server_URL_260))&amp;&apos;apex/MyTeam&apos;</formula>
+        <label>View salary review</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Employee Salary Review</label>
+    <listViews>
+        <fullName>xcdhcm__All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <label>Employee</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Employee Salary Reviews</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>Private</sharingModel>
+    <sharingReasons>
+        <fullName>xcdhcm__XCD_Sharing__c</fullName>
+        <label>XCD_Sharing</label>
+    </sharingReasons>
+    <validationRules>
+        <fullName>xcdhcm__Do_not_allow_reviewer_to_edit_status</fullName>
+        <active>true</active>
+        <description>Allow Reviewer 1 (or SRA) to edit only Review 1 boxes, Same as Reviewer 2, Reviewer 3 
+When Status contains 1, only Reviewer 1 (or SRA) can edit; same as Reviewer 2, Reviewer 3</description>
+        <errorConditionFormula>OR(
+AND( 
+OR( 
+ISCHANGED(xcdhcm__Status__c), 
+ISCHANGED(xcdhcm__Reviewer_1_submitted__c) 
+), 
+$User.Id == xcdhcm__Reviewer_1__c, 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator),$Profile.Name &lt;&gt; &apos;System Administrator&apos;,$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos;, 
+OR(NOT(ISPICKVAL(xcdhcm__Status__c,&quot;Review 1 submitted&quot;)), 
+NOT(xcdhcm__Reviewer_1_submitted__c = true) 
+)
+), 
+
+AND( 
+OR( 
+ISCHANGED(xcdhcm__Status__c), 
+ISCHANGED(xcdhcm__Reviewer_2_submitted__c) 
+), 
+$User.Id == xcdhcm__Reviewer_2__c, 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator),$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos;, 
+OR(NOT(ISPICKVAL(xcdhcm__Status__c,&quot;Review 2 submitted&quot;)), 
+NOT(xcdhcm__Reviewer_2_submitted__c = true) 
+)
+), 
+
+AND( 
+OR( 
+ISCHANGED(xcdhcm__Status__c), 
+ISCHANGED(xcdhcm__Reviewer_3_submitted__c) 
+), 
+$User.Id == xcdhcm__Reviewer_3__c, 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator),$Profile.Name &lt;&gt; &apos;System Administrator&apos;,$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos;, 
+OR(NOT(ISPICKVAL(xcdhcm__Status__c,&quot;Review 3 submitted&quot;)), 
+NOT(xcdhcm__Reviewer_3_submitted__c = true) 
+) 
+), 
+AND( 
+OR( 
+ISCHANGED(xcdhcm__Status__c), 
+ISCHANGED(xcdhcm__Reviewer_4_submitted__c) 
+), 
+$User.Id == xcdhcm__Reviewer_4__c, 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator),$Profile.Name &lt;&gt; &apos;System Administrator&apos;,$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos;, 
+OR(NOT(ISPICKVAL(xcdhcm__Status__c,&quot;Review 4 submitted&quot;)), 
+NOT(xcdhcm__Reviewer_4_submitted__c = true) 
+) 
+) 
+)</errorConditionFormula>
+        <errorMessage>You are not permitted to edit records. Please contact HRMS Salary Review Administrator.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>xcdhcm__Restrict_reviewer_to_edit_records</fullName>
+        <active>true</active>
+        <description>Allow Reviewer 1 (or SRA) to edit only Review 1 boxes, Same as Reviewer 2, Reviewer 3
+When Status contains 1, only Reviewer 1 (or SRA) can edit;same as Reviewer 2, Reviewer 3</description>
+        <errorConditionFormula>OR( 
+AND( 
+OR(NOT(ISPICKVAL(PRIORVALUE(xcdhcm__Status__c),&quot;Review 1&quot;)),AND(ISPICKVAL(PRIORVALUE(xcdhcm__Status__c),&quot;Review 1&quot;),$User.Id &lt;&gt; xcdhcm__Reviewer_1__c)), 
+OR( 
+ISCHANGED(xcdhcm__Proposed_increase_per_1__c), 
+ISCHANGED(xcdhcm__Proposed_increase_1__c), 
+ISCHANGED(xcdhcm__Proposed_salary_1__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_per_salary_1__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_amount_1__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_per_target_1__c), 
+ISCHANGED(xcdhcm__Proposed_next_year_target_bonus_1__c), 
+ISCHANGED(xcdhcm__Review_notes_1__c) 
+), 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator), $Profile.Name &lt;&gt; &apos;System Administrator&apos;,$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos; 
+), 
+AND( 
+OR(NOT(ISPICKVAL(PRIORVALUE(xcdhcm__Status__c),&quot;Review 2&quot;)),AND(ISPICKVAL(PRIORVALUE(xcdhcm__Status__c),&quot;Review 2&quot;),$User.Id &lt;&gt; xcdhcm__Reviewer_2__c)), OR( 
+ISCHANGED(xcdhcm__Proposed_increase_per_2__c), 
+ISCHANGED(xcdhcm__Proposed_increase_2__c), 
+ISCHANGED(xcdhcm__Proposed_salary_2__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_per_salary_2__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_amount_2__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_per_target_2__c), 
+ISCHANGED(xcdhcm__Proposed_next_year_target_bonus_2__c), 
+ISCHANGED(xcdhcm__Review_notes_2__c) 
+), 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator),$Profile.Name &lt;&gt; &apos;System Administrator&apos;,$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos; 
+
+), 
+AND( 
+OR(NOT(ISPICKVAL(PRIORVALUE(xcdhcm__Status__c),&quot;Review 3&quot;)),AND(ISPICKVAL(PRIORVALUE(xcdhcm__Status__c),&quot;Review 3&quot;),$User.Id &lt;&gt; xcdhcm__Reviewer_3__c)), OR( 
+ISCHANGED(xcdhcm__Proposed_increase_3__c), 
+
+ISCHANGED(xcdhcm__Proposed_increase_per_3__c), 
+ISCHANGED(xcdhcm__Proposed_salary_3__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_per_salary_3__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_amount_3__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_per_target_3__c), 
+ISCHANGED(xcdhcm__Proposed_next_year_target_bonus_3__c), 
+ISCHANGED(xcdhcm__Review_notes_3__c) 
+), 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator),$Profile.Name &lt;&gt; &apos;System Administrator&apos;,$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos; 
+
+), 
+AND( 
+OR(NOT(ISPICKVAL(PRIORVALUE(xcdhcm__Status__c),&quot;Review 4&quot;)),AND(ISPICKVAL(PRIORVALUE(xcdhcm__Status__c),&quot;Review 4&quot;),$User.Id &lt;&gt; xcdhcm__Reviewer_4__c)), OR( 
+
+ISCHANGED(xcdhcm__Proposed_increase_per_4__c), 
+ISCHANGED(xcdhcm__Proposed_increase_4__c), 
+ISCHANGED(xcdhcm__Proposed_salary_4__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_per_salary_4__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_amount_4__c), 
+ISCHANGED(xcdhcm__Proposed_bonus_per_target_4__c), 
+ISCHANGED(xcdhcm__Proposed_next_year_target_bonus_4__c), 
+ISCHANGED(xcdhcm__Review_notes_4__c) 
+), 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator),$Profile.Name &lt;&gt; &apos;System Administrator&apos;,$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos; 
+
+), 
+AND( 
+OR( 
+ISCHANGED(xcdhcm__Salary_Review__c), 
+ISCHANGED(xcdhcm__Conversion_rate__c), 
+ISCHANGED(CurrencyIsoCode), 
+ISCHANGED(Name), 
+ISCHANGED(xcdhcm__Company__c), 
+ISCHANGED(xcdhcm__Job_title__c), 
+ISCHANGED(xcdhcm__Location__c), 
+ISCHANGED(xcdhcm__Current_salary__c), 
+ISCHANGED(xcdhcm__Effective_from__c), 
+ISCHANGED(xcdhcm__Compensation__c), 
+ISCHANGED(xcdhcm__Target_bonus__c), 
+ISCHANGED(xcdhcm__Target_bonus_per__c), 
+ISCHANGED(xcdhcm__Last_bonus_payment__c), 
+ISCHANGED(xcdhcm__Last_bonus_award_date__c), 
+ISCHANGED(xcdhcm__Reviewer_1__c), 
+ISCHANGED(xcdhcm__Reviewer_1_title__c), 
+ISCHANGED(xcdhcm__Reviewer_2__c), 
+ISCHANGED(xcdhcm__Reviewer_2_title__c), 
+ISCHANGED(xcdhcm__Reviewer_3__c), 
+ISCHANGED(xcdhcm__Reviewer_3_title__c) 
+), 
+NOT($Permission.xcdhcm__HRMS_Salary_Review_Administrator),$Profile.Name &lt;&gt; &apos;System Administrator&apos;,$Profile.Name &lt;&gt; &apos;HRMS System Admin&apos; 
+)
+)</errorConditionFormula>
+        <errorMessage>You are not permitted to edit records. Please contact HRMS Salary Review Administrator.</errorMessage>
+    </validationRules>
+    <visibility>Public</visibility>
+</CustomObject>

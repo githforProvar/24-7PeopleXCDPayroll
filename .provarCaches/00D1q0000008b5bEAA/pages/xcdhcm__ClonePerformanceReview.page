@@ -1,0 +1,419 @@
+<apex:page standardController="xcdhcm__Employee_Review__c" extensions="xcdhcm.CloneReviewController" sidebar="false">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" /> 
+    <style>
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: #ccc;
+        border-color: #ccc;
+        padding: .75rem 1rem;
+        background: #f4f6f9;
+        border-radius: 4px;
+        color: #54698d!important;
+        font-size: 1.15em;
+        letter-spacing: .0625rem;
+        font-weight: 500;
+        }
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        .closeIcon
+        {
+        display:none!important;
+        }
+        input[type='text'] 
+        {
+        width: 100%;
+        }  
+        textarea
+        {
+        width:100%;
+        } 
+        select
+        {
+        width:100%!important;
+        }
+        .columnWidth
+        {
+        width: 10%;
+        }
+        .firstcolumn
+        {
+        padding-left: 1% !important;
+        width: 10%;
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form >
+                <apex:pageBlock title="{!$Label.xcdhcm__phcloneperformancereview}">	
+                    <apex:PageMessages id="errmsgper"/> 
+                    <apex:pageBlockButtons location="bottom" style="float:right">
+                        <apex:actionStatus id="waitStatus">                   
+                            <apex:facet name="stop">
+                                <apex:outputpanel >
+                                    <apex:commandButton value="{!$Label.xcdhcm__cloneperformancereviewbcancel}" action="{!cancelReview}" immediate="true" rerender="errmsgper,id_save" styleclass="slds-button slds-button--neutral" status="waitStatus"/>
+                                    <apex:commandButton value="{!$Label.xcdhcm__cloneperformancereviewbsave}" action="{!cloneReview}" styleclass="slds-button slds-button--brand" status="waitStatus" id="id_save" rerender="errmsgper,id_save"/> 
+                                </apex:outputpanel>
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed">
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus> 
+                    </apex:pageBlockButtons>		
+                    <div Class="line"></div>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__cloneperformancereviewreviewdetails}" columns="2">
+                        <apex:repeat value="{!PerfReview}" var="pr" rows="1">
+                            <apex:repeat value="{!$ObjectType.xcdhcm__Employee_Review__c.Fieldsets.xcdhcm__ClonePerformanceReview}" var="o">
+                               <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Review__c.fields[o].Accessible}" >
+                                <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                            <label class="slds-form-element__label" style="{!IF(o.label=='Blankspace','display:none;' ,'')}" >
+                                                <apex:outputPanel rendered="{!o.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                {!o.label}
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[o].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Employee_Review__c.fields[o].inlineHelpText}</span>
+                                                </span>
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:inputField value="{!pr[o]}" required="{!o.Required}" style="{!IF(o.label=='Blankspace','display:none;' ,'')}"/> 
+                                            </div>                                                                                         
+                                        </div>
+                                    </div>  
+                                </apex:outputpanel>
+                            </apex:repeat>
+                        </apex:repeat>
+                    </apex:pageBlockSection>        
+                    
+                    <div Class="line"></div>
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__cloneperformancereviewobjectives}" >
+                        <!-- <apex:pageBlockTable align="center" value="{!ObjectiveList}" var="c" >      
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__ClonePerformanceObjective}">
+<apex:column headervalue="{!f.label}">
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat>
+</apex:pageBlockTable> -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__ClonePerformanceObjective}">
+                                             <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                            			     <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Objective__c.Fields[f].Accessible}" >
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Objective__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Objective__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Objective__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+                                            </apex:outputpanel>
+					 <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+
+                                        </apex:repeat>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!ObjectiveList}" var="c" >
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__ClonePerformanceObjective}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection columns="1" id="perfObj" > 
+                        <apex:variable value="{!1}" var="rowNum" />
+                        
+                        <!-- <apex:pageBlockTable align="center" value="{!newObjectiveList }" var="c" id="rows" > 
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__ClonePerformanceObjective}">
+<apex:column >
+<apex:inputField value="{!c[f]}" required="{!f.required}" style="width:150px;height:25px;"/>
+</apex:column>
+</apex:repeat>
+
+<apex:column headervalue="" rendered="{!newObjectiveList.size >=1}" style="width:1%;">
+<apex:commandlink action="{!deleteObjective}"  immediate="true" rerender="perfObj">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+</apex:commandlink>
+</apex:column>                         
+</apex:pageBlockTable> -->
+                        <apex:outputpanel id="rows">
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__ClonePerformanceObjective}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate" > 
+                                                </div>
+                                            </th> 
+                                        </apex:repeat>
+                                        <th scope="col" class="columnWidth">
+                                        </th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!newObjectiveList }" var="c">
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Objective__c.Fieldsets.xcdhcm__ClonePerformanceObjective}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:outputPanel rendered="{!f.required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel> 
+                                                        <apex:inputField value="{!c[f]}" required="{!f.required}" />
+                                                    </div>
+                                                </th> 
+                                            </apex:repeat> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:commandlink action="{!deleteObjective}"  rendered="{!newObjectiveList.size >=1}" immediate="true" rerender="perfObj">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </div>
+                                            </th>
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                        <apex:commandButton styleclass="slds-button slds-button--neutral" value="{!$Label.xcdhcm__cloneperformancereviewbaddrow}" action="{!addObjective}" immediate="true" rerender="perfObj"  style="float:right;"/>
+                    </apex:pageBlockSection>   
+                    <div Class="line"></div>
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__cloneperformancereviewvalues}" >
+                        <!-- <apex:pageBlockTable align="center" value="{!ValueList}" var="c" >      
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__CloneValue}">
+<apex:column headervalue="{!f.label}">
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat>
+</apex:pageBlockTable>   -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__CloneValue}">
+                                        <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                            			     <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Values__c.Fields[f].Accessible}" >
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Values__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Values__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Values__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+                                            </apex:outputpanel>
+					 <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+
+                                        </apex:repeat>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!ValueList}" var="c" >
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__CloneValue}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>         
+                    </apex:pageBlockSection>        
+                    
+                    <apex:pageBlockSection columns="1" id="perfVal" > 
+                        <apex:variable value="{!1}" var="rowNum" />
+                        <!-- <apex:pageBlockTable align="center" value="{!newValueList }" var="c" id="rows" >                     
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__CloneValue}">
+<apex:column >
+<apex:inputField value="{!c[f]}" required="{!f.required}" style="width:150px;height:25px;"/>
+</apex:column>
+</apex:repeat> 
+
+<apex:column headervalue="" rendered="{!newValueList.size >=1}" style="width:1%;">
+<apex:commandlink action="{!deleteValue}"  immediate="true" rerender="perfVal">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+</apex:commandlink>
+</apex:column>                         
+</apex:pageBlockTable> -->
+                        <apex:outputpanel id="rows">
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__CloneValue}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate" > 
+                                                </div>
+                                            </th> 
+                                        </apex:repeat>
+                                        <th scope="col" class="columnWidth">
+                                        </th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!newValueList }" var="c" >
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Values__c.Fieldsets.xcdhcm__CloneValue}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:outputPanel rendered="{!f.required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel> 
+                                                        <apex:inputField value="{!c[f]}" required="{!f.required}" />
+                                                    </div>
+                                                </th> 
+                                            </apex:repeat> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:commandlink action="{!deleteValue}" rendered="{!newValueList.size >=1}" immediate="true" rerender="perfVal">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </div>
+                                            </th>
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                        <apex:commandButton styleclass="slds-button slds-button--neutral" value="{!$Label.xcdhcm__cloneperformancereviewbaddrow}" action="{!addValue}" immediate="true" rerender="perfVal"  style="float:right;"/>
+                    </apex:pageBlockSection> 
+                    
+                    <div Class="line"></div>
+                    
+                    <apex:pageBlockSection title="{!$Label.xcdhcm__cloneperformancereviewpersonaldevelopmentplan}">
+                        <!--  <apex:pageBlockTable align="center" value="{!DevelopmentList}" var="c" >      
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__ClonePerformanceDevelopment}">
+<apex:column headervalue="{!f.label}">
+<apex:inputField value="{!c[f]}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat>
+</apex:pageBlockTable> -->
+                        <apex:outputpanel >
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__ClonePerformanceDevelopment}">
+                                          <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                            			     <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fields[f].Accessible}" >
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">{!$ObjectType.Personal_development_plan__c.Fields[f].label}</div>
+                                                <span class="LiteHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Personal_development_plan__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.Personal_development_plan__c.fields[f].inlineHelpText}</span>
+                                                </span>
+                                            </th> 
+                                             </apex:outputpanel>
+					 <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 	     
+                                        </apex:repeat>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!DevelopmentList}" var="c">
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__ClonePerformanceDevelopment}">
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:inputField value="{!c[f]}"/>
+                                                    </div>
+                                                </th> 
+                                            </apex:repeat> 
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>    
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockSection columns="1" id="pdp" > 
+                        <apex:variable value="{!1}" var="rowNum" />
+                        
+                        <!-- <apex:pageBlockTable align="center" value="{!newPDPList }" var="c" id="rows" >  
+
+<apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__ClonePerformanceDevelopment}">
+<apex:column >
+<apex:inputField value="{!c[f]}" required="{!f.required}" style="width:150px;height:25px;" />
+</apex:column>
+</apex:repeat> 
+
+<apex:column headervalue="" rendered="{!newPDPList.size >=1}" style="width:1%;">
+<apex:commandlink action="{!deletePdp}"  immediate="true" rerender="pdp">
+<apex:param name="rownumber" value="{!rowNum}"/>
+<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+</apex:commandlink>
+</apex:column>                          
+</apex:pageBlockTable> -->
+                        <apex:outputpanel id="rows">
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                <thead>
+                                    <tr class="slds-text-title--caps"> 
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__ClonePerformanceDevelopment}">
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate" > 
+                                                </div>
+                                            </th> 
+                                        </apex:repeat>
+                                        <th scope="col" class="columnWidth">
+                                        </th>
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!newPDPList }" var="c" >
+                                        <tr> 
+                                            <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Personal_development_plan__c.Fieldsets.xcdhcm__ClonePerformanceDevelopment}">
+                                        	 <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+					    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Personal_development_plan__c.fields[f].Accessible}">
+                                            
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:outputPanel rendered="{!f.required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel> 
+                                                        <apex:inputField value="{!c[f]}" required="{!f.required}" />
+                                                    </div>
+                                                </th> 
+                                                </apex:outputpanel>
+				    		 <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                            </apex:repeat> 
+                                            <th scope="row" class="columnWidth">
+                                                <div class="slds-truncate" >
+                                                    <apex:commandlink action="{!deletePdp}" rendered="{!newPDPList.size >=1}" immediate="true" rerender="pdp">
+                                                        <apex:param name="rownumber" value="{!rowNum}"/>
+                                                        <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                    </apex:commandlink>
+                                                </div>
+                                            </th>
+                                        </tr> 
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </apex:outputpanel>
+                        <apex:commandButton styleclass="slds-button slds-button--neutral" value="{!$Label.xcdhcm__cloneperformancereviewbaddrow}" action="{!addPdp}" immediate="true" rerender="pdp"  style="float:right;"/>       
+                    </apex:pageBlockSection>             
+                </apex:pageBlock>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

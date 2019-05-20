@@ -1,0 +1,42 @@
+<apex:page standardController="xcdhcm__Company__c"
+	extensions="xcdhcm.CompanyExtensionController">
+	<apex:form >
+
+		<apex:pageBlock >
+			<b>Click 'Save' to update the below listed public holidays as
+				events in active user calendar..</b>
+			<br />
+			<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+		
+			<apex:pageBlockSection title="{!$Label.xcdhcm__setupemployeecalendarpublicholidays}">
+			<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+				<apex:pageBlockTable value="{!companyHolidayList}" var="cf"
+					style="width:100%">
+			                
+							<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+						
+							<apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holidays__c.fields.name.label}" style="width:40%">
+							<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+			                    <apex:outputfield value="{!cf.Name}" />
+			                </apex:column>
+							<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->               
+							
+							<apex:column headervalue="{!$ObjectType.xcdhcm__Company_Holidays__c.fields.xcdhcm__Holiday_Date__c.label}"
+						style="width:30%">
+						<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+								  <apex:outputfield value="{!cf.xcdhcm__Holiday_Date__c}" />
+					</apex:column>
+			                
+			            </apex:pageBlockTable>
+
+			</apex:pageBlockSection>
+			<apex:pageBlockButtons >
+				<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+			
+				<apex:commandButton value="{!$Label.xcdhcm__setupemployeecalendarbsave}" action="{!employeeCalenderSetUp}" />
+				<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+
+	</apex:form>
+</apex:page>

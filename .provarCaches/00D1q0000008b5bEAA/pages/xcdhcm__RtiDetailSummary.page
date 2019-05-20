@@ -1,0 +1,13 @@
+<apex:page >
+<style type="text/css">
+body input.btn, body input.btnDisabled, body input.btnCancel 
+{
+    display:none !important;
+}
+.actionColumn 
+{
+	display:none; visibility:hidden
+}
+</style>
+	<apex:detail relatedList="true" title="true"/>	
+</apex:page>

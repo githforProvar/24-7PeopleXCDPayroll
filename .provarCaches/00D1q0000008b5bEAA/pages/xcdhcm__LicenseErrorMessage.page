@@ -1,0 +1,12 @@
+<apex:page standardcontroller="xcdhcm__Employee_Detail__c" sidebar="false">
+    <apex:form >
+        <apex:pageBlock >
+              <apex:pageMessage summary="All available Licenses are in use" severity="ERROR" strength="3"/>  
+      
+                <apex:pageBlockButtons Location="top">
+                    <apex:commandButton value="{!$Label.xcdhcm__licenseerrormessagebback}" action="{!Cancel}"/>
+                 </apex:pageBlockButtons>  
+       </apex:pageBlock>
+        
+    </apex:form>
+</apex:page>

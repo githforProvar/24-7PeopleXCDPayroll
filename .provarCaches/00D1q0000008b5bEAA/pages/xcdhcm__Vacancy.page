@@ -1,0 +1,79 @@
+<!--
+Name : Vacancy
+authour : Saravanan 
+Created Date : 26-3-2014
+Describtion : Display the detail page of the vacancy instead of standard page.
+Cahnge log : 
+-->                                    
+<apex:page standardController="xcdhcm__Vacancy__c" extensions="xcdhcm.VacancyViewController" showHeader="true" sidebar="true">
+   <!-- <apex:stylesheet value="{!URLFOR($Resource.XCD_static_resources,'Css/LiteVacancy.css')}" /> -->
+     <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteVacancy.css')}" /> 
+    <apex:form >      
+     <!-- 
+       <div style="box-shadow: 4px 5px 10px #ccc;    box-shadow: 2px 2px 7px #ccc;   border-radius: 4px;background: #fff; padding: 20px;">        
+        <apex:pageMessage summary="{!displayRemainingNo}" severity="Info" strength="3" rendered="{!DisplayRemainingNo!=null}"/>
+         <div style="margin-left:62%">
+            
+            <apex:commandButton value="{!$Label.VacancyBApply}"  action="{!applyPositionForm}" 
+             rendered="{!enableApplyPositionForAgency}"/>
+            
+            <apex:commandButton value="{!$Label.VacancyBEdit}" action="{!Edit}" 
+            rendered="{!editanddeleteBtnView!=true}"/>
+            <apex:commandButton value="{!$Label.VacancyBDelete}" action="{!delete}" onclick="return deleteVacancy();"
+            rendered="{!editanddeleteBtnView!=true}"/>
+            <apex:commandButton value="{!$Label.VacancyBSharing}"
+                                            action="{!URLFOR($Action.Vacancy__c.Share,Vacancy__c.Id)}" 
+                                            rendered="{!RecPosttoAgencies}"/>
+            <apex:commandButton value="{!$Label.VacancyBPosttoAgencies}" action="{!postToAgency}" 
+            rendered="{!RecPosttoAgencies}"/>
+         </div>          
+        <apex:detail relatedList="true" title="true" inlineEdit="true"  />          
+      <div style="border-bottom: 1px solid #E6E1D5 !important;"></div> <br/>      
+      </div>  -->
+     <div style="box-shadow: 4px 5px 10px #ccc;margin-top:30px;    box-shadow: 2px 2px 7px #ccc; border-radius: 4px; background: #fff; padding: 20px;">               
+      <apex:tabPanel switchType="client" selectedTab="name1" id="theTabPanel">  
+        <apex:tab label="{!$Label.xcdhcm__vacancystactive}" name="name1" id="tabOne">       
+            <apex:pageblock title="{!$Label.xcdhcm__vacancyactiveactiveapplications}" >
+               <apex:outputText Value="No records to display" rendered="{!ApplicationList.size<1}" />
+                <apex:pageBlockTable value="{!ApplicationList}" var="le" rendered="{!ApplicationList.size>=1}" >
+                     <apex:column headervalue="{!$ObjectType.xcdhcm__Applicant__c.Fields.Name.Label}" >
+                     	<!-- START:: 02/03/2018 Lightning regression patch-1 issue added by Kamal -->
+                       <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!le.id}"> {!le.Name}</apex:outputLink>
+                       <!-- END:: 02/03/2018 Lightning regression patch-1 issue added by Kamal --> 
+                     </apex:column>
+                         <apex:repeat var="f"  value="{!$ObjectType.xcdhcm__Applicant__c.FieldSets.xcdhcm__Related_list_column}">
+                         <apex:column value="{!le[f]}" />
+                     </apex:repeat>
+              </apex:pageBlockTable>  
+           </apex:pageblock>
+          
+          <div style="border-bottom:1px solid #E6E1D5 !important;"></div>    
+          
+        </apex:tab>      
+        <apex:tab label="{!$Label.xcdhcm__vacancystrejected}" name="name2" id="tabTwo">   
+          <apex:pageblock title="{!$Label.xcdhcm__vacancyrejectedrejectedapplications}" >
+                <apex:outputText Value="No records to display" rendered="{!ClosedApplicationList.size<1}" />
+                <apex:pageBlockTable value="{!ClosedApplicationList}" var="le" rendered="{!ClosedApplicationList.size>=1}" >
+                     <apex:column headervalue="{!$ObjectType.xcdhcm__Applicant__c.Fields.Name.Label}" >
+                     	<!-- START:: 02/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil -->
+                       <apex:outputLink target="_top" value="/one/one.app#/alohaRedirect/{!le.id}"> {!le.Name}</apex:outputLink> 
+                       <!-- END:: 02/03/2018 NPPD-1623 Lightning regression patch-1 issue added by Anil -->
+                     </apex:column>
+                       <apex:repeat var="f"  value="{!$ObjectType.xcdhcm__Applicant__c.FieldSets.xcdhcm__Related_list_column}">
+                         <apex:column value="{!le[f]}" />
+                     </apex:repeat>
+              </apex:pageBlockTable>    
+          </apex:pageblock>            
+        <div style="border-bottom:1px solid #E6E1D5 !important;"></div>    
+       </apex:tab>       
+    </apex:tabPanel>
+   </div><br/>
+   </apex:form> 
+    <script>
+        function deleteVacancy()
+        {
+            var confirmst=confirm("Are you sure?");
+            return confirmst;
+        }
+    </script>
+</apex:page>

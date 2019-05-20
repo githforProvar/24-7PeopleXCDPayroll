@@ -1,0 +1,868 @@
+<apex:page standardController="xcdhcm__Company__c" extensions="xcdhcm.BulkAwardsController" sidebar="false" showHeader="true" wizard="false">
+  <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />       
+        <style> 
+        <!--START:: NPPD-1623 Lightning regression issues added by sabir-->
+        .slds-scope h1, .slds-scope h2, .slds-scope h3, .slds-scope h4, .slds-scope h5, .slds-scope h6, .slds-scope td, .slds-scope th {
+		    color: black;
+		}
+		.slds-scope li {
+		    color: black;
+		}
+        <!--END:: NPPD-1623 Lightning regression issues added by sabir-->
+        body .bPageBlock .pbBody {
+            background: #f7f9fb;
+        }
+            body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+            {
+                font-family:Salesforce Sans,Arial,sans-serif!important;
+                font-size: 1.4rem!important;
+                    color: #16325c;
+                margin-left: 1mm;
+            }
+
+        /*column header*/
+            .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>th 
+            {
+                font-size: 1.1rem!important;;
+                    color: #54698d;
+                    font-weight: normal;
+                    font-family: 'Salesforce Sans',Arial,sans-serif;
+                    line-height: 1.25; 
+                    letter-spacing:.0625rem;
+                    
+            }
+        /*column data*/
+            .table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+                    font-size: 1.2rem!important;;
+                    color: #16325c;
+                    font-weight: normal;
+                    font-family: 'Salesforce Sans',Arial,sans-serif;
+                    
+            }
+            
+           
+                #LiteHelpTextID span 
+            {
+                display: none;
+            }
+            
+            #LiteHelpTextID:hover span 
+            {
+                display: block !important;
+                width: 300px;
+                background-color: #16325c!important;   
+                border: 1px solid #16325c!important;
+                padding: 4px;
+                color: white;
+                position: absolute;
+                z-index: 1;
+                top:100%;
+                right:20%;
+                text-align: justify;
+                white-space: normal;
+                font-weight: normal;  
+                border-radius: 4px!important;    
+                left:5% !important;     
+            }
+            
+            #LiteHelpTextID:hover 
+            {
+                position: inherit;
+            }
+       
+        .fa 
+        {
+         font-size: 8pt!important;
+        }
+        
+        .slds-scope button, .slds-scope input, .slds-scope optgroup, .slds-scope select, .slds-scope textarea 
+        {
+                font-size: 12px;
+        }
+        .slds-scope table 
+        {
+            font-size: 13px;
+        }
+        .modal-content 
+        {
+                width: 80%;
+        }
+        
+        input[type="text"] {
+            width: 110px !important;
+            margin-left: 10px;
+        }
+        input[type="float"] { 
+            width: 80px !important;
+            margin-left: 10px;
+        }
+        input[type="text"] {
+            height: 20px !important;
+            margin-left: 10px;
+        }
+        input[type="float"] {
+            height: 20px !important;
+            margin-left: 10px;
+        }
+        
+    </style>
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="bulkAwardApp" lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+        <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+        <apex:slds />
+    </head>
+    
+    <script type="text/javascript">
+        //For stop press enter
+        document.onkeypress = function (e) 
+        {
+            e = e || window.event;
+            var charCode = (typeof e.which == "number") ? e.which : e.keyCode; 
+            if(charCode == 13)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        };
+        </script>
+         <!--- -------------------START AngularJs----------------------------------------- -->
+        <script type="text/javascript">
+            <!-- Name your application -->
+            var myapp = angular.module('bulkAwardApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+            <!-- Define Controller  -->
+            var contrl=myapp.controller('ctrlRead', function ($scope, $filter ,$uibModal) {         
+                <!--- JSON from apex controller --->
+                $scope.items = {!EmployeeAwardsList}; 
+            $scope.performanceFieldSetMember = {!performanceFieldSetMemberJSON}; 
+            $scope.compensationFieldSetMember = {!compensationFieldSetMemberJSON}; 
+            $scope.benefitFieldSetMember = {!benefitFieldSetMemberJSON}; 
+            $scope.userDefaultCurrency ={!userDefaultCurrencyJson};
+            //For pagination
+            $scope.filteredItems = [];
+            $scope.itemsPerPage = 25;
+            $scope.currentPage = 1;
+                $scope.maxlength = 5;
+                
+                //Initialize Earliest_payment_date__c and Date_of_award__c to javascript date format for date picker
+                $scope.convertToJSDate = function() 
+            {
+                    for(var i=0; i<$scope.items.length; i++)
+                {
+                    $scope.date1 = new Date($scope.items[i].benefit.xcdhcm__Earliest_payment_date__c );
+                    $scope.items[i].benefit.xcdhcm__Earliest_payment_date__c = $scope.date1;
+                    
+                    $scope.date2 = new Date($scope.items[i].benefit.xcdhcm__Date_of_award__c );
+                    $scope.items[i].benefit.xcdhcm__Date_of_award__c = $scope.date2;
+                }           
+            };  
+                $scope.convertToJSDate();
+            
+                //Initialize the Search Filters 
+            var searchMatch = function (haystack, needle) 
+            {
+                    if(!needle) 
+                    {
+                        return true;
+                    }
+                    return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+            };
+              
+                $scope.search = function () 
+                {
+                    $scope.filteredItems = $filter('filter')($scope.items, function (item) 
+                    {
+                        for(var attr in item) 
+                        {
+                        if(searchMatch(item.empId , $scope.query))
+                                return true;
+                        }
+                        return false;
+                    });
+                };
+            
+            // functions have been describe process the data for display
+                $scope.search();
+             
+            //for department serach
+            $scope.changeDeparment = function()
+                {
+                    if($scope.reviewerName == '')
+                    {
+                        $scope.search();
+                    }
+                };
+           
+        //<=============================START::For select and select all from check box as per current page wise ============================>
+                $scope.selectedAll = false;
+            $scope.deleteAll = false;
+            $scope.selectedAll = function()
+            {
+                    for(var i=  ($scope.currentPage -1)* $scope.itemsPerPage; i< $scope.currentPage * $scope.itemsPerPage; i++)
+                    {
+                        if($scope.deleteAll)
+                        {
+                            $scope.filteredItems[i].selected = true;
+                        }
+                        else
+                        {
+                            $scope.filteredItems[i].selected = false;
+                        }
+                    }
+            };
+            
+            //call from pagination 
+            $scope.uncheck = function()
+            {
+                $scope.deleteAll = false;
+            };          
+        //<=============================END::For select and select all from check box as per current page wise ============================>
+        
+        //<==================================START:: change benefit percentage and pament amount ================================>
+            $scope.changePercentage=(function(index)
+                {                           
+                    $scope.items[index].benefit.xcdhcm__Payment_amount__c = (parseFloat(( $scope.items[index].Compn.xcdhcm__Base_Salary__c * $scope.items[index].benefit.xcdhcm__Percentage_bonus__c )/100)).toFixed(2);
+            });    
+                
+            $scope.changePamentAmount=(function(index)
+                {                                       
+                $scope.items[index].benefit.xcdhcm__Percentage_bonus__c = (parseFloat(( $scope.items[index].benefit.xcdhcm__Payment_amount__c / $scope.items[index].Compn.xcdhcm__Base_Salary__c )*100)).toFixed(2);
+            });  
+        //<===================================END:: change benefit percentage and pament amount ================================>
+            
+        //<========================================START:: Departments Pop-up Functionality ==================================>
+            $scope.animationsEnabled = true;
+            $scope.reviewerName = '';
+            $scope.showDepartments = function()
+            {           
+                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.BulkAwardsController.getDepartments}',$scope.reviewerName, 
+                function(result, event)
+                {
+                    if(event.status) 
+                     {
+                            var modalInstance = $uibModal.open({
+                            animation: $scope.animationsEnabled,
+                            templateUrl: 'userContent.html',
+                            controller: 'userModalInstanceCtrl',    
+                            size : 'lg',
+                            resolve: 
+                            {
+                                reviewerName: function () 
+                                {
+                                    return $scope.reviewerName;
+                                },
+                                userDetails: function () 
+                                {
+                                    return result;
+                                }
+                            }
+                        });
+                        modalInstance.result.then(function (selectedUser) 
+                        {                                                              
+                            $scope.selectedUsr = selectedUser;
+                            $scope.reviewerName = selectedUser.Name; 
+                                $scope.filteredItems = $filter('filter')($scope.items, function (item)
+                                {
+                                for(var attr in item)
+                                    {
+                                    if(item.Compn.xcdhcm__Employee__r.xcdhcm__User__r.Department != null && searchMatch(item.Compn.xcdhcm__Employee__r.xcdhcm__User__r.Department , $scope.selectedUsr.Name))
+                                        {
+                                            return true;
+                                        }
+                                    } 
+                                    return false;
+                                });
+                            }); 
+                        } 
+                     }, 
+                    {escape: false}
+                );
+            }   
+        //<========================================END:: Departments Pop-up Functionality ==================================>
+        
+//<=================================START:: Date Pick PopUp===================================================>
+            /*Date Picker changes*/
+            
+              $scope.inlineOptions = {
+                customClass: getDayClass,
+                minDate: new Date(),
+                showWeeks: true
+              };
+            
+              $scope.dateOptions = {
+                //dateDisabled: disabled,
+                formatYear: 'yy',
+                maxDate: new Date(2020, 5, 22),
+                minDate: new Date(),
+                startingDay: 1
+              };
+
+            //Disable weekend selection
+            function disabled(data) 
+            {
+                var date = data.date,
+                mode = data.mode;
+                return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+            }
+            
+            $scope.toggleMin = function() 
+            {
+                $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+                $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+            };
+            
+            $scope.toggleMin();
+            
+            $scope.open1 = function(index) 
+            {
+                $scope.items[index].isUidatePickerOpen1 = true;
+            };
+        
+            $scope.open2 = function(index) 
+            {
+                $scope.items[index].isUidatePickerOpen2 = true;
+            };
+            
+              $scope.formats1 = ['dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+              $scope.format1 = $scope.formats1[0];
+              $scope.altInputFormats1 = ['M!/d!/yyyy'];
+              
+              $scope.formats2 = ['dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+              $scope.format2 = $scope.formats2[0];
+              $scope.altInputFormats2 = ['M!/d!/yyyy'];
+            
+              $scope.popup1 = {
+                opened: false
+              };
+            
+              $scope.popup2 = {
+                opened: false
+              };
+            
+              var tomorrow = new Date();
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              var afterTomorrow = new Date();
+              afterTomorrow.setDate(tomorrow.getDate() + 1);
+              $scope.events = [
+                {
+                  date: tomorrow,
+                  status: 'full'
+                },
+                {
+                  date: afterTomorrow,
+                  status: 'partially'
+                }
+              ];
+              
+            function getDayClass(data) 
+            {
+                var date = data.date,
+                mode = data.mode;
+                    if(mode === 'day') 
+                    {
+                    var dayToCheck = new Date(date).setHours(0,0,0,0);
+                    for(var i = 0; i < $scope.events.length; i++) 
+                    {
+                            var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+                            if(dayToCheck === currentDay) 
+                            {
+                            return $scope.events[i].status;
+                            }
+                    }
+                 }
+                    return '';
+                }
+    //<=================================END:: Date Pick PopUp==========================================================>
+        
+    //<=================================START:: Save Records==========================================================>
+            $scope.sendData = function()
+            {
+                //while saving removing ConvertedCurrentSalary
+                for(var i=0; i<$scope.items.length; i++)
+                {   
+                    delete $scope.items[i].Compn.ConvertedCurrentSalary;
+                }
+                
+                for(var i=0; i<$scope.items.length; i++)
+                {
+                    $scope.items[i].benefit.xcdhcm__Earliest_payment_date__c = $filter('date')($scope.items[i].benefit.xcdhcm__Earliest_payment_date__c, "yyyy-MM-dd");
+                    $scope.items[i].benefit.xcdhcm__Date_of_award__c = $filter('date')($scope.items[i].benefit.xcdhcm__Date_of_award__c, "yyyy-MM-dd");     
+                }
+                                    
+                saveMethod(JSON.stringify($scope.items));
+                
+                //if any validation come re-initialize
+                    for(var i=0; i<$scope.items.length; i++)
+                {
+                    $scope.date1 = new Date($scope.items[i].benefit.xcdhcm__Earliest_payment_date__c );
+                    $scope.items[i].benefit.xcdhcm__Earliest_payment_date__c = $scope.date1;
+                    $scope.date2 = new Date($scope.items[i].benefit.xcdhcm__Date_of_award__c );
+                    $scope.items[i].benefit.xcdhcm__Date_of_award__c = $scope.date2;        
+                }           
+            };  
+    //<=================================START:: Save Records==================================================>
+            
+        });
+        
+    //<=================================START:: Deparment Pop pagination ==========================================>
+        myapp.controller('userModalInstanceCtrl', function ($scope,$uibModalInstance,reviewerName,userDetails) 
+        {
+            $scope.AllUsers = JSON.parse(userDetails);
+            $scope.searchUser = reviewerName;
+            $scope.totalItems = $scope.AllUsers.length;
+            $scope.currentPage = 1;
+            $scope.itemsPerPage = 10;
+            $scope.maxSize = 2;
+              
+              $scope.closePopUp = function()
+              {
+                  $uibModalInstance.close();     
+              }
+              
+              $scope.selectUserDetails = function(user)
+              {
+                  $uibModalInstance.close(user);     
+              }
+        });     
+    //<=================================END:: Deparment Pop pagination ===========================================>
+        
+    //<=================================START:: Formating=====================================================>
+        //For Date format 
+        myapp.filter('toDayMonthYear', function ($filter) 
+        {
+                return function (dateString) 
+                {
+                    var dateObject = new Date(dateString);
+                    var result;
+                    if(!isNaN(dateObject))
+                    {
+                        var dispayDate = $filter('date')(dateObject, 'dd');
+                        var displayMonth = $filter('date')(dateObject, 'MM');
+                        var displayYear = dateObject.getFullYear();
+                        result = dispayDate+'/'+displayMonth+'/'+displayYear;
+                    }
+                    else
+                    {
+                        result ='';
+                    }
+                return result;
+            };
+        });
+        
+        //For percentage format 
+        myapp.filter('percentage', function($filter) 
+            {
+            return function(input) 
+            {
+                var check;
+                if(!isNaN(input))
+                {
+                    check = input + '%';
+                }
+                else
+                {
+                    check ='';
+                }
+                    return check;
+            };
+        });     
+    //<=================================END:: Formating======================================================>
+    </script>
+    
+    <body class="slds-scope" ng-controller="ctrlRead" style="background: #f7f9fb;">
+        <apex:form id="theForm"> 
+            <apex:pageMessages id="errorId" /> 
+    <!-- =========================================START:: Bonus================================================= -->
+             <apex:pageBlock id="pagblkId" mode="maindetail" rendered="{!selectedAwardType == 'Bonus'}" >   
+            <div style="font-weight:400!important;font-size: 2.2rem;line-height: 1.25; color: #16325c;margin-left:1rem;text-transform: uppercase;padding-top: 10px;">{!pageBlockTitle}</div>
+              <br/>
+               <span style="margin-left: 12px;font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">Departments</span>
+                    <input type="text" ng-model="reviewerName" placeholder="Name" ng-change="changeDeparment()" style="font-size:12px;font--weight:300; width:150px!important;"/>
+                    <i class="fa fa-search" aria-hidden="true" 
+                        style="margin-top: 5px;margin-left: 3px;color: #00a6ed;border: 1px solid #00a6ed;padding: 3px;border-radius: 2px;cursor: pointer;" ng-click="showDepartments()">
+                    </i> 
+                    <br/><br/>                    
+                
+                <table  class="table  table-hover;" style="background: #fdfdfd;"> 
+                        <tr class="slds-text-title--caps">
+                            <th>
+                            <div><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /></div>
+                            </th>
+                            <th> 
+                              <abbr class="slds-required" title="required">*</abbr>{!$ObjectType.Benefit__c.Fields.Date_of_award__c.Label} 
+                                <span class="LiteHelpText">
+                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Date_of_award__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                    <span>{!$ObjectType.Benefit__c.Fields.Date_of_award__c.inlineHelpText}</span>
+                                </span> 
+                        </th>
+                            
+                            <th>
+                            {!$ObjectType.Employee_Review__c.Fields.Employee_name__c.Label}
+                            <span class="LiteHelpText">
+                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.Fields.xcdhcm__Employee_name__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                    <span>{!$ObjectType.Employee_Review__c.Fields.Employee_name__c.inlineHelpText}</span>
+                             </span> 
+                        </th>
+                        
+                        <apex:outputPanel rendered="{!BulkSalaryaward}">  
+                            <apex:repeat var="review" value="{!$ObjectType.xcdhcm__Employee_Review__c.fieldSets.xcdhcm__Bulk_award_review}">
+                            <th>
+                                 {!review.label}
+                                <span ID="LiteHelpTextID">
+                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[review].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                    <span>{!$ObjectType.Employee_Review__c.fields[review].inlineHelpText}</span>
+                                </span>
+                            </th>
+                            </apex:repeat>
+                         </apex:outputPanel>
+                         
+                         <th>
+                                {!$objectType.Compensation__c.fields.Base_Salary__c.Label}
+                            <span class="LiteHelpText">
+                                 <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Base_Salary__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                 <span>{!$ObjectType.Compensation__c.Fields.Base_Salary__c.inlineHelpText}</span>
+                             </span> 
+                        </th>
+                        
+                        
+                        <apex:repeat var="comp" value="{!$ObjectType.xcdhcm__Compensation__c.fieldSets.xcdhcm__Bulk_bonus_award}">                          
+                            <th>
+                                 {!comp.label}
+                                <span ID="LiteHelpTextID">
+                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields[comp].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                    <span>{!$ObjectType.Compensation__c.fields[comp].inlineHelpText}</span>
+                                </span>
+                            </th>
+                        </apex:repeat>  
+                        
+                        <th>
+                             <abbr class="slds-required" title="required">*</abbr> 
+                            {!$ObjectType.Benefit__c.fields.Percentage_bonus__c.Label}
+                            <span class="LiteHelpText">
+                                 <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Percentage_bonus__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                 <span>{!$ObjectType.Benefit__c.Fields.Percentage_bonus__c.inlineHelpText}</span>
+                             </span> 
+                        </th>
+                        
+                        <th>
+                             <abbr class="slds-required" title="required">*</abbr> 
+                            {!$ObjectType.Benefit__c.fields.Payment_amount__c.Label}
+                            <span class="LiteHelpText">
+                                 <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Payment_amount__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                 <span>{!$ObjectType.Benefit__c.Fields.Payment_amount__c.inlineHelpText}</span>
+                             </span> 
+                        </th>
+                                            
+                        <apex:repeat var="ben" value="{!$ObjectType.xcdhcm__Benefit__c.fieldSets.xcdhcm__Bulk_award_benefit}">
+                        <th>
+                               {!ben.label}
+                               <span ID="LiteHelpTextID">
+                                  <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.fields[ben].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                  <span>{!$ObjectType.Benefit__c.fields[ben].inlineHelpText}</span>
+                              </span>
+                        </th> 
+                    </apex:repeat>  
+                    
+                        <th>
+                             <abbr class="slds-required" title="required">*</abbr> 
+                            {!$ObjectType.Benefit__c.fields.Earliest_payment_date__c.Label}
+                            <span class="LiteHelpText"> 
+                                 <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Earliest_payment_date__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                 <span>{!$ObjectType.Benefit__c.Fields.Earliest_payment_date__c.inlineHelpText}</span>
+                             </span> 
+                        </th>
+                        </tr>
+                    
+                        <tbody>
+                            <tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+                                <td><input type="checkbox"  ng-model="item.selected"/></td>
+                                    <td>    
+                                    <input type="text"  ng-click="open1((currentPage-1)*itemsPerPage +$index);"  uib-datepicker-popup="{{format1}}" ng-model="item.benefit.xcdhcm__Date_of_award__c"  is-open="item.isUidatePickerOpen1"  datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats1" />
+                                </td>
+                                
+                            <td>    
+                                    <apex:outputText value="{{item.empId}}" />
+                            </td>
+                           
+                            <td ng-repeat="item1 in performanceFieldSetMember">
+                                <span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' ">{{item.employeeReview[item1.fieldPath] }}</span>                           
+                                <span ng-if = "item1.type ==  'date' "> {{item.employeeReview[item1.fieldPath]  | toDayMonthYear}}</span>
+                                <span ng-if = "item1.type ==  'percent' "> {{item.employeeReview[item1.fieldPath]  | number:2 | percentage}}</span>
+                                <span ng-if = "item1.type ==  'double' "> {{item.employeeReview[item1.fieldPath]  | number:2 }}</span>                              
+                            </td>
+                           
+                            <td>
+                                <span ng-if = "userDefaultCurrency == item.Compn.CurrencyIsoCode"> {{item.Compn.CurrencyIsoCode }} {{item.Compn.xcdhcm__Base_Salary__c | number:2}}</span>
+                                <span ng-if = "userDefaultCurrency != item.Compn.CurrencyIsoCode "> {{item.Compn.CurrencyIsoCode }} {{item.Compn.xcdhcm__Base_Salary__c | number:2}} ({{userDefaultCurrency}} {{item.Compn.ConvertedCurrentSalary | number:2}})</span>
+                            </td>
+                           
+                            <td ng-repeat="item2 in compensationFieldSetMember">
+                                <span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' ">{{item.Compn[item2.fieldPath] }}</span>                            
+                                <span ng-if = "item1.type ==  'date' "> {{item.Compn[item2.fieldPath]  | toDayMonthYear}}</span>
+                                <span ng-if = "item1.type ==  'percent' "> {{item.Compn[item2.fieldPath]  | number:2 | percentage}}</span>
+                                <span ng-if = "item1.type ==  'double' "> {{item.Compn[item2.fieldPath]  | number:2 }}</span>
+                            </td>
+                            
+                                <td>    
+                                    <input type="float"  id="id_PerBonus"  ng-model="item.benefit.xcdhcm__Percentage_bonus__c"  ng-change="changePercentage((currentPage-1)*itemsPerPage +$index);"/>
+                            </td>
+                           
+                            <td>
+                                    <input type="float"  id="id_PerBonus"  ng-model="item.benefit.xcdhcm__Payment_amount__c"  ng-change="changePamentAmount((currentPage-1)*itemsPerPage +$index);"/>
+                            </td>
+                             
+                            <td ng-repeat="item3 in benefitFieldSetMember" >
+                                <span ng-if = "item3.type !=  'picklist' "><input   id="id_PerBonus1"  ng-model="item.benefit[item3.fieldPath] " /></span>
+                                <span ng-if = "item3.type ==  'picklist' ">
+                                    <select ng-model="item.benefit[item3.fieldPath] " style="width:100px">
+                                        <option value="{{item.benefit[item3.fieldPath]}}" ng-selected="{{item.benefit[item3.fieldPath]}}">{{item.benefit[item3.fieldPath]}} </option>
+                                    </select> 
+                                </span>
+                           </td>
+                           
+                            <td>  
+                                <input type="text"  ng-click="open2((currentPage-1)*itemsPerPage +$index);"  uib-datepicker-popup="{{format2}}" ng-model="item.benefit.xcdhcm__Earliest_payment_date__c"  is-open="item.isUidatePickerOpen2"  datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats2" />
+                                </td>
+                            </tr>
+                        </tbody>
+                </table>            
+            </apex:pageBlock>
+    <!-- =========================================END Bonus=================================================== -->
+ 
+    <!-- =========================================START :: Commission============================================= -->
+           <apex:pageBlock mode="maindetail"  id="commission" rendered="{!selectedAwardType == 'Commission'}" >   
+            <div style="font-weight:400!important;font-size: 2.2rem;line-height: 1.25; color: #16325c;margin-left:1rem;text-transform: uppercase;padding-top: 10px;">{!pageBlockTitle}</div>
+              <br/>
+               <span style="margin-left: 12px;font-size:1.3rem;color: #16325c;font-weight:normal;font-family: 'Salesforce Sans',Arial,sans-serif;">Departments</span>
+                    <input type="text" ng-model="reviewerName" placeholder="Name" ng-change="changeDeparment()" style="font-size:12px;font--weight:300; width:150px!important;"/>
+                    <i class="fa fa-search" aria-hidden="true" 
+                        style="margin-top: 5px;margin-left: 3px;color: #00a6ed;border: 1px solid #00a6ed;padding: 3px;border-radius: 2px;cursor: pointer;" ng-click="showDepartments()">
+                    </i> 
+                    <br/><br/>         
+                         
+                        <table class="table  table-hover;" style="background: #fdfdfd;"> 
+                            <tr class="slds-text-title_caps" >
+                                <th><input type="checkbox" ng-model="deleteAll" ng-click="selectedAll()" /></th>
+                                <th> 
+                                <abbr class="slds-required" title="required">*</abbr> 
+                                    {!$ObjectType.Benefit__c.Fields.Date_of_award__c.Label}
+                                    <span class="LiteHelpText">
+                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Date_of_award__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                        <span>{!$ObjectType.Benefit__c.Fields.Date_of_award__c.inlineHelpText}</span>
+                                    </span> 
+                            </th>
+                            
+                            <th>
+                                {!$ObjectType.Employee_Review__c.Fields.Employee_name__c.Label}
+                                <span class="LiteHelpText">
+                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.Fields.xcdhcm__Employee_name__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                        <span>{!$ObjectType.Employee_Review__c.Fields.Employee_name__c.inlineHelpText}</span>
+                                 </span> 
+                            </th>
+                                                        
+                            <apex:outputPanel rendered="{!BulkSalaryaward}">  
+                                <apex:repeat var="review" value="{!$ObjectType.xcdhcm__Employee_Review__c.fieldSets.xcdhcm__Bulk_award_review}">
+                                <th>
+                                     {!review.label}
+                                    <span ID="LiteHelpTextID">
+                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Employee_Review__c.fields[review].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                        <span>{!$ObjectType.Employee_Review__c.fields[review].inlineHelpText}</span>
+                                    </span>
+                                </th>
+                                </apex:repeat>
+                            </apex:outputPanel> 
+                            
+                            <th>
+                                    {!$objectType.Compensation__c.fields.Base_Salary__c.Label}
+                                <span class="LiteHelpText">
+                                     <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.Fields.xcdhcm__Base_Salary__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                     <span>{!$ObjectType.Compensation__c.Fields.Base_Salary__c.inlineHelpText}</span>
+                                 </span> 
+                            </th>       
+                                                                        
+                                        
+                            <apex:repeat var="comp" value="{!$ObjectType.xcdhcm__Compensation__c.fieldSets.xcdhcm__Bulk_bonus_award}">                          
+                                <th>
+                                     {!comp.label}
+                                    <span ID="LiteHelpTextID">
+                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields[comp].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                        <span>{!$ObjectType.Compensation__c.fields[comp].inlineHelpText}</span>
+                                    </span>
+                                </th>
+                            </apex:repeat>
+                                            
+                            <th>
+                                 <abbr class="slds-required" title="required">*</abbr> 
+                                {!$ObjectType.Benefit__c.fields.Payment_amount__c.Label}
+                                <span class="LiteHelpText">
+                                     <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Payment_amount__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                     <span>{!$ObjectType.Benefit__c.Fields.Payment_amount__c.inlineHelpText}</span>
+                                 </span> 
+                            </th>
+                            
+                            <apex:repeat var="ben" value="{!$ObjectType.xcdhcm__Benefit__c.fieldSets.xcdhcm__Bulk_award_benefit}">
+                                <th>
+                                       {!ben.label}
+                                       <span ID="LiteHelpTextID">
+                                          <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.fields[ben].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                          <span>{!$ObjectType.Benefit__c.fields[ben].inlineHelpText}</span>
+                                      </span>
+                                </th> 
+                            </apex:repeat>  
+                    
+                            <th>
+                                 <abbr class="slds-required" title="required">*</abbr> 
+                                <span>{!$ObjectType.Benefit__c.fields.Earliest_payment_date__c.Label}</span>
+                                <span class="LiteHelpText"> 
+                                     <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Benefit__c.Fields.xcdhcm__Earliest_payment_date__c.inlineHelpText))}"  value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                     <span>{!$ObjectType.Benefit__c.Fields.Earliest_payment_date__c.inlineHelpText}</span>
+                                 </span> 
+                            </th>
+                            </tr>
+                            <tbody>
+                            <tr ng-repeat="item in filterData = filteredItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)" class="ng-cloak" >
+                                <td><input type="checkbox"  ng-model="item.selected"/></td>
+                                
+                                <td>    
+                                <input type="text"  ng-click="open1((currentPage-1)*itemsPerPage +$index);"  uib-datepicker-popup="{{format1}}" ng-model="item.benefit.xcdhcm__Date_of_award__c"  is-open="item.isUidatePickerOpen1"  datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats1" />
+                            </td>
+                                
+                            <td>    
+                                    <apex:outputText value="{{item.empId}}" />
+                            </td>
+                           
+                            <td ng-repeat="item1 in performanceFieldSetMember" >
+                                <span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' ">{{item.employeeReview[item1.fieldPath] }}</span>                           
+                                <span ng-if = "item1.type ==  'date' "> {{item.employeeReview[item1.fieldPath]  | toDayMonthYear}}</span>
+                                <span ng-if = "item1.type ==  'percent' "> {{item.employeeReview[item1.fieldPath]  | number:2 | percentage}}</span>
+                                <span ng-if = "item1.type ==  'double' "> {{item.employeeReview[item1.fieldPath]  | number:2 }}</span>
+                            </td>
+                           
+                            <td> 
+                                <span ng-if = "userDefaultCurrency == item.Compn.CurrencyIsoCode"> {{item.Compn.CurrencyIsoCode }} {{item.Compn.xcdhcm__Base_Salary__c | number:2}}</span>
+                                <span ng-if = "userDefaultCurrency != item.Compn.CurrencyIsoCode "> {{item.Compn.CurrencyIsoCode }} {{item.Compn.xcdhcm__Base_Salary__c | number:2}} ({{userDefaultCurrency}} {{item.Compn.ConvertedCurrentSalary | number:2}})</span>
+                            </td>
+                           
+                            <td ng-repeat="item2 in compensationFieldSetMember">
+                                <span ng-if = "item1.type !=  'date'  && item1.type != 'percent' && item1.type != 'double' ">{{item.Compn[item2.fieldPath] }}</span>                            
+                                <span ng-if = "item1.type ==  'date' "> {{item.Compn[item2.fieldPath]  | toDayMonthYear}}</span>
+                                <span ng-if = "item1.type ==  'percent' "> {{item.Compn[item2.fieldPath]  | number:2 | percentage}}</span>
+                                <span ng-if = "item1.type ==  'double' "> {{item.Compn[item2.fieldPath]  | number:2 }}</span>
+                            </td>
+                           
+                            <td>    
+                                    <input type="float"  id="id_PerCommission"  ng-model="item.benefit.xcdhcm__Payment_amount__c" />
+                            </td>
+
+                            <td ng-repeat="item3 in benefitFieldSetMember">
+                                <span ng-if = "item3.type !=  'picklist' "><input   id="id_PerBonus1"  ng-model="item.benefit[item3.fieldPath] " /></span>
+                                <span ng-if = "item3.type ==  'picklist' ">
+                                    <select ng-model="item.benefit[item3.fieldPath] " style="width:100px">
+                                        <option value="{{item.benefit[item3.fieldPath]}}" ng-selected="{{item.benefit[item3.fieldPath]}}">{{item.benefit[item3.fieldPath]}} </option>
+                                    </select> 
+                                </span>
+                                </td>
+                                
+                                <td>  
+                                <input type="text"  ng-click="open2((currentPage-1)*itemsPerPage +$index);"  uib-datepicker-popup="{{format2}}" ng-model="item.benefit.xcdhcm__Earliest_payment_date__c"  is-open="item.isUidatePickerOpen2"  datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats2" />
+                                </td>
+                            </tr>
+                        </tbody>
+                </table>        
+        </apex:pageBlock> 
+    <!-- =========================================END Commission=================================================== -->
+   
+    <!-- =========================================START Pagination=================================================== -->
+            <table width="100%">
+                <tfoot>
+                    <tr>
+                        <td width="50%">
+                            <ul uib-pagination ="x"  total-items="filteredItems.length" ng-model="currentPage" items-per-page="itemsPerPage" 
+                                max-size="maxlength" class="pagination-sm" boundary-links="true" force-ellipses="true" ng-change="uncheck();">
+                            </ul>
+                        </td>   
+                            
+                            <td style="text-align:right" width="50%">
+                            <apex:actionStatus id="saveStatus">
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                    <apex:commandButton value="{!$Label.xcdhcm__bulkemployeeawardbcancel}" action="{!cancel}" styleclass="slds-button slds-button--neutral"
+                                         status="saveStatus" reRender="errorId" style="padding: 5px;width: 90px;border: 1px solid #d8dde6;background-color: #fff;position: relative;display: inline-block;font-size: 1.2rem;"/>
+                                         
+                                <input type="button" ng-click="sendData()" value="{!$Label.BulkEmployeeAwardBSave}"  class="slds-button slds-button--brand" 
+                                    style="padding: 5px;width: 90px;border: 1px solid #d8dde6;position: relative;display: inline-block;font-size: 1.2rem;" />
+                                    
+                                 </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--large" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus>
+                            </td>
+                        <apex:actionFunction name="saveMethod"  action="{!saveBulkEmployeeAwards}" oncomplete=""  status="saveStatus" reRender="errorId" >   
+                            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+                        </apex:actionFunction>
+                    </tr> 
+                </tfoot>
+            </table>
+<!-- =========================================END Pagination================================================================================ -->
+    </apex:form>
+
+<script type="text/ng-template" id="userContent.html"> 
+        <div class="modal-body SignUpc" style="display:inline-block;paddin-bottom:5px;width: 100%;text-align: center;">
+            <div class="col-md-12" style="float:none;margin:auto;"> 
+                <h4><i title="Close" class="fa fa-close" aria-hidden="true" style="color: #00a6ed;padding: 3px;border-radius: 2px;float:right;cursor:pointer;" ng-click="closePopUp()"></i></h4>
+                <h3 style="float: left;color:#00a6ed;width:90%;text-align: left;font-size: 20px;margin-top:0px;">Lookup <i class="fa fa-search" aria-hidden="true" style="margin-top: 5px;    color: #00a6ed;      padding: 3px;    border-radius: 2px;"></i></h3>
+                
+                <div class="form-group" style="width:100%;float:left;">
+                    <input type="text" ng-model="searchUser" ng-change="filteredSearch()" placeholder="Name"  class="ng-pristine ng-valid form-control ng-touched" style="width:60% !important;height: 35px !important;" > 
+                 </div>
+                <h3 style="float: left;color:#000;width: 100%;text-align: left;font-size: 16px;margin-bottom:0px;margin-top:10px;">Search Result</h3>
+                <div style="margin-top:5px;height:300px;overflow:auto;border: 1px solid #ccc;">
+                    <table class="table" width=100%>
+                        <thead> 
+                            <tr > 
+                                <th >Name</th>
+                                <th>Company</th> 
+                                <th >No longer in use</th> 
+                            </tr>
+                        </thead> 
+                        <tbody>
+                           <!-- <tr ng-repeat="usr in AllUsers.slice(((currentPage-1)*itemsPerPage), ((currentPage)*itemsPerPage)) | filter:searchUser"> -->
+                           <tr ng-repeat="usr in filterData = (AllUsers | filter:searchUser) | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)"> 
+                                <td style="text-align:left;"><a href="" ng-click="selectUserDetails(usr)">{{usr.Name}}</a></td>
+                                <td style="text-align:left;">{{usr.xcdhcm__Companies_Name__r.Name}}</td>
+                                <td style="text-align:left;"><!--{{usr.Active__c}}--></td>
+                            </tr>
+                            <tr ng-if="filterData.length == 0">
+                                <td></td>
+                                <td style="text-align:center;font-weight: bold;font-size: 15px;width: 150px;padding-top: 100px;" ><i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color:#f88962;"></i> <br/>No record found</td>
+                                <td></td><td></td>
+                            </tr>                                                
+                        </tbody> 
+                    </table> 
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;">              
+                    <ul uib-pagination total-items="filterData.length" ng-model="currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+                    <!-- <ul uib-pagination total-items="filterData.length" ng-model="currentPage" items-per-page="itemsPerPage" ></ul> -->         
+                </div>
+            </div>
+        </div> 
+    </script>
+    </body> 
+</html>
+    
+</apex:page>

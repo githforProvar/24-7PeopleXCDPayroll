@@ -1,0 +1,65 @@
+<apex:page controller="xcdhcm.ErrorHandlingController">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteJoinerFirst.css')}" /> 
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <head>  
+        <apex:slds />
+    </head>
+   
+    
+<style type="text/css">
+         .popupBg
+        {
+        //background-color:#FFFFFF;
+        opacity: 1.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 50%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 40%;
+        width: 600px;
+        margin-left: -250px;
+        text-decoration: none;
+        font-weight: bold;
+        
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;
+        box-shadow: 1px 2px 2px 2px #b3d5f8;
+   
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+</style>
+ <body class="slds-scope">
+<apex:form id="frm">
+<apex:pageMessages id="pgMsgs"/>
+    <apex:outputPanel id="op1" styleClass="popupBg" rendered="{!showBenPopup}">
+        <apex:outputPanel id="op2" styleClass="customPopup" layout="block" rendered="{!showBenPopup}">
+            <center>  
+                <apex:outputtext id="oText1" value="The record may be cancelled provided payment has not been made.  The record will be removed from the Employee’s view.  No payments will be made" rendered="{!showPopupBenefit}"/>
+                <apex:outputtext id="oText2" value="You cannot cancel this request as it is already cancelled" rendered="{!showAlreadyCancelledBenefit}"/>
+                
+                <br/>
+                <br/>
+                <apex:commandButton id="b2" value="Ok" action="{!cancelBenefit}"  styleclass="btn slds-button slds-button--brand" rerender="op1,op2,oText1,oText2,pgMsgs" rendered="{!showAlreadyCancelledBenefit = false}"/>
+                 <apex:commandButton id="b1" value="Cancel" action="{!backToBenefit}"  styleclass="slds-button slds-button--neutral" rendered="{!showAlreadyCancelledBenefit = false}"/>
+                 <apex:commandButton id="b3" value="Ok" action="{!backToBenefit}"  styleclass="btn slds-button slds-button--brand" rendered="{!showAlreadyCancelledBenefit}"/>
+            </center>
+        </apex:outputPanel>
+    </apex:outputPanel>
+</apex:form>
+ </body>
+</html>
+</apex:page>

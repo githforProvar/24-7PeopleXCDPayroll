@@ -1,0 +1,262 @@
+<!-- START :: 29/11/2018 NPPD-1803 Fix MyTimesheet tab name code reference modified by Sabir -->
+<apex:page Controller="xcdhcm.TimeSheetSummaryController" sidebar="false"
+	showHeader="true" wizard="false" cache="false" readOnly="false"  tabStyle="Timesheets__tab"> 
+<!-- END :: 29/11/2018 NPPD-1803 Fix MyTimesheet tab name code reference modified by Sabir -->
+	<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/employeermview.css')}" />
+    <style type="text/css">
+        .popupBg {
+            background-color: #FFFFFF;
+            opacity: 0.0;
+            filter: alpha(opacity =   60);
+            position: absolute;
+            width: 100%;
+            height: 100%; 
+            top: 0;
+            left: 0; 
+            z-index: 9998;
+        }
+        .customPopup {
+            line-height: 25px;
+            position: absolute;
+            left: 50%; 
+            padding: 10px;
+            z-index: 9999;
+            text-align: center;
+            top: 150px;
+            width: 500px;
+            margin-left: -250px;
+            text-decoration: none;
+            font-weight: bold;
+            background: #ffffff !important;
+            border: 1px solid #ccc !important;
+            -moz-box-shadow: 4px 5px 10px #99ccff;
+            -webkit-box-shadow: 4px 5px 10px #99ccff;
+            box-shadow: 4px 5px 10px #99ccff;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            color: #336699;
+        }
+        .butt {
+            border: 1px solid #d9d9d9 !important;
+            color: #999999 !important;
+            background-color: #fff !important;
+            background-image: none !important;
+            -moz-box-shadow: 2px 1px 8px #a6d6ff;
+            -webkit-box-shadow: 2px 1px 8px #a6d6ff;
+            box-shadow: 2px 1px 8px #a6d6ff;
+        }
+        .links {
+            display: none;
+        }
+        .imgg .popp {
+            background: none repeat scroll 0 0 rgba(000,000,000,.60);
+            font-size: 1em;
+            height: 1.6em;
+            line-height: 1.6em;
+            margin-top: 128px;
+            width: 150px;
+            position: absolute;
+            text-align: center;
+            z-index: 3;
+            display:none;
+        }
+       
+        .imgg:hover .popp {
+            display:block !important;
+        }
+        .apexp .totalRow {
+            background-color:#FFFFFF!important;
+        }
+        body .bEditBlock .pbBottomButtons, body .apexp .bPageBlock.apexDefaultPageBlock .pbBottomButtons {
+            border-top: none !important;
+        }
+        body .bEditBlock .pbHeader, body .bLayoutBlock .pbHeader, body .apexp .bPageBlock.apexDefaultPageBlock .pbHeader {
+            border-bottom: 2px solid #63a4c5 !important;
+        }
+        .pbBody{
+            border-bottom: 2px solid #63a4c5 !important;
+        }
+        .bEditBlock input, .bEditBlock select, .bEditBlock img, .quickCreateModule input, .quickCreateModule select, .quickCreateModule img {
+            margin-left:1em!important;
+        }
+        body .pbBody table.list tr.headerRow th {
+            width:5%!important;
+        }
+        #fid{
+            color: #999 !important;
+            font-size: 11pt !important;font-weight: bold;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        body .pbBody table.list tr.headerRow th {
+            font-size:11pt!important;
+        }
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader {
+            font-size:14pt!important;
+        }
+        .ct{ 
+        text-align:center;
+        }
+        .headerRow .headerStyle{
+            background-color:#638658;color:#FFFFFF
+        }
+    </style>
+   
+    <apex:pageBlock rendered="{!AlertMsg==true}">
+        <h1> <blink><apex:outputText Style="Font-size:medium" value="Alert"/><br/><br/></blink> </h1>
+        <apex:outputText Style="Font-size:small" value="Please contact the HR Administrator to create a Employee Detail Profile"/>  
+    </apex:pageBlock>
+    
+    <apex:outputPanel rendered="{!AlertMsg==false}">  
+        <table style="width:100%" border="0" >
+            <tr>
+                <td valign="Top" width="15%" style="height: 800px;">
+                    <apex:outputpanel styleClass="pic" id="image" layout="block">
+                        <div class="imgg">
+                            <apex:form >
+                                <div class="popp">                
+                                    <apex:commandLink action="{!imageupload}" value="Add photo" rendered="{!AND(ImageUpload=true,imageRender!=true)}" style="color:#fff;text-decoration:none;margin-left:4px;"/>
+                                    <apex:commandLink action="{!imageupload}" value="Update | Delete" rendered="{!AND(ImageUpload=true,imageRender=true)}" style="color:#fff;text-decoration:none;margin-left:4px;"/>
+                                </div> 
+                                <apex:commandLink action="{!imageupload}" rendered="{!AND(ImageUpload=true,imageRender=true)}">
+                                    <apex:image value="{!ImageURL}" width="150px" height="150px" rendered="{!imageRender}" />
+                                </apex:commandLink>
+                                <apex:commandLink action="{!imageupload}" rendered="{!AND(ImageUpload=true,imageRender!=true)}">
+                                    <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Employee_Default_Image.PNG')}" width="150px" height="150px" rendered="{!imageRender!=true}" />
+                                </apex:commandLink>
+                            </apex:form>
+                        </div>
+                        <apex:form style="margin-bottom:1px;" rendered="{!ImageUpload=false}">
+                            <apex:image value="{!ImageURL}" width="150px" height="150px" rendered="{!AND(ImageUpload=false,imageRender=true)}"/>
+                            <apex:image value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/Employee_Default_Image.PNG')}" width="150px" height="150px" rendered="{!AND(ImageUpload=false,imageRender!=true)}"/>
+                        </apex:form>
+                        <br/><br/>            
+                        <apex:outputText style="font-weight:bold;font-size:150%;padding-top:15px;" value="{!empDetail.Name}" />
+                        <br />
+                        <apex:outputText style="color:#000000;" value="{!currentUser.title}" />
+                        <br />
+                        <br />
+                        <apex:outputLabel style="color:#999999;" for="phone" value="phone" />
+                        <br />
+                        <apex:outputText id="phone" style="color:#000;font-weight:bold;" value="{!currentUser.Phone}" />
+                        <br />
+                        <apex:outputLabel style="color:#999999;" for="Email" value="email " />
+                        <br />
+                        <div style="width:180px; word-wrap: break-word;">  
+                            <apex:outputText id="Email" style="color:#000;font-weight:bold;" value="{!currentUser.email}" />
+                        </div>
+                        <br />
+                        <apex:outputLabel style="color:#999999;" for="Manager" value="Manager" />
+                        <br />
+                        <apex:outputText id="Manager" style="color:#000;font-weight:bold;" value="{!currentUser.Manager.Name}" />
+                        <br />  
+                        <apex:outputLabel style="color:#999999;" for="Department" value="Department" rendered="{!currentUser.Department!=null}"/>
+                        <br />
+                        <apex:outputText id="Department" style="color:#000;font-weight:bold;" value="{!currentUser.Department}" rendered="{!currentUser.Department!=null}"/>      
+                        <apex:form >
+                            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                            <apex:commandButton action="{!newTimesheet}" value="{!$Label.xcdhcm__abtimesheetsummarymanagerviewbooktimesheet}" rendered="{!NewTimesheetButton == true}" styleclass="sidebutton" style="margin-top:10%;"/> 
+                            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                        </apex:form> 
+                    </apex:outputpanel>
+                </td>
+                <td valign="Top" width="100%">
+                    <apex:tabPanel switchType="client" value="{!SelectedTab}" id="theTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" width="100%" headerAlignment="center" style="background:#000; border-radius:5px;background-image:url('{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/gribbon2.png')}');">
+                         <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                        <apex:tab label="Timesheets" name="{!$Label.xcdhcm__timesheetsummarymanagerviewsttimesheets}" id="tabdetails1" style="font-size:14px" >
+                        <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                            <apex:form >
+                            		<!-- START :: 11/11/2017 NPPD-1372 Weekly timesheets added by Farhan -->  
+                                    <apex:pageBlock title="" mode="edit" id="timesheetSummary">
+                                    <!-- END :: 11/11/2017 NPPD-1372 Weekly timesheets added by Farhan -->
+                                        <apex:PageMessages id="errorMsg1"/>
+                                        <center>
+                                            <apex:pageBlockButtons location="top" >
+                                                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                                <apex:commandButton action="{!newTimesheet}" value="{!$Label.xcdhcm__timesheetsummarymanagerviewsttimesheetsbbooktimesheet}" rendered="{!NewTimesheetButton == true}" />
+                                                <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                                <!-- START :: 11/11/2017 NPPD-1372 Weekly timesheets added by Farhan -->
+						    					<span style="float:right">Year:<apex:selectList id="yearFilter" value="{!selectedYear}" size="1" styleclass="datepick"> 
+						                        	<apex:selectOptions value="{!YearFilterOptions}"/>
+						                        	<apex:actionSupport event="onchange" rerender="timesheetSummary" status="actStatus"/>  
+						                    	</apex:selectList>
+						                    	<apex:actionStatus startText="Loading..." id="actStatus"/>
+						                    	</span>
+						    					<!-- END :: 11/11/2017 NPPD-1372 Weekly timesheets added by Farhan -->
+                                            </apex:pageBlockButtons>
+                                        </center>
+                                        <apex:pageBlockTable value="{!empTSSummaries}" var="sub" id="table" >   
+                                            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                            <apex:column headervalue="{!$ObjectType.xcdhcm__Overtime_Record__c.fields.name.label}" width="15px">
+                                            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                                                <!-- START :: 11/11/2017 NPPD-1372 Weekly timesheets modified by Farhan -->
+                                                <!-- START :: 29/11/2017 NPPD-1513 Modular timesheet modified by Farhan -->
+                                                
+                                                
+                                                <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetDays?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c == 'Days',OR(sub.xcdhcm__Timesheet_frequency__c == '',sub.xcdhcm__Timesheet_frequency__c == 'Monthly'))}">{!sub.Name}</apex:OutputLink>
+                                                <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetProject?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c == 'Project',OR(sub.xcdhcm__Timesheet_frequency__c == '',sub.xcdhcm__Timesheet_frequency__c == 'Monthly'))}">{!sub.Name}</apex:OutputLink>
+												<apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__ModularTimesheet?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c != 'Days',sub.xcdhcm__Time_sheet_approach__c != 'Project',OR(sub.xcdhcm__Timesheet_frequency__c == '',sub.xcdhcm__Timesheet_frequency__c == 'Monthly'))}">{!sub.Name}</apex:OutputLink>
+                                                <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetDays?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c == 'Days',sub.xcdhcm__Timesheet_frequency__c != '',sub.xcdhcm__Timesheet_frequency__c != 'Monthly')}">{!sub.Name}</apex:OutputLink>
+                                            	<apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetProject?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c == 'Project',sub.xcdhcm__Timesheet_frequency__c != '',sub.xcdhcm__Timesheet_frequency__c != 'Monthly')}">{!sub.Name}</apex:OutputLink>
+                                            	<apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__ModularTimesheet?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&tssumID={!sub.xcdhcm__Leave_Month__c}&detailView=yes&approach={!sub.xcdhcm__Time_sheet_approach__c}&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c != 'Days',sub.xcdhcm__Time_sheet_approach__c != 'Project',sub.xcdhcm__Timesheet_frequency__c != '',sub.xcdhcm__Timesheet_frequency__c != 'Monthly')}">{!sub.Name}</apex:OutputLink>
+                                            </apex:column>  
+                                            <apex:repeat value="{! $ObjectType.Overtime_Record__c.Fieldsets.Timesheet_summary}" var="f">
+                                                    <apex:column headervalue="{!f.Label}">                                                  
+                                                        <apex:outputField value="{!sub[f]}"/>
+                                                    </apex:column>  
+                                            </apex:repeat> 
+                                        </apex:pageBlockTable> 
+                                        <br />
+                                        <br />
+                                        <center>
+                                            <apex:outputText Value="There are no timesheets to display" rendered="{! empTSSummaries.size == 0}" style="font-size:14px;"/>
+                                        </center>
+                                        <br />
+                                        <br />
+                                    </apex:pageBlock>
+                            </apex:form> 
+                        </apex:tab> 
+                        
+                        <apex:tab label="{!$Label.xcdhcm__timesheetsummarymanagerviewstapprovals}" name="Approvals" id="Approvals" style="font-size:14px" rendered="{!empTSSummaryToApprove.size != 0}">
+                            <apex:form >
+                                <apex:outputPanel id="outApprovals">
+                                    <apex:pageBlock title="" mode="edit">
+                                        <apex:PageMessages id="errorMsg2"/>
+                                        	
+                                        <apex:pageBlockTable value="{!empTSSummaryToApprove}" var="sub" id="table" >   
+                                            <apex:column headervalue="{!$ObjectType.xcdhcm__Overtime_Record__c.fields.name.label}" width="15px">
+                                                <!-- START :: 11/11/2017 NPPD-1372 Weekly timesheets modified by Farhan -->
+                                                <!-- START :: 29/11/2017 NPPD-1513 Modular timesheet modified by Farhan -->
+                                                
+                                                <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetDays?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&approach={!sub.xcdhcm__Time_sheet_approach__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&approver=yes&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c == 'Days',OR(sub.xcdhcm__Timesheet_frequency__c == '',sub.xcdhcm__Timesheet_frequency__c == 'Monthly'))}">{!sub.Name}</apex:OutputLink>
+                                                <apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetProject?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&approach={!sub.xcdhcm__Time_sheet_approach__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&approver=yes&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c == 'Project',OR(sub.xcdhcm__Timesheet_frequency__c == '',sub.xcdhcm__Timesheet_frequency__c == 'Monthly'))}">{!sub.Name}</apex:OutputLink>
+												<apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__ModularTimesheet?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&approach={!sub.xcdhcm__Time_sheet_approach__c}&tssumID={!sub.xcdhcm__Leave_Month__c}-{!sub.xcdhcm__Leave_Year__c}&approver=yes&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c != 'Days',sub.xcdhcm__Time_sheet_approach__c != 'Project',OR(sub.xcdhcm__Timesheet_frequency__c == '',sub.xcdhcm__Timesheet_frequency__c == 'Monthly'))}">{!sub.Name}</apex:OutputLink>
+                                            	<apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetDays?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&approach={!sub.xcdhcm__Time_sheet_approach__c}&tssumID={!sub.xcdhcm__Leave_Month__c}&approver=yes&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c == 'Days',sub.xcdhcm__Timesheet_frequency__c != '',sub.xcdhcm__Timesheet_frequency__c != 'Monthly')}">{!sub.Name}</apex:OutputLink>
+                                            	<apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__TimesheetProject?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&approach={!sub.xcdhcm__Time_sheet_approach__c}&tssumID={!sub.xcdhcm__Leave_Month__c}&approver=yes&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c == 'Project',sub.xcdhcm__Timesheet_frequency__c != '',sub.xcdhcm__Timesheet_frequency__c != 'Monthly')}">{!sub.Name}</apex:OutputLink>
+                                            	<apex:outputLink target="_self" title="{!sub.Name}" value="/apex/xcdhcm__ModularTimesheet?empid={!sub.xcdhcm__Employee_Details__c}&jobroleID={!sub.xcdhcm__Job_Role__c}&approach={!sub.xcdhcm__Time_sheet_approach__c}&tssumID={!sub.xcdhcm__Leave_Month__c}&approver=yes&managerpage=yes" rendered="{!AND(sub.xcdhcm__Time_sheet_approach__c != 'Days',sub.xcdhcm__Time_sheet_approach__c != 'Project',sub.xcdhcm__Timesheet_frequency__c != '',sub.xcdhcm__Timesheet_frequency__c != 'Monthly')}">{!sub.Name}</apex:OutputLink>
+	                                            
+                                            <!-- END :: 29/11/2017 NPPD-1513 Modular timesheet modified by Farhan -->
+                                            <!-- END :: 11/11/2017 NPPD-1372 Weekly timesheets modified by Farhan -->
+                                            </apex:column>  
+                                            <apex:repeat value="{! $ObjectType.Overtime_Record__c.Fieldsets.Timesheet_summary_approval}" var="f">
+                                                    <apex:column headervalue="{!f.Label}">                                                  
+                                                        <apex:outputField value="{!sub[f]}"/>
+                                                    </apex:column>  
+                                            </apex:repeat> 
+                                        </apex:pageBlockTable> 
+                                        <br />
+                                        <br />
+                                        <center>
+                                            <apex:outputText Value="There are no timesheets to be approved" rendered="{! empTSSummaryToApprove.size == 0}" style="font-size:14px;"/>
+                                        </center>
+                                        <br />
+                                        <br />
+                                    </apex:pageBlock>    
+                                </apex:outputPanel>                  
+                            </apex:form>
+                        </apex:tab>
+                    </apex:tabPanel>
+                </td>
+            </tr>
+        </table>
+    </apex:outputPanel>
+</apex:page>

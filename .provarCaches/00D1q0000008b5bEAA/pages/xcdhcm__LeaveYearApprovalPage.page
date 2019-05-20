@@ -1,0 +1,1279 @@
+<apex:page standardController="xcdhcm__Company_Holiday_Year__c" extensions="xcdhcm.LeaveYearApprovalController" sidebar="false"> 
+   <!-- <apex:stylesheet value="{!URLFOR($Resource.Css,'EmpDetPageCSS1.css')}" /> -->
+   <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEditPage.css')}" />
+   <!--START::4/2/2014 NPPD-392 Leaveyearapproval page pagination and carryforward filter Modified by kamal-->
+   <style>
+      .slds-inline_icon_text {  
+      background-color: #f4f6f9;
+      color: #54698d;
+      padding: .75rem 1rem;
+      }   
+      .slds-inline_icon_text .slds-icon {
+      fill: #54698d;
+      } 
+      .bEditBlock .pbHeader>table, .apexp .bPageBlock.apexDefaultPageBlock .pbHeader>table, #ep.bLayoutBlock .pbHeader>table {
+      border-bottom: none;
+      }
+      body .bPageBlock .pbTitle h2{
+      color: #000;
+      font-size: 2em;
+      }
+      .btnWidth{
+      width: 60px;
+      }
+      .slds-scope .slds-table th{
+      border: 1px solid #e0e3e5; 
+      background: #f2f3f3  		
+      }  
+      .invalidInput
+      {
+      	border: 1px solid red;
+      } 
+      
+      .slds-inline_icon_text--error .slds-icon {
+    	fill: #c23934;
+	  }
+   </style>
+   <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="leaveYearApproveApp">
+      <head>
+         <apex:slds />
+         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+         <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>	
+         <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+      </head>
+      <script>
+         var leaveYearApproveApp = angular.module('leaveYearApproveApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+         
+         leaveYearApproveApp.controller('leaveYearApproveController',	function($scope,$window,$filter,$uibModal,$sce,$timeout, $log){ 
+         
+         $scope.trustAsHtml = $sce.trustAsHtml;
+         
+         var allLSPList ="{!leaveSummaryPendingList}"; 
+         var allLSPItem = {!leaveSummaryPendingListJSON};       	 
+         
+         $scope.showAccrualBasisCompany = "{!isAccrualBasisCompany}";
+         
+         var allLSPNRList = "{!leaveSummaryPendingListNonReg}";
+         var allLSPNRItem = {!leaveSummaryPendingListNonRegJSON};  
+         
+         var leaveSummariesList ="{!leaveSummaries}"; 
+         var leaveSummariesMapJson = {!leaveSummariesMapJSON};     
+         
+         var leaveSummariesNonRegList ="{!leaveSummariesNonReg}"; 
+         var leaveSummariesNonRegMapJson = {!leaveSummMapNonRegMapJSON}; 
+         
+         var prevLeavePendingList ="{!isPrevLSLeavePendingList}"; 
+         var prevLeavePendingListItem = {!prevLSLeavePendingListJson}; 
+         var prevLeavePendingErrorMessage = {!prevLSLeavePendingErrorMessage};
+         
+         var prevLeavePendingListNonReg ="{!isPrevLSLeavePendingListNonReg}"; 
+         var prevLeavePendingListNonRegItem = {!prevLSLeavePendingListNonRegJson};
+         var prevLeavePendingNonRegErrorMessage = {!prevLSLeavePendingNonRegErrorMessage};  
+         
+         var companyId = "{!companyId}"; 
+         var companyHolIdJson = "{!CompanyHolId}";
+         var companyDetailJSON = {!companyDetailJSON};
+         
+         $scope.currentPage = 1 ;
+         $scope.currentPageBlock2 = 1 ;
+         $scope.itemsPerPage=50;
+         $scope.maxSize = 5;
+         
+         $scope.showRegLeaveSummaryNoRecord= "false";  
+         $scope.showNonRegLeaveSummaryNoRecord= "false";
+         $scope.showRegLeaveSummaryNoRecordBlock2= "false";
+         $scope.showNonRegLeaveSummaryNoRecordBlock2= "false";         
+         $scope.showRegPrevLeavePendingListNoRecordBlock3= "false";
+         $scope.showNonRegPrevLeavePendingListNoRecordBlock3= "false";
+         
+         $scope.showpageBlockTable1 = "true";
+         $scope.showpageBlockTable2 = "false";
+         $scope.showpageBlockTable3 = "false";
+         
+         $scope.showProceedBtn = "true";
+         $scope.showApproveBtn = "false";
+         $scope.showBackBtn = "false";
+         $scope.showCancelBtn = "true";
+         $scope.showNextBtn = "false";
+         
+         
+         $scope.initialAllRegChkBoxVal = true;
+		 $scope.initialAllNonRegChkBoxVal = true;
+		 
+		 $scope.dropDownViewName = 'Ready to action';
+		 $scope.dropDownInternalValue = 'Nocarry';
+		 
+         getAllItem();   	
+               	 
+         function getAllItem()
+         {
+         	//pending records required variables
+           	$scope.allPrevLeavePendingListItems = prevLeavePendingListItem;
+         	$scope.allPrevLeavePendingListNonRegItems = prevLeavePendingListNonRegItem; 
+         	$scope.prevLeavePendingErrorMsg = prevLeavePendingErrorMessage;
+			$scope.prevLeavePendingNonRegErrorMsg = prevLeavePendingNonRegErrorMessage;
+			$scope.errMsgPrevRecord = "";
+         	 
+         	if($scope.allPrevLeavePendingListItems.length >0 || $scope.allPrevLeavePendingListNonRegItems.length > 0)
+         	{
+         		$scope.showpageBlockTable1 = "false";
+		        $scope.showpageBlockTable2 = "false";
+		        $scope.showpageBlockTable3 = "true";
+		        
+		        $scope.showProceedBtn = "false";
+	         	$scope.showApproveBtn = "false";
+	         	$scope.showBackBtn = "false";
+	         	$scope.showCancelBtn = "true";
+	         	$scope.showNextBtn = "true";
+	         	
+	         	if($scope.prevLeavePendingErrorMsg != 'NoError')
+	         	{
+	         		$scope.errMsgPrevRecord = $scope.prevLeavePendingErrorMsg;
+	         	}
+	         	else if($scope.prevLeavePendingNonRegErrorMsg)
+	         	{
+	         		$scope.errMsgPrevRecord = $scope.prevLeavePendingNonRegErrorMsg;
+	         	}
+         	}
+         	   
+         	if($scope.allPrevLeavePendingListItems.length < 1)
+         	{
+         		$scope.showRegPrevLeavePendingListNoRecordBlock3= "true";
+         	}
+         	
+         	if($scope.allPrevLeavePendingListNonRegItems.length < 1)
+         	{
+         		$scope.showNonRegPrevLeavePendingListNoRecordBlock3= "true";
+         	}
+         	
+         	//approval required varibales
+         	$scope.allLeaveSummaryPendingItems = allLSPItem;   
+         	$scope.allLeaveSummaryPendingNonRegItems = allLSPNRItem;  
+         	
+         	$scope.leaveSummariesMapJsonItems = leaveSummariesMapJson;  
+         	
+         	$scope.leaveSummariesNonRegMapJsonItems = leaveSummariesNonRegMapJson; 
+         	
+         	$scope.comID =  companyId;
+         	$scope.comHolID =  companyHolIdJson;
+         	$scope.companyDetail = companyDetailJSON;
+         	
+         	if($scope.allLeaveSummaryPendingItems.length < 1)
+         	{
+         		$scope.showRegLeaveSummaryNoRecord= "true";
+         	}
+         	else
+         	{
+         	   $scope.initialAllRegChkBoxVal = true;
+			   for (var i = 0; i < $scope.allLeaveSummaryPendingItems.length; i++)
+			   {
+			    	$scope.allLeaveSummaryPendingItems[i].selected = true;
+			   }
+         	}
+         	
+         	if($scope.allLeaveSummaryPendingNonRegItems.length < 1)
+         	{
+         		$scope.showNonRegLeaveSummaryNoRecord= "true";
+         	}
+         	else
+         	{
+         		$scope.initialAllNonRegChkBoxVal = true;
+			    for (var i = 0; i < $scope.allLeaveSummaryPendingNonRegItems.length; i++)
+			    {
+			    	$scope.allLeaveSummaryPendingNonRegItems[i].selected = true;
+			    }
+         	}       	  
+         	
+         	if($scope.allLeaveSummaryPendingItems.length > $scope.allLeaveSummaryPendingNonRegItems.length)
+       		{
+       			$scope.totalItems = $scope.allLeaveSummaryPendingItems.length;//80;
+       		}
+       		else
+       		{
+       			$scope.totalItems = $scope.allLeaveSummaryPendingNonRegItems.length;
+       		}     		  		
+         } 
+         
+         /* ======View drop down function call====== */
+         $scope.dropboxitemselected = function (internalVal,displayName) {
+         	$scope.dropDownInternalValue = internalVal;
+         	$scope.dropDownViewName = displayName;
+         	
+         	$scope.showLoadingImg = "true";
+         	getData();
+         }
+         
+         function getData()
+         {
+	       Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.LeaveYearApprovalController.filterLeaveYearRecords}',
+	       JSON.stringify($scope.comID),JSON.stringify($scope.comHolID),JSON.stringify($scope.dropDownInternalValue),
+				function(result, event)
+				{
+					if (event.status)
+					{
+						if(result !='' && result.length > 0 && result.indexOf('Exception') == -1)
+						{
+							$scope.$apply(function(){
+							   $scope.resultData = angular.fromJson(result);
+							   $scope.allLeaveSummaryPendingItems = null;
+							   $scope.allLeaveSummaryPendingNonRegItems = null;
+							   
+		                       $scope.allLeaveSummaryPendingItems = $scope.resultData.leaveSmryPendingList;   
+         					   $scope.allLeaveSummaryPendingNonRegItems = $scope.resultData.leaveSmryPendingListNonReg;         					   
+         					 
+         					   /* ============= Reload all initial variables================ */ 
+         					   if($scope.allLeaveSummaryPendingItems.length < 1)
+					         	{
+					         		$scope.showRegLeaveSummaryNoRecord= "true";
+					         	}
+					         	else
+					         	{
+					         	   $scope.showRegLeaveSummaryNoRecord= "false";
+								   for (var i = 0; i < $scope.allLeaveSummaryPendingItems.length; i++)
+								   {
+								    	$scope.allLeaveSummaryPendingItems[i].selected = true;
+								   }
+					         	}
+					         	
+					         	if($scope.allLeaveSummaryPendingNonRegItems.length < 1)
+					         	{
+					         		$scope.showNonRegLeaveSummaryNoRecord= "true";
+					         	}
+					         	else
+					         	{
+					         		$scope.showNonRegLeaveSummaryNoRecord= "false";
+								    for (var i = 0; i < $scope.allLeaveSummaryPendingNonRegItems.length; i++)
+								    {
+								    	$scope.allLeaveSummaryPendingNonRegItems[i].selected = true;
+								    }
+					         	}       	  
+					         	
+					         	if($scope.allLeaveSummaryPendingItems.length > $scope.allLeaveSummaryPendingNonRegItems.length)
+					       		{
+					       			$scope.totalItems = $scope.allLeaveSummaryPendingItems.length;//80;
+					       		}
+					       		else
+					       		{
+					       			$scope.totalItems = $scope.allLeaveSummaryPendingNonRegItems.length;
+					       		}
+						         
+						        $scope.showpageBlockTable1 = "true";
+						        $scope.showpageBlockTable2 = "false";
+						        $scope.showpageBlockTable3 = "false";
+						        
+						        $scope.showProceedBtn = "true";
+						        $scope.showApproveBtn = "false";
+						        $scope.showBackBtn = "false";
+						        $scope.showCancelBtn = "true";
+						        
+						        $scope.currentPage = 1 ;	
+						        
+						        $scope.showLoadingImg = "false";
+						        $scope.showRegLeaveSummaryNoRecordBlock2= "false";
+								$scope.showNonRegLeaveSummaryNoRecordBlock2= "false";					        
+			                });
+						}
+						else
+						{
+							$scope.errMsg = result;
+							$scope.showLoadingImg = "false";
+						}
+						
+					}else if (event.type === 'exception') {
+						$scope.errMsg = event.message;
+						$scope.showLoadingImg = "false";
+					} else {
+						$scope.errMsg = event.message;
+						$scope.showLoadingImg = "false";
+					}
+				}, 
+			{escape: false}
+			);
+         }         
+         
+         function updateLeaveSummaries()
+         {
+	       Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.LeaveYearApprovalController.updateLeaveSummariesRecords}',
+	       JSON.stringify($scope.comID),JSON.stringify($scope.comHolID),
+				function(result, event)
+				{
+					if (event.status)
+					{
+						if(result !='' && result.length > 0 && result.indexOf('Exception') == -1)
+						{
+							$scope.$apply(function()
+							{
+								$scope.resultData = angular.fromJson(result);
+								$scope.tempLeaveSummMap = $scope.resultData.leaveSummaries; 
+								$scope.tempLeaveSummNonRegMap = $scope.resultData.leaveSummariesNonReg; 
+	         					  
+	         					$scope.leaveSummariesMapJsonItems = null;
+	         					$scope.leaveSummariesNonRegMapJsonItems = null;
+	         					
+	         					$scope.leaveSummariesMapJsonItems = $scope.tempLeaveSummMap ;          					
+	         					$scope.leaveSummariesNonRegMapJsonItems = $scope.tempLeaveSummNonRegMap	;			   
+			                });
+						}
+						else
+						{
+							$scope.errMsg = result;
+						}
+						
+					}else if (event.type === 'exception') {
+						$scope.errMsg = event.message;
+					} else {
+						$scope.errMsg = event.message;
+					}
+				}, 
+			{escape: false}
+			);
+         }
+         
+         $scope.pageChanged = function()
+       	 {
+       		$scope.remainingRegLeaveYearRecordCount    = $scope.currentPage*$scope.itemsPerPage - $scope.allLeaveSummaryPendingItems.length;	
+         	$scope.remainingNonRegLeaveYearRecordCount = $scope.currentPage*$scope.itemsPerPage - $scope.allLeaveSummaryPendingNonRegItems.length;         	         	
+         	 
+         	if($scope.remainingRegLeaveYearRecordCount < $scope.itemsPerPage)
+		    {
+		    	$scope.showRegLeaveSummaryNoRecord = "false";
+		    }
+		    else
+		    {
+		    	$scope.showRegLeaveSummaryNoRecord = "true";
+		    } 
+		     
+		    if($scope.remainingNonRegLeaveYearRecordCount < $scope.itemsPerPage)
+		    {
+		    	$scope.showNonRegLeaveSummaryNoRecord = "false";
+		    }
+		    else
+		    {
+		    	$scope.showNonRegLeaveSummaryNoRecord = "true";
+		    }
+	  	 };	
+	  	 
+	  	 /* ============================================ Functoins after selecting records and on the preview page======================================= */	 
+	  			
+		 $scope.selectAllRegLeave = function()
+	  	 {
+		  	  $scope.initialAllRegChkBoxVal = !$scope.initialAllRegChkBoxVal
+			  for (var i = 0; i < $scope.allLeaveSummaryPendingItems.length; i++)
+			  {
+			    $scope.allLeaveSummaryPendingItems[i].selected = $scope.initialAllRegChkBoxVal;
+			  }
+		 };  
+		
+		 $scope.selectAllNonRegLeave = function()
+	  	 {
+		  	  $scope.initialAllNonRegChkBoxVal = !$scope.initialAllNonRegChkBoxVal;
+			  for (var i = 0; i < $scope.allLeaveSummaryPendingNonRegItems.length; i++)
+			  {
+			    $scope.allLeaveSummaryPendingNonRegItems[i].selected = $scope.initialAllNonRegChkBoxVal;
+			  }
+		 }; 
+		 
+		 $scope.proceedNextBlock= function()
+	  	 {
+	  	 	$scope.dayItemsValidationFailed = false;
+	  	 	$scope.hourItemsValidationFailed = false;
+	  	 	
+  	 		$scope.showLoadingImg = "true";
+        	 	
+        	$scope.selectedAllRegLeaveRecords = [];	
+        	$scope.selectedAllNonRegLeaveRecords = [];		  	 	
+	  	 	
+	  	    for (var i = 0; i < $scope.allLeaveSummaryPendingItems.length; i++)
+		    {
+		   	  if($scope.allLeaveSummaryPendingItems[i].selected)
+		   	  {
+			   	  if($scope.allLeaveSummaryPendingItems[i].empLeaveAdjustDay != null)
+			   	  {
+			  		$scope.selectedAllRegLeaveRecords.push($scope.allLeaveSummaryPendingItems[i]); 
+			  	  }
+			  	  else
+			  	  {
+			  	  	$scope.dayItemsValidationFailed = true;
+			  	  	break;
+			  	  }
+		  	  }
+		    }
+		  
+		    for (var i = 0; i < $scope.allLeaveSummaryPendingNonRegItems.length; i++)
+		    {
+		  	  if($scope.allLeaveSummaryPendingNonRegItems[i].selected)
+		  	  {
+		  	  	if($scope.allLeaveSummaryPendingNonRegItems[i].empLeaveAdjustHour != null)
+			   	{
+		  	 		$scope.selectedAllNonRegLeaveRecords.push($scope.allLeaveSummaryPendingNonRegItems[i]);
+		  	 	}
+		  	 	else
+			  	{
+			  	  	$scope.hourItemsValidationFailed = true;
+			  	  	break;
+			  	}
+		  	  }
+		    } 
+		    
+		    if($scope.dayItemsValidationFailed == false &&  $scope.hourItemsValidationFailed== false )
+		    {
+			    $scope.showpageBlockTable1 = "false";
+	            $scope.showpageBlockTable2 = "true";
+	            $scope.showpageBlockTable3 = "false";
+	        	
+	        	$scope.showProceedBtn = "false";
+	            $scope.showApproveBtn = "true";
+	            $scope.showBackBtn = "true";
+	            $scope.showCancelBtn = "true"; 
+			    //================Getting the total items length for paginationin selected block=============================
+			    if($scope.selectedAllRegLeaveRecords.length > $scope.selectedAllNonRegLeaveRecords.length)
+	       		{
+	       			$scope.totalItemsBlock2 = $scope.selectedAllRegLeaveRecords.length;//80;
+	       		}
+	       		else
+	       		{
+	       			$scope.totalItemsBlock2 = $scope.selectedAllNonRegLeaveRecords.length;
+	       		}
+	       		
+	       		if($scope.selectedAllRegLeaveRecords.length < 1)
+	         	{ 
+	         		$scope.showRegLeaveSummaryNoRecordBlock2= "true";
+	         	}
+	         	
+	         	if($scope.selectedAllNonRegLeaveRecords.length < 1)
+	         	{
+	         		$scope.showNonRegLeaveSummaryNoRecordBlock2= "true";
+	         	}
+	         	
+	         	if($scope.totalItemsBlock2 < 1)
+	         	{
+	         		$scope.showApproveBtn = "false";
+	         	}
+         	}
+       		
+		    $scope.showLoadingImg = "false";		    
+	  	 };	
+	  	 
+	  	 $scope.pageChangedBlock2 = function()
+       	 {
+       		$scope.remainingRegLeaveYearRecordCountBlock2    = $scope.currentPageBlock2*$scope.itemsPerPage - $scope.selectedAllRegLeaveRecords.length;	
+         	$scope.remainingNonRegLeaveYearRecordCountBlock2 = $scope.currentPageBlock2*$scope.itemsPerPage - $scope.selectedAllNonRegLeaveRecords.length;         	         	
+         	 
+         	if($scope.remainingRegLeaveYearRecordCountBlock2 < $scope.itemsPerPage)
+		    {
+		    	$scope.showRegLeaveSummaryNoRecordBlock2 = "false";
+		    }
+		    else
+		    {
+		    	$scope.showRegLeaveSummaryNoRecordBlock2 = "true";
+		    } 
+		     
+		    if($scope.remainingNonRegLeaveYearRecordCountBlock2 < $scope.itemsPerPage)
+		    {
+		    	$scope.showNonRegLeaveSummaryNoRecordBlock2 = "false";
+		    }
+		    else
+		    {
+		    	$scope.showNonRegLeaveSummaryNoRecordBlock2 = "true";
+		    }
+	  	 };	
+	  	 
+	  	 $scope.backtoInitialBlock = function()
+       	 {
+       	 	$scope.showpageBlockTable1 = "true";
+            $scope.showpageBlockTable2 = "false";
+            $scope.showpageBlockTable3 = "false";
+        	
+        	$scope.showProceedBtn = "true";
+            $scope.showApproveBtn = "false";
+            $scope.showBackBtn = "false";
+            $scope.showCancelBtn = "true";   
+        	
+        	$scope.currentPageBlock2 = 1 ;
+			$scope.totalItemsBlock2 = 0;
+			
+			$scope.selectedAllRegLeaveRecords = [];	
+        	$scope.selectedAllNonRegLeaveRecords = [];	
+			
+			$scope.showRegLeaveSummaryNoRecordBlock2= "false";
+			$scope.showNonRegLeaveSummaryNoRecordBlock2= "false";
+       	 };
+       	 
+       	$scope.goBackToMainPage = function()
+	  	{
+	  		$scope.showLoadingImg = "true";
+	  	 	gotoMainPage();
+		};
+		
+		$scope.gotoNextRecordBlock = function()
+	  	{
+	  		$scope.showpageBlockTable1 = "true";
+	        $scope.showpageBlockTable2 = "false";
+	        $scope.showpageBlockTable3 = "false";
+	        
+	        $scope.showProceedBtn = "true";
+         	$scope.showApproveBtn = "false";
+         	$scope.showBackBtn = "false";
+         	$scope.showCancelBtn = "true";
+         	$scope.showNextBtn = "false";
+		};		
+		
+		$scope.animationsEnabled = true;
+		$scope.approveRecords = function(packageDoctorId) {				
+			var modalInstanceApproveSelectedRecords = $uibModal.open({
+				animation: $scope.animationsEnabled,
+				templateUrl: 'approveSelectedRecordModal.html',
+				controller: 'ApproveSelectedRecordModalInstanceCtrl',	
+				size : 'sm'
+			});	
+			
+		modalInstanceApproveSelectedRecords.result.then(function (selectedItem) {
+		  $scope.showLoadingImg = "true";
+			
+	      Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.LeaveYearApprovalController.approveSelectedRecords}',
+	      JSON.stringify($scope.selectedAllRegLeaveRecords),JSON.stringify($scope.selectedAllNonRegLeaveRecords),JSON.stringify($scope.leaveSummariesMapJsonItems),
+	      JSON.stringify($scope.leaveSummariesNonRegMapJsonItems),JSON.stringify($scope.comID),JSON.stringify($scope.comHolID),JSON.stringify($scope.companyDetail),
+				function(result, event)
+				{
+					if (event.status) {
+						
+						if(result !='' && result.length > 0)
+						{
+							if(result == 'allRecordsApproved')
+							{
+								//all records approved - go to company page
+								//window.location.href = '/one/one.app#/alohaRedirect/'+$scope.comHolID;
+								window.open('/'+$scope.comHolID, '_top');
+							}
+							else if(result == 'recordsPendingForApproval')
+							{
+								// some records pending for approval - loading records again
+								updateLeaveSummaries();
+								getData();
+							}
+							else if(result.indexOf('error is') >= 0)
+							{
+								//error occured - so reloading the page with error message
+								$scope.errMsg = result;
+							}
+						}
+						
+						$scope.$apply(function(){
+							$scope.showLoadingImg = "false";
+						});
+						
+					}else if (event.type === 'exception') {
+						$scope.errMsg = event.message;
+						$scope.showLoadingImg = "false";
+					} else {
+						$scope.errMsg = event.message;
+						$scope.showLoadingImg = "false";
+					}
+				}, 
+			{escape: false}
+			);
+		     
+		    }, function () {
+		      //$log.info('modal-component dismissed at: ' + new Date());
+		    });		
+		};
+		
+		$scope.doDayCalculations = function(i,chnagedValue){
+		   
+		   if($scope.allLeaveSummaryPendingItems[i].tempTotalLeave == null)
+	       {
+	      		$scope.allLeaveSummaryPendingItems[i].tempTotalLeave = parseFloat($scope.allLeaveSummaryPendingItems[i].TotalLeave);
+	       }
+		      
+		   if(chnagedValue!= null &&  chnagedValue != 0)
+		   {
+		   	   $scope.allLeaveSummaryPendingItems[i].TotalLeave = parseFloat($scope.allLeaveSummaryPendingItems[i].tempTotalLeave)+parseFloat(chnagedValue);
+		   }
+		   else
+		   {
+		   		$scope.allLeaveSummaryPendingItems[i].TotalLeave = parseFloat($scope.allLeaveSummaryPendingItems[i].tempTotalLeave);
+		   }
+			
+        }
+        
+        $scope.initDayLeaveAdjust = function(i){
+			
+	        	$scope.allLeaveSummaryPendingItems[i].empLeaveAdjustDay = parseFloat($scope.allLeaveSummaryPendingItems[i].empLeaveAdjustDay);
+        }
+        
+        $scope.doHourCalculations = function(i,chnagedValue){
+		   
+		   if($scope.allLeaveSummaryPendingNonRegItems[i].tempTotalLeave == null)
+	       {
+	      		$scope.allLeaveSummaryPendingNonRegItems[i].tempTotalLeave = parseFloat($scope.allLeaveSummaryPendingNonRegItems[i].TotalLeave);
+	       }
+		      
+		   if(chnagedValue!= null &&  chnagedValue != 0)
+		   {
+		   	   $scope.allLeaveSummaryPendingNonRegItems[i].TotalLeave = parseFloat($scope.allLeaveSummaryPendingNonRegItems[i].tempTotalLeave)+parseFloat(chnagedValue);
+		   }
+		   else
+		   {
+		   		$scope.allLeaveSummaryPendingNonRegItems[i].TotalLeave = parseFloat($scope.allLeaveSummaryPendingNonRegItems[i].tempTotalLeave);
+		   }
+			
+        }
+        
+        $scope.initHourLeaveAdjust = function(i){
+			
+	        	$scope.allLeaveSummaryPendingNonRegItems[i].empLeaveAdjustHour = parseFloat($scope.allLeaveSummaryPendingNonRegItems[i].empLeaveAdjustHour);
+        }
+	  	 		     
+	  });
+	  
+	  leaveYearApproveApp.controller('ApproveSelectedRecordModalInstanceCtrl', function ($scope,$http,$uibModalInstance) { 
+	  
+	    $scope.closePopUp = function()
+	  	{
+	  		$uibModalInstance.dismiss('cancel');
+		};
+		
+		$scope.approveRecordPopUp = function()
+	  	{
+	  		$uibModalInstance.close('approveRecord');
+		};
+		
+	  });
+	  
+	  leaveYearApproveApp.directive('isNumber', function () {
+	    return {
+		        require: 'ngModel',
+		        link: function (scope, element, attrs, ngModel) {   
+		        element.bind("keydown keypress", function (event) {
+		          if(event.which === 32) {
+		            event.returnValue = false;
+		            return false;
+		          }
+		       }); 
+	       
+              scope.$watch(attrs.ngModel, function(newValue,oldValue) {
+                var arr = String(newValue).split("");
+                if (arr.length === 0) return;
+                if (arr.length === 1 && (arr[0] == '-' || arr[0] === '.' )) return;
+                if (arr.length === 2 && newValue === '-.') return;
+                if (isNaN(newValue)) {
+                    //scope.wks.number = oldValue;
+                    ngModel.$setViewValue(oldValue);
+                    ngModel.$render();
+                }
+            });
+	       }
+	    };
+	});
+	    	
+      </script>
+      <body ng-controller="leaveYearApproveController" style="font-size:10px;">
+         <apex:form id="TheForm">
+         
+         <apex:actionFunction name="gotoMainPage" action="{!cancelCompYear}" reRender="TheForm"></apex:actionFunction>
+         	
+         	<!-- ==================== Start :: Info Message - on approve page load========================= -->
+         	<div ng-show="showpageBlockTable3 == 'false'">
+            <apex:pageBlock title="{!$Label.xcdhcm__leaveyearapprovalpageapproveempleaveyearssection}">
+            	<div ng-show="showpageBlockTable1 == 'true'" style="font-size:12px;">
+	               	<div class="slds-box" style="">
+						<div class="slds-inline_icon_text slds-grid">
+							<span class="slds-icon_container" title=""> 
+								<svg class="slds-icon slds-icon--large" aria-hidden="true">
+									<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+								</svg>
+							</span>
+							<div class="slds-col slds-align-middle">
+                                <p ng-bind-html="trustAsHtml('{!$Label.LeaveRequestPageIMConfirmCarryOverAndApproveLeaveYear}')" style="margin-left: 5px;"></p>   
+							</div>
+						</div>
+					</div>
+				</div>           
+            </apex:pageBlock>
+            <!-- ==================== End :: Info Message - on approve page load=========================== -->
+            </div>
+            
+            <!-- ==================== Start :: Leave adjustment Day/Hours field blank validation failed=========================== -->
+            <div ng-show="dayItemsValidationFailed  || hourItemsValidationFailed">
+	           	<div ng-show="showpageBlockTable1 == 'true'" style="font-size:12px;margin-left: 12px;margin-right: 12px;margin-bottom: 20px;">
+	               	<div class="slds-box" style="">
+						<div class="slds-inline_icon_text slds-grid slds-inline_icon_text--error">
+							<span title=""> 
+								<svg class="slds-icon slds-icon--large" aria-hidden="true">
+									<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#warning')}"></use> 
+								</svg>
+							</span>
+							<div class="slds-col slds-align-middle slds-text-color_error">
+								<p style="margin-left: 5px;"> &nbsp;&nbsp;Leave adjustment : Please make sure all leave adjustment fields are filled</p>   
+							</div>
+						</div>
+					</div>
+				</div>           
+            </div>
+            <!-- ==================== End :: Leave adjustment Day/Hours field blank validation failed=========================== -->
+            
+            <!-- ========  Start:: View Dropdown ============ -->
+            <div style="float:left;font-size: 12px;" ng-if="showProceedBtn == 'true' && showpageBlockTable1 == 'true'">
+				<apex:outputText value="View" style="font-weight: bold;padding-left:15px;padding-right:5px;" />
+				<div class="btn-group" uib-dropdown="x" dropdown-append-to-body="x" >
+					<button id="btn-append-to-body" type="button" class="btn btn-default" uib-dropdown-toggle="x" style="width: 200px;" >
+						{{dropDownViewName}} <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" uib-dropdown-menu="x" role="menu" aria-labelledby="btn-append-to-body" style="width: 200px;">
+						<li role="menuitem"><a href="" ng-click="dropboxitemselected('Nocarry', 'Ready to action')">Ready to action</a></li>
+						<li role="menuitem"><a href="" ng-click="dropboxitemselected('Maxcarry', 'Need review')">Need review</a></li>
+						<li class="divider"></li>
+						<li role="menuitem"><a href="" ng-click="dropboxitemselected('All', 'All')">All</a></li>
+					</ul>
+				</div>               
+			</div>
+			<!-- ========  End:: View Dropdown ============ -->
+	               
+           <!-- ========  Start:: Loading modal ============ -->
+            <div ng-if="showLoadingImg == 'true'">
+            	<div class="slds-spinner_container slds-show" >
+	            	<div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+	                	<div class="slds-spinner__dot-a"></div>
+	                    <div class="slds-spinner__dot-b"></div>
+	                </div> 
+               </div>
+            </div>
+            <!-- ========  End:: Loading modal ============ -->
+            
+            <!-- ============================= Start:: Button section=================================== -->
+            <div style="margin-left: 45%;margin-bottom: 10px;font-size:12px;" ng-show="showpageBlockTable3 == 'false'">                  	
+               	<button type="button" style="font-size:12px;" class="slds-button slds-button--neutral" ng-click="proceedNextBlock()" ng-if="showProceedBtn == 'true' && (showRegLeaveSummaryNoRecord == 'false' || showNonRegLeaveSummaryNoRecord == 'false')"> {!$Label.LeaveYearApprovalPageBProceed} </button>
+               	<button type="button" style="font-size:12px;" class="slds-button slds-button--neutral" ng-click="approveRecords()" ng-if="showApproveBtn == 'true'"> {!$Label.LeaveYearApprovalPageBApprove} </button>
+               	<button type="button" style="font-size:12px;" class="slds-button slds-button--neutral" ng-click="backtoInitialBlock()" ng-if="showBackBtn == 'true'"> {!$Label.LeaveYearApprovalPageBBack} </button>
+               	<button type="button" style="font-size:12px;" class="slds-button slds-button--neutral " ng-click="goBackToMainPage()" ng-if="showCancelBtn == 'true'"> {!$Label.LeaveYearApprovalPageBEndOrCancel} </button>
+            </div>
+            <!-- ============================= End:: Button section===================================== -->
+            
+            <!-- ============================= Start:: Displaying records selection section========================= -->
+            <div ng-show="showpageBlockTable1 == 'true'">
+               <apex:pageBlock id="pageBlock1">
+                                                
+                  <apex:outputText value="{!$Label.xcdhcm__leaverequestpageimemprecordingleaveindays}" style="font-size:12px;"/> 
+                  <table ng-class="showRegLeaveSummaryNoRecord == 'false' ? 'slds-table slds-table--bordered slds-table--striped' : ''" style="font-size:12px;">
+                        <tr ng-if="showRegLeaveSummaryNoRecord == 'false'">
+                           <th>
+                              <input type="checkbox" ng-click="selectAllRegLeave()" ng-model="initialAllRegChkBoxVal"></input>
+                           </th>
+                           <th>Employee name</th>
+                           <th>Leave year</th>
+                           <th>Job role</th>
+                           <th ng-show="showAccrualBasisCompany == 'false'">
+                              Contractual leave entitlement
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.CLE__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.CLE__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>
+                              Carried over days
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_Remaining__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_Remaining__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>
+                              Leave pending approval
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_pending_approval__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_pending_approval__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>Days lost</th>
+                           <th>
+                              Leave adjustment
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_pending_approval__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_Adjustment__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th ng-show="showAccrualBasisCompany == 'false'"> 
+                              Total annual leave entitlement
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Total_LE__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Total_LE__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>
+                              Status
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Status__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Status__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                        </tr>
+                     <tr ng-repeat="item in filterData = allLeaveSummaryPendingItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)">
+                        <td><input type="checkbox"  ng-model="item.selected"/></td>
+                        <td><a href="/one/one.app#/alohaRedirect/{{item.EmpId}}" >{{item.empName}}</a></td>
+                        <td>{{item.leaveYearName}}</td>
+                        <td>{{item.jobroleval}}</td>
+                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.ContracLeave}}</td>
+                        <td>{{item.cDays}}</td>
+                        <td>{{item.daysLeavePendingApproval}}</td>
+                        <td>{{item.DaysLost}}</td>
+                       <!--  <td><input type="number" name="lname" ng-model="item.empLeaveAdjustDay"/>0.0</td> 
+                        <td>{{item.empLeaveAdjustDay--item.TotalLeave}}</td>  -->
+                        <td>
+                        	<abbr class="slds-required" title="required">*</abbr>
+                        	<input type="number" ng-init="initDayLeaveAdjust(allLeaveSummaryPendingItems.indexOf(item))" ng-model="item.empLeaveAdjustDay" 
+                        	ng-change="doDayCalculations(allLeaveSummaryPendingItems.indexOf(item),item.empLeaveAdjustDay)" ng-class="item.empLeaveAdjustDay == null ?'invalidInput':''"/>
+                        </td>
+                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.TotalLeave | number : 1}}</td>
+                        <td>{{item.leaveYearStatus}}</td>
+                     </tr>
+                     <tr ng-if="showRegLeaveSummaryNoRecord == 'true'">
+						<td style="width:100%">
+			                 <div class="slds-box" style="">
+								<div class="slds-inline_icon_text slds-grid">
+									<span class="slds-icon_container" title=""> 
+										<svg class="slds-icon slds-icon--large" aria-hidden="true">
+											<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+										</svg>
+									</span>
+									<div class="slds-col slds-align-middle">
+										<p> &nbsp; {!$Label.CompanyLeaveYearCreationPageIMNoLeaveYearDaysWorker}</p>
+									</div>
+								</div>
+							 </div>
+						 </td>
+					</tr>
+                  </table>
+                  <apex:outputText value="{!$Label.xcdhcm__leaveyearapprovalpageimmaxcarrydays}{!MaxCarrydays}" style="font-size:12px;"/>
+               </apex:pageBlock>
+               
+               <apex:pageBlock id="pageBlock2">
+                  <apex:outputText value="{!$Label.xcdhcm__leaverequestpageimemprecordingleaveinhours}" style="font-size:12px;"/>
+                  <apex:PageMessage title="{!$Label.xcdhcm__leaveyearapprovalpageimnoemprecordsinhours}" severity="info" strength="3" rendered="{!OR(AND(leaveSummariesNonReg.size != 0, leaveSummaryPendingListNonReg.size == 0, pageblockTable2 == false,OR(isPrevLYearHasLR == false, AND(isPrevLSLeavePendingList.size == 0, isPrevLSLeavePendingListNonReg.size == 0))), AND(leaveSummariesNonReg.size != 0, selectedLeaveSummaryPendingListNonReg.size == 0, pageblockTable2 == true,OR(isPrevLYearHasLR == false, AND(isPrevLSLeavePendingList.size == 0, isPrevLSLeavePendingListNonReg.size == 0))))}"/>
+                  
+                  <table ng-class="showNonRegLeaveSummaryNoRecord == 'false' ? 'slds-table slds-table--bordered slds-table--striped' : ''" style="font-size:12px;">
+                     <tr ng-if="showNonRegLeaveSummaryNoRecord == 'false'">
+                        <th>
+                           <input type="checkbox" ng-click="selectAllNonRegLeave()" ng-model="initialAllNonRegChkBoxVal"></input>
+                        </th>
+                        <th>Employee name</th>
+                        <th>Leave year</th>
+                        <th>Job role</th>
+                        <th ng-show="showAccrualBasisCompany == 'false'">
+                           Contractual leave entitlement (hours)
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.CLE_hrs__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.CLE_hrs__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th>
+                           Carried over hours
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Hours_Remaining__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Hours_Remaining__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th>
+                           Leave pending approval (hours)
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Hours_pending_approval__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Hours_pending_approval__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th>Hours lost</th>
+                        <th>
+                           Leave adjustment (hours)
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_Adjustment_Hours__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_Adjustment_Hours__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th ng-show="showAccrualBasisCompany == 'false'">
+                           Total annual leave entitlement (hours)
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Total_LE_Hours__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Total_LE_Hours__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th>
+                           Status
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Status__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Status__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                     </tr>
+                     <tr ng-repeat="item in filterData = allLeaveSummaryPendingNonRegItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)">
+                        <td><input type="checkbox"  ng-model="item.selected"/></td>
+                        <td><a href="/one/one.app#/alohaRedirect/{{item.EmpId}}" >{{item.empName}}</a></td>
+                        <td>{{item.leaveYearName}}</td>
+                        <td>{{item.jobroleval}}</td>
+                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.ContracLeave}}</td>
+                        <td>{{item.cHours}}</td>
+                        <td>{{item.hoursLeavePendingApproval}}</td>
+                        <td>{{item.HoursLost}}</td>
+                        <td>
+                        	<abbr class="slds-required" title="required">*</abbr>
+                        	<input type="number" ng-init="initHourLeaveAdjust(allLeaveSummaryPendingNonRegItems.indexOf(item))" ng-model="item.empLeaveAdjustHour" 
+                        	ng-change="doHourCalculations(allLeaveSummaryPendingNonRegItems.indexOf(item),item.empLeaveAdjustHour)" ng-class="item.empLeaveAdjustHour == null?'invalidInput':''"/>
+                        </td>
+                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.TotalLeave | number : 1}}</td>
+                        <td>{{item.leaveYearStatus}}</td>
+                     </tr>
+                     <tr ng-if="showNonRegLeaveSummaryNoRecord == 'true'">							
+						<td>
+			                 <div class="slds-box" style=""> 
+								<div class="slds-inline_icon_text slds-grid">
+									<span class="slds-icon_container" title=""> 
+										<svg class="slds-icon slds-icon--large" aria-hidden="true">
+											<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+										</svg>
+									</span>
+									<div class="slds-col slds-align-middle">
+										<p> &nbsp;  {!$Label.CompanyLeaveYearCreationPageIMNoLeaveYearHoursWorker}</p>
+									</div>
+								</div>
+							 </div>
+						 </td>
+					</tr>
+                  </table>
+                  <apex:outputText value="{!$Label.xcdhcm__leaveyearapprovalpageimmaxcarryhours}{!MaxCarryHours}" style="font-size:12px;"/>
+               </apex:pageBlock> 
+               
+               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-left: 0px;font-size: 12px;" ng-show="showpageBlockTable1 == 'true' && (allLeaveSummaryPendingItems.length > 0 || allLeaveSummaryPendingNonRegItems.length > 0)">
+	            	<ul uib-pagination="x" total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" ng-change="pageChanged()"></ul>
+	           </div>              
+            </div>  
+            <!-- ============================= End:: Displaying records selection section=========================== -->    
+            
+            
+            <!-- ============================= Start:: Displaying selected record section=========================== --> 
+            <div ng-show="showpageBlockTable2 == 'true'">
+               <apex:pageBlock id="pageBlockSelected1">    
+               		
+               	  <apex:outputText value="{!$Label.xcdhcm__leaverequestpageimemprecordingleaveindays}" style="font-size:12px;"/>       
+                  <table ng-class="showRegLeaveSummaryNoRecordBlock2 == 'false' ? 'slds-table slds-table--bordered slds-table--striped' : ''" style="font-size:12px;">
+                        <tr ng-if="showRegLeaveSummaryNoRecordBlock2 == 'false'">
+                           <th >Employee name</th>
+                           <th>Leave year</th>
+                           <th>Job role</th>
+                           <th ng-show="showAccrualBasisCompany == 'false'">
+                              Contractual leave entitlement
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.CLE__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.CLE__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>
+                              Carried over days
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_Remaining__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_Remaining__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>
+                              Leave pending approval
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_pending_approval__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_pending_approval__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>Days lost</th>
+                           <th>
+                              Leave adjustment
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_pending_approval__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_Adjustment__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th ng-show="showAccrualBasisCompany == 'false'"> 
+                              Total annual leave entitlement
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Total_LE__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Total_LE__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>
+                              Status
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Status__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Status__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                        </tr>
+                     <tr ng-repeat="item in filterData = selectedAllRegLeaveRecords | limitTo:itemsPerPage:itemsPerPage*(currentPageBlock2-1)">
+                        <td><a href="/one/one.app#/alohaRedirect/{{item.EmpId}}" >{{item.empName}}</a></td>
+                        <td>{{item.leaveYearName}}</td>
+                        <td>{{item.jobroleval}}</td>
+                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.ContracLeave}}</td>
+                        <td>{{item.cDays}}</td>
+                        <td>{{item.daysLeavePendingApproval}}</td>
+                        <td>{{item.DaysLost}}</td>
+                        <td>{{item.empLeaveAdjustDay}}</td>
+                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.TotalLeave}}</td>
+                        <td>{{item.leaveYearStatus}}</td>
+                     </tr>
+                     <tr ng-if="showRegLeaveSummaryNoRecordBlock2 == 'true'">
+						<td style="width:100%">
+			                 <div class="slds-box" style="">
+								<div class="slds-inline_icon_text slds-grid">
+									<span class="slds-icon_container" title=""> 
+										<svg class="slds-icon slds-icon--large" aria-hidden="true">
+											<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+										</svg>
+									</span>
+									<div class="slds-col slds-align-middle">
+										<p> &nbsp;&nbsp; {!$Label.LeaveYearApprovalPageIMNoEmpRecordsInDays}</p>
+									</div>
+								</div>
+							 </div>
+						 </td>
+					</tr>
+                  </table>
+                  <apex:outputText value="{!$Label.xcdhcm__leaveyearapprovalpageimmaxcarrydays}{!MaxCarrydays}" style="font-size:12px;"/>
+               </apex:pageBlock>
+               
+               <apex:pageBlock id="pageBlockSelected2">
+               
+               	  <apex:outputText value="{!$Label.xcdhcm__leaverequestpageimemprecordingleaveinhours}" style="font-size:12px;"/>
+                  <table ng-class="showNonRegLeaveSummaryNoRecordBlock2 == 'false' ? 'slds-table slds-table--bordered slds-table--striped' : ''" style="font-size:12px;">
+                     <tr ng-if="showNonRegLeaveSummaryNoRecordBlock2 == 'false'">
+                        <th>Employee name</th>
+                        <th>Leave year</th>
+                        <th>Job role</th>
+                        <th ng-show="showAccrualBasisCompany == 'false'">
+                           Contractual leave entitlement (hours)
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.CLE_hrs__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.CLE_hrs__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th>
+                           Carried over hours
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Hours_Remaining__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Hours_Remaining__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th>
+                           Leave pending approval (hours)
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Hours_pending_approval__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Hours_pending_approval__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th>Hours lost</th>
+                        <th>
+                           Leave adjustment (hours)
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_Adjustment_Hours__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_Adjustment_Hours__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th ng-show="showAccrualBasisCompany == 'false'">
+                           Total annual leave entitlement (hours)
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Total_LE_Hours__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Total_LE_Hours__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                        <th>
+                           Status
+                           <span class="LiteHelpText"> 
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Status__c.inlineHelpText == null, 'display:none','')}" />
+                           <span>{!$ObjectType.Leave_Summary__c.Fields.Status__c.inlineHelpText}</span>
+                           </span>
+                        </th>
+                     </tr>
+                     <tr ng-repeat="item in filterData = selectedAllNonRegLeaveRecords | limitTo:itemsPerPage:itemsPerPage*(currentPageBlock2-1)">
+                        <td><a href="/one/one.app#/alohaRedirect/{{item.EmpId}}" >{{item.empName}}</a></td>
+                        <td>{{item.leaveYearName}}</td>
+                        <td>{{item.jobroleval}}</td>
+                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.ContracLeave}}</td>
+                        <td>{{item.cHours}}</td>
+                        <td>{{item.hoursLeavePendingApproval}}</td>
+                        <td>{{item.HoursLost}}</td>
+                        <td>{{item.empLeaveAdjustHour}}</td>
+                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.TotalLeave}}</td>
+                        <td>{{item.leaveYearStatus}}</td>
+                     </tr>
+                     <tr ng-if="showNonRegLeaveSummaryNoRecordBlock2 == 'true'">							
+						<td>
+			                 <div class="slds-box" style=""> 
+								<div class="slds-inline_icon_text slds-grid">
+									<span class="slds-icon_container" title=""> 
+										<svg class="slds-icon slds-icon--large" aria-hidden="true">
+											<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+										</svg>
+									</span>
+									<div class="slds-col slds-align-middle">
+										<p> &nbsp;&nbsp; {!$Label.xcdhcm__leaveyearapprovalpageimnoemprecordsinhours}</p>
+									</div>
+								</div>
+							 </div>
+						 </td>
+					</tr>
+                  </table>
+                  <apex:outputText value="{!$Label.xcdhcm__leaveyearapprovalpageimmaxcarryhours}{!MaxCarryHours}" style="font-size:12px;"/>
+               </apex:pageBlock> 
+               
+               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-left: 0px;font-size: 12px;" ng-show="showpageBlockTable2 == 'true' && (selectedAllRegLeaveRecords.length > 0 || selectedAllNonRegLeaveRecords.length > 0)">
+	            	<ul uib-pagination="x" total-items="totalItemsBlock2" ng-model="currentPageBlock2" items-per-page="itemsPerPage" ng-change="pageChangedBlock2()"></ul>
+	           </div>              
+            </div>      
+         	<!-- ============================= End:: Displaying selected record section============================= --> 
+         	
+         	<!-- ============================= Start:: Displaying non-approved records section============================= --> 
+         	<div ng-show="showpageBlockTable3 == 'true'">         	
+         		
+         		<apex:pageBlock id="nonApprovedRecordspPeBlock" title="Complete {!prevLeaveYear} leave year incomplete leave requests"> 
+         			<div style="margin-left: 45%;margin-bottom: 10px;font-size:12px;">                  	
+		               	<button type="button" style="font-size:12px;" class="slds-button slds-button--neutral" ng-click="gotoNextRecordBlock()" ng-if="showNextBtn == 'true'"> {!$Label.LeaveYearApprovalPageBNext} </button>
+		               	<button type="button" style="font-size:12px;" class="slds-button slds-button--neutral " ng-click="goBackToMainPage()" ng-if="showCancelBtn == 'true'"> {!$Label.LeaveYearApprovalPageBEndOrCancel} </button>
+		            </div>
+		            
+		            <div class="slds-box" style="margin-left: 5px;margin-right: 5px;margin-bottom: 20px;font-size:12px;">
+						<div class="slds-inline_icon_text slds-grid slds-inline_icon_text--warning">
+							<span class="slds-icon_container" title=""> 
+								<svg class="slds-icon slds-icon--large" aria-hidden="true">
+									<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#warning')}"></use> 
+								</svg>
+							</span>
+							<div class="slds-col slds-align-middle">
+								<p ng-bind-html="trustAsHtml(errMsgPrevRecord)" style="margin-left: 5px;"></p>
+							</div>
+						</div> 
+					</div>
+                            
+                     <apex:outputText value="{!$Label.xcdhcm__leaverequestpageimemployeesandleaverequestsleavedays}" style="font-size:12px;"/>       
+	                 <table ng-class="showRegPrevLeavePendingListNoRecordBlock3 == 'false' ? 'slds-table slds-table--bordered slds-table--striped' : ''" style="font-size:12px;">
+                         <tr ng-if="showRegPrevLeavePendingListNoRecordBlock3 == 'false'">
+                           <th >Employee name</th>
+                           <th>Leave year</th>
+                           <th>Job role</th>
+                           <th ng-show="showAccrualBasisCompany == 'false'">
+                              Contractual leave entitlement
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.CLE__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.CLE__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>
+                              Carried over days
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_Remaining__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_Remaining__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                           <th>
+                              Leave pending approval
+                              <span class="LiteHelpText"> 
+                              <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Leave_pending_approval__c.inlineHelpText == null, 'display:none','')}" />
+                              <span>{!$ObjectType.Leave_Summary__c.Fields.Leave_pending_approval__c.inlineHelpText}</span>
+                              </span>
+                           </th>
+                         </tr>
+	                     <tr ng-repeat="item in allPrevLeavePendingListItems">
+	                        <td><a href="/one/one.app#/alohaRedirect/{{item.EmpId}}" >{{item.empName}}</a></td>
+	                        <td>{{item.prevLYName}}</td>
+	                        <td>{{item.prevjobroleName}}</td>
+	                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.prevContracLeaveVal}}</td>
+	                        <td>{{item.cDays}}</td>
+	                        <td>{{item.daysLeavePendingApproval}}</td>
+	                     </tr>
+	                     <tr ng-if="showRegPrevLeavePendingListNoRecordBlock3 == 'true'">
+							<td style="width:100%">
+				                 <div class="slds-box" style="">
+									<div class="slds-inline_icon_text slds-grid">
+										<span class="slds-icon_container" title=""> 
+											<svg class="slds-icon slds-icon--large" aria-hidden="true">
+												<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+											</svg>
+										</span>
+										<div class="slds-col slds-align-middle">
+											<p> &nbsp;&nbsp; {!$Label.LeaveRequestPageIMThereAreNoEmployeesRecordingLeaveInDays}</p>
+										</div>
+									</div>
+								 </div>
+							 </td>
+						 </tr>
+	                  </table>
+                       <br/>
+                       <br/>
+                     <apex:outputText value="{!$Label.xcdhcm__leaverequestpageimemployeesandleaverequestsleavehours}" style="font-size:12px;"/>
+	                 <table ng-class="showNonRegPrevLeavePendingListNoRecordBlock3 == 'false' ? 'slds-table slds-table--bordered slds-table--striped' : ''" style="font-size:12px;">
+	                     <tr ng-if="showNonRegPrevLeavePendingListNoRecordBlock3 == 'false'">
+	                        <th>Employee name</th>
+	                        <th>Leave year</th>
+	                        <th>Job role</th>
+	                        <th ng-show="showAccrualBasisCompany == 'false'">
+	                           Contractual leave entitlement (hours)
+	                           <span class="LiteHelpText"> 
+	                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.CLE_hrs__c.inlineHelpText == null, 'display:none','')}" />
+	                           <span>{!$ObjectType.Leave_Summary__c.Fields.CLE_hrs__c.inlineHelpText}</span>
+	                           </span>
+	                        </th>
+	                        <th>
+	                           Carried over hours
+	                           <span class="LiteHelpText"> 
+	                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Hours_Remaining__c.inlineHelpText == null, 'display:none','')}" />
+	                           <span>{!$ObjectType.Leave_Summary__c.Fields.Hours_Remaining__c.inlineHelpText}</span>
+	                           </span>
+	                        </th>
+	                        <th>
+	                           Leave pending approval (hours)
+	                           <span class="LiteHelpText"> 
+	                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/Lhelp.png')}" style="{!IF($ObjectType.Leave_Summary__c.Fields.Hours_pending_approval__c.inlineHelpText == null, 'display:none','')}" />
+	                           <span>{!$ObjectType.Leave_Summary__c.Fields.Hours_pending_approval__c.inlineHelpText}</span>
+	                           </span>
+	                        </th>
+	                     </tr>
+	                     <tr ng-repeat="item in allPrevLeavePendingListNonRegItems">
+	                        <td><a href="/one/one.app#/alohaRedirect/{{item.EmpId}}" >{{item.empName}}</a></td>
+	                        <td>{{item.prevLYName}}</td>
+	                        <td>{{item.prevjobroleName}}</td>
+	                        <td ng-show="showAccrualBasisCompany == 'false'">{{item.prevContracLeaveVal}}</td>
+	                        <td>{{item.cHours}}</td>
+	                        <td>{{item.hoursLeavePendingApproval}}</td>
+	                     </tr>
+	                     <tr ng-if="showNonRegPrevLeavePendingListNoRecordBlock3 == 'true'">							
+							<td>
+				                 <div class="slds-box" style=""> 
+									<div class="slds-inline_icon_text slds-grid">
+										<span class="slds-icon_container" title=""> 
+											<svg class="slds-icon slds-icon--large" aria-hidden="true">
+												<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+											</svg>
+										</span>
+										<div class="slds-col slds-align-middle">
+											<p> &nbsp;&nbsp; {!$Label.LeaveRequestPageIMThereAreNoEmployeesRecordingLeaveInHours}</p>
+										</div>
+									</div>
+								 </div>
+							 </td>
+						</tr>
+                  </table>
+         		</apex:pageBlock>
+         	</div>
+         </apex:form>
+         
+         <!-- ============================= Start:: Displaying confirmation Pop-Up=========================== -->    
+         <script type="text/ng-template" id="approveSelectedRecordModal.html">
+		  <section style="font-size:12px;" role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_large slds-fade-in-open">
+		    <div class="slds-modal__container">
+		      <header class="slds-modal__header">       
+		        <p class="slds-m-top_x-small">Please click OK to proceed and save the change.</p>
+		      </header>     
+		      <footer class="slds-modal__footer">
+		        <button style="font-size:12px;" class="slds-button slds-button_neutral" ng-click="closePopUp()">{!$Label.LeaveYearApprovalPageBCancel}</button>
+		        <button style="font-size:12px;" class="slds-button slds-button_brand" ng-click="approveRecordPopUp()">  {!$Label.LeaveYearApprovalPageBOK}  </button>
+		      </footer>
+		    </div>
+		  </section>
+		  <div class="slds-backdrop slds-backdrop_open"></div>
+		</script>
+     	 <!-- ============================= End:: Displaying confirmation Pop-Up=========================== --> 
+      </body>
+   </html>   
+</apex:page>
+<!--END :: 03/05/2017 NPPD-1344 Company leave year - improve setup and carry over processes added by Kumbresh-->

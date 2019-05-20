@@ -1,0 +1,98 @@
+<apex:page controller="xcdhcm.AttachmentController" sidebar="false">
+    <!-- START :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {	 
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .homeTab .listViewport .subNav .linkBar, .homeTab .mComponent .cHeader, .homeTab .genericTable, .homeTab .bSubBlock, .homeTab .bPageBlock 
+        {
+        border-top: 3px solid #fdfdfd;
+        }
+        .bPageBlock 
+        {
+        border-top: 4px solid rgb(253, 253, 253);
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form >
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancel}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHPrivateAttachment}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageblock >
+                                <apex:PageMessages id="error_id"/> 
+                                <apex:pageBlockSection showHeader="false" columns="2" id="block1">
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <apex:outputLabel value="File" for="file"/>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputFile filename="{!fileName}" contentType="{!contentType}" filesize="1000" size="50" value="{!Attach}"/> 
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputpanel >
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <apex:outputLabel value="Description" for="description"/>
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputTextarea value="{!attachment.description}" id="description"/>
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                            </apex:pageblock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:commandButton value="{!$Label.xcdhcm__privateattachmentbcancel}" action="{!cancel}" immediate="true" styleclass="slds-button slds-button--neutral" />
+                                        <apex:commandButton value="{!$Label.xcdhcm__privateattachmentbupload}" action="{!upload}"  styleclass="slds-button slds-button--brand" />
+                            <!-- <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:actionRegion >
+                                        <apex:commandButton value="{!$Label.xcdhcm__privateattachmentbcancel}" action="{!cancel}" immediate="true" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__privateattachmentbupload}" action="{!upload}"  styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="error_id,id_saveBtn" id="id_saveBtn"/>
+                                        </apex:actionRegion>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:35%; bottom:40%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form> 
+        </body>
+    </html>
+    <!-- END :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+</apex:page>

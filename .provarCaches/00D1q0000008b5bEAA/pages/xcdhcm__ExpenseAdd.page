@@ -1,0 +1,257 @@
+<apex:page Controller="xcdhcm.ExpenseAddController" sidebar="false">
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteBulkEditPage.css')}" />       
+
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {    
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important; 
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        background-color: #fff;
+        }
+        .requiredLegend 
+        {
+        display: none;
+        }
+        .ThisPageHelpText span 
+        {
+        display: none;
+        }
+        .ThisPageHelpText:hover span 
+        {
+        display: block !important;
+        width: 300px;
+        background-color: #16325c!important;   
+        border: 1px solid #16325c!important;
+        padding: 4px;
+        color: white;
+        position: absolute;
+        z-index: 1;
+        top:100%;
+        right:15%;
+        text-align: justify;
+        white-space: normal;
+        font-weight: normal;  
+        border-radius: 4px!important;      
+        text-transform: none;   
+        }
+        .dateInput  
+        {
+        white-space: nowrap;
+        } 
+        .dateOnlyInput input 
+        {
+        width: 10em !important; 
+        }
+        #actionColumn
+        {
+        color: white;
+        }
+        .slds-scope img 
+        {
+        max-width: 250%;
+        height: auto;
+        }
+        body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader 
+        {
+        color: #54698d !important;
+        font-weight: 300;
+        font-size: 1.25rem !important;
+        line-height: 1.25 !important;
+        }
+    </style>
+    
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript">
+    function jsfind()
+    {
+        callfind();
+        
+    }
+    function jsSave()
+    {
+        $("[id$='topSaveBtn']").prop('disabled', true);
+        $("[id$='topSaveBtn']").val('Processing...');
+        
+        $("[id$='bottomSaveBtn']").prop('disabled', true);
+        $("[id$='bottomSaveBtn']").val('Processing...');
+        
+        callSave();
+    }
+    </script>
+    
+    <script>
+            function setFocusOnLoad() {}
+    </script>
+        <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">
+            
+            <apex:form id="id_form">
+                <apex:actionFunction name="callfind" action="{!expenseCallByJavascript}" immediate="true"/>
+                <apex:actionFunction name="callSave" action="{!saveExpense}" />
+                
+                <apex:outputpanel rendered="{!showSelectType}">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                         <apex:commandLink action="{!cancel}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                   <svg class="slds-button__icon slds-button__icon--large" aria-hidden="true">
+                       <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+                   </svg>
+                   <span class="slds-assistive-text">Close</span>
+               </apex:commandLink>
+                            
+                            <h2 id="header43" class="slds-text-heading--medium"></h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+   <!-- ================================== Page content  ==========================================================  -->
+                <apex:pageBlock title="Select Expense type" mode="maindetail" >
+                     <apex:pageBlockSection id="sec1" columns="2" collapsible="false">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputpanel >
+                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                        <!--  <apex:outputLabel value="Select Expense type" styleclass="slds-form-element__label"/>-->
+                                        <div class="slds-form-element__control">
+                                            <apex:SelectList value="{!selectedExpenseType}" size="1">
+                                                <apex:actionSupport event="onchange" action="{!typeSelected}" rerender="id_form"/>
+                                                <apex:selectOptions value="{!ExpenseType}" />
+                                            </apex:SelectList>
+                                        </div>                                                                                        
+                                </div> 
+                            </apex:outputpanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageblocksection>
+                </apex:pageBlock>
+                </div>
+                        <div class="slds-modal__footer">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+                </apex:outputpanel>
+                
+                <apex:pageBlock title="{!$Label.xcdhcm__phexpenseadd}" rendered="{!showSelectType == false}">
+                    <apex:pagemessages id="error"/>
+                    
+                    <apex:pageBlockButtons location="bottom" style="float:right;">
+                        <apex:actionStatus id="saveStatus">                   
+                            <apex:facet name="stop">
+                                <apex:actionRegion >
+                                    <apex:commandButton value="{!$Label.xcdhcm__expenseaddbaddrow}" action="{!addExpense}" immediate="true" styleclass="slds-button slds-button--neutral"/> 
+                                        <apex:commandButton action="{!cancel}" value="{!$Label.xcdhcm__expenseaddbcancel}" immediate="true" styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="topSaveBtn"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__expenseaddbsave}" rerender="error,topSaveBtn" onclick="jsSave();" status="saveStatus" id="topSaveBtn" styleclass="slds-button slds-button--brand"/>
+                               </apex:actionRegion>            
+                            </apex:facet>
+                            <apex:facet name="start">
+                                <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div> 
+                                </div>                    
+                            </apex:facet>                                
+                        </apex:actionStatus>
+                    </apex:pageBlockButtons>
+                    
+                    <apex:pageBlockButtons location="bottom">
+                        <apex:outputpanel rendered="{!expenseList.Size=0}" >
+                            <apex:outputText Value="Click Add row button for new expense record"  style="font-size:14px;" />
+                        </apex:outputpanel>
+                    </apex:pageBlockButtons>
+                    <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;">
+                        <table class="slds-table slds-table_edit slds-table_bordered  slds-table_resizable-cols slds-no-cell-focus" style="width:100%;overflow-x: scroll;">
+                                                <apex:variable value="{!0}" var="rowNum" />   
+                        
+                            <thead>
+                            <tr class="slds-line-height_reset">
+                                <apex:repeat value="{!$ObjectType.xcdhcm__Expense__c.fieldSets.xcdhcm__Expense_Add_column_Page}" var="i">
+                                
+                                    <th class="slds-text-title_caps" scope="col" >
+                                        <div class="slds-th__action slds-text-link_reset">
+                                                    <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                    <span class="slds-truncate" title="{!i.label}">
+                                                        {!IF(i.label == 'Currency ISO Code', 'Currency', i.label)} 
+                                                </span>
+                                                 <span class="ThisPageHelpText">
+                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Expense__c.Fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                    <span>{!$ObjectType.xcdhcm__Expense__c.Fields[i].inlineHelpText}</span>
+                                                </span> 
+                                        </div>
+                                    </th>
+                                </apex:repeat> 
+                                 <th class="slds-text-title_caps" scope="col" >
+                                    <div class="slds-th__action slds-text-link_reset">
+                                            <span class="slds-truncate" title="Attach receipt"> Attach receipt</span>
+                                     </div>
+                                 </th>
+                                  
+                                  <th class="slds-text-title_caps" scope="col" >
+                                    <div class="slds-th__action slds-text-link_reset">
+                                            <span class="slds-truncate"> </span>
+                                     </div>
+                                 </th>
+                                 
+                                 <apex:outputpanel rendered="{!ExpenseList.size >1}">
+                                        <th class="slds-text-title_caps" scope="col" style="width:3rem;">
+                                            <span id="actionColumn" >
+                                                Remove
+                                                </span>
+                                     </th>
+                            </apex:outputpanel>                                 
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!ExpenseList}" var="s" >
+                                    <apex:variable value="{!rowNum+1}" var="rowNum" /> 
+                                    <tr class="slds-hint-parent">
+                                        <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Expense__c.fieldSets.xcdhcm__Expense_Add_column_Page}" >
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                        <apex:inputField value="{!s.expense[f]}" style="{!IF(OR(f=='Claims__c',f=='Tax__c'),'width:100px !important;','')};{!IF(OR(f=="Description__c"),'width:200px !important;','')}; {!IF(OR(f=="Employee_Detail__c"),'width:140px !important;','')},"  required="{!OR(f.required, f.dbrequired)}"/>
+                                                </span>
+                                            </td>
+                                        </apex:repeat>
+                                            
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span class="slds-grid slds-grid_align-spread">
+                                                    <apex:actionRegion >
+                                                            <apex:inputFile value="{!s.attachFile.body}" filename="{! s.attachFile.name}" style="width:84px; direction:ltr; padding:3px;" id="id1" onchange="jsfind()" title="Please attach less than 6MB file" styleclass="slds-button slds-button--neutral"/>
+                                                        </apex:actionRegion>
+                                                </span>
+                                            </td>
+                                            <td role="gridcell" class="slds-cell-edit">
+                                                <span style="word-break: break-word;">
+                                                        <apex:outputText >{! IF(LEN(s.attachFile.name) > 0, s.attachFile.name, '')}</apex:outputText>
+                                                </span>
+                                            </td>
+                                            <apex:outputpanel rendered="{!ExpenseList.size >1}">
+                                                    <td role="gridcell" class="slds-cell-edit">
+                                                    <apex:commandlink action="{!deleteExpense}"  immediate="true" >
+                                                            <apex:param name="rownumber" value="{!rowNum}"/>
+                                                            <apex:param name="cid" value="{!s.expense.id}" assignTo="{!claimIdStr}"/>
+                                                            <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                        </apex:commandlink>
+                                                </td>
+                                            </apex:outputpanel>
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                                        
+                   <!--  <apex:commandButton value="{!$Label.xcdhcm__expenseaddbaddrow}" action="{!addExpense}" immediate="true" styleclass="slds-button slds-button--neutral"/>  -->
+                    
+                </apex:pageBlock>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

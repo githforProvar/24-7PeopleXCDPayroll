@@ -1,0 +1,64 @@
+<apex:page standardController="xcdhcm__Pay_Summary__c"
+    extensions="xcdhcm.PayrollOverviewController" sidebar="false">
+            <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/bulkleave.css')}" />
+              <style>
+            .customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette
+            {
+            background-color: #fff !important;
+            }
+            
+            
+     </style>
+     
+    <apex:form >
+        <apex:pageBlock >
+            <apex:PageMessages />
+            <apex:pageBlockButtons location="bottom">
+				<apex:commandButton value="{!$Label.xcdhcm__oneoffdeductionbsave}" action="{!saveOneOffDeduction}" />
+				<apex:commandButton value="{!$Label.xcdhcm__oneoffdeductionbcancel}" action="{!cancel}" />
+            </apex:pageBlockButtons>
+            
+            <apex:repeat value="{!oneOffDeduction}" var="oneOff" rows="1">
+				<apex:pageBlockSection title="{!$Label.xcdhcm__oneoffdeductiondeductiononeoffdetail}"
+					columns="2">
+					<apex:repeat value="{!$ObjectType.xcdhcm__Benefit__c.Fieldsets.xcdhcm__Pay_summary_one_off_deduction}"
+						var="i">
+						<apex:inputField value="{!oneOff[i]}" required="{!i.Required}" />
+					</apex:repeat>
+					<!-- 
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Benefit__c.Fields.Employee__c.Label}"/>
+                    <apex:inputField value="{!oneOff.Employee__c}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Benefit__c.Fields.Benefit_Type__c.Label}"/>
+                    <apex:inputField value="{!oneOff.Benefit_Type__c}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Benefit__c.Fields.Earliest_payment_date__c.Label}"/>
+                    <apex:inputField value="{!oneOff.Earliest_payment_date__c}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Benefit__c.Fields.Payment_amount__c.Label}"/>
+                    <apex:inputtext value="{!oneOff.Payment_amount__c}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$ObjectType.Benefit__c.Fields.Notes__c.Label}"/>
+                    <apex:inputText value="{!oneOff.Notes__c}"/>
+                </apex:pageBlockSectionItem>                
+				 -->
+            </apex:pageBlockSection> 
+            </apex:repeat>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="false">
+            <apex:outputField value="{!xcdhcm__Pay_Summary__c.xcdhcm__Employee__c}"/>
+			<apex:outputField value="{!xcdhcm__Pay_Summary__c.xcdhcm__XCD_PAY_Period__c}" />
+        </apex:pageBlock>
+        
+    </apex:form>
+
+</apex:page>

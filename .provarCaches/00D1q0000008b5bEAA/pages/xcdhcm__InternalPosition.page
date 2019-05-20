@@ -1,0 +1,163 @@
+<apex:page controller="xcdhcm.InternalPositionsController" action="{!initList}" showheader="true" sidebar="false" > 
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.XCD_static_resources,'Css/Internalsite.css')}" /> -->
+    <!-- START :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock 
+        {
+        border-top: 4px solid #fff!important; 
+        border:none!important; 
+        }
+        #intMain 
+        {
+        background: #fff!important; 
+        }
+        .columnWidth
+        {
+        background: #fff!important; 
+        }
+    </style> 
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">        
+            <apex:define name="body"> 
+                <apex:form id="theForm">
+                    <!--START :: 1/07/2016 NPPD-1197 Recruitment and internal vacancies changed by kamal-->    
+                    <div id="intMain"><br/>   
+                        <h2 class="slds-text-heading--medium" style="margin-left:20px;">Current vacancies</h2> <br/> 
+                        <apex:pageBlock id="theBlock" >
+                            <apex:PageMessages />  
+                            <apex:actionRegion >
+                                <apex:outputText value="Search: " style="Width:100%!important;margin-left:10px!important;" />     
+                                <input type="text" id="PositionName" onkeyup="doSearch();" style="width: 200px!important;height: 20px!important;border-radius: 8px!important;" placeholder="  Job title" />             
+                                
+                                <apex:actionFunction name="searchServer" action="{!runquery}" rerender="positionList,noRecordMsg,div" status="status" >
+                                    <apex:param name="PositionName" value="" />
+                                </apex:actionFunction> 
+                                
+                                <apex:outputpanel style="margin-left:10px!important;margin-top:5px!important;" >                
+                                    <apex:actionStatus id="status" > 
+                                        <apex:facet name="start">    
+                                            <div class="slds-spinner_container slds-show slds-is-fixed">
+                                                <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                    <div class="slds-spinner__dot-a"></div>
+                                                    <div class="slds-spinner__dot-b"></div>
+                                                </div> 
+                                            </div>     
+                                        </apex:facet> 
+                                    </apex:actionStatus>  
+                                </apex:outputpanel>                                           
+                            </apex:actionRegion><br/><br/>          
+                            
+                            <apex:outputPanel layout="block" rendered="{!displayMessage}" style="width:340px; font-size: 12px; color: #85bef7;">
+                                <apex:commandLink action="{!ClosePopup}"  type="image/png" style="float:right;text-decoration:none">
+                                   <!-- START::3/2/218 REG issue ro 59 and NPPD-1623 changes done by Kamal -->
+                                    <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/close.PNG')}" title="close"  style="width:15px;"/> 
+                                   <!-- END::3/2/218 REG issue ro 59 and NPPD-1623 changes done by Kamal -->
+                                </apex:commandlink>
+                                <apex:pageMessage summary="{!$Label.xcdhcm__recruitment_candidate_successfully_applied}" severity="Info" strength="3" />            
+                            </apex:outputPanel><br/>
+                            
+                            <apex:outputPanel id="noRecordMsg">
+                                <apex:outputText Value="No records to display" rendered="{!vacancy.Size=0}" /> 
+                            </apex:outputPanel>   
+                            
+                            <!-- <apex:pageBlockTable id="positionList" value="{!vacancy}" var="Vac">       
+<apex:column headervalue="{!$ObjectType.Internal_Vacancy__c.Fields.Job_title__c.Label}" >                                           
+<apex:commandLink value="{!Vac.xcdhcm__Job_title__c}" action="{!viewVacancy}" id="theLink">
+<apex:param name="assignVacId" assignTo="{!vacancyId}" value="{!Vac.id}"/>
+</apex:commandLink>
+</apex:column>
+
+<apex:repeat value="{!$ObjectType.xcdhcm__Internal_Vacancy__c.Fieldsets.xcdhcm__PositionList}" var="i">   
+<apex:column value="{!Vac[i]}"  /> 
+</apex:repeat>  
+<apex:column headervalue="" > 
+<apex:commandLink action="{!viewVacancy}" id="applybuttonLink" style="text-decoration:none">    
+<apex:commandButton value="{!$Label.xcdhcm__internalpositionbview}" styleclass="slds-button slds-button--neutral"/>  
+<apex:param name="assignVacId" assignTo="{!vacancyId}" value="{!Vac.id}"/>
+</apex:commandLink>
+</apex:column>   
+</apex:pageBlockTable>  -->
+                            <apex:outputpanel id="positionList">    
+                                <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                    <thead>
+                                        <tr class="slds-text-title--caps"> 
+                                            <th scope="col" class="columnWidth">
+                                                <div class="slds-truncate">
+                                                    {!$ObjectType.Internal_Vacancy__c.Fields.Job_title__c.Label}
+                                                </div>
+                                            </th>
+                                            <apex:repeat value="{!$ObjectType.xcdhcm__Internal_Vacancy__c.Fieldsets.xcdhcm__PositionList}" var="i">
+                                                <th scope="col" class="columnWidth" >
+                                                    <div class="slds-truncate">
+                                                        {!$ObjectType.Internal_Vacancy__c.Fields[i].label}
+                                                        <span class="LiteHelpText">
+                                                            <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Internal_Vacancy__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                            <span>{!$ObjectType.Internal_Vacancy__c.fields[i].inlineHelpText}</span>
+                                                        </span>
+                                                    </div>
+                                                </th> 
+                                            </apex:repeat>
+                                            <th scope="col" class="columnWidth">
+                                                
+                                            </th>
+                                        </tr> 
+                                    </thead>
+                                    <tbody>
+                                        <apex:repeat value="{!vacancy}" var="Vac">
+                                            <tr> 
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:commandLink value="{!Vac.xcdhcm__Job_title__c}" action="{!viewVacancy}" id="theLink">
+                                                            <apex:param name="assignVacId" assignTo="{!vacancyId}" value="{!Vac.id}"/>
+                                                        </apex:commandLink>
+                                                    </div>
+                                                </th>
+                                                <apex:repeat value="{!$ObjectType.xcdhcm__Internal_Vacancy__c.Fieldsets.xcdhcm__PositionList}" var="i">
+                                                    <th scope="row" class="columnWidth">
+                                                        <div class="slds-truncate" >
+                                                            <apex:outputField value="{!Vac[i]}"/>
+                                                        </div>
+                                                    </th> 
+                                                </apex:repeat> 
+                                                <th scope="row" class="columnWidth">
+                                                    <div class="slds-truncate" >
+                                                        <apex:commandLink action="{!viewVacancy}" id="applybuttonLink" style="text-decoration:none">    
+                                                            <apex:commandButton value="{!$Label.xcdhcm__internalpositionbview}" styleclass="slds-button slds-button--neutral"/>  
+                                                            <apex:param name="assignVacId" assignTo="{!vacancyId}" value="{!Vac.id}"/>
+                                                        </apex:commandLink>
+                                                    </div>
+                                                </th>
+                                            </tr> 
+                                        </apex:repeat>
+                                    </tbody>
+                                </table>     
+                            </apex:outputpanel>            
+                        </apex:pageBlock>      
+                    </div>   
+                </apex:form> 
+            </apex:define>
+        </body>
+    </html>
+    
+    <!--END :: 1/07/2016 NPPD-1197 Recruitment and internal vacancies changed by kamal-->
+ <script type="text/javascript">
+    function doSearch() 
+    {
+        searchServer(
+        document.getElementById("PositionName").value);
+    }
+    </script> 
+    <div Class="line"></div>
+</apex:page>

@@ -1,0 +1,111 @@
+<apex:page standardController="xcdhcm__Third_Party_Summary__c" extensions="xcdhcm.RtiTaxCodeController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />    
+<style type="text/css">
+.custPopup 
+{
+	background-color: white;
+	border-width: 2px;
+	border-style: inset;
+	z-index: 9999;
+	left: 50%;
+	padding: 10px;
+	position: absolute;
+	width: 650px;
+	margin-left: -250px;
+	top: 100px;
+}
+
+.popupBackground 
+{
+	background-color: black;
+	opacity: 0.20;
+	filter: alpha(opacity = 20);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 9998;
+}
+
+body .pbBody table.list tr.headerRow th:first-child,body .pbBody table.list tr.dataRow td:first-child
+{
+	border-left-width: 0;
+	width: 0.1% !important;
+}
+
+.bPageTitle .ptBody .content 
+{
+	display: none;
+}
+
+body .bPageBlock .pbTitle h2 
+{
+	display: none;
+}
+
+.customnotabTab .tertiaryPalette,.individualPalette .customnotabBlock .tertiaryPalette,.layoutEdit .individualPalette .customnotabBlock .tertiaryPalette
+	{
+	background-color: #FFFFFF;
+	border-color: #63a4c5 !important;
+	border-top: 2px solid #63a4c5 !important;
+}
+
+.Custom50Tab .tertiaryPalette,.individualPalette .Custom50Block .tertiaryPalette,.layoutEdit .individualPalette .Custom50Block .tertiaryPalette
+{
+	background-color: #FFFFFF;
+	border-color: #63a4c5 !important;
+	/*  border-top: 2px solid #63a4c5 !important; */
+}
+
+body .bPageBlock .pbBody .pbSubheader .hideListButton 
+{
+	display: none;
+}
+
+.triangle 
+{
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 10px 0 10px 20px;
+	border-color: transparent transparent transparent #4a86e8;
+}
+
+.pagination ul 
+{
+	box-shadow: none !important;
+}
+</style>
+<apex:form >
+	<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+
+	<apex:pageBlock title="{!$Label.xcdhcm__phrtitaxcodefromhmrc}" mode="edit" id="pageId">
+	<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	<apex:pageMessages id="erMsg"/>
+		<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+	
+		<apex:pageBlockSection title="{!$Label.xcdhcm__rtitaxcodefromhmrchmrctaxcodeinputdata}" columns="2">
+		<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+			<apex:repeat value="{!$ObjectType.xcdhcm__Third_Party_Summary__c.fieldsets.xcdhcm__Request_to_third_paty}" var="fieldValue">
+				<apex:inputField value="{!thirdPatySummary[fieldValue]}" required="{!fieldValue.Required}"/>
+			</apex:repeat>
+		</apex:pageBlockSection>
+		<apex:pageBlockButtons location="bottom" >
+			<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+			<!-- START :: 26/12/2017 NPAY-403 Payroll7Patch2 issues modified by Tutu -->
+			<apex:actionStatus id="proccessStatus">
+		      <apex:facet name="stop">           
+		    	<apex:commandButton value="{!$Label.xcdhcm__rtitaxcodefromhmrcbsubmit}" action="{!sendTaxCodeRequestToHMRC}" status="proccessStatus"  rerender="erMsg"/>
+		      </apex:facet>
+		      <apex:facet name="start">  
+		        <apex:commandButton value="{!$Label.xcdhcm__rtifpssummarybprocessing}" disabled="true"/>
+		      </apex:facet>
+		    </apex:actionStatus>
+			<!-- END :: 26/12/2017 NPAY-403 Payroll7Patch2 issues modified by Tutu -->
+			<apex:commandButton action="{!Back}" value="{!$Label.xcdhcm__rtitaxcodefromhmrcbcancel}" immediate="true"/>
+			<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+		</apex:pageBlockButtons>.
+	</apex:pageBlock>
+</apex:form>
+</apex:page>

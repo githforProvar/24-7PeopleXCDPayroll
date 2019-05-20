@@ -1,6 +1,6 @@
 <project default="runtests">
 	<property environment="env"/>
-	<property name="provar.home" value="C:/Program Files/Provar 9.6/Provar/"/>
+	<property name="provar.home" value="C:/Program Files/ProvarApril 2019/"/>
 	<property name="testproject.home" value=".."/>
 	<property name="testproject.results" value="../ANT/Results"/>
 	<property name="secrets.password" value="${env.ProvarSecretsPassword}"/>
@@ -21,7 +21,9 @@
 				resultsPathDisposition="Increment" 
 				testEnvironment="" 
 				webBrowser="Chrome" 
-				webBrowserConfiguration="Full Screen" 
+				webBrowserConfiguration="Full Screen"
+				webBrowserProviderName="Desktop"
+				webBrowserDeviceName="Full Screen" 
 				excludeCallableTestCases="true" 
 				salesforceMetadataCache="Reuse" 
 				projectCachePath="../../.provarCaches"
@@ -33,10 +35,10 @@
 				invokeTestRunMonitor="true"
 				>
 		
-			<fileset dir="../tests/Payroll HMRC Student loan Project 2019-20"><include name="1_HmrcStudentLoanPlanOneWeeklyPayPeriod.testcase"/></fileset><fileset dir="../tests/Payroll HMRC Student loan Project 2019-20"><include name="2_HmrcStudentLoanPlanTwoWeeklyPayPeriod.testcase"/></fileset>
+			<fileset dir="../tests/Jamie spec Student Loan Project for all tax years/StudentLoans"></fileset>
 
 			<emailProperties sendEmail="true" primaryRecipients="azizm@peoplexcd.com" ccRecipients="" bccRecipients="" emailSubject="Provar test run report" attachExecutionReport="true" attachZip="false"/>
-			<attachmentProperties includeOnlyFailures="false" includeOnlyBdd="false" includeSkipped="false" includeTestCaseDescription="true" includeScreenshots="true" includeWarningMessages="false" includeInfoMessages="false" includeDebugMessages="false" includeTestStepTime="false" includeTestStepPathHierarchy="true" includeFullScreenShot="false"/>
+			<attachmentProperties includeAllFailuresInSummary="true" includeOnlyFailures="false" includeOnlyBdd="false" includeSkipped="false" includeTestCaseDescription="true" includeScreenshots="true" includeWarningMessages="false" includeInfoMessages="false" includeDebugMessages="false" includeTestStepTime="false" includeTestStepPathHierarchy="true" includeFullScreenShot="false"/>
 		</Run-Test-Case>
 
 	</target>

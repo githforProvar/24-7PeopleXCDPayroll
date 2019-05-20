@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Records public holidays in each Company or Country</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <fields>
+        <fullName>xcdhcm__Companies_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Company</label>
+        <referenceTo>xcdhcm__Company__c</referenceTo>
+        <relationshipLabel>Company Public Holidays</relationshipLabel>
+        <relationshipName>Company_Holidays</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Company_Holiday_Year__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Company Leave year</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>$Source.xcdhcm__Companies_Name__c</field>
+                <operation>equals</operation>
+                <valueField>xcdhcm__Company_Holiday_Year__c.xcdhcm__Companies_Name__r.Id</valueField>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>xcdhcm__Company_Holiday_Year__c</referenceTo>
+        <relationshipLabel>Company Public Holidays</relationshipLabel>
+        <relationshipName>Company_Leave</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Half_day__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Half day</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Holiday_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Holiday date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Leave_year_starting_month__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>xcdhcm__Company_Holiday_Year__r.xcdhcm__Leave_year_starting_month__c &amp;&apos;-&apos;&amp;xcdhcm__Company_Holiday_Year__r.Name</formula>
+        <label>Leave year start month</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Region__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Region(s)</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>All</fullName>
+                    <default>true</default>
+                    <label>All</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>xcdhcm__Select_AM_PM__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>AM/PM/All day</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>All Day</fullName>
+                    <default>true</default>
+                    <label>All Day</label>
+                </value>
+                <value>
+                    <fullName>AM</fullName>
+                    <default>false</default>
+                    <label>AM</label>
+                </value>
+                <value>
+                    <fullName>PM</fullName>
+                    <default>false</default>
+                    <label>PM</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <label>Company Public Holidays</label>
+    <nameField>
+        <label>Public holiday</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Company Public Holidays</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>xcdhcm__Full_Day_Holiday_validation</fullName>
+        <active>true</active>
+        <description>Do not deactivate.  Checks before creating company public holiday: if the holiday is for &apos;All day&apos; then it does not allow you to check the Half day field as true.</description>
+        <errorConditionFormula>AND( OR( ISPICKVAL( xcdhcm__Select_AM_PM__c , &apos;All Day&apos;) , ISPICKVAL( xcdhcm__Select_AM_PM__c , &apos;&apos;) ) , xcdhcm__Half_day__c = true)</errorConditionFormula>
+        <errorDisplayField>xcdhcm__Half_day__c</errorDisplayField>
+        <errorMessage>Please uncheck the checkbox</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>xcdhcm__Half_Day_Holiday_validation</fullName>
+        <active>true</active>
+        <description>Do not deactivate.  Checks on creating company public holiday - if the holiday is &apos;AM or PM&apos; then forces the user to check the Half day field as true.</description>
+        <errorConditionFormula>AND( OR( ISPICKVAL( xcdhcm__Select_AM_PM__c , &apos;AM&apos;) , ISPICKVAL( xcdhcm__Select_AM_PM__c , &apos;PM&apos;) ) , xcdhcm__Half_day__c = false)</errorConditionFormula>
+        <errorDisplayField>xcdhcm__Half_day__c</errorDisplayField>
+        <errorMessage>Please check the checkbox.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>xcdhcm__Holiday_Date</fullName>
+        <active>false</active>
+        <description>Deprecated</description>
+        <errorConditionFormula>YEAR( xcdhcm__Holiday_Date__c )  &lt;&gt;  VALUE(  xcdhcm__Company_Holiday_Year__r.Name)</errorConditionFormula>
+        <errorDisplayField>xcdhcm__Holiday_Date__c</errorDisplayField>
+        <errorMessage>This validation rule is depecated please deactive it under Company Public Holidays</errorMessage>
+    </validationRules>
+    <visibility>Public</visibility>
+    <webLinks>
+        <fullName>xcdhcm__New_Edit_Public_Holidays</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Add public holiday(s)</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/xcdhcm__Create_New_Public_Holidays?Id={!xcdhcm__Company_Holiday_Year__c.xcdhcm__Companies_NameId__c}&amp;comId={!xcdhcm__Company_Holiday_Year__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__New_public_holiday</fullName>
+        <availability>online</availability>
+        <description>New public holiday</description>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Add public holidays - after leave year assigned</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/28.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/28.0/apex.js&quot;)} 
+
+var results = sforce.connection.describeSObjects([&quot;xcdhcm__Company_Holidays__c&quot;]);
+var result = results[0];
+var objPrefix = result.keyPrefix;
+
+var result = sforce.connection.query(&quot;Select Name, xcdhcm__CustomURL_Value__c FROM xcdhcm__CustomURL__c&quot;);
+records = result.getArray(&quot;records&quot;);
+var company;
+var holiday_year;
+
+for (var i=0; i&lt; records.length; i++)
+{
+  if(records[i].Name == &quot;CompanyHolidayYearFieldID&quot;)
+  {
+    holiday_year = records[i].xcdhcm__CustomURL_Value__c;
+  }
+  else if(records[i].Name == &quot;CompanyFieldID&quot;)
+  {
+    company = records[i].xcdhcm__CustomURL_Value__c;  
+  }
+}
+
+var url = &apos;/one/one.app#/alohaRedirect/&apos;+objPrefix+&apos;/e?&apos;+company+&apos;_lkid=&apos;+&apos;{!xcdhcm__Company__c.Id}&apos;+&apos;&amp;&apos;+company+&apos;=&apos;+&apos;{!xcdhcm__Company__c.Name}&apos;+&apos;&amp;&apos;+holiday_year+&apos;_lkid=&apos;+&apos;{!xcdhcm__Company_Holiday_Year__c.Id}&apos;+&apos;&amp;&apos;+holiday_year+&apos;=&apos;+&apos;{!xcdhcm__Company_Holiday_Year__c.Name}&apos;+&apos;&amp;retURL=/&apos;+&apos;{!xcdhcm__Company_Holiday_Year__c.Id}&apos;;
+window.open(url, &apos;_self&apos;);</url>
+    </webLinks>
+    <webLinks>
+        <fullName>xcdhcm__Recalculate_leave_request</fullName>
+        <availability>online</availability>
+        <description>Recalculate leave requests</description>
+        <displayType>button</displayType>
+        <linkType>page</linkType>
+        <masterLabel>Recalculate employees leave</masterLabel>
+        <openType>replace</openType>
+        <page>xcdhcm__RecalculateLeaveRequests</page>
+        <protected>false</protected>
+    </webLinks>
+</CustomObject>

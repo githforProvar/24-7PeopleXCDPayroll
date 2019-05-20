@@ -1,0 +1,226 @@
+<apex:page standardController="xcdhcm__RTI_Submission__c" extensions="xcdhcm.RtiFPSController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/EmpDetPageCSS.css')}"/> 
+<style type="text/css">
+.links {
+    display: none;
+} 
+.Custom83Tab .tertiaryPalette, .individualPalette .Custom83Block .tertiaryPalette, .layoutEdit .individualPalette .Custom83Block .tertiaryPalette {
+    background-color: #fff !important;
+    border-top: 2px solid #75b2dd !important;
+}
+body .pbBody table.list tr.headerRow th {
+  background: #ffffff !important;
+  border: none;
+  color: #999999 !important;
+  font-size: .9em;
+  font-weight: bold;
+  padding: 5px 2px 4px 5px;
+  border-bottom: 1px solid #cde2f5 !important;
+  border-top: 1px solid #cde2f5 !important;
+}
+<!-- START :: 05/01/2017 NPAY-71 Year end process Modified by Tutu -->
+body .pbBody table {
+  border-bottom: 0px solid #cde2f5 !important; 
+}
+<!-- END :: 05/01/2017 NPAY-71 Year end process Modified by Tutu -->
+.customPopup {
+    background-color: #1E90FF;
+    border-radius: 6px 6px 6px 6px;
+    border-style: hidden;
+    border-width: 2px;
+    left: 50%;
+    padding: 10px;
+    position: absolute;
+    z-index: 9999;
+    width: 500px;
+    margin-left: -250px;
+    top: 70px;
+}
+body .bRelatedList .pbTitle h3, body .bPageBlock .pbTitle h2, body .bPageBlock .pbTitle h3, body .bSubBlock h3.lbHeader {
+  color:#336699 !important;
+  font-size: 12pt !important;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}
+</style>
+
+<apex:form id="course" >
+    <!-- START :: 05/05/2016 NPPD-1139 UserGuide Link Added by Namrata-->
+    <apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;"
+                   target="_blank" action="{!helpLinkHMRCAdmin}" value="Help" id="theCommandLink1" rendered="{!HelpHMRCAdmin}"/>
+    <!-- END :: 05/05/2016 NPPD-1139 UserGuide Link Added by Namrata-->
+ <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+ <apex:pageBlock title="{!$Label.xcdhcm__phrtisubmmision}" id="rows" >
+ <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            <apex:pageMessages id="erMsg"/>
+            <!-- START :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+            <apex:outputText value="{!$CurrentPage.parameters.hmrcMessage}" escape="false" id="errMsg" style="color:red;" rendered="{!$CurrentPage.parameters.hmrcMsgFlag != 'ACCEPTED'}"></apex:outputText> 
+            <apex:outputText value="{!$CurrentPage.parameters.hmrcMessage}" escape="false" id="sucMsg" style="color:black;" rendered="{!$CurrentPage.parameters.hmrcMsgFlag == 'ACCEPTED'}"></apex:outputText>  
+            <!-- END ::  13/01/2017 NPAY-71 Year end process Modified by Tutu --> 
+            <apex:pageBlockButtons location="top" >
+                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->               
+                <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbneweps}" action="{!newEPS}"  id="theButton"/>
+                <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbneweyu}" action="{!newEYU}" id="theButtonEYU"/>
+                <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbnewnino}" action="{!newNINO}" id="theButtonNINO"/>
+                <!-- START :: 25/07/2016 NPAY-164 Added by Tutu for tax code download. -->
+                <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbnewtaxcode}" action="{!newTaxCode}" id="theButtonTaxCode"/>
+                <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbviewtaxcode}" action="{!viewTaxCode}" id="theButtonViewTaxCode"/>
+                <!-- END :: 25/07/2016 NPAY-164 Added by Tutu for tax code download. -->
+                <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                <!-- START :: 04/11/2016 NPAY-211 Added by Jamil for Generate P60.-->
+                <!-- change to Publish P60 -->
+                 <!--<apex:commandButton value=" Generate P60" action="{!generateP60}" id="theButtonGenerateP60"/> -->
+                 <apex:commandButton value="Publish P60" action="{!generateP60}" id="theButtonGenerateP60"/>
+                  <!-- change to Publish P60 -->
+                <!-- END :: 04/11/2016 NPAY-211 Added by Jamil for Generate P60.-->                
+            </apex:pageBlockButtons>         
+    </apex:pageBlock>
+    <!-- START :: 05/01/2017 NPAY-71 Year end process Modified by Tutu -->
+    <apex:pageBlock >
+        <apex:pageBlockSection columns="2"> 
+            <apex:pageBlockSectionItem >
+            <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <apex:outputLabel value="Tax year"/>
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <apex:outputPanel layout="block">
+            <apex:inputField value="{!rtiSummaryField.xcdhcm__Tax_year_d__c}">
+                <apex:actionSupport event="onchange" action="{!getRtiRecordVsTaxYear}"/>
+            </apex:inputField>
+            </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+            <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <apex:outputLabel value="Period" for="uptoMonthList"/>
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <apex:outputPanel layout="block">
+            <apex:actionRegion >
+                <apex:SelectList id="uptoMonthList" value="{!selectedUptoMonth}" size="1">
+                    <apex:actionSupport event="onchange" action="{!getRtiRecordVsTaxYear}"/>
+                    <apex:selectOptions value="{!UptoMonth}"/>
+                </apex:SelectList>
+            </apex:actionRegion>
+            </apex:outputPanel>
+            </apex:pageBlockSectionItem>                
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+     <!-- END ::  05/01/2017 NPAY-71 Year end process Modified by Tutu --> 
+    <!-- START :: 08/03/2016 NPAY-116 Payroll issue (changed 'Recently' to 'Recent') Modified by Farhan -->
+    <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+    <!-- START :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+    <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+    <apex:pageBlock id="rows1" rendered="true">
+     <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+    <!-- END :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+    <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+    <!-- END :: 08/03/2016 NPAY-116 Payroll issue (changed 'Recently' to 'Recent') Modified by Farhan -->
+        <apex:pageBlockTable value="{!rtisubmission}" var="item">
+           <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->         
+           <apex:column headervalue="{!$objecttype.xcdhcm__RTI_Submission__c.Fields.Name.label}">      
+           <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->                                 
+           <!-- START::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->                                
+                <apex:outputLink target="_top" title="{!item.name}" value="/one/one.app#/sObject/{!item.id}" rendered="{!item.xcdhcm__Status__c != 'ACCEPTED'}">{!item.name}
+                </apex:OutputLink>
+           <!-- END::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+                       <apex:outputText value="{!item.name}" rendered="{!item.xcdhcm__Status__c == 'ACCEPTED'}"/>                                                                                      
+           </apex:column>
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->            
+            <apex:column headerValue="Type">
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                <apex:outputText value="{!left(item.RecordType.Name,4)}" />
+            </apex:column>
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->           
+            <apex:column headerValue="Created">
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                    <apex:param value="{!item.CreatedDate}" /> 
+                </apex:outputText>
+            </apex:column>
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->  
+            <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->         
+            <apex:column headerValue="Payment date">
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                <apex:outputText value="{0,date,dd'/'MM'/'yyyy}" rendered="{!item.RecordType.Name =='FPS Submission'}">
+                    <apex:param value="{!item.xcdhcm__Paymt_dt__c}"/> 
+                </apex:outputText>
+            </apex:column>
+            <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <apex:column headerValue="Tax period">
+                <apex:outputText value="{!IF(item.Payroll_Period__r.XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c =='Monthly', item.xcdhcm__Tax_Month_No__c, item.xcdhcm__Tax_Week_No__c)}" rendered="{!item.RecordType.Name =='FPS Submission'}"/>
+            </apex:column>
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S --> 
+            <!-- START :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->          
+            <apex:column value="{!item.xcdhcm__HMRC_Off_no__c} / {!item.xcdhcm__Emplr_PAYE_ref__c} " headerValue="PAYE reference"/> 
+            <apex:column value="{!item.xcdhcm__Final_subm_fr_yr__c} " headerValue="Final submission"/> 
+            <apex:column value="{!item.xcdhcm__No_employee__c} " headerValue="Employees"/>  
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            <apex:column value="{!item.xcdhcm__Status__c}" headerValue="Status"/>
+            <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            <!-- <apex:column value="{!item.xcdhcm__Submit_dt__c}" headerValue="Date submitted"/>         -->
+            <apex:column value="{!item.xcdhcm__Submit_dt__c}" headerValue="Date submitted"/>        
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->   
+            <apex:column value="{!item.xcdhcm__CorrelationID__c}" headerValue="Correlation ID"/> 
+            <!-- END :: 14/02/2017 NPAY-223 Payroll5 issues modified by Tutu  -->           
+            <apex:column >
+             <apex:actionStatus id="proccessStatus">
+              <apex:facet name="stop">           
+                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                <!-- START :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+                <!-- START :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+        <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbsubmit}" action="{!sendFPSDataFromHMRC}" status="proccessStatus" rerender="hiddenBlock,erMsg,errMsg,sucMsg,pg,rows1" rendered="{!OR(AND(item.RecordType.Name =='FPS Submission', OR(item.xcdhcm__Status__c == 'Draft', item.xcdhcm__Status__c == 'error')), AND(item.RecordType.Name =='EPS Submission', OR(item.xcdhcm__Status__c == 'Draft', item.xcdhcm__Status__c == 'error')), AND(item.RecordType.Name =='EYU Submission', OR(item.xcdhcm__Status__c == 'Draft', item.xcdhcm__Status__c == 'error')))}">
+                <!-- END :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+        <!-- END :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+                <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                    <apex:param name="currentID" value="{!item.id}" assignTo="{!currentID}"/>
+                    <apex:param name="recordTypeName" value="{!item.RecordType.Name}" assignTo="{!recordTypeName}"/>
+                </apex:commandButton>
+              </apex:facet>
+              <apex:facet name="start">  
+                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->               
+                <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbprocessing}" disabled="true"/>
+                <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+              </apex:facet>
+             </apex:actionStatus>
+                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->              
+        <!-- START :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+                <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbrefresh}" action="{!refreshPage}" rendered="{!item.xcdhcm__Status__c == 'SUBMITTED'}" rerender="hiddenBlock,errMsg,sucMsg">
+                <!-- END :: 13/01/2017 NPAY-71 Year end process Modified by Tutu -->
+        <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                    <apex:param name="currentID" value="{!item.id}" assignTo="{!currentID}"/>
+                    <apex:param name="recordTypeName" value="{!item.RecordType.Name}" assignTo="{!recordTypeName}"/>
+                </apex:commandButton>
+                <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->             
+                <apex:commandButton value="{!$Label.xcdhcm__rtisubmmisionbview}" action="{!viewRtiPage}" rendered="{!item.xcdhcm__Status__c == 'ACCEPTED'}" rerender="hiddenBlock">
+                <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                    <apex:param name="currentID" value="{!item.id}" assignTo="{!currentID}"/>
+                </apex:commandButton>      
+            </apex:column>
+            <!-- START :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+            <apex:column >
+            	<!-- START :: 05/03/2018 NPAY-419 Scale up RTI submission to work for 2000 Employees Added/Modified by Tutu. -->
+                <apex:commandButton id="wheellId" rendered="{!herokuStatusBool}" image="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Icons/loading52.gif')}" style="hight:15px;width:20px;"/>
+                <!-- END :: 05/03/2018 NPAY-419 Scale up RTI submission to work for 2000 Employees Added/Modified by Tutu. -->
+            </apex:column>
+            <!-- END :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+        </apex:pageBlockTable> 
+    </apex:pageBlock>
+    <apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
+    <!-- START :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+    <apex:pageBlock id="pg">
+      <!-- START :: 05/03/2018 NPAY-419 Scale up RTI submission to work for 2000 Employees Added/Modified by Tutu. -->
+      <apex:pageBlockSection rendered="{!herokuStatusBool}">           
+          <apex:actionPoller interval="10" action="{!hmrcReloadPage}" enabled="{!herokuPollerBool}" reRender="pg"/>
+      </apex:pageBlockSection>
+     <!-- <apex:pageBlockSection rendered="{!batchStatusBool}">           
+          <apex:actionPoller interval="5" action="{!rtiReloadPage}" enabled="{!pollerBool}" reRender="pg"/>
+      </apex:pageBlockSection> -->
+      <!-- END :: 05/03/2018 NPAY-419 Scale up RTI submission to work for 2000 Employees Added/Modified by Tutu. -->
+   </apex:pageBlock>
+   <!-- END :: 04/11/2016 NPAY-227 Added by Tutu for Payroll4 critical issues. -->
+</apex:form>
+</apex:page>

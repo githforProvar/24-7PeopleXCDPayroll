@@ -1,0 +1,63 @@
+<apex:page standardController="xcdhcm__Leave_Request__c" sidebar="false" showHeader="true" >
+     <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Employeesubpagecss.css')}" />
+     <style>
+.Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette
+{
+background:none !important;
+border-top: 2px solid #63a4c5 !important;
+}
+
+</style>
+    <apex:form Id="theForm">
+        
+        <apex:PageBlock Id="thePageBlock" title="{!$Label.xcdhcm__phleaverequestpage}" >
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="{!$Label.xcdhcm__leaverequestpagebedit}" action="{!Edit}" rendered="{!AND(xcdhcm__Leave_Request__c.xcdhcm__Approval_Status__c=='Awaiting Approval',xcdhcm__Leave_Request__c.xcdhcm__Type_of_Leave__c!='Annual Leave')}"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection title="{!$Label.xcdhcm__leaverequestpageleaveabsencerequest}" columns="2" >      
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Leave_Absence_Request_Detail_Section_For}" var="m">
+                    <apex:outputField value="{!xcdhcm__Leave_Request__c[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <!-- START :: 22/09/2016 NPPD-988 Regular working hours modified by Kumbresh -->
+            <apex:pageBlockSection title="{!$Label.xcdhcm__leaverequestpagerequestdates}" columns="2" rendered="{!xcdhcm__Leave_Request__c.Employee_Details__r.Job_Role__r.xcdhcm__Pattern_Type__c=='Regular work pattern - days'}">                          
+            <!-- END :: 22/09/2016 NPPD-988 Regular working hours modified by Kumbresh -->
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Request_Dates_Section_for_Full_Time}" var="m">
+                    <apex:outputField value="{!xcdhcm__Leave_Request__c[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <!-- START :: 22/09/2016 NPPD-988 Regular working hours modified by Kumbresh -->
+            <apex:pageBlockSection title="{!$Label.xcdhcm__leaverequestpagerequestdates}" columns="2" rendered="{!xcdhcm__Leave_Request__c.Employee_Details__r.Job_Role__r.xcdhcm__Pattern_Type__c!='Regular work pattern - days'}">                        
+            <!-- END :: 22/09/2016 NPPD-988 Regular working hours modified by Kumbresh -->
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Request_Dates_Section_for_Part_Time}" var="m">
+                    <apex:outputField value="{!xcdhcm__Leave_Request__c[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <!-- START :: 22/09/2016 NPPD-988 Regular working hours modified by Kumbresh -->
+            <apex:pageBlockSection title="{!$Label.xcdhcm__leaverequestpagedetails}" columns="2" rendered="{!xcdhcm__Leave_Request__c.Employee_Details__r.Job_Role__r.xcdhcm__Pattern_Type__c=='Regular work pattern - days'}">                         
+            <!-- END :: 22/09/2016 NPPD-988 Regular working hours modified by Kumbresh -->
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Details_Full_Time}" var="m">
+                    <apex:outputField value="{!xcdhcm__Leave_Request__c[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <!-- START :: 22/09/2016 NPPD-988 Regular working hours modified by Kumbresh -->
+            <apex:pageBlockSection title="{!$Label.xcdhcm__leaverequestpagedetails}" columns="2" rendered="{!xcdhcm__Leave_Request__c.Employee_Details__r.Job_Role__r.xcdhcm__Pattern_Type__c!='Regular work pattern - days'}">                         
+            <!-- END :: 22/09/2016 NPPD-988 Regular working hours modified by Kumbresh -->
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__Details_Part_Time}" var="m">
+                    <apex:outputField value="{!xcdhcm__Leave_Request__c[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.xcdhcm__leaverequestpagesysteminformation}" columns="2" >                         
+                <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Request__c.FieldSets.xcdhcm__System_Rec_Info_for_both}" var="m">
+                    <apex:outputField value="{!xcdhcm__Leave_Request__c[m]}"/>  
+                </apex:repeat>
+            </apex:pageBlockSection>
+        </apex:PageBlock> 
+         <div style="border-bottom: 2px solid #63a4c5!important;"></div>
+    </apex:form>
+    <apex:relatedList list="ProcessSteps" ></apex:relatedList>
+    <apex:relatedList list="NotesAndAttachments"/>
+                    
+</apex:page>

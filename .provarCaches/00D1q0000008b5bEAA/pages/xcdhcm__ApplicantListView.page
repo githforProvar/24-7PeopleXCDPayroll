@@ -1,0 +1,46 @@
+<apex:page standardController="xcdhcm__Applicant__c" extensions="xcdhcm.ApplicationViewController" action="{!initact}" sidebar="false" showHeader="true" wizard="false" > 
+<style>
+ body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {   
+    width: 4%!important;
+ }
+</style>
+   <apex:sectionHeader title="(!$Label.ApplicantListViewApplications)" subtitle="Home"/>
+  <apex:form >
+    <apex:pageblock title="{!$Label.xcdhcm__applicantlistviewapplications}" >
+       <apex:PageMessages id="errorMsg"/>
+       <!-- 
+         <apex:pageBlockButtons location="top">
+             <apex:commandButton value="New" action="{!NewApplication}" reRender="errorMsg"/>       
+        </apex:pageBlockButtons>
+         -->                   
+        <apex:outputText Value="No records to display" rendered="{!ApplicationList.size<1}" />       
+         <apex:pageBlockTable value="{!ApplicationList}" var="le" rendered="{!ApplicationList.size>=1}" >
+             <apex:column headervalue="Action" >  
+               <apex:outputLink onClick="return Edit('{!le.id}');"  style="text-decoration: none; padding-right: 2px;  color: #336699;">Edit</apex:outputLink>| 
+               <apex:outputLink onclick="return confirmDelete('{!le.id}');"  style="text-decoration: none; padding-left: 2px;  color: #336699;">Del</apex:outputLink>           
+             </apex:column>   
+             <apex:column headervalue="{!$ObjectType.xcdhcm__Applicant__c.Fields.Name.Label}" >
+               <apex:outputLink target="_top" value="/{!le.id}"> {!le.Name}</apex:outputLink> 
+             </apex:column>
+               <apex:repeat var="f"  value="{!$ObjectType.xcdhcm__Applicant__c.FieldSets.xcdhcm__Application_List}">
+                 <apex:column value="{!le[f]}" />
+             </apex:repeat>
+        </apex:pageBlockTable>  
+      </apex:pageblock>  
+  </apex:form>   
+  <script>
+    function confirmDelete(a) {
+        if(confirm('Are you sure?')) {
+           window.location.href ='/apex/xcdhcm__ApplicantlistView?delid='+a;
+           return false;   
+        }
+        return false;
+    }
+    
+    function Edit(a) {
+        window.location.href ='/'+a+'/e?retURL=/apex/xcdhcm__ApplicantlistView';
+        return false;
+    }
+</script>
+
+</apex:page>

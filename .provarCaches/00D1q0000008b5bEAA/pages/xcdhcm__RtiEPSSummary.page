@@ -1,0 +1,155 @@
+<apex:page docType="html-5.0" standardController="xcdhcm__Pay_Period__c" extensions="xcdhcm.RtiEPSController" sidebar="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Sublineremovecss.css')}"/>    
+<style>
+  .customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette, .layoutEdit .individualPalette .customnotabBlock .tertiaryPalette {
+    background-color: #FFFFFF!important;
+    border-color: #FFFFFF!important;
+	}
+	<!--START::25/11/2015 added by Farhan -->
+	body .pbBody table.list tr.headerRow th 
+	{
+		border-bottom: 2px solid #cde2f5 !important;
+	}
+	<!--END::25/11/2015 added by Farhan -->
+	td.dataCol.first {
+	    width: 500px !important;
+	    height: 40px !important;
+	}
+	<!--START :: 02/01/2017 NPAY-71 Year end process modified by Tutu -->
+     .popupBg
+    {
+       opacity: 4.0;
+       filter: alpha(opacity = 60);
+       position: absolute;
+       width: 100%;
+       height: 100%;
+       top: 0;
+       left: 0;
+       z-index: 9998;
+    }
+    .customPopup
+    {
+       line-height: 25px;
+       position: absolute;
+       left: 60%;
+       padding:10px;
+       z-index: 9999;
+       text-align: center;
+       top: 150px;
+       width: 400px;
+       margin-left: -450px;
+       text-decoration: none;
+       font-weight: bold;
+       background: #ffffff !important;
+       border: 1px solid #ccc !important;         
+       -moz-box-shadow: 4px 5px 10px #99ccff;
+       -webkit-box-shadow: 4px 5px 10px #99ccff;
+       box-shadow: 4px 5px 10px #99ccff;
+       -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+       color:#336699;
+     }
+     <!--END :: 02/01/2017 NPAY-71 Year end process modified by Tutu -->
+     
+     /* START :: 14/11/2016 NPAY-71 Year end process added by Farhan */
+     .pbBody .messageCell
+     {
+     	font-size: 110%;
+     }
+     /* END :: 14/11/2016 NPAY-71 Year end process added by Farhan */
+</style> 
+<apex:form id="theform">
+ 	<!--START :: 02/01/2017 NPAY-71 Year end process modified by Tutu -->
+	<apex:outputPanel id="popup3">
+         <apex:outputpanel styleClass="popupBg" rendered="{!displayEPSpopup}" style="opacity: 0.2;background-color: black;"/>
+         <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayEPSpopup}">
+            <center>  
+                <apex:outputtext value="{!p11DEPSMsg}" rendered="{!displayEPSpopup}"/>
+                <apex:inputCheckbox value="{!p11DCheckBox}"/>
+                <br/><br/>
+                <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!newEPS}" style="width: 100px;" onClick="disableButton(this);" styleClass="butt"/>
+				<apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelEPS}" style="width: 100px;" onClick="disableButton(this);" styleClass="butt"/>
+   			</center>
+         </apex:outputPanel>
+     </apex:outputPanel>
+     <!--END :: 02/01/2017 NPAY-71 Year end process modified by Tutu -->
+    <apex:pageBlock title="{!$Label.xcdhcm__phrtiepssummary}" id="rows">   
+    <!--START :: 14/11/2016 NPAY-71 Year end process added by Farhan -->
+    <apex:pageMessages id="erMsg" escape="false"/>
+    <!--END :: 14/11/2016 NPAY-71 Year end process added by Farhan -->	  
+	<apex:pageBlockSection id="sec" columns="3" rendered="{!selectedEpsDate == '--Select--'}"  collapsible="false">
+		<apex:pageBlockSectionItem id="emprSecItem">
+			<apex:outputLabel value="Select employer" for="emprList"/>
+			<apex:outputPanel layout="block">
+			<apex:actionRegion >
+				<apex:SelectList id="emprList" value="{!selectedEmployer}" size="1">
+					<apex:actionSupport event="onchange" action="{!choosenTaxYear}" reRender="taxYearList,dateList"/>
+					<apex:selectOptions value="{!Employer}"/>
+				</apex:SelectList>
+			</apex:actionRegion>
+			</apex:outputPanel>				
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem id="taxYearSecItem">
+			<apex:outputLabel value="Select tax year" for="taxYearList"/>
+			<apex:outputPanel layout="block">
+			<apex:actionRegion >
+				<apex:SelectList id="taxYearList" value="{!selectedTaxYear}" size="1">
+					<apex:actionSupport event="onchange" action="{!choosenEpsDate}" reRender="dateList"/>
+					<apex:selectOptions value="{!TaxYear}"/>
+				</apex:SelectList>
+			</apex:actionRegion>
+			</apex:outputPanel>				
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem id="dateSecItem">
+			<!-- START :: 14/11/2016 NPAY-71 Year end process (changed Select date to Select period) modified by Farhan --> 
+			<apex:outputLabel value="Select period" for="dateList"/>
+			<!-- END :: 14/11/2016 NPAY-71 Year end process (changed Select date to Select period) modified by Farhan --> 
+			<apex:outputPanel layout="block">
+			<apex:actionRegion >
+				<apex:SelectList id="dateList" value="{!selectedEpsDate}" size="1">
+					<apex:actionSupport event="onchange"
+						action="{!choosenEmployer}" reRender="theform"
+						status="recordStatus"/>
+					<apex:selectOptions value="{!EpsDate}"/>
+				</apex:SelectList>
+			</apex:actionRegion>
+			</apex:outputPanel>
+      	</apex:pageBlockSectionItem>
+      	<apex:outputLabel />     	
+        <apex:actionStatus startText="Applying value..." id="recordStatus" />
+    </apex:pageBlockSection>   
+	<!-- START :: 14/11/2016 NPAY-71 Year end process modified by Farhan --> 
+    	<center>
+    		<apex:commandButton value="{!$Label.xcdhcm__rtitaxcodefromhmrcbcancel}" action="{!Back}" rendered="{!selectedEpsDate == '--Select--'}"/>
+    	</center>
+    <!--END :: 14/11/2016 NPAY-71 Year end process modified by Farhan -->    
+	<apex:repeat value="{!employerList}" var="iteme" rows="1">
+		<apex:pageBlockSection title="" columns="1" collapsible="false"
+			rendered="{!AND(selectedEmployer != '--Select--', selectedTaxYear != '--Select--', selectedEpsDate != '--Select--')}">
+		 <apex:pageBlockTable value="{!rtiSubmisionList}"  var="item">     
+		 	<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->     
+            <apex:column value="{!item.Payroll_Period__r.XCD_PAY_Payroll__r.Name}" headerValue="{!$ObjectType.xcdhcm__XCD_PAY_Payroll__c.Fields.Name.label}"/>            
+            <apex:column value="{!item.Payroll_Period__r.XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c}" headerValue="{!$ObjectType.xcdhcm__XCD_PAY_Payroll__c.Fields.xcdhcm__Pay_Frequency__c.label}"/>
+            <apex:column value="{!item.Payroll_Period__r.xcdhcm__Pay_day__c}" headerValue="{!$ObjectType.xcdhcm__Pay_Period__c.fields.xcdhcm__Pay_day__c.label}"/>                         
+            <apex:column value="{!item.Payroll_Period__r.xcdhcm__Payroll_status__c}" headerValue="{!$ObjectType.xcdhcm__Pay_Period__c.fields.xcdhcm__Payroll_status__c.label}"/>
+            <apex:column value="{!item.xcdhcm__Status__c}" headerValue="{!$ObjectType.xcdhcm__RTI_Submission__c.fields.xcdhcm__Status__c.label}"/>
+            <apex:column value="{!item.xcdhcm__Submit_dt__c}" headerValue="{!$ObjectType.xcdhcm__RTI_Submission__c.fields.xcdhcm__Submit_dt__c.label}"/>     
+            <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->     
+         </apex:pageBlockTable>            		
+	  </apex:pageBlockSection>
+	</apex:repeat>
+	<apex:outputText value="* No payment FPS for this period." rendered="{!rtiSubmisionList.size = 0}" style="color:red;"/>
+	 <apex:pageBlockButtons location="Bottom" rendered="{!AND(selectedEmployer != '--Select--', selectedTaxYear != '--Select--', selectedEpsDate != '--Select--')}">
+        <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S --> 
+        <!--START :: 02/01/2017 NPAY-71 Year end process modified by Tutu -->      
+        <apex:commandButton value="{!$Label.xcdhcm__rtiepssummarybcreateeps}" rendered="{!AND(rtiSubmisionList.size != 0, finalEPSButton == false)}" action="{!newEPS}" id="thePopButton"/>
+        <apex:commandButton value="{!$Label.xcdhcm__rtiepssummarybcreateeps}" rendered="{!AND(rtiSubmisionList.size != 0, finalEPSButton == true)}" action="{!createEPSPopup}" id="theButton"/>
+        <apex:commandButton value="{!$Label.xcdhcm__rtiepssummarybnopaymenteps}" rendered="{!AND(rtiSubmisionList.size = 0, finalEPSButton == false)}" action="{!newEPS}"/>
+        <apex:commandButton value="{!$Label.xcdhcm__rtiepssummarybnopaymenteps}" rendered="{!AND(rtiSubmisionList.size = 0, finalEPSButton == true)}" action="{!createEPSPopup}"/>
+        <!--END :: 02/01/2017 NPAY-71 Year end process modified by Tutu -->
+        <apex:commandButton value="{!$Label.xcdhcm__rtiepssummarybback}" action="{!Back}"/> 
+        <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+     </apex:pageBlockButtons>   
+  </apex:pageBlock>     
+</apex:form>
+</apex:page>

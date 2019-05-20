@@ -1,0 +1,720 @@
+<apex:page Controller="xcdhcm.ExpenseViewController" sidebar="false" showHeader="true" wizard="false" cache="false" readOnly="false">
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> 
+	
+    	<head>
+        	<apex:includeScript value="https://code.jquery.com/jquery-2.2.4.min.js" />
+            <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet"/>
+            <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeDetails.css')}" />  
+            <apex:includeLightning />
+            <apex:slds />
+        </head>  
+        
+        <style>
+            
+            .popupBg
+            {
+                opacity: 1.0;
+                filter: alpha(opacity = 60);
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: 9998;
+            }
+            
+            .customPopup
+            {
+                line-height: 25px;
+                position: absolute;
+                left: 50%;
+                padding:10px;
+                z-index: 9999;
+                text-align: center;
+                top: 40%;
+                width: 500px;
+                margin-left: -250px;
+                text-decoration: none;
+                font-weight: bold;                
+                background: #ffffff !important;
+                border: 1px solid #ccc !important;                
+                -moz-box-shadow: 4px 5px 10px #99ccff;
+                -webkit-box-shadow: 4px 5px 10px #99ccff;
+                box-shadow: 4px 5px 10px #99ccff;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                color:#336699;
+            }
+            
+
+    			.slds-scope .slds-text-heading_label, .slds-scope .slds-text-heading--label
+             {
+    				font-size: 14px
+			}
+			td.css1 
+			{
+				font-family:Salesforce Sans,Arial,sans-serif!important;
+			    font-weight: normal;
+			    color: #54698d;
+			    font-size: 18px;
+			    text-transform: capitalize;
+			}
+				/* To remove left and right padding */
+	        	.noSidebarCell, .sidebarCell .fixed 
+	        	{
+				    padding: 0 !important;
+				}
+				
+				.icon-padding
+				{
+					padding-left : calc((50% - 38px)/2);
+					text-align: left;
+				}
+
+				.apexp .bPageBlock.apexDefaultPageBlock .pbBody 
+				{
+				    margin: 0;
+				}
+				
+				.bEditBlock .pbHeader>table>tbody>tr>td, .bPageBlock .pbHeader>table>tbody>tr>td, .bLayoutBlock .pbHeader>table>tbody>tr>td, .bEditBlock .pbBottomButtons>table>tbody>tr>td, .bPageBlock .pbBottomButtons>table>tbody>tr>td, .bLayoutBlock .pbBottomButtons>table>tbody>tr>td 
+				{
+				    padding: 0;
+				}
+				
+				body .bPageBlock .pbTitle 
+				{
+				    padding: 0;
+				}
+				
+				@media (min-width:960px) and (max-width:1280px)
+				{
+					.icon-padding
+					{
+						padding-left : calc((50% - 48px)/2);
+						text-align: left;
+					}
+				}
+
+				@media (min-width:1281px) and (max-width:1440px)
+				{
+					.icon-padding
+					{
+						padding-left : calc((50% - 68px)/2);
+						text-align: left;
+					}
+				}
+
+				@media (min-width:1441px) and (max-width:1680px)
+				{
+					.icon-padding
+					{
+						padding-left : calc((50% - 78px)/2);
+						text-align: left;
+					}
+				}
+
+				@media (min-width:1920px)
+				{
+					.icon-padding
+					{
+						padding-left : calc((50% - 88px)/2);
+						text-align: left;
+					}
+				}				
+            .tooltip .tooltiptext {
+                    visibility: hidden;                 
+                    background-color: #fff;
+                    color: #000;
+                    text-align: center;
+                    border-radius: 3px;
+                    padding: 3px;
+                    position: absolute;
+                    z-index: 1;   
+                    border: 1px solid #ccc;
+                }
+                
+                .tooltip:hover .tooltiptext {
+                    visibility: visible;
+                }
+        </style>
+        <script type="text/javascript">
+            function selectAllCheckboxes(obj,receivedInputID)
+            {
+                var inputCheckBox = document.getElementsByTagName("input");                 
+                for(var i=0; i<inputCheckBox.length; i++)
+                {         
+                    if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1)
+                    {                                    
+                        inputCheckBox[i].checked = obj.checked;
+                    }
+                }          
+            } 
+            //START :: 16-06-2017 New Lightning UI Added by Rahul S 
+            //Used to display spinner on loading page
+            document.onreadystatechange = function () 
+            {
+                var state = document.readyState
+                if (state == 'interactive') 
+                {
+                    document.getElementById('contents').style.visibility="hidden";
+                } 
+                else if (state == 'complete') 
+                {
+                    setTimeout(function()
+                    {
+                        document.getElementById('load').style.display = "none";
+                        document.getElementById('contents').style.visibility="visible";
+                    },2000); 
+                }
+            }
+            //END :: 16-06-2017 New Lightning UI Added by Rahul S 
+            $Lightning.use
+            (
+                "c:XCDLightning", function() 
+                {
+                    var permissionLevel = '{!permissionLevel}';
+                    $Lightning.createComponent
+                    (
+                        "c:HeaderWithIcon",
+                        { 
+                            parentPage:"Expense_vf",
+                            permissionLevel:permissionLevel,
+                        },
+                        "HeaderWithIcon",
+                        function(cmp) 
+                        {
+                        
+                        }
+                    );
+                }
+            );
+                
+            $Lightning.use
+            (
+                "c:XCDLightning", function() 
+                {
+                    var permissionLevel = '{!permissionLevel}';
+                    var timesheetType = '{!empDetail.Job_Role__r.Timesheet__c}';
+                    $Lightning.createComponent
+                    (
+                        "c:MyActionIcon",
+                        { 
+                            parentPage:"Expense_vf",
+                            permissionLevel:permissionLevel,
+                            timesheetType:timesheetType
+                        },
+                        "ActionIcon",
+                        function(cmp) 
+                        {                       
+                        }
+                    );
+                }
+            );
+                
+			$Lightning.use
+			(
+				"c:XCDLightning", function() 
+				{
+					var userID = '{!empDetail.User__c}';
+					var empID = '{!empDetail.Id}';
+					var imgURL = '{!ImageURL}';
+					var permissionLevel = '{!permissionLevel}'; 
+					var imageRenderTrue = false;
+					if(imgURL != undefined && imgURL.length > 0)
+					{
+						imageRenderTrue = true;
+					}
+					var nameTemp = '{!empDetail.Name}';
+					var nameArr = nameTemp.split(' ');
+					var name = 'Welcome, '+nameArr[0];
+					var fLetter = nameArr[0].charAt(0).toUpperCase();
+					
+					$Lightning.createComponent
+					(
+						"c:MyBusinessCard",
+						{ 
+							userID:userID,
+							empID:empID,
+							imgUrl:imgURL,
+							imageRenderTrue:imageRenderTrue,
+							name:name,
+							fLetter:fLetter,
+							renderBodyTrue:true,
+							parentPage:"Expense_vf",
+							permissionLevel:permissionLevel,
+							widthH:200,
+                            marginL:35,
+                            marginT:-(18+(200-2*35))
+						},
+						"BusinessCard",
+						function(cmp) 
+						{
+						}
+					);
+				}
+			);
+			function selectTab(elmnt) 
+			{
+				//alert('HIIIIIIII'+elmnt);
+				// slds-active
+				$(elmnt).parent("li").siblings(".slds-active").removeClass("slds-active");
+				$(elmnt).parent("li").addClass("slds-active");
+				
+				// tabindex
+				$(elmnt).parent("li").siblings().children("a").attr("tabindex", -1);
+				$(elmnt).attr("tabindex", 0);
+				
+				// aria-selected
+				$(elmnt).parent("li").siblings().children("a").attr("aria-selected", false);
+				$(elmnt).attr("aria-selected", true);
+				
+				// hiding previouly selected tab (slds-show/slds-hide)
+				$(elmnt).closest(".slds-tabs--default").children("div[role='tabpanel'].slds-show").addClass("slds-hide");
+				$(elmnt).closest(".slds-tabs--default").children("div[role='tabpanel'].slds-show").removeClass("slds-show");
+				// displaying newly selected tab (slds-show/slds-hide)
+				$(elmnt).closest(".slds-tabs--default").children("div[aria-labelledby='"+elmnt.id+"']").addClass("slds-show");
+				$(elmnt).closest(".slds-tabs--default").children("div[aria-labelledby='"+elmnt.id+"']").removeClass("slds-hide");
+			}    
+		</script> 
+<body>
+	<!-- used to display spinner on page load -->
+	<div id="load">
+		<div class="slds-spinner_container slds-show slds-is-fixed" style="background-color:white;">
+			<div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+				<div class="slds-spinner__dot-a"></div>
+				<div class="slds-spinner__dot-b"></div>
+			</div>
+		</div>
+	</div>
+	<!-- used to display page content after page load -->
+            
+    <div id="contents" style="width:100%;overflow:hidden;text-align:center;">
+        <div id="idTable" class="slds-grid slds-wrap" style="margin-left:auto; margin-right:auto;">
+            <apex:pageBlock rendered="{!AlertMsg==false}">
+               <h1><blink><apex:outputText Style="Font-size:medium" value="Alert"/><br/><br/></blink> </h1>
+               <apex:outputText Style="Font-size:small" value="Please contact the HR Administrator to create an Employee Detail Profile"/>  
+            </apex:pageBlock>
+            
+                <apex:outputPanel rendered="{!AlertMsg==true}">
+                <div class="slds-size_12-of-12" >
+                        <div id="HeaderWithIcon"  style="padding-left:25%;"></div>
+                    </div>
+                    
+                    <div class="slds-size_12-of-12" >     
+                        <div style="height:68px; background-color:#51bc86">
+                            <div style="width:100%; height:100%; padding-left:25%; text-align:left; font-family:'Dosis', sans-serif; font-size:30pt; color:white; font-weight:100; display:flex; justify-content:left; align-items:center;">
+                            Expenses
+                        </div>
+                    </div>
+                </div>
+                    
+                <!-- Business card/ Actions section -->
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-size_3-of-12"  style="vertical-align:top; text-align:center; padding-left: 58px; padding-right: 58px;">
+                        <div id="BusinessCard" style="margin-left:auto; margin-right:auto; margin-top:-140px; background:transparent !important;"></div>
+                                
+                        <div style="margin-top:13px;"> 
+                            <div class="icon-padding"> 
+                                <apex:outputText style="font-family: 'Dosis', sans-serif; font-size: 18pt;color: black;font-weight: 600 !important; display: inline-block; word-wrap: break-word;" value="{!empDetail.Name}"/><br/>
+                            </div>
+                              
+                           <!--     <div class="icon-padding">
+		                        	<div class="slds-icon_container slds-icon_container--circle slds-icon-action-close" title="">
+		                            <svg class="slds-icon slds-icon--xx-small" aria-hidden="true">
+		                                <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#call')}"></use>
+		                            </svg>
+		                        	</div>&nbsp;&nbsp;                        
+	                        		<apex:outputText id="phone" style="font-family: 'Dosis', sans-serif; font-size:0.85rem;color: rgb(135,135,135);font-weight: 100 !important; text-decoration:none"  value="{!currentUser.Phone}" /><br/>
+	                      	</div>
+	                      	
+							<div class="icon-padding">   
+		                        	<div class="slds-icon_container slds-icon_container--circle slds-icon-action-priority" title="">
+		                            <svg class="slds-icon slds-icon--xx-small" aria-hidden="true">
+		                                <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#email')}"></use>
+		                            </svg>  
+		                        	</div>&nbsp;&nbsp;
+		                        	<apex:outputText id="Email" style="font-family: 'Dosis', sans-serif; font-size: 0.85rem;color: rgb(135,135,135);font-weight: 100 !important; word-wrap: break-word; word-break: break-all;" value="{!currentUser.email}" />
+                            </div> -->
+                              <div class="icon-padding">
+                                <div class="slds-icon_container slds-icon_container--circle slds-icon-action-close" style="border-radius: 48%;width: 24px;height: 24px;text-align:center;padding-top: 5px!important;" title="">
+                                     <svg class="slds-icon slds-icon--xx-small" aria-hidden="true">
+                                         <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#call')}"></use>
+                                     </svg>
+                                </div>&nbsp;&nbsp;                        
+                                <apex:outputText id="phone" style="font-family: 'Dosis', sans-serif; font-size:0.85rem;color: rgb(135,135,135);font-weight: 100 !important; text-decoration:none" value="{!currentUser.Phone}" /><br/>
+                            </div>
+                                         
+                            <div class="icon-padding" >   
+                              <table>
+                               <tr>
+                                   <td>
+                                     <div class="slds-icon_container slds-icon_container--circle slds-icon-action-priority" style="border-radius: 48%;width: 24px;height: 24px;text-align:center;padding-top: 5px!important;" title="">
+                                        <svg class="slds-icon slds-icon--xx-small" aria-hidden="true">
+                                            <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/action-sprite/svg/symbols.svg#email')}"></use>
+                                        </svg>
+                                    </div>&nbsp;&nbsp;
+                                   </td>
+                                   <td>
+                                     <div  class="tooltip" style="margin-top: -10px;">
+                                         <div   style="margin-top: -10px; margin-left: 5px;font-family: 'Dosis', sans-serif; font-size: 0.85rem;color: rgb(135,135,135);font-weight: 100 !important;white-space: nowrap;width:15em;overflow: hidden;text-overflow: ellipsis;display: inline-block;">                                    
+                                            {!currentUser.email}
+                                          </div>    
+                                          <span class="tooltiptext" style="font-family: 'Dosis', sans-serif;">{!currentUser.email}</span>                                                        
+                                    </div>                             
+                                      
+                                   </td>
+                               </tr>
+                              </table>
+                             </div>   
+                             
+                            <div id="ActionIcon" style="padding-top:20px; margin-left:auto; margin-right:auto;"></div>
+                        </div>    
+                    </div>
+                     
+                    <!-- Data section -->
+                    <div class="slds-size_9-of-12" style="text-align:left;height:100%; border-left: 0.26mm solid #ccc; padding-left:20px; padding-right:20px; margin-top: 5px;"> 
+                        <apex:outputpanel id="mainOutPanel" layout="block" style="padding-left:-90px">
+                                <apex:form id="PSform">
+                                    <div class="slds">
+                                        <div class="slds-tabs--default">
+                                            <ul class="slds-tabs--default__nav" role="tablist" style="margin-left: -9px;">
+                                                <li class="slds-tabs--default__item slds-text-heading--label slds-active" title="EXPENSES" role="presentation" >
+                                                <a class="slds-tabs--default__link" href="#void" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item" onclick="selectTab(this);">EXPENSES</a>
+                                                </li>
+                                            
+                                                <li class="slds-tabs--default__item slds-text-heading--label" title="CLAIMS" role="presentation">
+                                                <a class="slds-tabs--default__link" href="#void" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item" onclick="selectTab(this);">CLAIMS</a>
+                                            </li>
+                                            </ul>
+                
+                                        <div id="tab-default-1" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+                                        <apex:commandButton action="{!submitClaim}" value="{!$Label.xcdhcm__expense_vfstcurrentexpensesbsubmitclaim}" rerender="{!IF(isConfirmPopupEnabled == true, 'popup, errorMsg1, errorMsg2', 'errorMsg1, errorMsg2, theTabPanel')}"
+                                                                 styleclass="slds-button slds-button--neutral" style="display:inline!important;box-shadow: none!important;margin-top: -53px;float: right!important;" />
+                                     
+                                            <apex:outputpanel id="tabdetails1" rendered="{!CurrentExpenseTab == true}" style="font-size:14px">
+                                                    <apex:pageBlock title="{!$Label.xcdhcm__expense_vfcurrentexpensescurrentexpenses}" mode="edit">
+                                                    <apex:PageMessages id="errorMsg1"/>
+                                                    
+                                                        <div style="float:right;margin-top:-35px">
+                                                            <apex:commandButton action="{!newExpense}" value="{!$Label.xcdhcm__expense_vfstcurrentexpensesbnewexpense}" styleclass="slds-button slds-button--neutral" style="display:inline!important;box-shadow: none!important;"/>
+                                                            <!--  -<apex:commandButton action="{!submitClaim}" value="{!$Label.xcdhcm__expense_vfstcurrentexpensesbsubmitclaim}" rerender="{!IF(isConfirmPopupEnabled == true, 'popup, errorMsg1, errorMsg2', 'errorMsg1, errorMsg2, theTabPanel')}"
+                                                                         styleclass="slds-button slds-button--neutral" style="display:inline!important;box-shadow: none!important;"/>-->
+                                                    </div> 
+                                                
+                                                        <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;">
+                                                            <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                                                <thead>
+                                                                 <tr class="slds-text-title--caps"> 
+                                                                     <th scope="col" class="columnWidth">
+                                                                         <div class="slds-truncate">
+                                                                             <div style="display:block;">
+                                                                                 <apex:inputCheckbox onclick="selectAllCheckboxes(this,'expenseCheckbox')"/>
+                                                                             </div>
+                                                                         </div>
+                                                                     </th>
+                                                                     <th scope="col" class="columnWidth">
+                                                                         <div class="slds-truncate">Expense ID</div>
+                                                                     </th>
+                                                                     
+                                                                     <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Expense__c.fieldSets.xcdhcm__Expense_view_summary_column}" >
+                                                                         <th scope="col" class="columnWidth" >
+                                                                             <div class="slds-truncate">
+                                                                             {!$ObjectType.Expense__c.Fields[f].label}
+                                                                                 <span ID="LiteHelpTextID">
+                                                                                     <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Expense__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                                     <span>{!$ObjectType.Expense__c.fields[f].inlineHelpText}</span>
+                                                                                 </span>
+                                                                             </div>
+                                                                         </th> 
+                                                                     </apex:repeat>
+                                                                     
+                                                                     <th scope="col" class="columnWidth">
+                                                                         <div class="slds-truncate">Receipt</div>
+                                                                     </th>
+                                                                     
+                                                                     <th scope="col" class="columnWidth">
+                                                                         <div class="slds-truncate">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                                                     </th>
+                                                                 </tr> 
+                                                             </thead>
+                                                             
+                                                             <tbody>
+                                                                 <apex:repeat value="{!recordTodisplay}" var="r">
+                                                                     <tr> 
+                                                                         <th scope="row" class="columnWidth">
+                                                                             <div class="slds-truncate" >
+                                                                                 <apex:inputCheckbox value="{!r.selected}" id="expenseCheckbox"/>
+                                                                             </div>
+                                                                         </th>
+                                                                         <th scope="row" class="columnWidth">
+                                                                             <div class="slds-truncate" >
+                                                                                 <apex:outputLink title="{!r.Exp.Name}" target="_self" value="/apex/xcdhcm__ExpenseEdit?Id={!r.Exp.id}&permissionLevel={!permissionLevel}&parentPage=Expense_vf" styleClass="backlink" >{!r.Exp.Name}</apex:outputLink>
+                                                                                 <!-- <apex:outputLink title="{!r.Exp.Name}" target="_parent" value="{!URLFOR($Action.Expense__c.Edit,r.Exp.id)}" styleClass="backlink" >{!r.Exp.Name}</apex:outputLink> -->
+                                                                             </div>
+                                                                         </th>
+                                                                         <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Expense__c.fieldSets.xcdhcm__Expense_view_summary_column}" >
+                                                                             <th scope="row" class="columnWidth" style="word-break: break-all;">
+                                                                                 <div class="slds-truncate" >
+                                                                                     <apex:outputField value="{!r.Exp[f]}"/>
+                                                                                 </div>
+                                                                             </th> 
+                                                                         </apex:repeat> 
+                                                                         <th scope="row" class="columnWidth">
+                                                                             <div class="slds-truncate" >
+                                                                                 <apex:outputLink target="_parent" title="{!r.attachFile.Name}" value="/{!r.attachFile.id}" rendered="{!r.attachFile.id != null}">view</apex:OutputLink>
+                                                                             </div>
+                                                                         </th>
+                                                                         <th scope="row" class="columnWidth">
+                                                                             <div class="slds-truncate" >
+                                                                                 <apex:commandLink action="{!deleteExpense}" reRender="table_Expense">
+                                                                                     <apex:param name="cid" value="{!r.Exp.id}" assignTo="{!dcid}"/>
+                                                                                     <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                                                 </apex:commandLink>
+                                                                             </div>
+                                                                         </th>
+                                                                     </tr> 
+                                                                 </apex:repeat>
+                                                             </tbody>
+                                                         </table>
+                                                     </div>
+                                                     <br/><br/>
+                                                     <center>
+                                                         <apex:outputText Value="No expense record to display" rendered="{!recordTodisplay.Size=0}" style="font-size:14px;"/>
+                                                     </center>
+                                                 </apex:pageBlock>	
+                                                 
+                                                 <apex:pageBlock title="{!$Label.xcdhcm__expense_vfcurrentexpensescurrentmileage}" mode="edit" rendered="{!MileageSectionPermission}">
+                                                     <apex:PageMessages id="errorMsg2"/>
+                                                     <apex:outputPanel >
+                                                         
+                                                      <div style="float:right;margin-top:-35px">
+                                                             <apex:commandButton action="{!newMileage}" value="{!$Label.xcdhcm__expense_vfstcurrentexpensesbnewmileage}" rendered="{!MileageSectionPermission}"
+                                                                                 styleclass="slds-button slds-button--neutral" style="display:inline!important;box-shadow: none!important;"/>
+                                                      </div> 
+                                                     </apex:outputPanel> 
+                                                     <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;">
+                                                         <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+                                                             <thead>
+                                                                 <tr class="slds-text-title--caps"> 
+                                                                     <th scope="col" class="columnWidth">
+                                                                         <div class="slds-truncate">
+                                                                             <apex:inputCheckbox onclick="selectAllCheckboxes(this,'mileageCheckbox')"/>
+                                                                         </div>
+                                                                     </th>
+                                                                     <th scope="col" class="columnWidth">
+                                                                         <div class="slds-truncate">Mileage ID</div>
+                                                                     </th>
+                                                                     <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Expense__c.fieldSets.xcdhcm__Mileage_summary_columns}">
+                                                                         <th scope="col" class="columnWidth" >
+                                                                             <div class="slds-truncate">
+                                                                                 {!$ObjectType.Expense__c.Fields[f].label}
+                                                                                 <span id="LiteHelpTextID">
+                                                                                     <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Expense__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                                     <span>{!$ObjectType.Expense__c.fields[f].inlineHelpText}</span>
+                                                                                 </span>
+                                                                             </div>
+                                                                         </th> 
+                                                                     </apex:repeat>
+                                                                     <th scope="col" class="columnWidth">
+                                                                         <div class="slds-truncate">Receipt</div>
+                                                                     </th>
+                                                                     <th scope="col" class="columnWidth">
+                                                                         <div class="slds-truncate">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                                                     </th>
+                                                                 </tr> 
+                                                             </thead>
+                                                             <tbody>
+                                                                 <apex:repeat value="{!mileageWrapperList}" var="r">
+                                                                     <tr> 
+                                                                         <th scope="row" class="columnWidth">
+                                                                             <div class="slds-truncate" >
+                                                                                 <apex:inputCheckbox value="{!r.selected}" id="mileageCheckbox"/> 
+                                                                             </div>
+                                                                         </th>
+                                                                         <th scope="row" class="columnWidth">
+                                                                             <div class="slds-truncate" >
+                                                                                 <apex:outputLink title="{!r.Exp.Name}" target="_self" value="/apex/xcdhcm__ExpenseEdit?Id={!r.Exp.id}&permissionLevel={!permissionLevel}&isMileage=true&parentPage=Expense_vf" styleClass="backlink" >{!r.Exp.Name}</apex:outputLink>
+                                                                             </div>
+                                                                         </th>
+                                                                         <apex:repeat var="f" value="{!$ObjectType.xcdhcm__Expense__c.fieldSets.xcdhcm__Mileage_summary_columns}">
+                                                                             <th scope="row" class="columnWidth">
+                                                                                 <div class="slds-truncate" >
+                                                                                     <apex:outputField value="{!r.Exp[f]}"  />
+                                                                                 </div>
+                                                                             </th> 
+                                                                         </apex:repeat> 
+                                                                         <th scope="row" class="columnWidth">
+                                                                             <div class="slds-truncate" >
+                                                                                 <apex:outputLink target="_parent" title="{!r.attachFile.Name}" value="/{!r.attachFile.id}" rendered="{!r.attachFile.id != null}">view</apex:OutputLink>
+                                                                             </div>
+                                                                         </th>
+                                                                         <th scope="row" class="columnWidth">
+                                                                             <div class="slds-truncate" >
+                                                                                 <apex:commandLink action="{!deleteMileage}" reRender="table_Mileage">
+                                                                                     <apex:param name="cid" value="{!r.Exp.id}" assignTo="{!dcid}"/>
+                                                                                     <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Remove_Cross_Symbol.png')}" alt="Remove"/>
+                                                                                 </apex:commandLink>
+                                                                             </div>
+                                                                         </th>
+                                                                     </tr> 
+                                                                 </apex:repeat>
+                                                             </tbody>
+                                                         </table>
+                                                     </div>
+                                                     
+                                                     <br/><br/>
+                                                     <center>
+                                                         <apex:outputText Value="No mileage record to display" rendered="{!mileageWrapperList.Size == 0}" style="font-size:14px;"/>
+                                                     </center>
+                                                     <br/>
+                                                 </apex:pageBlock>
+                                                 <apex:pageBlock mode="edit">
+                                                 
+                                                     <table style="width:100%; font-size:16px; border:none;font-family:Salesforce Sans,Arial,sans-serif!important;    font-weight: normal;display: inline-block; color: #54698d;">
+                                                         <tr>
+                                                             <td class="css1">
+                                                                 <apex:outputText value="Total expense" />
+                                                             </td>
+                                                             <td class="css1"  style="float:right; text-align:right !important;">
+                                                                 <apex:outputField value="{!totalMil.xcdhcm__Claims__c}" />
+                                                             </td>
+                                                         </tr>
+                                                         
+                                                         <tr>
+                                                             <td class="css1">
+                                                                 <apex:outputText value="Total miles"/>
+                                                             </td>      
+                                                             <td class="css1" style="float:right; text-align:right !important;">
+                                                                 <apex:outputText value="{0,number,###,###}" > 
+                                                                     <apex:param value="{!totMileage}"/>
+                                                                 </apex:outputText>
+                                                             </td>
+                                                         </tr>
+                                                         
+                                                         <tr>
+                                                             <td class="css1">
+                                                                 <apex:outputText value="Total miles ytd"/>
+                                                             </td>      
+                                                             <td class="css1" style="float:right; text-align:right !important;">
+                                                                 <apex:outputText value="{0,number,###,###}" > 
+                                                                     <apex:param value="{!totalMileageYTD}"/>
+                                                                 </apex:outputText>
+                                                             </td>
+                                                         </tr>
+                                                     </table>
+                                                 </apex:pageBlock>
+                                             </apex:outputpanel>
+	                                    	</div>
+	                             		<div id="tab-default-2" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                                        		<apex:outputpanel id="Claims" rendered="{!ClaimsTab == true}" style="font-size:14px">
+	                                      <!-- <apex:commandLink style="float:right;font-family: 'Dosis', sans-serif; font-size: 10pt;color: black;font-weight: 100 !important;"
+	                                                        target="_blank" action="{!helpLinkClaims}" value="Help" id="theCommandLink3" rendered="{!HelpClaims}" />
+	                                      <apex:commandLink style="float:right;font-family: 'Dosis', sans-serif; font-size: 10pt;color: black;font-weight: 100 !important;"
+	                                                        target="_blank" action="{!helpLinkClaimsAdmin}" value="Help" id="theCommandLink4" rendered="{!HelpClaimsAdmin}"/> -->
+	                                      	<apex:outputPanel id="outClaims">
+	                                                <apex:pageBlock title="{!$Label.xcdhcm__expense_vfclaimsexpenseclaims}" mode="edit" >
+	                                                    
+	                                                    <div class="slds-table_edit_container slds-is-relative slds-scrollable--x"  style="width:100%;">
+	                                                        <table class="slds-table slds-table--bordered slds-table--cell-buffer "> 
+	                                                            <thead>
+	                                                                <tr class="slds-text-title--caps"> 
+	                                                                    <th scope="col" class="columnWidth">
+	                                                                        <div class="slds-truncate">
+	                                                                            {!$ObjectType.Claim__c.fields.Date_submitted__c.Label}
+	                                                                            <span id="LiteHelpTextID">
+	                                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Claim__c.fields.xcdhcm__Date_submitted__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+	                                                                                <span>{!$ObjectType.Claim__c.Fields.Date_submitted__c.inlineHelpText}</span>
+	                                                                            </span>
+	                                                                        </div>
+	                                                                    </th>
+	                                                                    <apex:repeat value="{! $ObjectType.Claim__c.Fieldsets.Claim_summary_column}" var="f">
+	                                                                        <th scope="col" class="columnWidth" >
+	                                                                            <div class="slds-truncate">
+	                                                                                {!$ObjectType.Claim__c.Fields[f].label}
+	                                                                                <span id="LiteHelpTextID">
+	                                                                                    <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Claim__c.fields[f].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+	                                                                                    <span>{!$ObjectType.Claim__c.fields[f].inlineHelpText}</span>
+	                                                                                </span>
+	                                                                            </div>
+	                                                                        </th> 
+	                                                                    </apex:repeat>
+	                                                                </tr> 
+	                                                            </thead>
+	                                                            <tbody>
+	                                                                <apex:repeat value="{!submittedClaimList}" var="sub">
+	                                                                    <tr> 
+	                                                                        <th scope="row" class="columnWidth">
+	                                                                            <div class="slds-truncate" >
+                                                                                        <!--<apex:outputLink target="_parent" title="{!sub.xcdhcm__Date_submitted__c}" value="/apex/xcdhcm__ClaimDetails?id={!sub.id}&EmpId={!employeeId}&permissionLevel={!permissionLevel}&parentPage=Expense_vf">{!sub.xcdhcm__Date_submitted__c}</apex:OutputLink>-->
+                                        												<apex:outputLink target="_parent" value="/{!sub.id}" >{!sub.xcdhcm__Date_submitted__c}</apex:OutputLink>
+	                                                                            </div>
+	                                                                        </th>
+	                                                                        <apex:repeat value="{! $ObjectType.Claim__c.Fieldsets.Claim_summary_column}" var="f">
+	                                                                            <th scope="row" class="columnWidth">
+	                                                                                <div class="slds-truncate" >
+	                                                                                    <apex:outputField value="{!sub[f]}"/>
+	                                                                                </div>
+	                                                                            </th> 
+	                                                                        </apex:repeat> 
+	                                                                    </tr> 
+	                                                                </apex:repeat>
+	                                                            </tbody>
+	                                                        </table>
+	                                                    </div>
+	                                                    <br /><br />
+	                                                    <center>
+	                                                        <apex:outputText Value="No expense record yet submitted" rendered="{!submittedClaimList.Size=0}" style="font-size:14px;"/>
+	                                                    </center>
+	                                                    <br /><br />
+	                                                </apex:pageBlock>
+	                                                
+	                                            </apex:outputPanel>
+	                                        </apex:outputpanel>
+	                                    </div>
+	                        			</div>
+	                        		</div>
+	               			</apex:form>
+	               		</apex:outputpanel>
+	             
+	               	</div>
+               	</div>
+           	</apex:outputPanel>
+      	</div>
+ 	</div>
+ 	
+ 	    <apex:outputPanel id="popup">
+        		<apex:outputPanel rendered="{!(displayClaimPopup)}">
+			 <apex:outputPanel styleClass="popupBg"/>
+                <apex:outputPanel id="popup1" styleClass="customPopup" layout="block" >
+                    <center>
+                        <apex:outputtext id="oText2" value="{!confirmMsg}"/>
+                    </center>
+                    <br />
+                    <apex:form id="theform">
+                        <apex:outputPanel > 
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel > 
+                                        <apex:commandButton action="{!acceptExpenseClaim}"  oncomplete="selectTab(document.getElementById('tab-default-2__item'))"  value="{!$Label.xcdhcm__expense_vfbok}" style="width: 100px;" rerender="popup,Approvals,out,Claims,mainOutPanel" status="saveStatus" />
+                                        <apex:commandButton value="{!$Label.xcdhcm__expense_vfbcancel}" action="{!cancelExpenseClaim}" style="width: 100px;" rerender="popup"  />
+                                      </apex:outputPanel>  
+                                  </apex:facet>
+                                  <apex:facet name="start">
+                                      <apex:outputPanel >
+                                          <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                              <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                  <div class="slds-spinner__dot-a"></div>
+                                                  <div class="slds-spinner__dot-b"></div>
+                                              </div>
+                                          </div>
+                                      </apex:outputPanel>                        
+						</apex:facet>                                
+					</apex:actionStatus> 
+				</apex:outputPanel> 
+			</apex:form>
+		</apex:outputPanel>
+	</apex:outputPanel>
+</apex:outputPanel>
+</body>
+	</html>
+</apex:page>

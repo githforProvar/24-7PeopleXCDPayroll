@@ -1,0 +1,170 @@
+<apex:page standardController="xcdhcm__Employee_Detail__c" sidebar="false" showHeader="true" wizard="false" extensions="xcdhcm.LeaveExtensionController"> 
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        	display:none!important;
+        }
+        input[type='text'] 
+        {
+        	width: 100%;
+        }  
+        textarea
+        {
+        	width:100%;
+        } 
+        select
+        {
+        	width:100%!important;
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope"> 
+            <apex:form >
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelNewYear}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Full_Time_Page}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:pageBlock > 
+                                <apex:pageMessages id="errorMsg"/>
+                                
+                                <apex:pageBlockSection collapsible="false" columns="2">
+                                    <apex:repeat value="{!leaveYearDetail}" var="ly" rows="1">
+                                    	<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Summary__c.Fields.Name.Accessible}" >
+                                        <!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        <abbr class="slds-required" title="required">*</abbr>
+                                                        {!$ObjectType.Leave_Summary__c.Fields.Name.Label}
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!ly.Name}" required="true"/> 
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                        
+                                        <!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                        <apex:outputpanel rendered="{!AND($ObjectType.xcdhcm__Leave_Summary__c.Fields.xcdhcm__Leave_Adjustment__c.Accessible ,OR(empDetail.Job_Role__r.xcdhcm__Pattern_Type__c=='Regular work pattern - days',empDetail.Job_Role__r.xcdhcm__Pattern_Type__c=='Flexible working days'))}">
+                                        <!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.Leave_Summary__c.Fields.Leave_Adjustment__c.Label}
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!ly.xcdhcm__Leave_Adjustment__c}" /> 
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                        
+                                        <!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                        <apex:outputpanel rendered="{!AND($ObjectType.xcdhcm__Leave_Summary__c.Fields.xcdhcm__Leave_Adjustment_Hours__c.Accessible , empDetail.Job_Role__r.xcdhcm__Pattern_Type__c!='Regular work pattern - days',empDetail.Job_Role__r.xcdhcm__Pattern_Type__c!='Flexible working days')}">
+                                        <!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                    <label class="slds-form-element__label" >
+                                                        {!$ObjectType.Leave_Summary__c.Fields.Leave_Adjustment_Hours__c.Label}
+                                                    </label> 
+                                                    <div class="slds-form-element__control">
+                                                        <apex:inputField value="{!ly.xcdhcm__Leave_Adjustment_Hours__c}" />
+                                                    </div>                                                                                        
+                                                </div>
+                                            </div> 
+                                        </apex:outputpanel>
+                                        
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Leave_Summary__c.Fieldsets.xcdhcm__New_Holiday_Absence_Full_Set1}" var="i">
+                                        	<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Leave_Summary__c.Fields[i].Accessible}">
+                                            <!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{!OR(i.dbRequired,i.Required)}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Leave_Summary__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Leave_Summary__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label>
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!ly[i]}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>      
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div>  
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                        
+                                        <apex:pageBlockSectionItem >
+                                            <apex:outputpanel >
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                        <label class="slds-form-element__label" >
+                                                            Note
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:outputText value="{!$Label.xcdhcm__leave_summary_creation_note}" />
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                        
+                                        <apex:pageBlockSectionItem >
+                                        	<!-- START:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Employee_Detail__c.Fields['Job_Role__c'].Accessible}">
+                                            <!-- END:: 24/12/2018 NPPD-1819 FLS Not Affecting Edit Page Label modify by  Ranjeet-->
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                        <label class="slds-form-element__label" >
+                                                            Job role
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:outputLink value="/{!empDetail.xcdhcm__Job_Role__c}" id="theLink">Click here</apex:outputLink>
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div> 
+                                            </apex:outputpanel>
+                                        </apex:pageBlockSectionItem>
+                                    </apex:repeat>
+                                </apex:pageBlockSection>
+                            </apex:pageBlock>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_full_time_pagebcancel}" action="{!cancelNewYear}" immediate="true" styleclass="slds-button slds-button--neutral" reRender="id_saveBtn" status="saveStatus"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_full_time_pagebsave}" action="{!saveNewYear}" styleclass="slds-button slds-button--brand" reRender="errorMsg,id_saveBtn" status="saveStatus" id="id_saveBtn"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

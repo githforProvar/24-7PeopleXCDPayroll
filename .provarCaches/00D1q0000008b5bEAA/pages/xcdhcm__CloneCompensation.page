@@ -1,0 +1,709 @@
+<apex:page standardController="xcdhcm__Compensation__c" extensions="xcdhcm.CompensationOverrideController" sidebar="false" showHeader="true" wizard="false">
+    <!--    <apex:stylesheet value="{!URLFOR($Resource.Css,'Sublineremovecss.css')}" /> -->
+    <!-- START :: 15-05-2017 New Lightning UI Modified by Rahul S --> 
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />    
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .bPageBlock .requiredInput .requiredBlock 
+        {
+        display:none!important;
+        }
+        
+        .Custom37Tab .secondaryPalette, .individualPalette .Custom37Block .secondaryPalette 
+        {
+        background-color: #fff;
+        border-color: #fff;
+        }
+        .Custom37Tab .tertiaryPalette, .individualPalette .Custom37Block .tertiaryPalette, .layoutEdit .individualPalette .Custom37Block .tertiaryPalette 
+        {
+        background-color: #fff;
+        border-color: #fff;
+        }
+        .popupBg
+        {
+        //background-color:#FFFFFF;
+        opacity: 1.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 50%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 40%;
+        width: 500px;
+        margin-left: -250px;
+        text-decoration: none;
+        font-weight: bold;
+        
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;
+        
+        -moz-box-shadow: 4px 5px 10px #99ccff;
+        -webkit-box-shadow: 4px 5px 10px #99ccff;
+        box-shadow: 4px 5px 10px #99ccff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+        .bPageBlock .detailList tr td, .bPageBlock .detailList tr th, .hoverDetail .bPageBlock .detailList tr td, .hoverDetail .bPageBlock .detailList tr th 
+        {
+        border-bottom: white !important;
+        }
+        .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette 
+        {
+        background-color: white;
+        border-color: white;
+        }
+        <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important;
+		   position: sticky !important;    
+		}  
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <!-- START :: 01-12-2018 NPPD-1822 Error handling - Compensation Modified by Rahul S -->
+        <body class="slds-scope">  
+            <apex:form id="theForm_id"> 
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelCompensation}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHCloneCompensation}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                         
+                            <!-- START :: 15/09/2017 NPPD-1525 Data integrity and error management - Phase 1 Payroll Related added by Geetha 
+                        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_info" role="alert">
+                          <span class="slds-assistive-text">info</span>
+                          <span class="slds-icon_container slds-icon-utility-user slds-m-right_x-small" title="Description of icon when needed">
+                          </span> <apex:outputText value="{!$Label.xcdhcm__compensation_info}" rendered="{!ehmsg == 'dntshow'}"/>
+                         
+                          <apex:outputText value="A payment has been made from this compensation record.  To make a change you must set up a new record.  Complete the details below.  Previous records will be adjusted or corrected automatically and any back pay or pension payment made in the next pay run." rendered="{!ehmsg == 'show'}"/>
+                        </div>
+                        
+                        <!-- END:: 15/09/2017 NPPD-1525 Data integrity and error management - Phase 1 Payroll Related added by Geetha -->
+                        <!-- ================================== Page content  ==========================================================    -->
+                            <!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+                            <apex:outputPanel id="popup3">
+                                <apex:outputpanel styleClass="popupBg" rendered="{!displayPopup}" style="opacity: 0.2;background-color: black;"/>
+                                <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopup}">
+                                    <center>  
+                                        <apex:outputtext value="{!validationPopupMsg}" rendered="{!displayPopup}"/>
+                                        <br/><br/>
+                                        <!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+						                <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!createIrregularOrCasualPopupInfo}" rendered="{!displayOkButton == false}" rerender="popup,popup3,error" styleClass="btn slds-button slds-button--brand" status="saveStatus"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!confirmCloneCompensation}" rendered="{!displayOkButton == true}" rerender="popup,popup3,error" styleclass="btn slds-button slds-button--brand" status="saveStatus"/>
+                                        <!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelPopup}" onClick="disableButton(this);" styleclass="slds-button slds-button--neutral"/>
+                                    </center>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu--> 
+                            
+                            <apex:outputPanel id="pageBlockContentId">
+                                <apex:pageMessages id="error" />
+                                <apex:outputPanel rendered="{!compensationAction == 'none'}">       
+                                    <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        <div class="slds-form-element slds-p-around--small">
+                                            <label class="slds-form-element__label"> 
+                                                Select an action
+                                            </label>
+                                            <div class="slds-form-element__control">
+                                                <apex:actionRegion >
+                                                    <apex:selectList id="compensationActionlist"  
+                                                                     value="{!compensationAction}" size="1" tabindex="10">
+                                                        <apex:selectOptions value="{!CompensationActionOptions}" />
+                                                    </apex:selectList>
+                                                </apex:actionRegion>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel rendered="{!compensationAction == 'Review compensation'}">
+                                    <apex:pageBlock >
+                                        <apex:pageMessage summary="{!$Label.xcdhcm__clonecompensation_change_compensation_msg}" severity="warning" strength="3" rendered="{!compensationOverlapinfo=false}"/>
+                                        
+                                        <!-- ============================================Lightning spinner ================================================= -->
+                                        <apex:actionStatus id="wait">                   
+                                            <apex:facet name="start">
+                                                <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>
+                                            <apex:facet name="stop">
+                                                <div class="slds-spinner_container slds-hide slds-is-fixed">
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>                                
+                                        </apex:actionStatus>
+                                        <!-- =============================================Lightning spinner =============================================== -->
+                                        
+                                        <!-- START :: 19-09-2018 NPPD-1674 P1 Summer2018 Hybrid Joiner Process Modified by Rahul S -->
+                                        <apex:pageBlockSection title="" columns="2" collapsible="false" id="id_compen_sec">
+                                            <apex:repeat value="{!cloneCompensation}" var="eComp" rows="1">
+                                                <apex:pageBlocksectionitem rendered="{!DispayCompensationBasis}">
+                                                    <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                    <apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.Accessible}" >
+                                                        <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:actionRegion >
+                                                                        <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.label}" Value="{!eComp.xcdhcm__Compensation_basis__c}" >
+                                                                            <apex:actionSupport event="onchange" rerender="id_compen_sec" status="defaultStatus" />
+                                                                        </apex:inputField>
+                                                                    </apex:actionRegion>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <apex:pageBlocksectionitem rendered="{!OR(eComp.xcdhcm__Compensation_basis__c == 'Pay scale',eComp.xcdhcm__Compensation_basis__c == 'Grade range')}">
+                                                    <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.Accessible}">
+                                                        <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:actionRegion >
+                                                                        <apex:outputPanel styleClass="requiredInput" layout="block">
+                                                                            <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.label}" Value="{!compensationGrade.xcdhcm__Grade_L__c}" required="true">
+                                                                                <apex:actionSupport event="onchange" action="{!onchangeGradePopulateSpinalpoint}" rerender="panelid" status="wait" /><br/>
+                                                                            </apex:inputField>
+                                                                        </apex:outputPanel>
+                                                                    </apex:actionRegion>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <apex:pageBlocksectionitem rendered="{!eComp.xcdhcm__Compensation_basis__c == 'Pay scale'}">
+                                                    <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.Accessible}" >
+                                                        <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:outputPanel id="panelid">
+                                                                        <apex:actionRegion >  
+                                                                            <apex:outputPanel styleClass="requiredInput" layout="block">
+                                                                                <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                                                                <apex:selectList id="List" value="{!spinalPoint}"  size="1"  required="true" Label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.label}">  
+                                                                                    <apex:selectOptions value="{!spinalPointList}" ></apex:selectoptions>
+                                                                                </apex:selectList>
+                                                                            </apex:outputPanel>
+                                                                        </apex:actionRegion> 
+                                                                    </apex:outputPanel>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <apex:pageBlocksectionitem rendered="{!OR(eComp.xcdhcm__Compensation_basis__c == 'Spot salary',eComp.xcdhcm__Compensation_basis__c == 'Grade range')}">
+                                                    <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                    <apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.Accessible}" >
+                                                        <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata-->
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.label}" Value="{!eComp.xcdhcm__Monthly_salary_input__c}" required="true" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <apex:pageBlocksectionitem rendered="{!OR(eComp.xcdhcm__Compensation_basis__c == 'Spot salary',eComp.xcdhcm__Compensation_basis__c == 'Grade range')}">
+                                                    <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.Accessible}" >
+                                                        <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata-->
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.label}" Value="{!eComp.xcdhcm__Period__c}" required="true"/>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                <!-- <apex:repeat value="{!cloneCompensation}" var="eComp" rows="1"> -->
+                                                <!-- END :: 19-09-2018 NPPD-1674 P1 Summer2018 Hybrid Joiner Process Modified by Rahul S -->
+                                                
+                                                <!--START :: 20/12/2018 NPPD-1784 Custom lookup for jobrole in add/review compensation page added by Kumbresh-->	
+			                                   	<apex:pageBlocksectionitem >
+			                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields['Role_L__c'].Accessible}" > 
+														<div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+															<div class="slds-form-element slds-p-around--small">                                                                                                     
+																<label class="slds-form-element__label" >
+																	<abbr class="slds-required" title="required">*</abbr>
+																	{!$ObjectType.Compensation__c.fields['Role_L__c'].Label}
+																	<span class="LiteHelpText">
+																		<apex:image Id="abcd" rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields['Role_L__c'].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+																		<span Id="abcde">{!$ObjectType.Compensation__c.fields['Role_L__c'].inlineHelpText}</span>
+																	</span>
+																</label> 
+																<div Id="abc" class="slds-form-element__control">
+																	<apex:actionRegion >
+																		<apex:inputField id="jobRole" value="{!eComp.xcdhcm__Role_L__c}" required="true"/>
+																	</apex:actionRegion>
+																</div>
+															</div>
+														</div> 
+													</apex:outputpanel>
+			                                   	</apex:pageBlocksectionitem>
+			                                   	<!--END :: 20/12/2018 NPPD-1784 Custom lookup for jobrole in add/review compensation page added by Kumbresh-->
+			                                   	
+			                                   	
+                                                <apex:repeat value="{!$ObjectType.xcdhcm__Compensation__c.Fieldsets.xcdhcm__Compensation}" var="i">
+                                                    <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields[i].Accessible}" >
+                                                        <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata-->
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                                <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                    <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                                    {!i.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields[i].inlineHelpText}</span>
+                                                                    </span>
+                                                                </label>
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:inputField value="{!eComp[i]}" required="{!i.Required}"  style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div>
+                                                    </apex:outputpanel>
+                                                </apex:repeat>
+                                            </apex:repeat>
+                                        </apex:pageBlockSection>            
+                                    </apex:pageBlock>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel rendered="{!compensationAction == 'Correct error'}">
+                                    <apex:pageBlock >
+                                        <!-- ============================================Lightning spinner ================================================= -->
+                                        <apex:actionStatus id="wait">                   
+                                            <apex:facet name="start">
+                                                <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>
+                                            <apex:facet name="stop">
+                                                <div class="slds-spinner_container slds-hide slds-is-fixed">
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>                                
+                                        </apex:actionStatus>
+                                        <!-- =============================================Lightning spinner =============================================== -->
+                                        
+                                        <apex:pageBlockSection title="" columns="2" collapsible="false" id="id_edit_compen_sec">
+                                            <apex:repeat value="{!editCompensation}" var="eComp" rows="1">
+                                                <apex:pageBlocksectionitem rendered="{!DispayCompensationBasis}">
+                                                    <apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.Accessible}" >
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:actionRegion >
+                                                                        <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Compensation_basis__c.label}" Value="{!eComp.xcdhcm__Compensation_basis__c}" >
+                                                                            <apex:actionSupport event="onchange" rerender="id_edit_compen_sec" status="defaultStatus" />
+                                                                        </apex:inputField>
+                                                                    </apex:actionRegion>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <apex:pageBlocksectionitem rendered="{!OR(eComp.xcdhcm__Compensation_basis__c == 'Pay scale',eComp.xcdhcm__Compensation_basis__c == 'Grade range')}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.Accessible}">
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:actionRegion >
+                                                                        <apex:outputPanel styleClass="requiredInput" layout="block">
+                                                                            <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Grade_L__c.label}" Value="{!compensationGrade.xcdhcm__Grade_L__c}" required="true">
+                                                                                <apex:actionSupport event="onchange" action="{!onchangeGradePopulateSpinalpoint}" rerender="spinalPointListid" status="wait" /><br/>
+                                                                            </apex:inputField>
+                                                                        </apex:outputPanel>
+                                                                    </apex:actionRegion>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <apex:pageBlocksectionitem rendered="{!eComp.xcdhcm__Compensation_basis__c == 'Pay scale'}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.Accessible}" >
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:outputPanel id="spinalPointListid">
+                                                                        <apex:actionRegion >  
+                                                                            <apex:outputPanel styleClass="requiredInput" layout="block">
+                                                                                <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                                                                <apex:selectList id="id_List" value="{!spinalPoint}"  size="1"  required="true" Label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Spinal_point_L__c.label}">  
+                                                                                    <apex:selectOptions value="{!spinalPointList}" ></apex:selectoptions>
+                                                                                </apex:selectList>
+                                                                            </apex:outputPanel>
+                                                                        </apex:actionRegion> 
+                                                                    </apex:outputPanel>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <apex:pageBlocksectionitem rendered="{!OR(eComp.xcdhcm__Compensation_basis__c == 'Spot salary',eComp.xcdhcm__Compensation_basis__c == 'Grade range')}">
+                                                    <apex:outputpanel rendered="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.Accessible}" >
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Monthly_salary_input__c.label}" Value="{!eComp.xcdhcm__Monthly_salary_input__c}" required="true" />
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <apex:pageBlocksectionitem rendered="{!OR(eComp.xcdhcm__Compensation_basis__c == 'Spot salary',eComp.xcdhcm__Compensation_basis__c == 'Grade range')}">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.Accessible}" >
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                     
+                                                                <label class="slds-form-element__label" >
+                                                                    <abbr class="slds-required" title="required">*</abbr>
+                                                                    {!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.inlineHelpText}</span>
+                                                                    </span>
+                                                                </label> 
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:inputField label="{!$objectType.xcdhcm__Compensation__c.fields.xcdhcm__Period__c.label}" Value="{!eComp.xcdhcm__Period__c}" required="true"/>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div> 
+                                                    </apex:outputpanel>
+                                                </apex:pageBlocksectionitem>
+                                                
+                                                <!--START :: 20/12/2018 NPPD-1784 Custom lookup for jobrole in add/review compensation page added by Kumbresh-->	
+			                                   	<apex:pageBlocksectionitem >
+			                                        <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields['Role_L__c'].Accessible}"> 
+														<div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+															<div class="slds-form-element slds-p-around--small">                                                                                                     
+																<label class="slds-form-element__label" >
+																	<abbr class="slds-required" title="required">*</abbr>
+																	{!$ObjectType.Compensation__c.fields['Role_L__c'].Label}
+																	<span class="LiteHelpText">
+																		<apex:image Id="abcd" rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields['Role_L__c'].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+																		<span Id="abcde">{!$ObjectType.Compensation__c.fields['Role_L__c'].inlineHelpText}</span>
+																	</span>
+																</label> 
+																<div Id="abc" class="slds-form-element__control">
+																	<apex:actionRegion >
+																		<apex:inputField id="jobRole" value="{!eComp.xcdhcm__Role_L__c}" required="true"/>
+																	</apex:actionRegion>
+																</div>
+															</div>
+														</div> 
+													</apex:outputpanel>
+			                                   	</apex:pageBlocksectionitem>
+			                                   	<!--END :: 20/12/2018 NPPD-1784 Custom lookup for jobrole in add/review compensation page added by Kumbresh-->
+                                                
+                                                <apex:repeat value="{!$ObjectType.xcdhcm__Compensation__c.Fieldsets.xcdhcm__Compensation}" var="i">
+                                                    <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Compensation__c.fields[i].Accessible}" >
+                                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                            <div class="slds-form-element slds-p-around--small">                                                                                                  
+                                                                <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                                    <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+                                                                    {!i.label}
+                                                                    <span class="LiteHelpText">
+                                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Compensation__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                        <span>{!$ObjectType.xcdhcm__Compensation__c.fields[i].inlineHelpText}</span>
+                                                                    </span>
+                                                                </label>
+                                                                <div class="slds-form-element__control">
+                                                                    <apex:inputField value="{!eComp[i]}" required="{!i.Required}"  style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+                                                                </div>                                                                                        
+                                                            </div>
+                                                        </div>
+                                                    </apex:outputpanel>
+                                                </apex:repeat>
+                                            </apex:repeat>
+                                        </apex:pageBlockSection>            
+                                    </apex:pageBlock>
+                                </apex:outputPanel>
+                                
+                            </apex:outputPanel>
+                            
+                            
+                            <apex:outputPanel id="popup">
+                                <apex:outputpanel id="popupSub1" styleClass="popupBg" rendered="{!(displayJobRolePopup)}"/>
+                                <apex:outputPanel id="popup1" styleClass="customPopup" layout="block" rendered="{!(displayJobRolePopup)}">
+                                    <center>  
+                                        <!-- START :: 15/09/2017 NPPD-1525 Data integrity and error management - Phase 1 Payroll Related added by Geetha -->
+                                        <apex:outputtext value="  {!$Label.xcdhcm__clonecompensationsave}" rendered="{!errorHandling}"/>
+                                        <!-- END :: 15/09/2017 NPPD-1525 Data integrity and error management - Phase 1 Payroll Related added by Geetha -->
+                                        <apex:outputtext id="oText2" value=" Please click OK to proceed and save the change."/>
+                                         <!--START:; 07-01-2019 Test trail issue :  New joiner Manager Issue modify sabir-->
+                                        <br/>
+                                        <apex:actionStatus id="okWait">                   
+                                            <apex:facet name="stop">
+                                                <apex:outputpanel >
+                                                    <apex:commandButton value="{!$Label.xcdhcm__clonecompensationbcancel}" action="{!cancelCloneCompensation}" rerender="popup" status="okWait" styleclass="slds-button slds-button--neutral" />
+                                                    <apex:commandButton action="{!cloneCompensation}" rerender="popup,error," value="{!$Label.xcdhcm__clonecompensationbok}" status="okWait" styleclass="btn slds-button slds-button--neutral"/>
+                                                	<!--END:: 07-01-2019 Test trail issue :  New joiner Manager Issue  modify sabir-->
+                                                </apex:outputpanel>
+                                            </apex:facet>
+                                            <apex:facet name="start">
+                                                <div class="slds-spinner_container slds-show slds-is-fixed" >
+                                                    <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>
+                                        </apex:actionStatus> 
+                                    </center>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel id="id_buttons">
+                                        <apex:commandButton value="{!$Label.xcdhcm__clonecompensationbcancel}" action="{!cancelCompensation}" immediate="true" rerender="popup,error,id_saveBtn" status="saveStatus" styleclass="slds-button slds-button--neutral"/>
+                                        &nbsp;
+                                        <apex:outputPanel rendered="{!compensationAction == 'Delete error'}">
+                                            <apex:commandButton value="{!$Label.xcdhcm__clonecompensationbconfirmanddelete}" rerender="pageBlockContentId,id_ConfirmAndDeleteBtn,id_buttons" action="{!deleteCompensation}" styleclass="slds-button slds-button--brand" status="saveStatus" id="id_ConfirmAndDeleteBtn"  />          
+                                        </apex:outputPanel>
+                                        
+                                        <apex:outputPanel rendered="{!compensationAction == 'none'}">
+                                            <apex:commandButton value="{!$Label.xcdhcm__clonecompensationbnext}" rerender="pageBlockContentId,id_NextBtn,id_buttons" action="{!compensationActionSelected}" styleclass="slds-button slds-button--brand" status="saveStatus" id="id_NextBtn"  />          
+                                        </apex:outputPanel>
+                                        
+                                        <apex:outputPanel rendered="{!compensationAction == 'Review compensation'}">
+                                            <!--START :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+                                            <apex:commandButton value="{!$Label.xcdhcm__clonecompensationbsave}" action="{!createCompPopupInfo}"  rerender="popup,popup3,error,id_saveBtn" styleclass="slds-button slds-button--brand" status="saveStatus" id="id_saveBtn"  />          
+                                            <!--END :: 24/04/2017 NPAY-200 Leavers and late changes added by Tutu -->
+                                        </apex:outputPanel>
+                                        
+                                        <apex:outputPanel rendered="{!compensationAction == 'Correct error'}">
+                                            <apex:commandButton value="{!$Label.xcdhcm__clonecompensationbsave}" action="{!saveEditedCompensation}"  rerender="error,id_saveBtn1" styleclass="slds-button slds-button--brand" status="saveStatus" id="id_saveBtn1"  />          
+                                        </apex:outputPanel>
+                                        
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form>
+        </body>
+        <!-- END :: 01-12-2018 NPPD-1822 Error handling - Compensation Modified by Rahul S -->
+    </html>
+    	<!--START :: 20/12/2018 NPPD-1784 Custom lookup for jobrole in add/review compensation page added by Kumbresh-->
+        <script>
+        function openLookup(baseURL, width, modified, searchParam)
+		{
+			var originalbaseURL = baseURL;
+			var originalwidth = width;
+			var originalmodified = modified;
+			var originalsearchParam = searchParam;
+			var lookupType = undefined;
+			var url = "http://dummyurl.com";
+			var absoluteURL;
+			
+			var arr = baseURL.split("?");
+			if(arr.length > 1)
+			{
+		        url += "?"+unescape(arr[1]);
+			}
+			absoluteURL = new URL(url);
+			lookupType = absoluteURL.searchParams.get("lktp");
+			  
+			//alert(lookupType+'--------'+'{!jobRolePrefixVal}'+'---------'+absoluteURL);
+			if (modified == '1') 
+			{
+				baseURL = baseURL + searchParam;
+			}
+		
+			var isCustomLookup = false;
+				
+			// Following "a0t" is the lookup type for Work_cycle__c object so change this as per your standard or custom object
+			if(lookupType == '{!jobRolePrefixVal}')
+			{
+				var urlArr = baseURL.split("&");
+				var txtId = '';
+				if(urlArr.length > 2) 
+				{
+					urlArr = urlArr[1].split('=');
+					txtId = urlArr[1];
+				}
+				//alert(txtId);
+		
+				// Following is the url of Custom Lookup page. You need to change that accordingly
+				baseURL = "/apex/xcdhcm__CustomJobRoleLookup?txt=" + txtId;
+		
+				// Following is the id of apex:form control "theForm". You need to change that accordingly
+				baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.theForm}");
+				if (modified == '1') 
+				{
+					baseURL = baseURL + "&lksearch=" + searchParam;
+				}
+				
+				var editCompEmpID = "{!JSENCODE(editCompensation[0].Employee__c)}";
+				//var cloneCompEmpID = "{!JSENCODE(cloneCompensation[0].Employee__c)}";
+				//var empId = !editCompEmpID ? editCompEmpID : cloneCompensation;
+				
+				var empId = editCompEmpID;
+				if(empId != undefined)
+				{
+					baseURL += "&empId=" + escapeUTF(empId);
+				}
+				
+				// Following is the ID of inputField that is the lookup to be customized as custom lookup
+				if(txtId.indexOf('jobRole') > -1 )
+				{	
+					isCustomLookup = true;
+				}
+			}
+		
+			if(isCustomLookup == true)
+			{
+				openPopup(baseURL, "lookup", 350, 480, "width="+width+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+			}
+			else 
+			{
+				if (modified == '1') 
+				{
+					originalbaseURL = originalbaseURL + originalsearchParam;
+				}
+				openPopup(originalbaseURL, "lookup", 350, 480, "width="+originalwidth+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+			} 
+		}
+        </script>
+        <!--END :: 20/12/2018 NPPD-1784 Custom lookup for jobrole in add/review compensation page added by Kumbresh-->
+</apex:page>

@@ -1,0 +1,209 @@
+<apex:page standardController="xcdhcm__Job_Role__c" extensions="xcdhcm.JobRoleOverrideController" sidebar="false" showHeader="true" wizard="false" >
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEmployeeSub.css')}" />
+    <style>
+        .slds-scope .slds-section-title--divider 
+        {  
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        input[type='text'] 
+        {
+        width: 50%;
+        }  
+        textarea
+        {
+        width:50%;
+        } 
+        select
+        {
+        width:50%!important;
+        }
+        /* .infoM2 .messageTable td 
+        {
+        width: 2px;
+        } */
+        .slds-scope .slds-form-element__label 
+        {
+        padding-left: 3%;
+        }
+        .slds-scope img 
+        {
+        max-width: 150%;
+        }
+        .message .messageText 
+        {
+        margin-left: 20px;
+        }
+        <!--Start: PopUp window to display the user Records -->
+        .popupBg
+        {
+        //background-color:#FFFFFF;
+        opacity: 1.0;
+        filter: alpha(opacity = 60);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        .customPopup
+        {
+        line-height: 25px;
+        position: absolute;
+        left: 50%;
+        padding:10px;
+        z-index: 9999;
+        text-align: center;
+        top: 40%;
+        width: 500px;
+        margin-left: -250px;
+        text-decoration: none;
+        font-weight: bold;
+        
+        background: #ffffff !important;
+        border: 1px solid #ccc !important;
+        
+        -moz-box-shadow: 4px 5px 10px #99ccff;
+        -webkit-box-shadow: 4px 5px 10px #99ccff;
+        box-shadow: 4px 5px 10px #99ccff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        color:#336699;
+        }
+        <!--End: PopUp window to display the user Records -->
+        <!-- START :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S-->
+        .datePicker
+        { 
+		   margin-left:210px !important;
+		   width: 21% !important;
+		   position: sticky !important;    
+		} 
+		<!-- END :: 14-02-2018 NPPD-1623 LightningPatch1 Date Calendar issue CSS Added by Rahul S--> 
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">  
+            <apex:form id="theForm">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelEndJobRoleAction2}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                            </apex:commandLink>  
+                            <h2 id="header43" class="slds-text-heading--medium">End Job Role</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                            <apex:outputPanel id="popup3">
+                                <apex:outputpanel styleClass="popupBg" rendered="{!displayPopup}" style="opacity: 0.2;background-color: black;"/>
+                                <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopup}">
+                                    <center>  
+                                        <apex:outputtext value="{!validationPopupMsg}" rendered="{!displayPopup}"/>
+                                        <br/><br/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbok}" action="{!confirmPopup}" rerender="popup,popup3,error" styleclass="btn slds-button slds-button--brand" status="saveStatus"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__payrollperiodbcancel}" action="{!cancelPopup}" onClick="disableButton(this);" styleclass="slds-button slds-button--neutral"/>
+                                    </center>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            <!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                            <apex:pageBlock > 
+                                <apex:pageMessages id="error" escape="false"/> 
+                                <apex:pageMessage id="jobroleInfoMsg" summary="{!$Label.xcdhcm__jobrolelistview_end_job_role_msg}" severity="info" strength="3"/>  
+                                
+                                <apex:pageBlockSection columns="2" collapsible="false" id="secid1">
+                                    <apex:repeat value="{!endJobRoleDetail}" var="jr" rows="1">   
+                                        <apex:repeat value="{!$ObjectType.xcdhcm__Job_Role__c.Fieldsets.xcdhcm__End_Job_Role_Set}" var="i">
+    							        <!-- START:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                            <apex:outputpanel rendered="{!$ObjectType.xcdhcm__Job_Role__c.fields[i].Accessible}">
+                                       <!-- END:: 12/11/2018 NPPD-1770 hotfix for FLS issue modify by  Namrata--> 
+                                                <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                                    <div class="slds-form-element slds-p-around--small">	                                                                                                 
+                                                        <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+                                                            <apex:outputPanel rendered="{! AND(i.Required,i!='Name')}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+                                                            {!i.label}
+                                                            <span class="LiteHelpText">
+                                                                <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Job_Role__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+                                                                <span>{!$ObjectType.Job_Role__c.fields[i].inlineHelpText}</span>
+                                                            </span>
+                                                        </label> 
+                                                        <div class="slds-form-element__control">
+                                                            <apex:inputField value="{!endJobRoleDetail[i]}" required="{!i.required}" rendered="{! OR(i!='Name')}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/> 
+                                                            <apex:outputField value="{!endJobRoleDetail[i]}" rendered="{! OR(i='Name')}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/> 
+                                                        </div>                                                                                        
+                                                    </div>
+                                                </div>  
+                                            </apex:outputpanel>
+                                        </apex:repeat>
+                                    </apex:repeat>
+                                </apex:pageBlockSection>
+                            </apex:pageBlock>
+                            
+                            <apex:outputPanel id="popup">
+                                <apex:outputPanel rendered="{!(displayJobRolePopup)}">
+                                    <apex:outputPanel styleClass="popupBg"/>
+                                    <apex:outputPanel id="popup1" styleClass="customPopup" layout="block" >
+                                        <center>
+                                        	<!-- START :: NPPD-1697 27/08/2018 Job role effective to coded validation changes Added by Anil -->
+                                            <!-- <apex:outputtext id="oText2" value="Please click OK to proceed and save the change."/> -->
+                                            <apex:outputtext id="oText2" value="You may change the Effective to date on this record but please consider if you also need to change dates on any related records - e.g. Job Role, Compensation or Benefit records for date changes, or Employee and User if the Employee was previously marked as a Leaver"/>
+                                            <!-- END :: NPPD-1697 27/08/2018 Job role effective to coded validation changes Added by Anil -->
+                                             </center>
+                                            <apex:outputPanel > 
+                                                <apex:actionStatus id="saveStatus1">                   
+                                                    <apex:facet name="stop">
+                                                        <apex:outputPanel > 
+                                                            <apex:commandButton action="{!endJobRoleAction}" value="{!$Label.xcdhcm__clonejbrolebok}" styleclass="slds-button slds-button--neutral" rerender="popup,error" status="saveStatus1" />
+                                                            
+                                                            <apex:commandButton value="{!$Label.xcdhcm__clonejbrolebcancel}" action="{!cancelEndJobRoleAction}" rerender="popup" styleclass="slds-button slds-button--neutral"/>
+                                                        </apex:outputPanel> 
+                                                    </apex:facet>
+                                                    <apex:facet name="start">
+                                                        <div class="slds-spinner_container slds-show" style="top:30%; bottom:30%">
+                                                            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                                                <div class="slds-spinner__dot-a"></div>
+                                                                <div class="slds-spinner__dot-b"></div>
+                                                            </div> 
+                                                        </div>                      
+                                                    </apex:facet>                                
+                                                </apex:actionStatus> 
+                                            </apex:outputPanel>
+                                       
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__clonejbrolebcancel}" action="{!cancelEndJobRoleAction2}" immediate="true" rerender="popup,error,btns1B" styleclass="slds-button slds-button--neutral" status="saveStatus"/>
+                                        <!--START :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                                        <apex:commandButton id="btns1B" action="{!confirmEndJobRoleAction}"  rerender="popup3,popup,error,btns1B" value="{!$Label.xcdhcm__clonejbrolebsave}" styleclass="slds-button slds-button--brand" status="saveStatus"/>
+                                    	<!--END :: 13/07/2017 NPAY-513 First Period Payment does not calculate for Irregular workers added by Tutu -->
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:30%; bottom:30%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form> 
+        </body> 
+    </html>
+</apex:page>

@@ -1,0 +1,40 @@
+<apex:page >
+	<head>
+       <apex:includeLightning />
+       <apex:slds />
+   	</head>
+    <script>
+         //Used to display spinner on loading page
+         document.onreadystatechange = function () 
+         {
+             var state = document.readyState
+             if (state == 'interactive') 
+             {
+                 document.getElementById('contents').style.visibility="hidden";
+             } 
+             else if (state == 'complete') 
+             {
+                //wait for 6 sec.
+                setTimeout(function()
+                {
+                     document.getElementById('load').style.display = "none";
+                     document.getElementById('contents').style.visibility="visible";
+                },2000); 
+             }
+         }
+      </script>
+       <!-- used to display spinner on page load -->
+       <div id="load">
+           <div class="slds-spinner_container slds-show slds-is-fixed" style="background-color:white;">
+               <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                   <div class="slds-spinner__dot-a"></div>
+                   <div class="slds-spinner__dot-b"></div>
+               </div>
+           </div>
+       </div>
+    <div id="contents" style="width:100%;overflow:hidden;text-align:center;">
+    	<a class="twitter-timeline" data-height="400" href="{!$CurrentPage.Parameters.Url}" data-chrome="noheader nofooter noborders transparent"></a>
+    	<!-- <apex:includeScript value="{!URLFOR('https://platform.twitter.com/widgets.js')}"/> -->
+    	<script async="x"  src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+</apex:page>

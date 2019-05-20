@@ -1,0 +1,419 @@
+<apex:page standardController="xcdhcm__Company_Holiday_Year__c" extensions="xcdhcm.CompanyLeaveYearCreation" readOnly="true">
+   <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEditPage.css')}" />
+   <style>  
+     .slds-inline_icon_text {
+	    background-color: #f4f6f9;
+	    color: #54698d;
+	    padding: .75rem 1rem;
+	}   
+	.slds-inline_icon_text .slds-icon {
+	    fill: #54698d;
+	} 
+	.bEditBlock .pbHeader>table, .apexp .bPageBlock.apexDefaultPageBlock .pbHeader>table, #ep.bLayoutBlock .pbHeader>table {
+	    border-bottom: none;
+	}
+	body .bPageBlock .pbTitle h2{
+	    color: #000;
+	    font-size: 2em;
+	}
+	/*.btnWidth{
+		width: 60px;
+	}*/
+	.slds-scope .slds-button 
+	{
+    font-size: 1rem;
+    line-height: 2.1rem;
+    }
+   </style>
+   <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="leaveYearCreationApp">
+      <head>
+         <apex:slds />
+         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+         <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>	
+         <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+      </head>
+      <script>
+         var leaveYearCreationApp = angular.module('leaveYearCreationApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+         
+         leaveYearCreationApp.controller('leaveYearCreationController',	function($scope, $filter,$sce){
+         	 $scope.trustAsHtml = $sce.trustAsHtml;
+         	 
+         	 var allList ="{!createRegLeaveSummaryList}"; 
+        	 var allLeaveYearItem = {!createRegLeaveSummaryListJSON};       	 
+        	 
+        	 var allHrList = "{!createNonRegLeaveSummaryList}";
+        	 var allNonRegLeaveYearItem = {!createNonRegLeaveSummaryListJSON};
+        	 
+        	 var compholidayYrJSON = {!compholidayYrJSON};
+        	 
+         	 $scope.currentPage = 1 ;
+         	 $scope.itemsPerPage=50;
+         	 $scope.maxSize = 5;
+         	 
+         	 $scope.showRegLeaveSummaryNoRecord= "false";
+         	 $scope.showNonRegLeaveSummaryNoRecord= "false";
+         	 
+         	 $scope.showpageBlockTable1 = "true";
+         	 $scope.showpageBlockTable2 = "false";
+         	 
+         	 $scope.showLoadingImg = "false";
+         	 $scope.isDisabledCreateBtn = false;
+			 $scope.isDisabledBackBtn = false;
+			 
+			 $scope.initialAllNonRegChkBoxVal = true;
+			 $scope.initialAllRegChkBoxVal = true;
+         	 
+         	 getAllItem();   	
+        	        	 
+        	function getAllItem()
+        	{
+        		$scope.allLeaveYearItems = allLeaveYearItem;   
+        		$scope.allNonRegLeaveYearItems = allNonRegLeaveYearItem;    
+        		$scope.compholidayYrJSON = compholidayYrJSON;   
+        		
+        		$scope.totalItems = {};
+        		
+        		if($scope.allLeaveYearItems.length > $scope.allNonRegLeaveYearItems.length)
+        		{
+        			$scope.totalItems = $scope.allLeaveYearItems.length;//80;
+        		}
+        		else
+        		{
+        			$scope.totalItems = $scope.allNonRegLeaveYearItems.length;
+        		}   		
+        	}
+        	
+        	$scope.pageChanged = function()
+        	{
+	         	$scope.remainingNonRegLeaveYearRecordCount = $scope.currentPage*$scope.itemsPerPage - $scope.allNonRegLeaveYearItems.length; 
+	         	$scope.remainingRegLeaveYearRecordCount    = $scope.currentPage*$scope.itemsPerPage - $scope.allLeaveYearItems.length;	         	
+	         	  
+			    if($scope.remainingNonRegLeaveYearRecordCount < $scope.itemsPerPage)
+			    {
+			    	$scope.showNonRegLeaveSummaryNoRecord = "false";
+			    }
+			    else
+			    {
+			    	$scope.showNonRegLeaveSummaryNoRecord = "true";
+			    }			      
+	         	  
+			    if($scope.remainingRegLeaveYearRecordCount < $scope.itemsPerPage)
+			    {
+			    	$scope.showRegLeaveSummaryNoRecord = "false";
+			    }
+			    else
+			    {
+			    	$scope.showRegLeaveSummaryNoRecord = "true";
+			    }    
+		  	};
+		  	
+		  	$scope.selectAllNonRegLeave = function()
+		  	{
+		  	  $scope.initialAllNonRegChkBoxVal = !$scope.initialAllNonRegChkBoxVal; 
+			  for (var i = 0; i < $scope.allNonRegLeaveYearItems.length; i++)
+			  {
+			    $scope.allNonRegLeaveYearItems[i].selected = $scope.initialAllNonRegChkBoxVal;  
+			  }
+			};
+			
+			$scope.selectAllRegLeave = function()
+		  	{
+		  	  $scope.initialAllRegChkBoxVal = !$scope.initialAllRegChkBoxVal
+			  for (var i = 0; i < $scope.allLeaveYearItems.length; i++)
+			  {
+			    $scope.allLeaveYearItems[i].selected = $scope.initialAllRegChkBoxVal;
+			  }
+			};				
+			
+			$scope.showNextBlock = function()
+		  	{	
+		  		$scope.showLoadingImg = "true";
+		  	 	$scope.showpageBlockTable1 = "false";
+         	 	$scope.showpageBlockTable2 = "true";         	 	 
+         	 	
+         	 	$scope.selectedRecords = [];		  	 	
+		  	 	
+		  	    for (var i = 0; i < $scope.allLeaveYearItems.length; i++)
+			    {
+			   	  if($scope.allLeaveYearItems[i].selected)
+			   	  {
+			  		$scope.selectedRecords.push($scope.allLeaveYearItems[i].jrId);
+			  	  }
+			    }
+			  
+			    for (var i = 0; i < $scope.allNonRegLeaveYearItems.length; i++)
+			    {
+			  	  if($scope.allNonRegLeaveYearItems[i].selected)
+			  	  {
+			  	 	 $scope.selectedRecords.push($scope.allNonRegLeaveYearItems[i].jrId);
+			  	  }
+			    }			  
+         	    
+         	    Visualforce.remoting.Manager.invokeAction( '{!$RemoteAction.CompanyLeaveYearCreation.selected}',JSON.stringify($scope.selectedRecords),JSON.stringify($scope.compholidayYrJSON),
+					function(result, event)
+					{				
+						if (event.status) {
+							$scope.$apply(function(){
+								//If no record selected, then hide the create button
+				         	    if($scope.selectedRecords.length < 1)
+				         	    {
+				         	    	$scope.showCreateBtn = "false";
+				         	    }
+				         	    else
+				         	    {
+				         	    	$scope.showCreateBtn = "true";	
+				         	    }
+				         	    															
+								$scope.showLoadingImg = "false";
+							});							
+							if(result !='' && result.length > 0 && result.indexOf('Note') >= 0)
+							{
+								$scope.showCreateBtn = "false";
+								 $scope.$apply(function(){
+			                       $scope.errMsg = result;
+			                    });
+							}
+							else
+							{
+								$scope.$apply(function(){
+			                       $scope.jobroleVsSelectedLYMap = result;
+			                    });
+							}
+							
+						}else if (event.type === 'exception') {
+							$scope.showCreateBtn = "false";
+							$scope.errMsg = event.message;
+							$scope.showLoadingImg = "false";
+						} else {
+							$scope.showCreateBtn = "false";
+							$scope.errMsg = event.message;
+							$scope.showLoadingImg = "false";
+						}
+					}, 
+				{escape: false}
+				);
+			};	
+			
+			$scope.showRecordBlock = function()
+		  	{
+		  	 	$scope.showpageBlockTable1 = "true";
+         	 	$scope.showpageBlockTable2 = "false";
+         	 	$scope.showCreateBtn = "true";
+         	 	$scope.errMsg = "";
+			};	
+			
+			$scope.goBackToMainPage = function()
+		  	{
+		  		$scope.showLoadingImg = "true";
+		  	 	gotoMainPage();
+			};
+			
+			$scope.createCompanyLeaveYear = function()
+		  	{
+			  $scope.showpageBlockTable1 = "false";
+         	  $scope.showpageBlockTable2 = "true";
+         	  $scope.isDisabledCreateBtn = true;
+			  $scope.isDisabledBackBtn = true;
+			  createLeaveYr($scope.jobroleVsSelectedLYMap);
+			};
+			
+         });			
+      </script>
+      <body ng-controller="leaveYearCreationController" >
+         <div style="margin-left: 0px;margin-top:0px;">
+            <apex:form id="TheForm">
+            
+               <apex:actionFunction name="gotoMainPage" action="{!cancelCompYear}" reRender="idLoading"></apex:actionFunction>               
+	           <apex:actionFunction name="createLeaveYr" action="{!createLeaveYear}" reRender="pg">
+	           		<apex:param assignTo="{!jobroleVsSelectedLYMapJson}" name="jobroleVsSelectedLYMapJson" value="x"/>
+	           </apex:actionFunction>
+	           
+	            <div ng-if="showLoadingImg == 'true'">
+	            	<div class="slds-spinner_container slds-show" >
+		            	<div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+		                	<div class="slds-spinner__dot-a"></div>
+		                    <div class="slds-spinner__dot-b"></div>
+		                </div> 
+	               </div>
+               </div>
+            
+               <apex:actionRegion >                 
+                  <apex:pageBlock id="pg">
+                  	 <div style="font-size:12px;">
+                   	 	<apex:PageMessages escape="false" id="errId"/>
+                   	 </div>
+                     <apex:pageBlockSection rendered="{!batchStatusBool}">
+                        <apex:actionPoller interval="5" action="{!companyLeaveYearPage}" enabled="{!pollerBool}" reRender="pg"/>
+                        <font>
+                           <apex:outputLabel value="{!Message}"  id="msg"  style="color: #999999 !important;font-family:sans-serif;font-weight:bold;" />
+                        </font> 
+                        <div class="slds-spinner_container slds-show" style="top:9%;"> 
+		                     <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+		                    	<div class="slds-spinner__dot-a"></div>
+		                     	<div class="slds-spinner__dot-b"></div>
+		                     </div> 
+	                     </div>                      
+                     </apex:pageBlockSection>                    
+                  </apex:pageBlock>
+                  
+                  <div ng-show="showpageBlockTable1 == 'true'">
+                  	 <div style="margin-left: 45%;margin-bottom: 10px;font-size:12px;">
+                     	<button type="button" class="slds-button slds-button--neutral" ng-click="showNextBlock()" ng-if="allNonRegLeaveYearItems.length > 0 || allLeaveYearItems.length > 0"> {!$Label.CompanyLeaveYearCreationPageBNext} </button>
+                     	<button type="button" class="slds-button slds-button--neutral" ng-click="goBackToMainPage()"> {!$Label.CompanyLeaveYearCreationPageBCancel} </button>
+                     </div>
+                  <apex:pageBlock id="pageBlock1" title="{!$Label.xcdhcm__companyleaveyearcreationpagecreateleaveyeardays}">
+                     <table ng-class="showRegLeaveSummaryNoRecord == 'false' ? 'slds-table slds-table--bordered slds-table--striped' : ''" ng-if="allLeaveYearItems.length > 0" style="font-size:12px;">
+                     	<tr ng-if="showRegLeaveSummaryNoRecord == 'false'">
+                     		<th style="width:10%;">
+                     			<input type="checkbox" ng-click="selectAllRegLeave()" ng-model="initialAllRegChkBoxVal"></input>
+                     		</th>
+                     		<th style="width:30%;">{!$ObjectType.Leave_Summary__c.Fields.Employee_Details__c.Label}</th>
+                     		<th style="width:15%;">{!$ObjectType.Leave_Summary__c.Fields.Leave_year_name__c.Label}</th>
+                     		<th style="width:30%;">{!$ObjectType.Leave_Summary__c.Fields.Job_Role__c.Label}</th>
+                     		<th style="width:15%;">{!$ObjectType.Leave_Summary__c.Fields.Status__c.Label}</th>
+                     	</tr>
+                     	<tr ng-repeat="item in filterData = allLeaveYearItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)">
+                     		<td><input type="checkbox"  ng-model="item.selected"/></td>
+							<td><a href="/one/one.app#/alohaRedirect/{{item.empId}}" >{{item.empName}}</a></td>
+							<td>{{item.leaveYearName}}</td>                                        
+							<td>{{item.jobTitle}}</td>
+							<td>{{item.leaveYearStatus}}</td>
+                     	</tr> 
+                     	<tr ng-if="showRegLeaveSummaryNoRecord == 'true'">
+							<td style="width:100%">
+				                 <div class="slds-box" style="margin-left: 5px;margin-right: 5px;">
+									<div class="slds-inline_icon_text slds-grid">
+										<span class="slds-icon_container" title=""> 
+											<svg class="slds-icon slds-icon--large" aria-hidden="true">
+												<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+											</svg>
+										</span>
+										<div class="slds-col slds-align-middle">
+											<p> &nbsp; {!$Label.CompanyLeaveYearCreationPageIMNoLeaveYearDaysWorker}</p>
+										</div>
+									</div>
+								 </div>
+							 </td>
+						</tr>						                
+                     </table> 
+                     <table ng-if="allLeaveYearItems.length == 0" style="font-size:12px;">
+                     	<tr> 
+							<td>
+				                 <div class="slds-box" style="">
+									<div class="slds-inline_icon_text slds-grid">
+										<span class="slds-icon_container" title=""> 
+											<svg class="slds-icon slds-icon--large" aria-hidden="true">
+												<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+											</svg>
+										</span>
+										<div class="slds-col slds-align-middle">
+											<p> &nbsp; {!$Label.CompanyLeaveYearCreationPageIMThereIsNoLeaveYearToCreateForDaysWorker}</p> 
+										</div>
+									</div>
+								 </div>
+							 </td>
+						</tr>
+                     </table>                   
+                  </apex:pageBlock>
+                  
+                  <apex:pageBlock title="{!$Label.xcdhcm__companyleaveyearcreationpagecreateleaveyearhours}" id="pageBlock2">
+                                         
+                     <table ng-class="showNonRegLeaveSummaryNoRecord == 'false' ? 'slds-table slds-table--bordered slds-table--striped' : ''" ng-if="allNonRegLeaveYearItems.length > 0" style="font-size:12px;">
+                     	<tr ng-if="showNonRegLeaveSummaryNoRecord == 'false'">
+                     		<th style="width:10%;">
+                     			<input type="checkbox" ng-click="selectAllNonRegLeave()" ng-model="initialAllNonRegChkBoxVal"></input>
+                     		</th>
+                     		<th style="width:30%;">{!$ObjectType.Leave_Summary__c.Fields.Employee_Details__c.Label}</th>
+                     		<th style="width:15%;">{!$ObjectType.Leave_Summary__c.Fields.Leave_year_name__c.Label}</th>
+                     		<th style="width:30%;">{!$ObjectType.Leave_Summary__c.Fields.Job_Role__c.Label}</th>
+                     		<th style="width:15%;">{!$ObjectType.Leave_Summary__c.Fields.Status__c.Label}</th>
+                     	</tr>
+                     	<tr ng-repeat="item1 in filterData1 = allNonRegLeaveYearItems | limitTo:itemsPerPage:itemsPerPage*(currentPage-1)">
+                     		<td><input type="checkbox"  ng-model="item1.selected"/></td>
+							<td><a href="/one/one.app#/alohaRedirect/{{item1.empId}}" >{{item1.empName}}</a></td>
+							<td>{{item1.leaveYearName}}</td>                                        
+							<td>{{item1.jobTitle}}</td>
+							<td>{{item1.leaveYearStatus}}</td>
+                     	</tr> 
+                     	<tr ng-if="showNonRegLeaveSummaryNoRecord == 'true'">							
+							<td>
+				                 <div class="slds-box" style="margin-left: 5px;margin-right: 5px;">
+									<div class="slds-inline_icon_text slds-grid">
+										<span class="slds-icon_container" title=""> 
+											<svg class="slds-icon slds-icon--large" aria-hidden="true">
+												<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+											</svg>
+										</span>
+										<div class="slds-col slds-align-middle">
+											<p> &nbsp; {!$Label.CompanyLeaveYearCreationPageIMNoLeaveYearHoursWorker}</p>
+										</div>
+									</div>
+								 </div>
+							 </td>
+						</tr>                    
+                     </table>
+                     <table ng-if="allNonRegLeaveYearItems.length == 0" style="font-size:12px;">
+                     	<tr>
+							<td>
+				                 <div class="slds-box" style="">
+									<div class="slds-inline_icon_text slds-grid">
+										<span class="slds-icon_container" title=""> 
+											<svg class="slds-icon slds-icon--large" aria-hidden="true">
+												<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use> 
+											</svg>
+										</span>
+										<div class="slds-col slds-align-middle">
+											<p> &nbsp;  {!$Label.CompanyLeaveYearCreationPageIMThereIsNoLeaveYearToCreateForHoursWorker}</p>
+										</div>
+									</div>
+								 </div>
+							 </td>
+						</tr>
+                     </table>                      
+                  </apex:pageBlock> 
+                  </div>
+                                 
+                  <div ng-if="showpageBlockTable2 == 'true'">                      
+                    <table ng-if="errMsg.length > 0" style="font-size:12px;">
+                     	<tr>
+							<td>
+								<div class="slds-box" style="margin-left: 5px;margin-right: 5px;margin-bottom: 20px;">
+									<div class="slds-inline_icon_text slds-grid slds-inline_icon_text--warning">
+										<span class="slds-icon_container" title=""> 
+											<svg class="slds-icon slds-icon--large" aria-hidden="true">
+												<use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#warning')}"></use> 
+											</svg>
+										</span>
+										<div class="slds-col slds-align-middle">
+											<p ng-bind-html="trustAsHtml(errMsg)" style="margin-left: 5px;"></p>
+										</div>
+									</div>
+								 </div>
+							</td>
+						</tr>
+                     </table>                     
+                     <div style="margin-left: 45%;margin-bottom: 10px;font-size:12px;">
+                     	<button type="button" class="slds-button slds-button--brand" ng-click="createCompanyLeaveYear()" ng-if="showCreateBtn == 'true'" ng-disabled="isDisabledCreateBtn" > {!$Label.CompanyLeaveYearCreationPageBCreate} </button>
+                     	<button type="button" class="slds-button slds-button--neutral" ng-click="showRecordBlock()" ng-disabled="isDisabledBackBtn" > {!$Label.CompanyLeaveYearCreationPageBBack} </button>
+                     </div>                     
+                     <table>
+                        <tr>
+                           <td style="width:5%"></td>
+                           <td style="font-size:14px;width:95%">
+                              Total employees you have selected:<b> {{ (allNonRegLeaveYearItems | filter:{selected: true }).length + (allLeaveYearItems | filter:{selected: true }).length}} </b>
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+                   
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding:0px;" ng-show="showpageBlockTable1 == 'true' && (allNonRegLeaveYearItems.length > 0 || allLeaveYearItems.length > 0)">
+                     <ul uib-pagination="x" total-items="totalItems" ng-model="currentPage" items-per-page="itemsPerPage" ng-change="pageChanged()" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+                  </div>
+               </apex:actionRegion>
+            </apex:form>
+         </div>
+      </body>
+   </html>
+</apex:page>

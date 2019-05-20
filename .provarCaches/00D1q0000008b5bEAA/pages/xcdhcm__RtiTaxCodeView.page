@@ -1,0 +1,249 @@
+<!-- START :: 20/12/2016 NPAY-71 Year end process modified by Farhan -->
+<apex:page standardController="xcdhcm__Third_Party_Detail__c" extensions="xcdhcm.RtiTaxCodeController" sidebar="false" action="{!autocallNewTaxcodeMethod}">
+<!-- END :: 20/12/2016 NPAY-71 Year end process modified by Farhan -->
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}"/>
+<style type="text/css">
+.links 
+{
+    display: none;
+} 
+.customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette, .layoutEdit .individualPalette .customnotabBlock .tertiaryPalette 
+{
+   background-color: #FFFFFF!important;
+   border-color: #FFFFFF!important;
+}
+<!--START::25/11/2015 added by Farhan -->
+body .pbBody table.list tr.headerRow th 
+{
+	border-bottom: 2px solid #cde2f5 !important;
+}
+<!--END::25/11/2015 added by Farhan -->
+td.dataCol.first {
+    width: 500px !important;
+    height: 40px !important;
+}
+body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+    width:2%!important;
+}
+.highlight
+{
+   background-color: #D3D3D3;
+}
+</style>
+<apex:form >
+<div ng-controller="ctrlRead">
+  <apex:pageBlock title="HMRC incoming data" id="rows">
+  <apex:pageMessages id="erMsg"/>
+				<!-- START :: 12/12/2018 NPAY-665 RTI Annual Update 2019/20 added/modified by Tutu -->
+				<apex:outputText value="{!$CurrentPage.parameters.resMessage}" escape="false" id="sucMsg" style="color:blue;" rendered="{!$CurrentPage.parameters.resMsgFlag == 'success'}"></apex:outputText>
+				<!-- END :: 12/12/2018 NPAY-665 RTI Annual Update 2019/20 added/modified by Tutu -->
+<html xmlns:ng="http://angularjs.org" ng-app="hello" lang="en">
+<head>
+<meta charset="utf-8"/>
+<!-- <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-icons.min.css" rel="stylesheet"/> -->
+<!-- <link href="https://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet"/> -->
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"/>
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
+<script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script> 
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script type="text/javascript">
+var myapp = angular.module('hello', []);
+var sortingOrder = 'hmrcInData.Employee__c';
+<!-- Define Controller  -->
+var contrl=myapp.controller('ctrlRead', function ($scope, $filter) 
+{
+	<!--- Initialize Scope Variables --->
+	$scope.sortingOrder = sortingOrder;
+	$scope.reverse = false;
+	$scope.filteredItems = [];
+	$scope.groupedItems = [];
+	$scope.itemsPerPage = 40;
+	$scope.pagedItems = [];
+	$scope.currentPage = 0;
+	$scope.selectedAll = true;
+	$scope.items = [];
+	$scope.items ={!wrapHmrcInListAJ};       
+    var searchMatch = function (haystack, needle) 
+    {
+        if(!needle) 
+        {
+            return true;
+        }
+        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+    };       
+    //Initialize the Search Filters 
+    $scope.search = function () 
+    {
+        $scope.filteredItems = $filter('filter')($scope.items, function (item) 
+        {
+	        for(var attr in item) 
+	        {
+	        	if (searchMatch(item.hmrcInData.Employee__c, $scope.query))
+	            return true;
+	        }
+        	return false;
+        });
+        // Define Sorting Order
+        if ($scope.sortingOrder !== '') 
+        {
+            $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
+        }
+        $scope.currentPage = 0;
+        // Group by pages
+        $scope.groupToPages();
+    };
+    //Getting code from static resource
+    {!scriptcode}
+    $scope.selectedData = function()
+    {
+        saveConfirm(JSON.stringify($scope.items));
+    };
+});
+contrl.$inject = ['$scope', '$filter'];
+</script>
+</head>
+<body>
+  <table style="margin-top:10px;">
+       <tr>
+           <td>
+               <apex:outputLabel value="Status" style="margin-right:10px;"/>
+           </td>
+           <td>
+            <apex:actionRegion >        
+            	<apex:SelectList size="1" value="{!selectedStatus}"  style="margin-right:150px;"> 
+                    <apex:actionSupport event="onchange" action="{!onChangeStatus}" status="recordStatus"/>
+                    <apex:selectOptions value="{!StatusList}" /> 
+                    <apex:actionStatus startText="Loading..." id="recordStatus"/>  
+                </apex:SelectList>
+            </apex:actionRegion> 
+           </td>
+           <td>
+               <apex:outputLabel value="Search employee" style="margin-right:10px;"/>
+           </td>
+           <td>
+               <input type="text" ng-model="query" ng-change="search()" placeholder="Search" style = "width: 250px !important;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ5JREFUeNpi+P//PwMQMANxERCfAeI/UBrEZwbJQ9WAFR0A4u1AbAnEbFB6O1ScGaawGoi3wHQiYyBYDZKHKbwHxLo4FOqC5GEKf4Ksw6EQ5IyfIDYTkPEUiNUZsAOQ+F9GRkYJEKcFiDficSOIcRjE4QTiY0C8DuRbqAJLKP8/FP9kQArHUiA+jySJjA8w4LAS5KZd0MAHhaccQIABALsMiBZy4YLtAAAAAElFTkSuQmCC);
+                                                                                                            background-repeat: no-repeat;background-position: 235px 8px;"/>
+           </td>
+       </tr>
+   </table>
+   <table class="table  table-hover,ng-cloak ">
+	   <thead>
+	       <tr>
+              <th class="hmrcInData.selected">
+                  <input type="checkbox" ng-model="selectedAll" ng-click="checkAll()"/>
+              </th>
+              <th class="hmrcInData.Employee__c">{!$ObjectType.Third_Party_Detail__c.Fields.Employee__c.Label}&nbsp;<a ng-click="sort_by('hmrcInData.Employee__c')"><i class="icon-sort"></i></a></th>
+				<!-- START :: 12/12/2018 NPAY-665 RTI Annual Update 2019/20 added/modified by Tutu -->
+				<th class="hmrcInData.Employee_l__c">{!$ObjectType.Third_Party_Detail__c.Fields.Employee_l__c.Label}&nbsp;</th>
+				<!-- END :: 12/12/2018 NPAY-665 RTI Annual Update 2019/20 added/modified by Tutu -->
+              <th class="hmrcInData.Name">Detail&nbsp;</th>
+              <th class="hmrcInData.Type">Type&nbsp;</th>
+              <th class="hmrcInData.Current_tax_code__c">{!$ObjectType.Third_Party_Detail__c.Fields.Current_tax_code__c.Label}&nbsp;</th>
+              <th class="hmrcInData.New_tax_code__c">{!$ObjectType.Third_Party_Detail__c.Fields.New_tax_code__c.Label}&nbsp;</th>
+              <th class="hmrcInData.Tax_basis__c">{!$ObjectType.Third_Party_Detail__c.Fields.Tax_basis__c.Label}&nbsp;</th>
+              <th class="hmrcInData.Taxable__c">{!$ObjectType.Third_Party_Detail__c.Fields.Taxable__c.Label}&nbsp;</th>
+              <th class="hmrcInData.Tax_paid_YTD__c">{!$ObjectType.Third_Party_Detail__c.Fields.Tax_paid_YTD__c.Label}&nbsp;</th>
+              <th class="hmrcInData.Student_loan_Y_N__c">{!$ObjectType.Third_Party_Detail__c.Fields.Student_loan_Y_N__c.Label}&nbsp;</th>
+				<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions add/modified by Shiva -->
+				<th class="hmrcInData.Postgraduate_Loan_Y_N__c">{!$ObjectType.Third_Party_Detail__c.Fields.Postgraduate_Loan_Y_N__c.Label}&nbsp;</th>
+				<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions add/modified by Shiva -->
+              <th class="hmrcInData.Student_plan__c">{!$ObjectType.Third_Party_Detail__c.Fields.Student_plan__c.Label}&nbsp;</th>
+				<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions add/modified by Shiva -->
+				<th class="hmrcInData.Postgraduate_plan__c">{!$ObjectType.Third_Party_Detail__c.Fields.Postgraduate_plan__c.Label}&nbsp;</th>
+				<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions add/modified by Shiva -->
+              <th class="hmrcInData.Effective_date__c">{!$ObjectType.Third_Party_Detail__c.Fields.Effective_date__c.Label}&nbsp;</th>
+              <th class="hmrcInData.Status__c">{!$ObjectType.Third_Party_Detail__c.Fields.Status__c.Label}&nbsp;</th>              
+	       </tr>
+	   </thead>
+	   	<tbody>                    
+	        <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse | filter:query" class="ng-cloak">
+               <td style="text-align:left;">                                       
+                  <input type="checkbox" ng-value="{{item.selected}}"  name="item.selected"  ng-model="item.selected"/>
+               </td>
+               <td style="text-align:left;">
+                  {{item.hmrcInData.xcdhcm__Employee__c}}                                     
+               </td>
+	       				<!-- END :: 12/12/2018 NPAY-665 RTI Annual Update 2019/20 added/modified by Tutu -->
+               <td style="text-align:left;">
+               	 {{item.hmrcInData.xcdhcm__Employee_l__r.Name}} 
+               </td>
+	       				<!-- END :: 12/12/2018 NPAY-665 RTI Annual Update 2019/20 added/modified by Tutu -->
+               <td style="text-align:left;">
+               <!-- START::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+               	  <a href="/one/one.app#/alohaRedirect/{{item.hmrcInData.Id}}" >{{item.hmrcInData.Name}}</a>
+               <!-- END::19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by Tutu -->
+               </td>
+               <td style="text-align:left;">
+					{{item.hmrcInData.xcdhcm__Third_Party_Summary__r.xcdhcm__Type__c}}</td>
+				<td style="text-align: left;">
+					{{item.hmrcInData.xcdhcm__Current_tax_code__c}}</td>
+				<td style="text-align: left;">
+					{{item.hmrcInData.xcdhcm__New_tax_code__c}}</td>
+				<td style="text-align: left;">{{item.hmrcInData.xcdhcm__Tax_basis__c}}
+				</td>
+				<td style="text-align: left;">{{item.hmrcInData.xcdhcm__Taxable__c |
+					currency : ""}}</td>
+				<td style="text-align: left;">
+					{{item.hmrcInData.xcdhcm__Tax_paid_YTD__c | currency : ""}}</td>
+				<td style="text-align: left;">
+					{{item.hmrcInData.xcdhcm__Student_loan_Y_N__c}}</td>
+				<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions add/modified by Shiva -->	
+				<td style="text-align: left;">
+					{{item.hmrcInData.xcdhcm__Postgraduate_Loan_Y_N__c}}</td>
+				<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions add/modified by Shiva -->
+				<td style="text-align: left;">
+					{{item.hmrcInData.xcdhcm__Student_plan__c}}</td>
+				<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions add/modified by Shiva -->	
+				<td style="text-align: left;">
+					{{item.hmrcInData.xcdhcm__Postgraduate_plan__c}}</td>
+				<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions add/modified by Shiva -->
+				<td style="text-align: left;">
+					{{item.hmrcInData.xcdhcm__Effective_date__c | date:'dd/MM/yyyy'}}</td>
+				<td style="text-align: left;">{{item.hmrcInData.xcdhcm__Status__c}}</td>
+	        </tr>
+	    </tbody>
+	    <tfoot>
+	    	<tr>
+	            <td colspan="13" style="border:none !important;">
+			    	<div class="pagination pagination-large pagination-centered">
+				       <ul style="box-shadow:none !important;">  
+				           <li ng-class="{disabled: currentPage == 0}">
+				               <a ng-click="prevPage()"> Prev</a>
+				           </li>
+				           <li ng-repeat="n in range(pagedItems.length)"
+				           ng-class="{active: n == currentPage}"
+				           ng-click="setPage()">
+				               <a ng-bind="n + 1">1</a>
+				           </li>
+				           <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+				               <a ng-click="nextPage()">Next </a>
+				           </li>
+				       </ul>
+				   </div>
+			   </td>
+		   </tr>
+	    </tfoot>
+   </table> 
+</body>
+</html>                       
+   <apex:pageBlockButtons location="Bottom">
+	   	<apex:commandButton style="display:none;" rendered="{!OR(selectedStatus == 'Match',selectedStatus == 'No match',selectedStatus == null)}">
+        	<!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+        
+        	<input type="button" ng-click="selectedData()" value="{!$Label.xcdhcm__rtitaxcodeviewbsaveandconfirm}" class="btn"/>      
+        	<!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->                      
+        </apex:commandButton>
+        <apex:actionFunction name="saveConfirm" action="{!saveAndConfirm}" rerender="erMsg,hiddenBlock" oncomplete="" rendered="{!OR(selectedStatus == 'Match',selectedStatus == 'No match',selectedStatus == null)}">
+            <apex:param assignTo="{!scopeItemsjson}" name="scopeItemsjson" value="x"/>
+        </apex:actionFunction>
+        <!-- START :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+       
+        <apex:commandButton disabled="{!OR(selectedStatus == 'Updated',selectedStatus == 'Updated manually')}" value="{!$Label.xcdhcm__rtitaxcodeviewbsaveandconfirm}" action="{!saveAndConfirm}" rendered="{!OR(selectedStatus == 'Updated',selectedStatus == 'Updated manually')}"/>	
+	    <apex:commandButton value="{!$Label.xcdhcm__rtitaxcodeviewbback}" action="{!Back}"/>
+	    <!-- END :: 29/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+   </apex:pageBlockButtons>
+  </apex:pageBlock>
+  <apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>
+  </div>
+</apex:form>
+</apex:page>

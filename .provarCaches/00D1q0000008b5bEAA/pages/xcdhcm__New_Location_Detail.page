@@ -1,0 +1,142 @@
+<apex:page standardController="xcdhcm__Company__c" extensions="xcdhcm.CompanyExtensionController" sidebar="false" showHeader="true" wizard="false"  >
+    <!-- START :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteCompanySub.css')}" />  
+    <style>
+        .slds-scope .slds-section-title--divider {	 
+        text-transform: none !important;
+        font-size: 1rem;
+        line-height: 0.6!important;
+        border-radius: 4px!important;
+        font-weight: 500!important; 
+        } 
+        .slds-modal__header, .slds-modal__content {
+        background: #fdfdfd;
+        } 
+        abbr[title], acronym[title] {
+        text-decoration: none!important;
+        }
+    </style>
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">   
+            <apex:form id="ID_form">
+                <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <apex:commandLink action="{!cancelLocation}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                                <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 66%;"/>
+                            </apex:commandLink>
+                            <h2 id="header43" class="slds-text-heading--medium">{!$Label.PHNew_Location_Detail}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium"> 
+                            <!-- ================================== Page content  ==========================================================    -->
+                            <apex:PageMessages id="id_error"/>
+                            <apex:repeat value="{!locationDetail}" var="ld" rows="1"> 
+                                <h3 class="slds-section-title--divider">{!$Label.xcdhcm__new_location_detaildetail}</h3>
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Location__c.Fieldsets.xcdhcm__Location_Detail}" var="i">
+                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        	<apex:outputpanel rendered="{!$objectType.xcdhcm__Location__c.fields[i].Accessible}">
+	                                            <div class="slds-form-element slds-p-around--small">	                                                                                                 
+	                                                <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+	                                                    <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>                                                   
+	                                                    {!i.label}
+	                                                    <span class="LiteHelpText">
+	                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Location__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+	                                                        <span>{!$ObjectType.Location__c.fields[i].inlineHelpText}</span>
+	                                                    </span>
+	                                                </label> 
+	                                                <div class="slds-form-element__control">
+	                                                    <apex:inputField value="{!ld[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/>
+	                                                </div>                                                                                        
+	                                            </div>
+                                            </apex:outputpanel>
+                                            <!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </div>
+                                    </apex:repeat>
+                                </div>
+                                <br/>
+                                
+                                <h3 class="slds-section-title--divider">{!$Label.xcdhcm__new_location_detaillocationaddress}</h3>
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Location__c.Fieldsets.xcdhcm__Location_Address}" var="i">
+                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                   			<apex:outputpanel rendered="{!$objectType.xcdhcm__Location__c.fields[i].Accessible}">
+	                                            <div class="slds-form-element slds-p-around--small">
+	                                                <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}">
+	                                                    <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+	                                                    {!i.label}
+	                                                    <span class="LiteHelpText">
+	                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Location__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+	                                                        <span>{!$ObjectType.Location__c.fields[i].inlineHelpText}</span>
+	                                                    </span>
+	                                                </label>
+	                                                <div class="slds-form-element__control">
+	                                                    <apex:inputField value="{!ld[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}"/> 
+	                                                </div>
+	                                            </div>
+                                            </apex:outputpanel>
+                                       		<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </div>
+                                    </apex:repeat>
+                                </div>
+                                <br/>  
+                                
+                                <h3 class="slds-section-title--divider">{!$Label.xcdhcm__new_location_detailcontactdetails}</h3>
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!$ObjectType.xcdhcm__Location__c.Fieldsets.xcdhcm__Location_Contact}" var="i">
+                                        <div class="slds-col slds-size--1-of-1 slds-small-size--6-of-12">
+                                        	<!-- START:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                   			<apex:outputpanel rendered="{!$objectType.xcdhcm__Location__c.fields[i].Accessible}">
+	                                            <div class="slds-form-element slds-p-around--small">
+	                                                <label class="slds-form-element__label" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" >
+	                                                    <apex:outputPanel rendered="{!i.Required}" ><abbr class="slds-required" title="required">*</abbr></apex:outputPanel>  
+	                                                    {!i.label} 
+	                                                    <span class="LiteHelpText">
+	                                                        <apex:image rendered="{!NOT(ISNULL($ObjectType.xcdhcm__Location__c.fields[i].inlineHelpText))}" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/Lhelp.png')}"/>
+	                                                        <span>{!$ObjectType.Location__c.fields[i].inlineHelpText}</span>
+	                                                    </span>
+	                                                </label>
+	                                                <div class="slds-form-element__control">
+	                                                    <apex:inputField value="{!ld[i]}" required="{!i.Required}" style="{!IF(i.label=='Blankspace','display:none;' ,'')}" /> 
+	                                                </div>
+	                                            </div>
+                                            </apex:outputpanel>
+                                       		<!-- END:: 17/12/2018 NPPD-1819 hotfix for FLS issue modify by  Anil-->
+                                        </div>
+                                    </apex:repeat>
+                                </div>
+                                <br/>
+                            </apex:repeat>
+                            <!-- ================================== Page content  ==========================================================    -->
+                        </div>
+                        <div class="slds-modal__footer">
+                            <apex:actionStatus id="saveStatus">                   
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_location_detailbcancel}" action="{!cancelLocation}" immediate="true"  styleclass="slds-button slds-button--neutral" status="saveStatus" rerender="id_saveBtn"/>
+                                        <apex:commandButton value="{!$Label.xcdhcm__new_location_detailbsave}"  action="{!saveLocationDetail}" styleclass="slds-button slds-button--brand" status="saveStatus" rerender="id_saveBtn,id_error" id="id_saveBtn"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <div class="slds-spinner_container slds-show" style="top:10%; bottom:9%">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" aria-hidden="false" role="alert">
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div> 
+                                    </div>                    
+                                </apex:facet>                                
+                            </apex:actionStatus> 
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </apex:form> 
+        </body>
+    </html>
+    <!-- END :: 15-05-2017 New Lightning UI Modified by Rahul S -->
+</apex:page>

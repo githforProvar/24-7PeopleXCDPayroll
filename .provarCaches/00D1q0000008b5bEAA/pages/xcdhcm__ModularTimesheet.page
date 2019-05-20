@@ -1,0 +1,1543 @@
+<!-- START :: 29/11/2018 NPPD-1803 Fix MyTimesheet tab name code reference modified by Sabir -->
+<apex:page standardController="xcdhcm__Employee_Detail__c" sidebar="false"
+	showHeader="true"
+	extensions="xcdhcm.TimeSheetController" action="{!TimeSheetRecords}"  tabStyle="Timesheets__tab"> 
+<!-- END :: 29/11/2018 NPPD-1803 Fix MyTimesheet tab name code reference modified by Sabir -->
+	<apex:form id="theform" >
+		<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Timesheet.css')}" id="thePage"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<apex:outputPanel id="styleclsOutputPanel" rendered="{!if(((TimesheetEditablePermission == false && (approvalStatus == 'Awaiting Approval' || approvalStatus == 'Approved')) || approvalStatus == 'Confirmed'),true,false)}">
+			<style type="text/css">
+			   textarea {
+			   pointer-events: none;
+			   display: block;
+			   }
+			   textarea:focus {
+			   outline: none;
+			   }
+			   body .pbBody table.list tr.dataRow th, body .pbBody table.list tr.dataRow td {
+			   pointer-events: none;
+			   }
+			    
+			   .picklistArrowRight {
+			   pointer-events: none;
+			   }
+			   .picklistArrowLeft {
+			   pointer-events: none;
+			   }
+			   .pbBody a:hover, .lbBody a:hover {
+			   pointer-events: none;   
+			   } 
+			   .pbBody, .pbBody a, .pbBody td, .lbBody a, .lbBodyDescription, .list .headerRow .noRowsHeader {
+			   pointer-events: none;   
+			   }  
+			   .nodisplay {
+			   display: none;
+			   }   
+			</style> 
+			<script>
+				$(document).ready(function()
+				{
+					$("[id$=pbtableId] :input").prop("disabled",true);
+				});
+			</script>
+		</apex:outputPanel>
+		<style>
+			.list tr td
+			{
+				padding-top:5px !important;
+			}
+			
+			.list tr td:last-child,.list tr th:last-child
+			{
+				width:14.6% !important;
+			}
+			.helpButton,.helpButtonOn
+			{
+				z-index:100;
+				position:relative;
+			}
+			#hlpbtn:hover .titlepopup
+			{
+				display: block !important;
+			    width: 300px;
+			    background: #FEFDB9;
+			    padding: 4px;
+			    color: #000;
+			    position: absolute;
+			    z-index: 1;
+			    top: 175px;
+			    border: 1px solid #FFA603;
+			    text-align: justify;
+			    white-space: normal;
+			    font-weight: normal;
+			}
+			#hlpbtn:hover .titlepopup1
+			{
+				display: block !important;
+			    width: 300px;
+			    background: #FEFDB9;
+			    padding: 4px;
+			    color: #000;
+			    position: absolute;
+			    z-index: 1;
+			    top: 175px;
+			    border: 1px solid #FFA603;
+			    text-align: justify;
+			    white-space: normal;
+		        font-weight: normal;
+		        right:5px;
+			
+			}
+			#hlpbtn img
+			{
+			    height: 12px;
+			    margin-left: 3px;
+			    margin-top: -1px;
+			    opacity:0.50;
+			}
+			#hlpbtn img:hover
+			{
+			    opacity:1.0;
+			}
+			img[title]
+			{
+			font-size:19px;
+			}
+			@-moz-document url-prefix()
+	        {
+	        	.hhmm
+	         	{
+	        		 margin-left:2px !important;
+	         	}
+	         	.mm
+	         	{
+	         		margin-left: -15px;
+	         	}
+	        }
+			.list td, .list th, body.oldForecast .list .last td, body.oldForecast .list .last th
+			{
+				padding: 4px 0px 4px 0px !important;
+			}
+			.inputfclass
+			{
+				width:32% !important;
+			}
+			.inputfclass1
+			{
+				width:50% !important;
+			}
+			.inputfclass2
+			{
+				width:60% !important;
+			}
+			.inputfclass3 
+			{
+				width:50% !important;
+			}
+			@media all and (min-width: 766px) and (max-width:1050px) 
+			{
+				.selectlistt
+				{
+					width:46% !important;
+				}
+				.selectlistcol
+				{
+					width:15% !important; 
+				}	
+				.inputfclass
+				{
+					width:32% !important;
+				}
+				.inputfclass1
+				{
+					width:70% !important;
+				}
+				.inputfclass2
+				{ 
+					width:60% !important;
+				}
+				.inputfclass3
+				{
+					width:50% !important;
+				}
+				.duecol
+				{
+					width:18% !important; 
+				}
+				input
+				{
+					font-size: 9.7px;
+					padding:2px 0 2px 0;
+				}
+				select
+				{
+					font-size: 9.6px;
+					padding:2px 0 2px 0;
+				}
+				body .pbBody table.list tr th, body .pbBody table.list tr td
+				{
+					font-size: 9.7px;
+				}
+				body .pbBody table.list tr.headerRow th
+				{
+					font-size: 9px !important;
+				}	
+			}
+			
+			body .pbBody table.list tr.headerRow th 
+			{
+				background: #fff !important;
+				border-bottom: 1px solid #cde2f5 !important; 
+				border-top: none !important; 
+				color: #999999 !important;
+				border-left: none !important;
+				border-right: none !important;
+				padding-right: 0.5% !important;
+			}
+			/*popup*/ 
+			
+			.popupBg 
+			{
+				background-color:black;
+				opacity: 0.70;
+				filter: alpha(opacity =   70);
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				z-index: 9998;
+				background: black !important;
+			}
+			.customPopup {
+			
+				line-height: 25px;
+				position: absolute;
+				left: 50%;
+				padding: 10px;
+				z-index: 9999;
+				text-align: center;
+				top: 150px;
+				width: 500px;
+				margin-left: -250px;
+				text-decoration: none;
+				font-weight: bold;
+				background: #ffffff !important;
+				border: 1px solid #ccc !important;
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+				color: #336699;
+			}
+			.butt {
+				border: 1px solid #d9d9d9 !important;
+				color: #999999 !important;
+				background-color: #fff !important;
+				background-image: none !important;
+				-moz-box-shadow: 2px 1px 8px #a6d6ff;
+				-webkit-box-shadow: 2px 1px 8px #a6d6ff;
+				box-shadow: 2px 1px 8px #a6d6ff;
+			}
+			.freezedHeader
+			{
+			    top:0px;
+			    line-height: normal;
+			    position: fixed;
+			    z-index:1;
+			    background: #fff;
+			    display:none;
+			    border-bottom:1px solid #cde2f5;
+			    color:#999999;
+			    width:14% !important;
+			    padding-bottom: 5px;
+			}
+			
+			body .pbBody table.list .dataCell
+			{
+				padding-right: 0.5% !important;
+			}
+			
+			/*popup*/
+			select:disabled
+			{
+			  	color: #000;
+			}
+			.fixedPlaceHolder
+			{
+				margin:0 0 40px 0 !important;
+			}
+			.fixedInner
+			{
+				margin : 0 20px !important;
+			}
+			.fixedInnerMost
+			{
+				max-width:700px;
+			}
+		</style>
+		<script>
+					//Jquery method to disable(non-editable) columns
+					$(document).ready(function()
+			         {
+			         	var componentsInPage = '{!timesheetVsTrueComponent}';
+			         	var theadOffset = 270; 
+			         	var nav = $('.list thead');
+						if (nav.length) 
+						{
+						  theadOffset = nav.offset().top;
+						}
+				         	//disabling Start time, End time, Breaks, worked columns
+				         	if(componentsInPage.includes('Hours_Input_Start_End_Break__c'))
+				         	{
+				         		$("[id$=if8]").prop("disabled",true);
+				         		if({!IsTimeClocked} == true )
+				         		{
+				         			$("[id$=if3]").prop("disabled",true);
+					         		$("[id$=if4]").prop("disabled",true);
+					         		$("[id$=if5]").prop("disabled",true);
+					         		$("[id$=if6]").prop("disabled",true);
+					         		$("[id$=if7]").prop("disabled",true);
+				         		}
+				         	}
+							
+							//disabling the worked hours input field when time clocking is enabled
+				         	if(componentsInPage.includes('Hours_Input_Total_hours__c') && {!IsTimeClocked} == true )
+				         	{
+				         		$("[id$=if9]").prop("disabled",true);
+				         		$("[id$=if9]").css({"background-color":"#dddddd"});
+				         	}
+				         	
+				         	//disabling due, leave column based on jobrole pattern type.
+				         	var jobrolePattern = "{!jobrole_pattern}";
+				         	if(jobrolePattern != 'Flexible working days' && jobrolePattern != 'Irregular shift pattern')
+				         	{
+				         		if(componentsInPage.includes('Due__c'))
+				         		{
+				         			$("[id$=if10]").prop("disabled",true);
+				         		}
+				         		if(componentsInPage.includes('Leave__c'))
+				         		{
+				         			$("[id$=if13]").prop("disabled",true);
+				         			$("[id$=if14]").prop("disabled",true);
+				         		}
+				         	}
+				         	
+				         	//disabling the balance column
+	            			if(componentsInPage.includes('Balance__c'))
+				         	{
+				         		$("[id$=if15]").prop("disabled",true);
+				         	}
+				         	
+				         	//disabling the overtime output columns
+				         	if(componentsInPage.includes('Overtime_Output__c'))
+				         	{
+				         		$("[id$=if16]").prop("disabled",true);
+				         		$("[id$=if17]").prop("disabled",true);
+				         		$("[id$=ifOtDefault]").prop("disabled",true);
+				         	}
+				         	
+				         	//disabling the overtime input column
+				         	if(componentsInPage.includes('Overtime_Input__c'))
+				         	{
+				         		$("[id$=if18]").prop("disabled",true);
+				         	}
+				         	
+				         	//disabling the flex claim column
+				         	if(componentsInPage.includes('Flex_Daily_flex__c'))
+				         	{
+				         		$("[id$=if24]").prop("disabled",true);
+				         	}
+				         	
+				         	//disabling the adjustment and flex running total columns
+				         	if(componentsInPage.includes('Flex_Adjustment_Running_balance__c'))
+				         	{
+				         		if({!isAdjustmentEditable} == false)
+		            			{
+		            				$("[id$=if25]").prop("disabled",true);
+		            			}
+		            			$("[id$=if26]").prop("disabled",true);
+				         	}
+				         	
+	            			$(window).scroll(function() 
+							{    
+							    var scroll = $(window).scrollTop();
+							    var leftscroll = $(window).scrollLeft();
+								if(scroll >= theadOffset)
+								{
+									$('.freezedHeader').css({"display":"block"});
+									$('.titlepopup').css({"top":"67px"});
+									$('.titlepopup1').css({"top":"67px"});
+									$('.titlepopup2').css({"top":"67px"});
+									$('.titlepopup2').css({"right":"-120px"});
+									
+								}
+								else
+								{
+									$('.freezedHeader').css({"display":"none"});
+									$('.titlepopup').css({"top":"175px"});
+									$('.titlepopup1').css({"top":"18px"});
+									$('.titlepopup2').css({"top":"175px"});
+									$('.titlepopup2').css({"right":"5px"});
+								}
+							});
+        			});
+					
+					
+			</script>
+		<apex:pageBlock mode="edit" id="theblock" title="{!$Label.xcdhcm__phtimesheet}">
+			<apex:pageMessages id="errorId" escape="false"/>
+			<apex:pageBlockSection id="timSummJobrolSecId" columns="1" >
+				<apex:pageBlockSectionItem id="timSummJobrolId">
+					<apex:outputPanel id="timSummJobrolpanel" style="{!if(TS_approver == 'yes','font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt !important;' ,'pointer-events: auto;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt !important;')}">  
+            		<apex:outputLabel value="Employee" style="margin-right:5px;color: #999999;font-weight: bold;"/>
+            		<apex:outputField value="{!empDetail.Name}" style=""/>
+            		<apex:outputLabel value="{!$ObjectType.xcdhcm__Overtime_Record__c.Fields.xcdhcm__Job_Role__c.Label}" style="{!IF((greyOut != true), 'color: #999999;margin-left:5px;margin-right:5px;color: #999999;font-weight: bold;', 'color: #999999; margin-left:5px; margin-right:5px;color: #999999;font-weight: bold;')}"/>  
+	                <apex:actionRegion >  
+	                    <apex:selectList id="jobrolePicklist" value="{!jobroleVal}" size="1" style="{!IF((greyOut != true), 'width: 170px !important;', 'width: 170px !important;color: #999999; pointer-events: none;')}"> 
+	                    	<apex:selectOptions value="{!jobroleValues}"/> 
+	                        <apex:actionSupport action="{!getTimeSheetMonths}" event="onchange" status="processing" reRender="timSummPicklist"/> 
+	                    </apex:selectList>  
+	                </apex:actionRegion>  
+	                <apex:outputLabel value="Period" style="{!IF((greyOut != true), 'color: #999999;margin-right:5px;color: #999999;font-weight: bold;margin-left: 10px;', 'color: #999999; margin-right:5px; margin-left: 10px; color: #999999;font-weight: bold;')}"/>  
+	                <apex:actionRegion >  
+	                    <apex:selectList id="timSummPicklist" value="{!timeSheetMonth}" size="1" style="{!IF((greyOut != true), 'width: 120px !important;', 'color: #999999; pointer-events: none;width: 120px !important;')}" > 
+	                        <apex:selectOptions value="{!TimeSheetSummaryValues}"/>  
+	                    </apex:selectList>  
+	                </apex:actionRegion>  
+					<apex:actionStatus startText="Processing..." id="processing"/> 
+                    <apex:commandButton id="btn1" value="{!$Label.xcdhcm__timesheetbgo}" action="{!nextTimeSheetRecords}" rendered="{!IF(TS_approver != 'yes',true,false)}" reRender="thePage,theform,btn1,errorId" onClick="disableButton(this);" style="{!IF((greyOut != true), 'margin-left:10px;', 'margin-left:10px; display: none;')}"/>
+    				<apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;" target="_blank" action="{!helpLinkTimesheet}" value="Help" id="theCommandLink" />
+                    <apex:outputPanel id="ButtonsId" rendered="{!TimeSheetRecordList.size!=0}">
+        				<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbsave}" action="{!saveTimeSheets}" reRender="errorId,ButtonsId,theform" id="btnTopSave" onClick="disableButton(this,'saveBtn');" style="{!if(((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null) || (TimesheetEditablePermission == true && approvalStatus!='Confirmed')),'','opacity:0.5; pointer-events: none;')}"/>
+	        			<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbcancel}" action="{!cancelTS}" id="btnTopCancel" onClick="disableButton(this);" rerender="errorId,SummaryPanel,ButtonsId" style="pointer-events: visible;"/> 
+   					</apex:outputPanel>
+				</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+				<br/>
+			</apex:pageBlockSection>
+			<apex:outputPanel id="Infosection" rendered="{!TimeSheetRecordList.size!=0}">
+		        <table style="width:100%;">
+			    	<tr>
+			        		<td>
+			            		<label style="margin-left:25px;color: #999999;font-weight: bold;"> Status </label>
+			            		<label style="margin-left:5px;margin-right:15%;font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 10pt !important"> {!approvalStatus} </label>
+			            		<apex:outputPanel style="padding: 5px; border: 1.5px solid black;padding-right: 2%;" rendered="{!AND(TimesheetBalanceSection,contains(timesheetVsTrueComponent,'Top_bar__c'))}">
+			            			<apex:repeat value="{!$ObjectType.xcdhcm__Overtime_Record__c.Fieldsets.xcdhcm__Timesheet_balance}" var="tp">
+											<span  class="label" style="color: #999999;font-weight: bold;margin-left:2%;margin-right:1%;pointer-events: visible;"> {!tp.label}  
+												<span id="hlpbtn"> <img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}"   title="{!$ObjectType.Overtime_Record__c.Fields[tp].inlineHelpText}"
+											              		style="{!IF($ObjectType.Overtime_Record__c.Fields[tp].inlineHelpText == null, 'display:none','')}" />
+											    </span>
+											</span>
+								            <apex:outputField value="{!Timeperiod[tp]}" />
+							        </apex:repeat>
+						        </apex:outputPanel>
+			            	</td>
+					</tr>
+				</table>
+	      	</apex:outputPanel><br/><br/>
+			<apex:outputText Value="No records to display" rendered="{!IF(AND(jobroleVal != null,TimeSheetRecordList.Size=0),TRUE,FALSE)}" style="margin-left:20px;"/>
+			<apex:variable var="rowCounter" value="{!-1}"/>
+			<apex:pageBlockTable value="{!otDisplay}" var="ot" rendered="{!TimeSheetRecordList.size!=0}" id="pbtableId"  cellspacing="0" cellpadding="0" style="width:min-content; float: left;padding-bottom: 1% !important;">
+				<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+				<apex:column style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 7% !important; background-color: #f5f5f5', 'width: 7% !important;')}">
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	            	<apex:facet name="header">
+						DATE/DAY 
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:120%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Date__c.Label}</span>
+					   	<div class="freezedHeader" >
+					   		DATE/DAY
+							<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Date__c.Label}</span>
+					   	</div>
+					</apex:facet>
+					<span style="{!IF(ot.ts.xcdhcm__Requires_approval__c == true,'color: #e74c2e;','')}">
+								<!-- START :: 24/07/2018 NPPD-1682 Timesheet improvements added by Anil -->
+					   			<apex:outputField value="{!ot.ts.xcdhcm__Date__c}" id="if1" rendered="{!OR(ot.ts.id == null,AND(timesheetVsTrueComponent != null,NOT(contains(timesheetVsTrueComponent,'Date_hyperlink__c'))))}"/>
+					   			<apex:outputLink target="_blank" value="/one/one.app#/alohaRedirect/{!ot.ts.id}" rendered="{!AND(ot.ts.id != null,timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Date_hyperlink__c'))}" style="{!IF(ot.ts.xcdhcm__Requires_approval__c == true,'color: #e74c2e;','')}">
+					   				<apex:outputField value="{!ot.ts.xcdhcm__Date__c}"/>
+					   			</apex:outputLink>
+					   			<!-- END :: 24/07/2018 NPPD-1682 Timesheet improvements added by Anil -->
+				   	</span>
+				   	<apex:variable var="rowCounter" value="{!rowCounter+1}"/>
+	            </apex:column>
+            	
+            	<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	            <apex:column style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 5% !important; background-color: #f5f5f5', 'width: 5% !important;')}">
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	                <apex:facet name="header" >
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:140%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Day__c.Label}</span>
+				   		<div class="freezedHeader" >
+				   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Day__c.Label}</span>
+				   		</div>
+					</apex:facet>
+	                <apex:outputField value="{!ot.ts.xcdhcm__Day__c}" id="if2" />
+	            </apex:column>
+	            
+	            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	            <apex:column style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 10%;background-color: #f5f5f5', 'width: 10%;')}"> 
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	                <apex:facet name="header" >
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Notes__c.Label}</span>
+				   		<div class="freezedHeader" >
+				   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:90%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Notes__c.Label}</span>
+				   		</div>
+					</apex:facet>
+					<apex:facet name="footer"><br/>
+						
+						<span style="width:100%;float:right;">Totals: </span>
+				   	</apex:facet>
+	                <apex:inputField value="{!ot.ts.xcdhcm__Notes__c}" id="if12n" style="height: 18px !important;margin-right: 10px !important;" onkeydown="{!if(approvalStatus == 'Approved' || ($User.Id == empDetail.xcdhcm__User__c && approvalStatus == 'Awaiting Approval'),'disableNotes(this.id);','')}"/> 
+	            </apex:column>
+	            
+	            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Hours_Input_Start_End_Break__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 6% !important;background-color: #f5f5f5', 'width: 6%')}" >
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	               	<apex:facet name="header">
+	               		<div style="width:120px!important;">
+	               		HOURS WORKED 
+	               		</div>
+	               		<div style="pointer-events: visible;">
+		               		<span style="border-top: 1px solid #cde2f5 !important;float:left;width:110%;"><br/><span id="hlpbtn">Start time<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Enter the actual times when you started and ended each working day, and the total break time in minutes</span></span>
+		               		<br/>hh &nbsp; &nbsp; &nbsp; &nbsp; <span class="mm" >mm &nbsp; &nbsp;</span></span>
+					   		<div class="freezedHeader" >
+					   			<div style="width:120px!important;">
+			               		HOURS WORKED 
+			               		</div>
+			               		<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><span id="hlpbtn">Start time<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+			               		<span style="display: none;" class="titlepopup">Enter the actual times when you started and ended each working day, and the total break time in minutes</span></span>
+			               		<br/>hh &nbsp; &nbsp; &nbsp; &nbsp; <span class="mm" >mm &nbsp; &nbsp;</span></span>
+						   	</div>
+					   	</div>
+					</apex:facet>
+				   	<apex:inputField value="{!ot.ts.xcdhcm__Time_in_hours__c}" id="if3" onfocus="removeNone(this.id);" onchange="calculateWorked(this.id);" style="{!IF(IsTimeClocked == true,'width: 40%;pointer-events: none;','width: 40%;')}" />
+					<apex:inputField value="{!ot.ts.xcdhcm__Time_in_mins__c}" id="if4" onfocus="removeNone(this.id);" onchange="calculateWorked(this.id);" style="{!IF(IsTimeClocked == true,'width: 40%;pointer-events: none;','width: 40%;')}" />
+			    </apex:column> 
+            	
+            	<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Hours_Input_Start_End_Break__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 6% !important;background-color: #f5f5f5', 'width: 6%')}" >
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	               <apex:facet name="header">
+	               <div style="width:120px!important;">
+	               		
+	               		<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>End time <br/>hh &nbsp; &nbsp; &nbsp; &nbsp; <span class="mm" >mm &nbsp; &nbsp;</span></span>
+				   		</div>
+				   		<div class="freezedHeader">
+				   			<br/>
+		               		<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>End time<br/>hh &nbsp; &nbsp; &nbsp; &nbsp; <span class="mm" >mm &nbsp; &nbsp;</span></span>
+					   	</div>
+				   </apex:facet>
+				   <apex:inputField value="{!ot.ts.xcdhcm__Time_out_hours__c}" id="if5" onfocus="removeNone(this.id);" onchange="calculateWorked(this.id);" style="{!IF(IsTimeClocked == true,'width: 40%;pointer-events: none;','width: 40%;')}" />
+	               <apex:inputField value="{!ot.ts.xcdhcm__Time_out_mins__c}" id="if6" onfocus="removeNone(this.id);" onchange="calculateWorked(this.id);" style="{!IF(IsTimeClocked == true,'width: 40%;pointer-events: none;','width: 40%;')}" />
+				</apex:column>
+	            
+	            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->           
+	            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Hours_Input_Start_End_Break__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 5.3% !important; background-color: #f5f5f5', 'width: 5.3% !important;')}">
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	                <apex:facet name="header">
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:120%;"><br/>Breaks&nbsp; <br/>mm</span>
+						<div class="freezedHeader">
+				   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>Breaks&nbsp; <br/>mm</span>
+				   		</div>
+				   	</apex:facet>
+				   	
+				    <apex:inputField value="{!ot.ts.xcdhcm__Unpaid_breaks_minutes__c}" id="if7" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" style="width:65%" />
+				</apex:column>
+	            
+	            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Hours_Input_Start_End_Break__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 8.3% !important; background-color: #f5f5f5', 'width: 8.3% !important;')}">
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	                <apex:facet name="header">
+	                <div style="width:66px!important;">
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:90%;">Total<br/>worked<br/>hh.mm</span>
+						</div>
+						<div class="freezedHeader">
+				   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;">Total<br/>worked<br/>hh.mm</span>
+				   		</div>
+				   	</apex:facet>
+				   	<apex:facet name="footer"><br/>
+						<span style="float:left;width:100%;">{!TotalWorkedHours}</span>
+				   	</apex:facet>
+			       <apex:inputField value="{!ot.ts.xcdhcm__Worked__c}" id="if8" onmousedown="disable(this.id);" style="background-color: #dddddd; box-shadow: none; color: #666; padding: 1px 4px 1px 1px; pointer-events: none;width:55% !important;" />
+            	</apex:column>
+            	
+            	<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            	<apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Hours_Input_Total_hours__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 8.3% !important; background-color: #f5f5f5', 'width: 8.3% !important;')}">
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	                <apex:facet name="header">
+	                <div style="width:66px!important;">
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:90%;">Total<br/>worked<br/>hh.mm</span>
+						</div><div class="freezedHeader">
+				   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;">Total<br/>worked<br/>hh.mm</span>
+				   		</div>
+				   	</apex:facet>
+				   	<apex:facet name="footer"><br/>
+						<span style="float:left;width:100%;">{!TotalWorkedHours}</span>
+				   	</apex:facet>
+			       <apex:inputField value="{!ot.ts.xcdhcm__Worked__c}" id="if9" onchange="calculateWorked(this.id);" style="padding: 1px 4px 1px 1px;width:55% !important;"/>
+            	</apex:column>
+            	
+            	<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            	<apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Due__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 8.3%; background-color: #f5f5f5', 'width: 8.3%;')}"  >
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	                <apex:facet name="header">
+						<br/>
+						<div style="pointer-events: visible;">
+							<span style="border-top: 1px solid #cde2f5 !important;float:left;width:75px;"><br/><span id="hlpbtn">Due&nbsp;<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+							<span style="display: none;" class="titlepopup">Confirm or enter the number of hours you were due to work on each day</span></span> <br/>hh.mm</span>
+							<div class="freezedHeader">
+					   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:75px;"><br/><span id="hlpbtn">Due&nbsp;<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+								<span style="display: none;" class="titlepopup">Confirm or enter the number of hours you were due to work on each day</span></span> <br/>hh.mm</span>
+					   		</div>
+				   		</div>
+				   	</apex:facet> 
+				   	<apex:facet name="footer"><br/>
+						<span style="float:left;width:100%;">{!TotalDue}</span>
+				   	</apex:facet>
+				   	<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	                <apex:inputField value="{!ot.ts.xcdhcm__Due__c}" id="if10" onchange="calculateWorked(this.id);" style="{!IF((jobrole_pattern == 'Regular work pattern - days' || jobrole_pattern == 'Regular work pattern - hours' || jobrole_pattern = 'Work cycle - days' || jobrole_pattern = 'Work cycle - hours'),'background-color: #dddddd; box-shadow: none; color: #666; padding: 1px 2px 1px 1px;pointer-events: none;width:70% !important;','')}" />
+	    			<!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	    		</apex:column>
+	    		
+	    		<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	    		<apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Leave__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 7% !important; background-color: #f5f5f5;', 'width:7% !important;')}">
+				<!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+					<apex:facet name="header">
+						LEAVE&nbsp;<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:85px;"><br/>Booked<br/>hh.mm</span>
+						<div class="freezedHeader">
+							LEAVE&nbsp;<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:85px;"><br/>Booked<br/>hh.mm</span>
+						</div>
+					</apex:facet> 
+			   		<apex:facet name="footer"><br/>
+						<span style="float:left;width:100%;">{!TotalLeave}</span>
+				   	</apex:facet>
+					<apex:outputField value="{!ot.ts.xcdhcm__Leave_booked__c}" style="" rendered="{!(ot.ts.xcdhcm__Leave_booked_id__c == null )}"/>
+			   		<apex:inputField value="{!ot.ts.xcdhcm__Leave_booked__c}" id="if11" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" 
+			   		   style="{!IF((ot.ts.Leave_booked_id__c != null && (jobrole_pattern == 'Irregular shift pattern' || jobrole_pattern == 'Flexible working days')),IF(ot.ts.Leave_booked_id_2__c !=null,
+			   		    IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c),'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 32% !important;','pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 32% !important;'),
+		                IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 32% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 32% !important;'),	
+	                    IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.Due__c < 0, NOT(contains(workingdays, ot.ts.Day__c))),'background-color: #f5f5f5',''))),
+					    IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width:45% !important;','pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 45% !important;'),
+		                IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 45% !important;','pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 45% !important;'),	 
+	                    IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.Due__c < 0, NOT(contains(workingdays, ot.ts.Day__c))),'background-color: #f5f5f5','')))),'display:none;')}"/>
+	               		
+	               		<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	               		<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan(added lightning base url) -->
+               			<apex:outputLink target="_blank" title="Leave booked" id="leavebooked1Id" value="/one/one.app#/alohaRedirect/{!ot.ts.xcdhcm__Leave_booked_id__c}" style="{!IF((ot.ts.Leave_booked_id__c != null && (jobrole_pattern == 'Regular work pattern - days' || jobrole_pattern == 'Regular work pattern - hours' || jobrole_pattern == 'Work cycle - days' || jobrole_pattern == 'Work cycle - hours')),
+						 IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;', 'pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+			   		     IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+						 IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.Due__c < 0, NOT(contains(workingdays, ot.ts.Day__c))),'background-color: #f5f5f5',''))),'display:none;')}">
+						 <!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+						 <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+							<apex:outputField value="{!ot.ts.xcdhcm__Leave_booked__c}" id="if13" style="" />
+						</apex:OutputLink>&nbsp;&nbsp;
+					
+					  	<apex:inputField value="{!ot.ts.xcdhcm__Leave_booked_2__c}" id="if12" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" style="{!IF((ot.ts.Leave_booked_id_2__c != null && (jobrole_pattern == 'Irregular shift pattern' || jobrole_pattern == 'Flexible working days')),
+				   		   IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id_2__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id_2__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 32% !important;', 'pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 32% !important;'),
+				   		   IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id_2__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id_2__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 32% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 32% !important;'),
+				   		   IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.Due__c < 0, NOT(contains(workingdays, ot.ts.Day__c))),'background-color: #f5f5f5',''))),'display:none;')}"/>
+						 
+						 <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+						 <!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+						 <apex:outputLink target="_blank" title="Leave booked" id="leavebooked2Id" value="/one/one.app#/alohaRedirect/{!ot.ts.xcdhcm__Leave_booked_id_2__c}" style="{!IF((ot.ts.Leave_booked_id_2__c != null && (jobrole_pattern == 'Regular work pattern - days' || jobrole_pattern == 'Regular work pattern - hours' || jobrole_pattern == 'Work cycle - days' || jobrole_pattern == 'Work cycle - hours')),
+						 IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id_2__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id_2__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;', 'pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+			   		     IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id_2__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id_2__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+						 IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.Due__c < 0, NOT(contains(workingdays, ot.ts.Day__c))),'background-color: #f5f5f5',''))),'display:none;')}">
+						 <!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+						 <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+							<apex:outputField value="{!ot.ts.xcdhcm__Leave_booked_2__c}" id="if14" style="" />
+						</apex:OutputLink>
+				</apex:column>
+            	
+            	<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            	<apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Balance__c'))}" style="{!IF(((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c))))), 'width: 7% !important; background-color: #f5f5f5', 'width: 7% !important;')}">
+	            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	                <apex:facet name="header">
+	                <div style="width:60px!important;"></div>
+						BALANCE&nbsp;<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:80%;"><br/><br/>hh.mm</span>
+	                    <div class="freezedHeader">
+	                        BALANCE<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:80%;"><br/><br/>hh.mm</span>
+	                    </div>
+				   	</apex:facet>
+					<apex:inputField value="{!ot.ts.xcdhcm__Balance__c}" id="if15" onmousedown="disable(this.id);" style="background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;pointer-events: none;width: 55% !important;" />
+            	</apex:column>
+            	
+            	<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            	<apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Overtime_Output__c'))}" style="{!IF(((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c))))), 'width: 6.3% !important; background-color: #f5f5f5', 'width: 6.3% !important;')}">
+		        <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+		            <apex:facet name="header">
+		            <div style="width:75px!important;"></div>
+							OVERTIME<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:90%;"><br/>Claimed<br/>hh.mm</span>
+	                    <div class="freezedHeader">
+	                        OVERTIME<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:90%;"><br/>Claimed<br/>hh.mm</span>
+	                    </div>
+				   	</apex:facet>   	
+               		<apex:inputField value="{!ot.ts.xcdhcm__Overtime_claim__c}" id="ifOtDefault" onmousedown="disable(this.id);" style="background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;" rendered="{!ot.ts.xcdhcm__Overtime_claim_id__c == null}" />
+               		<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan (added lightning base url)-->
+               		<apex:outputLink target="_blank" title="Overtime claimed" id="overtime1Id" value="/one/one.app#/alohaRedirect/{!ot.ts.xcdhcm__Overtime_claim_id__c}" style="{!IF(ot.ts.xcdhcm__Overtime_claim__c != 0.0,'','display:none;')}">
+					<!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+					<apex:inputField value="{!ot.ts.xcdhcm__Overtime_claim__c}" id="if16" onmousedown="disable(this.id);"  style="width: 60% !important;
+						{!IF(ot.ts.Overtime_claim_2__c != 0.00,
+						IF(AND(contains(OT_approved_Dates, TEXT(ot.ts.Date__c)),contains(OT_approved_Dates,ot.ts.Overtime_claim_id__c)),IF(contains(reduceTimeWorkedId,ot.ts.Overtime_claim_id__c),'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;','pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;'),
+					    IF(AND(contains(OT_await_app_Dates, TEXT(ot.ts.Date__c)),contains(OT_await_app_Dates,ot.ts.Overtime_claim_id__c)),IF(contains(reduceTimeWorkedId,ot.ts.Overtime_claim_id__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;','pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;'),
+						 'background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;')),
+						IF(AND(contains(OT_approved_Dates, TEXT(ot.ts.Date__c)),contains(OT_approved_Dates,ot.ts.Overtime_claim_id__c)), IF(contains(reduceTimeWorkedId,ot.ts.Overtime_claim_id__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 40% !important;','pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 40% !important;'),
+						IF(AND(contains(OT_await_app_Dates, TEXT(ot.ts.Date__c)),contains(OT_await_app_Dates,ot.ts.Overtime_claim_id__c)),IF(contains(reduceTimeWorkedId,ot.ts.Overtime_claim_id__c),  'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 40% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 40% !important;'),
+						'background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;')))}" /> 
+						</apex:OutputLink>
+						<!-- START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+						<apex:outputLink target="_blank" title="Overtime claimed" id="overtime2Id" value="/one/one.app#/alohaRedirect/{!ot.ts.xcdhcm__Overtime_claim_id_2__c}" style="{!IF(ot.ts.xcdhcm__Overtime_claim_2__c !=0.0,'','display:none;')}">
+						<!-- END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan -->
+						<apex:inputField value="{!ot.ts.xcdhcm__Overtime_claim_2__c}" id="if17" onmousedown="disable(this.id);"  style="width: 60% !important;
+						{!IF(AND(contains(OT_approved_Dates, TEXT(ot.ts.Date__c)),contains(OT_approved_Dates,ot.ts.Overtime_claim_id_2__c)), IF(contains(reduceTimeWorkedId,ot.ts.Overtime_claim_id_2__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width:35% !important;' ,'pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width:35% !important;'),
+						IF(AND(contains(OT_await_app_Dates, TEXT(ot.ts.Date__c)),contains(OT_await_app_Dates,ot.ts.Overtime_claim_id_2__c)),IF(contains(reduceTimeWorkedId,ot.ts.Overtime_claim_id_2__c),  'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width:35% !important;','pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;'),
+						'background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;'))}" /> 
+					</apex:OutputLink> 
+			  </apex:column>
+			  
+			  <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+			  <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Overtime_Input__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 8.5% !important; background-color: #f5f5f5', 'width: 8.5% !important;')}">
+              <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+                <apex:facet name="header">
+					&nbsp;HOURS&nbsp;AND<br/>
+					<div style="pointer-events: visible;">
+						<span style="border-top: 1px solid #cde2f5 !important;float:left;width:115%;">Standard&nbsp;
+							<span id="hlpbtn"><br/>payable<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Calculated as total hours worked less hours worked at Overtime rates.</span></span>
+	               			<br/>hh.mm
+	               		</span>
+						<div class="freezedHeader">
+							&nbsp;HOURS&nbsp;AND<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;">
+							Standard&nbsp;<span id="hlpbtn"><br/>payable<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Calculated as total hours worked less hours worked at Overtime rates.</span>
+		               		</span>
+							<br/>hh.mm</span>
+						</div>
+					</div>
+			   	</apex:facet>
+			   	<apex:facet name="footer"><br/>
+					<span style="float:left;width:100%;">{!totalStandardPayable}</span>
+			   	</apex:facet>
+		       <apex:inputField value="{!ot.ts.xcdhcm__Standard_payable__c}" id="if18" onmousedown="disable(this.id);" style="background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;" />
+		    </apex:column>
+		    
+		    <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+     		<apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Overtime_Input__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 8.5% !important; background-color: #f5f5f5; ', 'width: 8.5% !important; ')}">
+	        <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	            <apex:facet name="header">
+					&nbsp;PAYMENT<br/>
+					<div style="pointer-events: visible;">
+						<span style="border-top: 1px solid #cde2f5 !important;float:left;width:115%;margin-right: -15px !important;"><br/>
+						Overtime 1<span id="hlpbtn"><br/>hh.mm<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+	               		<span style="display: none;" class="titlepopup">Enter the number of hours payable at an Overtime rate and the Reason or type of this Overtime.</span></span>
+						</span>
+						<div class="freezedHeader">
+							&nbsp;PAYMENT&nbsp;<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+							<span id="hlpbtn">Overtime 1
+							<br/>hh.mm<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Enter the number of hours payable at an Overtime rate and the Reason or type of this Overtime.</span></span></span>
+						</div>
+					</div>
+			   	</apex:facet>
+			   	<apex:facet name="footer"><br/>
+					<span style="float:left;width:100%;">{!totalOvertime1Value}</span>
+			   	</apex:facet>
+			   <apex:inputText value="{!ot.otHours1}" id="if19" style="width: 50% !important;padding: 1px 1px 1px 1px;" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" />
+		    	<div id="Msg1{!rowCounter}"  style="display:none; color: #e74c2e; " > 
+			    	<div style="width:85px;float:left;height:12px;" >
+				    	<font style="float:left">Invalid hh.mm</font>
+			        </div>
+		    	</div>
+		    </apex:column>
+			
+			<!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	        <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Overtime_Input__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 20.5% !important; background-color: #f5f5f5; padding-right: 2% !important;', 'width: 20.5% !important;padding-right: 2% !important;')}">
+            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+                <apex:facet name="header">
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:115%;"><br/>
+					<br/>Reason</span>
+			   		<div class="freezedHeader">
+			   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+						<br/>Reason</span>
+			   		</div>
+			   </apex:facet>
+			   <!-- START: 12/06/2018 NPDD-1609 Overtime and Timesheet modify by Sabir -->
+				<apex:SelectList size="1" value="{!ot.otCategory1}" id="if20" onkeydown="{!if((approvalStatus != 'Not Submitted' || approvalStatus != 'Rejected'),'disableNotes(this.id);','')}" 
+				onchange="calculateWorked(this.id);"> 
+			   <!-- END: 12/06/2018 NPDD-1609 Overtime and Timesheet modify by Sabir -->
+	        			<apex:selectOptions value="{!OvertimeReasonValues}" /> 
+               	</apex:SelectList>
+		    </apex:column>
+		    
+		    <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+	        <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Overtime_Input__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 8.5% !important; background-color: #f5f5f5;padding-left: 12px !important;', 'width: 8.5% !important;padding-left: 12px !important;')}">
+            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+                <apex:facet name="header">
+					<br/>
+					<div style="pointer-events: visible;">
+						<span style="border-top: 1px solid #cde2f5 !important;float:left;width:115%;"><br/>
+						<span id="hlpbtn" style="padding-left: 10px !important;">Overtime 2
+						<br/><span style="padding-left: 10px !important;">hh.mm<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+	               		<span style="display: none;" class="titlepopup">Enter the number of hours payable at an Overtime rate and the Reason or type of this Overtime.</span></span></span></span>
+						<div class="freezedHeader">
+							<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+							<span id="hlpbtn" style="padding-left: 10px !important;">Overtime 2
+							<br/><span style="padding-left: 10px !important;">hh.mm<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Enter the number of hours payable at an Overtime rate and the Reason or type of this Overtime.</span></span></span></span>
+						</div>
+					</div>
+			   	</apex:facet>
+			   	<apex:facet name="footer"><br/>
+					<span style="float:left;width:100%;padding-left: 15px !important;">{!totalOvertime2Value}</span>
+			   	</apex:facet>
+		       <apex:inputText value="{!ot.otHours2}" id="if21" style="width: 50% !important;padding: 1px 1px 1px 1px;" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" />
+		   		<div id="Msg2{!rowCounter}"  style="display:none; color: #e74c2e;" > 
+			   		<div style="width:85px;float:left;height:12px;" >
+				   		<font style="float:left">Invalid hh.mm</font>
+			   		</div>
+		   		</div>
+		    </apex:column>
+            
+            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Overtime_Input__c'))}" style="{!IF((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c)))), 'width: 8.5% !important; background-color: #f5f5f5', 'width: 8.5% !important;')}">
+            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+                <apex:facet name="header">
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+					<br/>Reason</span>
+					<div class="freezedHeader" >
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+						<br/>Reason</span>
+					</div>
+			   </apex:facet>
+			   <!-- START: 12/06/2018 NPDD-1609 Overtime and Timesheet modify by Sabir -->
+			   		<apex:SelectList size="1" value="{!ot.otCategory2}" id="if22" onkeydown="{!if((approvalStatus != 'Not Submitted' || approvalStatus != 'Rejected'),'disableNotes(this.id);','')}"
+			   		onchange="calculateWorked(this.id);"> 
+			   <!-- END: 12/06/2018 NPDD-1609 Overtime and Timesheet modify by Sabir -->
+	        			<apex:selectOptions value="{!OvertimeReasonValues}" /> 
+               	</apex:SelectList>
+               	
+            </apex:column>
+            
+            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Toil_Claim__c'))}" headervalue="{!$ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Toil_claim__c.Label} {!$ObjectType.xcdhcm__Overtime__c.Fields.xcdhcm__Toil_use__c.Label}" style="{!IF(((ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c))))), 'width: 5%; background-color: #f5f5f5', 'width: 5%;')}" >
+            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            	 <apex:facet name="header">
+           	 		<div style="pointer-events: visible;">
+	            	    <span style="border-bottom: 1px solid #cde2f5 !important;  width: 90%;  float: left;">TOIL </span>
+	            	    <br/>
+	            	    <span style="float:left;width:100%;">b/f {!Toil_bought_forward_val} 
+	            	    <br/>
+	            	    <span id="hlpbtn">
+	            	    Claim<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/> 
+	            	    <span style="display: none;" class="titlepopup">If you have worked an additional day or half day for which you wish to claim time off in lieu, enter the hours here</span>
+	            	    </span>
+	            	    <br/>hh.mm</span>
+						<div class="freezedHeader">
+	                        <span style="border-bottom: 1px solid #cde2f5 !important;  width: 90%;  float: left;">TOIL </span><br/>
+	                        <span style="float:left;" >b/f {!Toil_bought_forward_val} <br/><span id="hlpbtn"><span style="float:left;" >Claim</span><img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/> 
+	                        <span style="display: none;" class="titlepopup">If you have worked an additional day or half day for which you wish to claim time off in lieu, enter the hours here</span></span> <br/>hh.mm &nbsp;  </span>
+                    	</div>
+                   </div>
+			   	</apex:facet>
+	                <apex:inputField value="{!ot.ts.xcdhcm__Toil_claim__c}" id="if23" style="width: 60% !important; padding: 1px 1px 1px 1px" onchange="calculateWorked(this.id);" />
+            </apex:column>
+            
+            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'))}" style="{!IF((ot.ts.xcdhcm__Toil_use__c == 0.0 && (ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c))))), 'width: 5%; background-color: #f5f5f5;', 'width: 5%; ')}" >
+            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->   
+                <apex:facet name="header">
+                <div style="width:72px!important;">
+                	<span style="border-bottom: 1px solid #cde2f5 !important;  width: 90%;  float: left;">FLEX-TIME </span> <br/>
+                	<div style="pointer-events: visible;">
+						<span style="float:left;">b/f {!Flexi_bought_forward_val} <br/><span id="hlpbtn"><span style="float:left;" >Request</span><img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style="float:left;"/> 
+						 <span style="display: none;" class="titlepopup">This column calculates the balance of work less overtime, TOIL and any Flex-time you use up.  The balance will be requested as Flex-time when you submit your timesheet</span></span>
+						<br/><span class="hhmm" >hh.mm </span></span>
+                    </div>
+                    </div>
+                    <div class="freezedHeader">
+                    	<span style="border-bottom: 1px solid #cde2f5 !important;  width: 100%;  float: left;">FLEX-TIME </span> <br/>
+	                	<div style="pointer-events: visible;">
+							<span style="float:left;">b/f {!Flexi_bought_forward_val} <br/><span id="hlpbtn"><span style="float:left;" >Request</span><img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style="float:left;"/> 
+							 <span style="display: none;" class="titlepopup">This column calculates the balance of work less overtime, TOIL and any Flex-time you use up.  The balance will be requested as Flex-time when you submit your timesheet</span></span>
+							<br/><span class="hhmm" >hh.mm </span></span>
+	                    </div>
+                    </div>
+			   	</apex:facet>
+                	<apex:inputField value="{!ot.ts.xcdhcm__Flexi_claim__c}" id="if24" onmousedown="disable(this.id);" style="background-color: #dddddd; box-shadow: none; color: #666; width: 60% !important; padding: 1px 1px 1px 1px;" />
+            </apex:column>
+            
+            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}" style="{!IF((ot.ts.xcdhcm__Toil_use__c == 0.0 && (ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c))))), 'width: 7% !important; background-color: #f5f5f5', 'width: 7% !important;')}">
+            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+                <apex:facet name="header">
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:115%;"><br/>Adjustment<br/>hh.mm</span>
+                    <div class="freezedHeader">
+                        <br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:65%;"><br/>Adjustment<br/>hh.mm</span>
+                    </div>
+			   	</apex:facet>
+			   	<apex:outputText rendered="{!(ot.ts.xcdhcm__Date__c <= TODAY())}">
+                	<apex:inputField value="{!ot.ts.xcdhcm__Adjustment__c}" id="if25" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" style="{!IF(isAdjustmentEditable == false ,'background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;','')}" />
+                </apex:outputText>
+            </apex:column>
+            
+            <!-- START :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+            <apex:column rendered="{!AND(timesheetVsTrueComponent != null,contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}" style="{!IF((ot.ts.xcdhcm__Toil_use__c == 0.0 && (ot.ts.xcdhcm__Leave_booked__c != 0.0 || ot.ts.xcdhcm__Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.xcdhcm__Date__c)) || IF(OR(jobrole_pattern = 'Work cycle - days', jobrole_pattern = 'Work cycle - hours'), ot.ts.xcdhcm__Due__c == 0, NOT(contains(workingdays, ot.ts.xcdhcm__Day__c))))), 'width: 7% !important; background-color: #f5f5f5', 'width: 7% !important;')}">
+            <!-- END :: 21/06/2018 NPPD-1162 input Due on Timesheet modified by Ranjeet -->
+                <apex:facet name="header">
+					FLEX-TIME<br/>
+					<div style="pointer-events: visible;">
+					<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><span id="hlpbtn">Flex total<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+					<span style="display: none;" class="titlepopup">Shows the running total balance at the end of each day.</span></span> <br/>hh.mm</span>
+						<div class="freezedHeader">
+				   			FLEX-TIME<br/>
+				   			<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><span id="hlpbtn">Flex total<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+							<span style="display: none;" class="titlepopup">Shows the running total balance at the end of each day.</span></span> <br/>hh.mm</span>
+				   		</div>
+			   		</div>
+					
+			   	</apex:facet>
+			   	
+			   	<apex:outputText rendered="{!(ot.ts.xcdhcm__Date__c <= TODAY())}">
+				<apex:inputText value="{!runningFlexTime[rowCounter]}" id="if26" onchange="calculateWorked(this.id);" style="background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;pointer-events: none;width: 60% !important;" />
+                </apex:outputText>
+                
+            </apex:column>
+            
+			</apex:pageBlockTable> 
+			<br/>
+        <apex:outputLabel rendered="{!TimeSheetRecordList.size!=0}" value="{!$Label.xcdhcm__timesheet_declaration}" style="font-weight: bold; font-size: 13px;float:left;padding-bottom: 1% !important;"/><br/>
+			<br/>
+			<apex:outputPanel id="ButtonsId1" rendered="{!TimeSheetRecordList.size!=0}">
+    <table style="width:100%;" cellpadding="5px;" cellspacing="5px">
+        <tr>
+            <td style=" width:35%;border: 1.5px solid black;">
+                <apex:repeat value="{!TimesheetNotes}" var="f">
+                    <apex:outputText value="{!f}" style="font-size: 13px; height:25px;"/><br/>
+                </apex:repeat>
+            </td>
+            <td style=" margin-left: 10%; padding-left:5%;" valign="bottom" >
+                <apex:outputPanel >
+				
+				<apex:commandButton value="{!$Label.xcdhcm__timesheetbsave}" action="{!saveTimeSheets}" id="btnBottomSave" onClick="disableButton(this,'saveBtn');" reRender="errorId,ButtonsId,theform" style="{!if(((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null) || (TimesheetEditablePermission == true && approvalStatus!='Confirmed')),'','opacity:0.5; pointer-events: none;')}"/>
+				<apex:commandButton value="{!$Label.xcdhcm__timesheetbsubmittimesheet}" id="btnSubmit" action="{!submitForApprove}" rendered="{!TS_approver != 'yes'}" rerender="popup,errorId,ButtonsId,ButtonsId1" onClick="disableButton(this,'saveBtn');" style="{!if((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null),'','opacity:0.5; pointer-events: none;')}"/>
+                <apex:commandButton value="{!$Label.xcdhcm__timesheetbapprovereject}" action="{!approveRejectTS}" rendered="{!TS_approver == 'yes'}" onClick="disableButton(this);" rerender="errorId,SummaryPanel,ButtonsId,ButtonsId1" style="{!if(approvalStatus=='Awaiting Approval','pointer-events: visible;','opacity:0.5; pointer-events: none;')}"/> 
+                <apex:commandButton value="{!$Label.xcdhcm__timesheetbcancel}" id="btnBottomCancel" action="{!cancelTS}" onClick="disableButton(this);" rerender="errorId,SummaryPanel,ButtonsId,ButtonsId1" style="pointer-events: visible;"/> 
+		</apex:outputPanel>
+            </td>
+        </tr>
+    </table>
+    </apex:outputPanel><br/>
+    <!-- popup -->
+    <apex:outputPanel id="popup">
+		<apex:outputPanel styleClass="popupBg" rendered="{!(displayPopup)}"/>
+		<apex:outputPanel id="popup1" styleClass="customPopup" layout="block" rendered="{!(displayPopup)}">
+			<center>
+				<apex:outputtext id="oText2" value="{! $Label.Confirm_message_to_submit_timesheet}"/>
+				<br />
+					<apex:commandButton value="{!$Label.xcdhcm__timesheetbok}" action="{!acceptTSApproval}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId,ButtonsId1,theblock" styleClass="butt"/>
+					<apex:commandButton value="{!$Label.xcdhcm__timesheetbcancel}" action="{!cancelTSApproval}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId,ButtonsId1,theblock" styleClass="butt"/>
+			</center>
+		</apex:outputPanel>
+	</apex:outputPanel>
+	<!-- popup -->
+	
+	<div style="border-bottom: 2px solid #63a4c5!important;"></div>
+			<!-- Summary --> 
+    <apex:outputPanel id="SummaryPanel" rendered="{!AND(TimeSheetRecordList.size!=0,contains(timesheetVsTrueComponent,'Totals_section__c'),OR(Timeperiod.xcdhcm__Timesheet_frequency__c == null,Timeperiod.xcdhcm__Timesheet_frequency__c == 'Monthly'))}">
+ 		<table style="width: 40%!important;float: right;margin-right: 30%;">
+			<tr style="width:100%!important;">
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="Week"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="font-weight: bold;color: #999999;white-space: nowrap;">
+					<apex:outputText value="Balance b/f"/>
+				</td>
+				</apex:outputLabel>
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="1"/>
+				</td>
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="2"/>
+				</td>
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="3"/>
+				</td>
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="4"/>
+				</td>
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="5"/>
+				</td>
+					<td style="width:10%!important;font-weight: bold;color: #999999;">
+				<apex:outputText value="6"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="font-weight: bold;color: #999999;white-space: nowrap;">
+					<apex:outputText value="Balance c/f"/>
+				</td>
+				</apex:outputLabel>
+			</tr>    
+			
+			<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Hours_Input_Start_End_Break__c'),contains(timesheetVsTrueComponent,'Hours_Input_Total_hours__c'))}">
+			<tr style="width:100%!important;">
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="Worked"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;">
+					<apex:outputText value=""/>
+				</td>
+				</apex:outputLabel>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w1_Worked}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w2_Worked}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w3_Worked}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w4_Worked}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w5_Worked}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w6_Worked}"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;">
+					<apex:outputText value=""/>
+				</td>
+				</apex:outputLabel>
+			</tr>    
+			</apex:outputLabel>
+			
+			<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'))}">
+			<tr style="width:100%!important;">
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="Flex"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!Flexi_bought_forward_val}"/>
+				</td>
+				</apex:outputLabel>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w1_Flexi}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w2_Flexi}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w3_Flexi}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w4_Flexi}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w5_Flexi}"/>
+				</td>
+					<td style="width:10%!important;background-color: #f5f5f5">
+				<apex:outputText value="{!w6_Flexi}"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!Flexi_carry_forward_val}"/>
+				</td>
+				</apex:outputLabel>
+			</tr>    
+			</apex:outputLabel>
+			
+			<apex:outputLabel rendered="{!contains(timesheetVsTrueComponent,'Toil_Claim__c')}">
+			<tr style="width:100%!important;">
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="TOIL"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!Toil_bought_forward_val}"/>
+				</td>
+				</apex:outputLabel>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w1_Toil}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w2_Toil}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w3_Toil}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w4_Toil}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w5_Toil}"/>
+				</td>
+					<td style="width:10%!important;background-color: #f5f5f5">
+				<apex:outputText value="{!w6_Toil}"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!Toil_carry_forward_val}"/>
+				</td>
+				</apex:outputLabel>
+			</tr>  
+			</apex:outputLabel>  
+			
+			<apex:outputLabel rendered="{!contains(timesheetVsTrueComponent,'Leave__c')}">
+			<tr style="width:100%!important;">
+				<td style="width:10%!important;font-weight: bold;color: #999999; ">
+					<apex:outputText value="Leave"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;">
+					<apex:outputText value=""/>
+				</td>
+				</apex:outputLabel>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w1_Leave}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w2_Leave}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w3_Leave}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w4_Leave}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w5_Leave}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w6_Leave}"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;">
+					<apex:outputText value=""/>
+				</td>
+				</apex:outputLabel>
+			</tr>    
+			</apex:outputLabel>
+			
+			<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Overtime_Input__c'),contains(timesheetVsTrueComponent,'Overtime_Output__c'))}">
+			<tr style="width:100%!important;">
+				<td style="width:10%!important;font-weight: bold;color: #999999;">
+					<apex:outputText value="Overtime"/>
+				</td>
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;">
+					<apex:outputText value=""/>
+				</td>
+				</apex:outputLabel>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w1_Overtime}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w2_Overtime}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w3_Overtime}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w4_Overtime}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5">
+					<apex:outputText value="{!w5_Overtime}"/>
+				</td>
+				<td style="width:10%!important;background-color: #f5f5f5"> 
+					<apex:outputText value="{!w6_Overtime}"/>
+				</td> 
+				<apex:outputLabel rendered="{!OR(contains(timesheetVsTrueComponent,'Toil_Claim__c'),contains(timesheetVsTrueComponent,'Flex_Daily_flex__c'),contains(timesheetVsTrueComponent,'Flex_Adjustment_Running_balance__c'))}">
+				<td style="width:10%!important;">
+					<apex:outputText value=""/>
+				</td>
+				</apex:outputLabel>
+			</tr>    
+			</apex:outputLabel>
+	    </table>
+	</apex:outputPanel>
+    <!-- Summary -->
+    
+		</apex:pageBlock>
+		<script type="text/javascript">
+			function isNumberKey(evt)
+			{
+			   var charCode = (evt.which) ? evt.which : evt.keyCode;
+			   if (charCode != 46 && charCode > 31 && charCode != 37 && charCode != 39 && charCode != 45 && (charCode < 48 || charCode > 57))
+			      return false;
+			
+			   return true;
+			}
+			
+			/*To disable the button*/
+			function disableButton(objBtn,compo) 
+			{
+			    objBtn.disabled = true;
+			    objBtn.style.color='#336699';
+			    objBtn.value='Processing...';
+			    window.scrollTo(0, 0);
+				if(compo == 'saveBtn')
+				{
+					$("[id$='btnTopSave']").val('Processing...');
+					$("[id$='btnBottomSave']").val('Processing...');
+				}
+				$("[id$='btn1']").prop('disabled', true);
+				$("[id$='btnTopSave']").prop('disabled', true);
+				$("[id$='btnTopCancel']").prop('disabled', true);
+				$("[id$='btnBottomSave']").prop('disabled', true);
+				$("[id$='btnSubmit']").prop('disabled', true);
+				$("[id$='btnBottomCancel']").prop('disabled', true);
+			}
+			
+			/*To disable the inputfield(which will manipulate automatically)*/
+			function disable(idval)
+			{
+			    /*document.getElementById(idval).disabled = true;*/
+			    document.getElementById(idval).setAttribute("readonly", "true"); 
+			}
+			
+			/*To disable the notes field*/
+			function disableNotes(idval)
+			{
+			    document.getElementById(idval).disabled = true;
+			}
+			
+			/*To remove --none-- option in picklist*/
+			function removeNone(idval)
+			{
+			    var list = document.getElementById(idval);
+			   // alert(list.options[0].text);
+			    if(list.options[0].text == '--None--')
+			    {
+			    	list.remove(0);
+			    }
+			}
+			
+			/*Calculating number of hours worked, Balance, Flexi claim*/
+			function calculateWorked(idval) 
+			{
+				var id = idval.split(':if');   
+				var row = id[0].split(':').pop();
+			    var reduceTimeWorkedId ='{!reduceTimeWorkedId}'; 
+			    var workingTimeLeaveId = '{!workingTimeLeaveId}'; 
+			    var jobpattern = "{!jobrole_pattern}";
+			    var componentsInPage = '{!timesheetVsTrueComponent}';
+			    var calVal = 0.00;
+			    var leavebooked = 0.00;
+			    var worked = 0.00;
+			    var calBalance = 0.00;
+			    var toilClaim = 0.00;
+			    var overtimeClaim = 0.00;
+			    var dailyAdjustment = 0.00;
+			    var dailyFlex = 0.00;
+			    
+			    //Update the Total hours worked upon start and end time change
+			    if(componentsInPage.includes('Hours_Input_Start_End_Break__c'))
+			    {
+			    	var sthours  = parseInt(document.getElementById(id[0]+':if3').value);
+				    var stmins = parseInt(document.getElementById(id[0]+':if4').value);
+				    var endhours = parseInt(document.getElementById(id[0]+':if5').value);
+				    var endmins = parseInt(document.getElementById(id[0]+':if6').value);
+				    var breaks = parseInt(document.getElementById(id[0]+':if7').value);
+				    if(!(isNaN(sthours)) && !(isNaN(stmins)) && !(isNaN(endhours)) && !(isNaN(endmins)))
+				    {
+				    	if(((endhours*60)+endmins) < ((sthours*60)+stmins))
+				    	{
+				    		calVal = ((((endhours*60)+endmins) - ((sthours*60)+stmins)-breaks)/60)+24.00;
+				    	}
+				    	else
+				    	{
+				    		calVal = ((((endhours*60)+endmins) - ((sthours*60)+stmins)-breaks)/60);
+				    	}
+				        document.getElementById(id[0]+':if8').value =  (parseInt(calVal) + (calVal.toFixed(2) - parseInt(calVal))*0.6).toFixed(2) ;
+				        worked = document.getElementById(id[0]+':if8').value;
+					}	
+			    }
+			    
+			    //check if the hours worked is a userinput
+			    if(componentsInPage.includes('Hours_Input_Total_hours__c'))
+			    {
+			    	worked = document.getElementById(id[0]+':if9').value;
+			    	worked = parseFloat(worked).toFixed(2);
+			    }
+			    
+			    //Get the due value
+			    var due = 0.00;
+			    if(componentsInPage.includes('Due__c'))
+			    {
+			    	due = document.getElementById(id[0]+':if10').value;
+			    	//due = (due).toFixed(2);
+			    }
+			    
+			    //Get the leave value
+			    var leavebooked = 0.00;
+			    var leavebooked1 = 0.00;
+			    var leavebooked2 = 0.00;
+			    if(componentsInPage.includes('Leave__c'))
+			    {
+			    	//Get the user input values for the irregular employees
+			    	if(jobpattern == 'Irregular shift pattern' || jobpattern == 'Flexible working days')
+			    	{
+			    		leavebooked1 = document.getElementById(id[0]+':if11').innerHTML;
+    					leavebooked2 = document.getElementById(id[0]+':if12').innerHTML;
+			    	}
+			    	else
+			    	{
+			    		leavebooked1 = document.getElementById(id[0]+':if13').innerHTML;
+    					leavebooked2 = document.getElementById(id[0]+':if14').innerHTML;
+    					if(leavebooked1 > 0)
+				        {
+				        	//START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+				        	var leavebooked1Link = document.getElementById(id[0]+':leavebooked1Id').getAttribute("href");
+                            leavebooked1Link = decodeURIComponent(leavebooked1Link).split('/');
+                            leavebooked1Link = leavebooked1Link[leavebooked1Link.length -1].split('\'');
+                            var leavebooked1Id = leavebooked1Link.length > 0 ? leavebooked1Link[0] : "InvalidId";
+                            console.log('workingTimeLeaveId = '+workingTimeLeaveId+',leavebooked1Id = '+leavebooked1Id );
+                            if(leavebooked1Id && workingTimeLeaveId.includes(leavebooked1Id))
+                            //END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+				    		{
+				    			leavebooked = leavebooked1;
+				    		}
+				        }
+				        if(leavebooked2 > 0)
+				        {
+				        	//START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+                            var leavebooked2Link = document.getElementById(id[0]+':leavebooked2Id').getAttribute("href");
+				    		leavebooked2Link = decodeURIComponent(leavebooked2Link).split('/');
+				    		leavebooked2Link = leavebooked2Link[leavebooked2Link.length -1].split('\'');
+                            var leavebooked2Id = leavebooked2Link.length > 0 ? leavebooked2Link[0] : "InvalidId";
+                            console.log('workingTimeLeaveId = '+workingTimeLeaveId+',leavebooked2Id = '+leavebooked2Id );
+				    		if(leavebooked2Id && workingTimeLeaveId.includes(leavebooked2Id))
+				    		//END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+				    		{
+				    			leavebooked = (((parseInt(leavebooked)*60) + ((leavebooked - parseInt(leavebooked))*100)) + ((parseInt(leavebooked2)*60) + ((leavebooked2 - parseInt(leavebooked2))*100)))/60;
+				    			leavebooked = (parseInt(leavebooked) + (leavebooked.toFixed(2) - parseInt(leavebooked))*0.6).toFixed(2);
+				    		}
+				        }
+			    	}
+			    }
+				//Update the balance column Balance = worked + leave - due 			    
+			    if(componentsInPage.includes('Balance__c') && !isNaN(due) && worked!=null)
+			    {
+			    	calBalance = parseFloat((((parseInt(worked)*60) + ((worked - parseInt(worked))*100))/60)) - parseFloat((((parseInt(due)*60) + ((due - parseInt(due))*100))/60)) + parseFloat((((parseInt(leavebooked)*60) + ((leavebooked - parseInt(leavebooked))*100))/60));
+			        calBalance = parseFloat(calBalance).toFixed(2);
+			        calBalance = (parseInt(calBalance) + (calBalance - parseInt(calBalance))*0.6).toFixed(2);
+			        document.getElementById(id[0]+':if15').value = calBalance;
+			    }
+			    
+			    //Get the Overtime values
+			    if(componentsInPage.includes('Overtime_Output__c'))
+			    {
+		    		var overtimeClaim1 = document.getElementById(id[0]+':if16').value;
+		    		var overtimeClaim2 = document.getElementById(id[0]+':if17').value;
+			        if(overtimeClaim1 > 0)
+			        {
+			        
+			        	//START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+			        	var overtime1Link = document.getElementById(id[0]+':overtime1Id').getAttribute("href");
+			        	overtime1Link = decodeURIComponent(overtime1Link).split('/');
+			        	overtime1Link = overtime1Link[overtime1Link.length -1].split('\'');
+			    		var overtime1Id = overtime1Link.length > 0 ? overtime1Link[0] : "InvalidId";
+			    		if(overtime1Id && reduceTimeWorkedId.includes(overtime1Id))
+			    		//END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+			    		{
+			    			overtimeClaim = overtimeClaim1;
+			    		}
+			        }
+			        if(overtimeClaim2 > 0)
+			        {
+			       		//START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+			        	var overtime2Link = document.getElementById(id[0]+':overtime2Id').getAttribute("href");
+			    		overtime2Link = decodeURIComponent(overtime2Link).split('/');
+			    		overtime2Link = overtime2Link[overtime2Link.length -1].split('\'');
+			    		var overtime2Id = overtime2Link.length > 0 ? overtime2Link[0] : "InvalidId";
+			    		if(overtime2Id && reduceTimeWorkedId.includes(overtime2Id))
+			    		//END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+			    		{
+			    			overtimeClaim = (((parseInt(overtimeClaim)*60) + ((overtimeClaim - parseInt(overtimeClaim))*100)) + ((parseInt(overtimeClaim2)*60) + ((overtimeClaim2 - parseInt(overtimeClaim2))*100)))/60;
+			    			overtimeClaim = (parseInt(overtimeClaim) + (overtimeClaim.toFixed(2) - parseInt(overtimeClaim))*0.6).toFixed(2);
+			    		}
+			        }
+			    }
+			    
+			    //Get the toil claim value
+			    if(componentsInPage.includes('Toil_Claim__c'))
+			    {
+			    	toilClaim = document.getElementById(id[0]+':if23').value;
+			    	if(isNaN(due))
+			    	{
+			    		toilClaim = 0.00;
+			    	}
+			    }
+			    
+			    //Get the overtime input values and update the standard payable column 
+			    if(componentsInPage.includes('Overtime_Input__c'))
+			    {
+			    		document.getElementById('Msg1'+row).style.display = "none";
+					document.getElementById('Msg2'+row).style.display = "none";
+					var RE = /^\d{0,2}(\.\d{1})?\d{0,1}$/;
+					var rate1 = document.getElementById(id[0]+':if19').value;
+					var rate2 = document.getElementById(id[0]+':if21').value;
+					var rate1mins = ((rate1 - parseInt(rate1))*100).toFixed(0);
+					var rate1hr = rate1 - rate1mins;
+					var rate2mins = ((rate2 - parseInt(rate2))*100).toFixed(0);
+					var rate2hr = rate2 - rate2mins;
+					if((RE.test(rate1) == false) || rate1mins >= 60 || rate1hr >= 24 || isNaN(rate1mins))
+					{
+						document.getElementById('Msg1'+row).style.display = "block";
+					}
+					else if((RE.test(rate2) == false) || rate2mins >= 60 || rate2hr >= 24 || isNaN(rate2mins))
+					{
+						document.getElementById('Msg2'+row).style.display = "block";
+					}
+					else
+					{
+						//START :: 12/06/2018 NPDD-1609 Overtime and Timesheet modify by Sabir
+				    		var reasons1 = document.getElementById(id[0]+':if20').value;
+				    		var reasons2 = document.getElementById(id[0]+':if22').value;
+						var reducesWorkingTimeValue ='{!reducesWorkingTimeValue}'; 
+						var reducesWorkingTimeValueList = reducesWorkingTimeValue.split(",");
+						
+						if(reducesWorkingTimeValueList.indexOf(reasons1) < 0) 
+						{
+							rate1 = 0.00;
+ 							//document.getElementById(id[0]+':if19').value = rate1.toFixed(2);						
+ 						}
+						
+						if(reducesWorkingTimeValueList.indexOf(reasons2) < 0 ) 
+						{
+							rate2 = 0.00;
+ 							//document.getElementById(id[0]+':if21').value = rate2.toFixed(2);					
+						}
+						
+						var calValhrs = ((parseInt(worked)*60 + (worked - parseInt(worked))*100) + (parseInt(leavebooked)*60 + (leavebooked - parseInt(leavebooked))*100) - (parseInt(rate1)*60 + (rate1 - parseInt(rate1))*100) - (parseInt(rate2)*60 + (rate2 - parseInt(rate2))*100))/60;
+						var calValhrsmins = (parseInt(calValhrs) + (calValhrs.toFixed(2) - parseInt(calValhrs))*0.6).toFixed(2) ;
+						document.getElementById(id[0]+':if18').value =calValhrsmins;		
+						//END :: 12/06/2018 NPDD-1609 Overtime and Timesheet modify by Sabir					
+					}
+					overtimeClaim = ((parseInt(rate1)*60 + (rate1 - parseInt(rate1))*100) + (parseInt(rate2)*60 + (rate2 - parseInt(rate2))*100))/60;
+					overtimeClaim = (parseInt(overtimeClaim) + (overtimeClaim.toFixed(2) - parseInt(overtimeClaim))*0.6).toFixed(2);
+			    }
+			    			    
+			    //Update the Flex time column.
+			    if(componentsInPage.includes('Flex_Daily_flex__c'))
+			    {
+					dailyFlex = ((((parseInt(calBalance)*60) + ((calBalance - parseInt(calBalance))*100)) - ((parseInt(toilClaim)*60) + ((toilClaim - parseInt(toilClaim))*100)) - ((parseInt(overtimeClaim)*60) + ((overtimeClaim - parseInt(overtimeClaim))*100)) + ((parseInt(dailyAdjustment)*60) + ((dailyAdjustment - parseInt(dailyAdjustment))*100)))/60).toFixed(2); 
+		    			dailyFlex = (parseInt(dailyFlex) + (dailyFlex - parseInt(dailyFlex))*0.6).toFixed(2);
+		   	 		document.getElementById(id[0]+':if24').value = dailyFlex;
+			    }
+			    
+			    //Update the running Flex time column.
+			    if(componentsInPage.includes('Flex_Adjustment_Running_balance__c'))
+			    {
+				    var flexBroughForward = {!Timeperiod.Flexi_bought_forward__c}+'';
+				    flexBroughForward = (parseInt(flexBroughForward) + (flexBroughForward - parseInt(flexBroughForward))*0.6).toFixed(2);
+				    if(row == 0 && (flexBroughForward != null || flexBroughForward != ''))
+				    {
+				    	var firstRowRunningVal = flexBroughForward;
+				    	var firstRowbalance = document.getElementById(id[0]+':if15').value;
+				    	var firstRowadjustmenthours = document.getElementById(id[0]+':if25').value;
+				    	var firstRowRunningFlex = parseFloat((((parseInt(firstRowRunningVal)*60) + ((firstRowRunningVal - parseInt(firstRowRunningVal))*100))/60)) + parseFloat((((parseInt(firstRowbalance)*60) + ((firstRowbalance - parseInt(firstRowbalance))*100))/60))  -  parseFloat((((parseInt(toilClaim)*60) + ((toilClaim - parseInt(toilClaim))*100))/60))  -  parseFloat((((parseInt(overtimeClaim)*60) + ((overtimeClaim - parseInt(overtimeClaim))*100))/60))  + parseFloat((((parseInt(firstRowadjustmenthours)*60) + ((firstRowadjustmenthours - parseInt(firstRowadjustmenthours))*100))/60)); 
+				    	firstRowRunningFlex = parseFloat(firstRowRunningFlex).toFixed(2);
+				    	document.getElementById(id[0]+':if26').value = (parseInt(firstRowRunningFlex) + (firstRowRunningFlex - parseInt(firstRowRunningFlex))*0.6).toFixed(2);
+				    	row = parseInt(row +1);
+				    }
+				    
+				    var iterateEnds = {!runningTotalIndex};
+				    for(var i=row; i<iterateEnds; i++)
+				    {
+				    	var balanceColId = "[id$='"+':'+String(i)+':if15'+"']";
+				    	var adjustHourColId = "[id$='"+':'+String(i)+':if25'+"']";
+				    	var previousRunningFlexColId = "[id$='"+':'+String(i-1)+':if26'+"']";
+				    	var currentRunningFlexColId = "[id$='"+':'+String(i)+':if26'+"']";
+				    	var toilClaimId = "[id$='"+':'+String(i)+':if23'+"']";
+				    	
+				    	var balanceVal = $(balanceColId).val();
+				    	var adjustHourVal = $(adjustHourColId).val();
+				    	var previousDayFlexVal = $(previousRunningFlexColId).val();
+				    	
+				    	overtimeClaim = 0.00;
+				    	var toilVisible = $(toilClaimId);
+						if(toilVisible.length) 
+						{
+				    		toilClaim = $(toilClaimId).val();
+				    	}
+				    	var ot1Id;
+				    	var ot2Id;
+				    	var ot1Value = 0.00;
+				    	var ot2Value = 0.00;
+				    	var ot1LinkId;
+				    	var ot2LinkId;
+				    	
+				    	if(componentsInPage.includes('Overtime_Output__c'))
+					    {
+				    		ot1Id = "[id$='"+':'+String(i)+':if16'+"']";
+				    		ot2Id = "[id$='"+':'+String(i)+':if17'+"']";
+				    		ot1Value = $(ot1Id).val();
+				    		ot2Value = $(ot2Id).val();
+					        if(ot1Value > 0)
+					        {
+					        	//var overtime1Link = document.getElementById(id[0]+':overtime1Id').getAttribute("href");
+					        	ot1LinkId = "[id$='"+':'+String(i)+':overtime1Id'+"']";
+					        	var overtime1Link = $(ot1LinkId).attr("href");
+					        	//START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+					    		overtime1Link = decodeURIComponent(overtime1Link).split('/');
+					    		overtime1Link = overtime1Link[overtime1Link.length -1].split('\'');
+					    		var overtime1Id = overtime1Link.length > 0 ? overtime1Link[0] : "InvalidId";
+					    		if(overtime1Id && reduceTimeWorkedId.includes(overtime1Id))
+					    		//END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+					    		{
+					    			overtimeClaim = ot1Value;
+					    		}
+					        }
+					        if(ot2Value > 0)
+					        {
+					        	//var overtime2Link = document.getElementById(id[0]+':overtime2Id').getAttribute("href");
+					        	ot2LinkId = "[id$='"+':'+String(i)+':overtime2Id'+"']";
+					        	var overtime2Link = $(ot2LinkId).attr("href");
+					        	//START :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+					    		overtime2Link = decodeURIComponent(overtime2Link).split('/');
+					    		overtime2Link = overtime2Link[overtime2Link.length -1].split('\'');
+					    		var overtime2Id = overtime2Link.length > 0 ? overtime2Link[0] : "InvalidId";
+					    		if(overtime2Id && reduceTimeWorkedId.includes(overtime2Id))
+					    		//END :: 07/02/2018 NPAY-413 Alignment in Project Timesheets modified by Farhan
+					    		{
+					    			overtimeClaim = (((parseInt(overtimeClaim)*60) + ((overtimeClaim - parseInt(overtimeClaim))*100)) + ((parseInt(ot2Value)*60) + ((ot2Value - parseInt(ot2Value))*100)))/60;
+					    			overtimeClaim = (parseInt(overtimeClaim) + (overtimeClaim.toFixed(2) - parseInt(overtimeClaim))*0.6).toFixed(2);
+					    		}
+					        }
+					    }
+					    
+				    	if(componentsInPage.includes('Overtime_Input__c'))
+				    	{
+				    		ot1Id = "[id$='"+':'+String(i)+':if19'+"']";
+				    		ot2Id = "[id$='"+':'+String(i)+':if21'+"']";
+				    		ot1Value = $(ot1Id).val();
+				    		ot2Value = $(ot2Id).val();
+				    		overtimeClaim = ((parseInt(ot1Value)*60 + (ot1Value - parseInt(ot1Value))*100) + (parseInt(ot2Value)*60 + (ot2Value - parseInt(ot2Value))*100))/60;
+						overtimeClaim = (parseInt(overtimeClaim) + (overtimeClaim.toFixed(2) - parseInt(overtimeClaim))*0.6).toFixed(2);
+				    	}
+				    	var runningFlex = 0.00;
+			    		runningFlex = parseFloat((((parseInt(previousDayFlexVal)*60) + ((previousDayFlexVal - parseInt(previousDayFlexVal))*100))/60)) + parseFloat((((parseInt(balanceVal)*60) + ((balanceVal - parseInt(balanceVal))*100))/60)) -  parseFloat((((parseInt(toilClaim)*60) + ((toilClaim - parseInt(toilClaim))*100))/60))  -  parseFloat((((parseInt(overtimeClaim)*60) + ((overtimeClaim - parseInt(overtimeClaim))*100))/60)) + parseFloat((((parseInt(adjustHourVal)*60) + ((adjustHourVal - parseInt(adjustHourVal))*100))/60));
+						runningFlex =runningFlex.toFixed(2);
+				    	runningFlex = (parseInt(runningFlex) + (runningFlex - parseInt(runningFlex))*0.6).toFixed(2);
+				    	$(currentRunningFlexColId).val(parseFloat(runningFlex).toFixed(2));
+				    	
+				    }
+			    }
+			    
+			
+			
+			
+			
+			
+			
+			
+			
+			}
+		</script>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,1050 @@
+<apex:page > <!-- standardController="Employee_Detail__c" sidebar="false" tabStyle="My_Timesheet__tab"
+    showHeader="true" extensions="TimeSheetController" action="{!TimeSheetRecords}" >
+    START :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+	<apex:form id="theform" >
+    	<apex:stylesheet value="{!URLFOR($Resource.Css,'Timesheet.css')}" id="thePage"/>
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<apex:outputPanel id="styleclsOutputPanel" rendered="{!if(((TimesheetEditablePermission == false && (approvalStatus == 'Awaiting Approval' || approvalStatus == 'Approved')) || approvalStatus == 'Confirmed'),true,false)}">
+			<style type="text/css">
+ 				   textarea 
+				   {
+				   pointer-events: none;
+				   display: block;
+				   }
+				   textarea:focus {
+				   outline: none;
+				   }
+				   body .pbBody table.list tr.dataRow th, body .pbBody table.list tr.dataRow td {
+				   pointer-events: none;
+				   }
+				    
+				   .picklistArrowRight {
+				   pointer-events: none;
+				   }
+				   .picklistArrowLeft {
+				   pointer-events: none;
+				   }
+				   .pbBody a:hover, .lbBody a:hover {
+				   pointer-events: none;   
+				   } 
+				   .pbBody, .pbBody a, .pbBody td, .lbBody a, .lbBodyDescription, .list .headerRow .noRowsHeader {
+				   pointer-events: none;   
+				   }  
+				   .nodisplay {
+				   display: none;
+				   }   
+				  .apexp .totalRow {
+				    font-weight: bold;
+				    background-color: #797970;
+				}
+
+			</style> 
+			
+			<script>
+			$(document).ready(function()
+         	{
+         		$("[id$=pbtableId] :input").prop("disabled",true);
+			});
+			</script>
+			<!-- END :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+		</apex:outputPanel>
+    
+		<style>
+		.list tr td
+		{
+		padding-top:5px !important;
+		}
+		
+		.list tr td:last-child,.list tr th:last-child
+		{
+		width:7.6% !important;
+		}
+		.helpButton,.helpButtonOn
+		{
+		z-index:100;
+		position:relative;
+		}
+
+		#hlpbtn:hover .titlepopup
+		{
+			display: block !important;
+		    width: 300px;
+		    background: #FEFDB9;
+		    padding: 4px;
+		    color: #000;
+		    position: absolute;
+		    z-index: 1;
+		    top: 175px;
+		    border: 1px solid #FFA603;
+		    text-align: justify;
+		    white-space: normal;
+		    font-weight: normal;
+		
+		}
+		#hlpbtn:hover .titlepopup2
+			{
+				display: block !important;
+			    width: 300px;
+			    background: #FEFDB9;
+			    padding: 4px;
+			    color: #000;
+			    position: absolute;
+			    z-index: 1;
+			    top: 175px;
+			    border: 1px solid #FFA603;
+			    text-align: justify;
+			    white-space: normal;
+			    font-weight: normal;
+			    right:5px;
+			}
+			
+			#hlpbtn img
+			{
+			    height: 12px;
+			    margin-left: 3px;
+			    margin-top: -1px;
+			    opacity:0.50;
+			}
+			
+			#hlpbtn img:hover
+			{
+			    opacity:1.0;
+			    
+			}
+			img[title]
+			{
+			font-size:19px;
+			}
+			@-moz-document url-prefix()
+			        {
+			         .hhmm
+			         {
+			         margin-left:2px !important;
+			         }
+			         .mm
+			         {
+			         margin-left: -15px;
+			         }
+			        }
+			.list td, .list th, body.oldForecast .list .last td, body.oldForecast .list .last th
+			{
+			padding: 4px 0px 4px 0px !important;
+			}
+			
+			.inputfclass
+			{
+				width:32% !important;
+			}
+			.inputfclass1
+			{
+				width:70% !important;
+			}
+			.inputfclass2
+			{
+				width:60% !important;
+			}
+			.inputfclass3 
+			{
+				width:55% !important;
+			}
+			
+			
+			@media all and (min-width: 766px) and (max-width:1050px) 
+			{
+				.selectlistt
+				{
+					width:46% !important;
+				}
+				.selectlistcol
+				{
+					width:15% !important; 
+				}	
+				.inputfclass
+				{
+					width:32% !important;
+				}
+				.inputfclass1
+				{
+					width:70% !important;
+				}
+				.inputfclass2
+				{ 
+					width:60% !important;
+				}
+				.inputfclass3
+				{
+					width:50% !important;
+				}
+				.duecol
+				{
+					width:18% !important; 
+				}
+				input
+				{
+					font-size: 9.7px;
+					padding:2px 0 2px 0;
+				}
+				select
+				{
+					font-size: 9.6px;
+					padding:2px 0 2px 0;
+				}
+				body .pbBody table.list tr th, body .pbBody table.list tr td
+				{
+					font-size: 9.7px;
+				}
+				body .pbBody table.list tr.headerRow th
+				{
+					font-size: 9px !important;
+				}	
+			}
+			
+			body .pbBody table.list tr.headerRow th 
+			{
+				background: #fff !important;
+				border-bottom: 1px solid #cde2f5 !important; 
+				border-top: none !important; 
+				color: #999999 !important;
+				border-left: none !important;
+				border-right: none !important;
+			}
+			
+			/*popup*/ 
+			
+			.popupBg 
+			{
+				background-color:black;
+				opacity: 0.70;
+				filter: alpha(opacity =   70);
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				z-index: 9998;
+				background: black !important;
+			}
+			.customPopup {
+			
+				line-height: 25px;
+				position: absolute;
+				left: 50%;
+				padding: 10px;
+				z-index: 9999;
+				text-align: center;
+				top: 150px;
+				width: 500px;
+				margin-left: -250px;
+				text-decoration: none;
+				font-weight: bold;
+				background: #ffffff !important;
+				border: 1px solid #ccc !important;
+				/*-moz-box-shadow: 4px 5px 10px #99ccff;
+				-webkit-box-shadow: 4px 5px 10px #99ccff;
+				box-shadow: 4px 5px 10px #99ccff; */
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+				color: #336699;
+			}
+			.butt {
+				border: 1px solid #d9d9d9 !important;
+				color: #999999 !important;
+				background-color: #fff !important;
+				background-image: none !important;
+				-moz-box-shadow: 2px 1px 8px #a6d6ff;
+				-webkit-box-shadow: 2px 1px 8px #a6d6ff;
+				box-shadow: 2px 1px 8px #a6d6ff;
+			}
+			.freezedHeader
+			{
+				top:0px;
+				line-height: normal;
+				position: fixed;
+				z-index:1;
+				background: #fff;
+				display:none;
+				border-bottom:1px solid #cde2f5;
+				color:#999999;
+				/*START :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan*/
+				width:35.00% !important;
+				/*END :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan*/
+				padding-bottom: 5px;
+			}
+			
+			/*popup*/
+			/*START :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time Attendance module added by Farhan*/
+			select:disabled
+			{
+	    		color: #000;
+			}
+			/*END :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time Attendance module added by Farhan*/
+			</style>
+			<script>
+					//START :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan	
+					//Jquery method to disable(non-editable) columns
+					$(document).ready(function()
+			         {
+			         	//disabling Start time, End time and Breaks columns
+			         	if({!IsTimeClocked} == true )
+			         	{
+			         		console.log('disabling invoked');
+			         		$("[id$=if3]").prop("disabled",true);
+			         		$("[id$=if4]").prop("disabled",true);
+			         		$("[id$=if5]").prop("disabled",true);
+			         		$("[id$=if6]").prop("disabled",true);
+			         		$("[id$=if7]").prop("disabled",true);
+			         	}
+			         	//disabling due column based on jobrole pattern type.
+			         	var jobrolePattern = "{!jobrole_pattern}";
+			         	if(jobrolePattern != 'Flexible working days' && jobrolePattern != 'Irregular shift pattern')
+			         	{
+			         		$("[id$=if9]").prop("disabled",true);
+			         	}
+			         	// disabling total worked, balance and running total columns.
+            			$("[id$=if8]").prop("disabled",true);
+            			$("[id$=if11]").prop("disabled",true);
+        			});
+					//END :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan	
+        			
+					$(window).scroll(function() 
+					{    
+					    var scroll = $(window).scrollTop();
+						if(scroll >= 275)
+						{
+							$('.freezedHeader').css({"display":"block"});
+							$('.titlepopup').css({"top":"67px"});
+							$('.titlepopup1').css({"top":"67px"});
+							$('.titlepopup2').css({"top":"67px"});
+							//START :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan
+							$('.titlepopup2').css({"right":"-120px"});
+							//END :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan
+						}
+						else
+						{
+							$('.freezedHeader').css({"display":"none"});
+							$('.titlepopup').css({"top":"175px"});
+							$('.titlepopup1').css({"top":"18px"});
+							//START :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan
+							$('.titlepopup2').css({"top":"175px"});
+							//END :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan
+							$('.titlepopup2').css({"right":"5px"});
+						}
+						/*var scrollleft = $(window).scrollLeft();
+						if(scrollleft > 0 )
+						{
+							$('.freezedHeader').css('left', -scrollleft + "px");
+						}
+						else
+						{
+							$('.freezedHeader').css('left', 0 + "px");
+						}
+						*/
+					});
+			</script>
+    <apex:pageBlock mode="edit" id="theblock" title="{!$Label.xcdhcm__phtimesheethours}">
+    	<apex:pageMessages id="errorId" escape="false"/>
+        <apex:pageBlockSection id="timSummJobrolSecId" columns="1" >
+            <apex:pageBlockSectionItem id="timSummJobrolId" >
+            	<apex:outputPanel id="timSummJobrolpanel" style="{!if(TS_approver == 'yes','font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt !important;' ,'pointer-events: auto;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt !important;')}">  
+            		<apex:outputLabel value="Employee" style="margin-right:5px;color: #999999;font-weight: bold;"/>
+            		<apex:outputField value="{!empDetail.Name}" style=""/>
+            		<apex:outputLabel value="{!$ObjectType.Overtime_Record__c.Fields.Job_Role__c.Label}" style="{!IF((greyOut != true), 'color: #999999;margin-left:5px;margin-right:5px;color: #999999;font-weight: bold;', 'color: #999999; margin-left:5px; margin-right:5px;color: #999999;font-weight: bold;')}"/>  
+	                <apex:actionRegion >  
+	                    <apex:selectList id="jobrolePicklist" value="{!jobroleVal}" size="1" style="{!IF((greyOut != true), 'width: 170px !important;', 'width: 170px !important;color: #999999; pointer-events: none;')}"> 
+	                    	<apex:selectOptions value="{!jobroleValues}"/> 
+	                        <apex:actionSupport action="{!getTimeSheetMonths}" event="onchange" status="processing" reRender="timSummPicklist"/> 
+	                    </apex:selectList>  
+	                </apex:actionRegion>  
+            		   
+	                <apex:outputLabel value="Period" style="{!IF((greyOut != true), 'color: #999999;margin-right:5px;color: #999999;font-weight: bold; margin-left: 10px;', 'color: #999999; margin-right:5px; margin-left: 10px; color: #999999;font-weight: bold;')}"/>  
+	                <apex:actionRegion >  
+	                    <apex:selectList id="timSummPicklist" value="{!timeSheetMonth}" size="1" style="{!IF((greyOut != true), 'width: 120px !important;', 'color: #999999; pointer-events: none;width: 120px !important;')}" > 
+	                        <apex:selectOptions value="{!TimeSheetSummaryValues}"/>  
+	                        <!-- <apex:actionSupport action="{!TimeSheetRecords}" event="onchange" status="processing"/> 
+	                    </apex:selectList>  
+	                </apex:actionRegion>  
+	                
+					<apex:actionStatus startText="Processing..." id="processing"/> 
+					<apex:commandButton id="btn1" value="{!$Label.xcdhcm__timesheethoursbgo}" action="{!nextTimeSheetRecords}" rendered="{!IF(TS_approver != 'yes',true,false)}" reRender="thePage,styleclsOutputPanel,theform,btn1,errorId" onClick="disableButton(this);" style="{!IF((greyOut != true), 'margin-left:10px;', 'margin-left:10px; display: none;')}"/>
+    				<apex:commandLink style="float:right; margin-right:5px;text-decoration:none;font-weight:bold;color: #555;" 
+	                      target="_blank" action="{!helpLinkTimesheet}" value="Help"
+	                      id="theCommandLink" />
+	                <apex:outputPanel id="ButtonsId" rendered="{!TimeSheetRecordList.size!=0}">
+	                	<!-- START :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan 
+	                	<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbsave}" action="{!saveTimeSheets}" reRender="errorId,ButtonsId,theform" id="btnTopSave" onClick="disableButton(this,'saveBtn');" style="{!if(((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null) || (TimesheetEditablePermission == true && approvalStatus!='Confirmed')),'','opacity:0.5; pointer-events: none;')}"/>
+	        			<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbcancel}" action="{!cancelTS}" id="btnTopCancel" onClick="disableButton(this);" rerender="errorId,SummaryPanel,ButtonsId"/> 
+    					<!-- END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan 
+				</apex:outputPanel> 
+				</apex:outputPanel>
+            </apex:pageBlockSectionItem> <br/>
+        </apex:pageBlockSection> 
+        <apex:outputPanel id="Infosection" rendered="{!TimeSheetRecordList.size!=0}">
+        <table style="width:100%;">
+	            <tr>
+	            	<td>
+	            		<label style="margin-left:25px;color: #999999;font-weight: bold;"> Status </label>
+	            		<label style="margin-left:5px;margin-right:15%;font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 10pt !important"> {!approvalStatus} </label>
+	            		<apex:outputPanel style="padding: 5px; border: 1.5px solid black;padding-right: 2%;" rendered="{!TimesheetBalanceSection}">
+	            			<apex:repeat value="{!$ObjectType.Overtime_Record__c.Fieldsets.Timesheet_balance}" var="tp">
+									<span  class="label" style="color: #999999;font-weight: bold;margin-left:2%;margin-right:1%;pointer-events: visible;"> {!tp.label}  
+										<span id="hlpbtn"> <img src="{!$Resource.Help_icon}"   title="{!$ObjectType.Overtime_Record__c.Fields[tp].inlineHelpText}"
+									              		style="{!IF($ObjectType.Overtime_Record__c.Fields[tp].inlineHelpText == null, 'display:none','')}" />
+									    </span>
+									</span>
+						            <apex:outputField value="{!Timeperiod[tp]}" />
+					        </apex:repeat>
+				        </apex:outputPanel>
+	            	</td>
+	            	
+	            </tr>
+	        </table>
+	      </apex:outputPanel><br/><br/>
+	     <apex:outputText Value="No records to display"
+                                rendered="{!IF(AND(jobroleVal != null,TimeSheetRecordList.Size=0),TRUE,FALSE)}" style="margin-left:20px;"/>                        
+       <apex:outputPanel >
+       <apex:variable var="rowCounter" value="{!0}"/>
+        <apex:pageBlockTable value="{!otDisplay}" var="ot" rendered="{!TimeSheetRecordList.size!=0}" id="pbtableId" columnswidth="7%,5%,10%,8.5%,8.5%,5%,5%,5%,5%,5%,5%,5%,5%,5%" cellspacing="0" cellpadding="0" style="width:100%; float: left;">
+ 	        <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 7% !important; background-color: #f5f5f5', 'width: 7% !important;')}">
+            	<apex:facet name="header">
+					DATE/DAY
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Date__c.Label}</span>
+				   	<div class="freezedHeader" >
+				   		DATE/DAY
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Date__c.Label}</span>
+				   	</div>
+				</apex:facet>
+			   	<apex:outputField value="{!ot.ts.Date__c}" id="if1" />
+            </apex:column>
+            
+            <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 5% !important; background-color: #f5f5f5', 'width: 5% !important;')}">
+                <apex:facet name="header" >
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Day__c.Label}</span>
+			   		<div class="freezedHeader" >
+			   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Day__c.Label}</span>
+			   		</div>
+				</apex:facet>
+                <apex:outputField value="{!ot.ts.Day__c}" id="if2" />
+            </apex:column>
+            
+            <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 10%;background-color: #f5f5f5', 'width: 10%;')}"> 
+                <apex:facet name="header" >
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:90%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Notes__c.Label}</span>
+			   		<div class="freezedHeader" >
+			   			<!-- START :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+			   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:30%;"><br/><br/>{!$ObjectType.Overtime__c.Fields.Notes__c.Label}</span>
+			   			<!-- END :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+			   		</div>
+				</apex:facet>
+                <apex:inputField value="{!ot.ts.Notes__c}" id="if12n" style="height: 18px !important;margin-right: 10px !important;" onkeydown="{!if(approvalStatus == 'Approved' || ($User.Id == empDetail.User__c && approvalStatus == 'Awaiting Approval'),'disableNotes(this.id);','')}"/> 
+            </apex:column>
+
+             <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 6% !important;background-color: #f5f5f5', 'width: 6%')}" styleclass="selectlistcol">
+               	<apex:facet name="header">
+               		<div style="width:120px!important;">
+               		HOURS WORKED 
+               		</div>
+               		<div style="pointer-events: visible;">
+	               		<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><span id="hlpbtn">Start time<img src="{!$Resource.Help_icon}" style=""/>
+	               		<span style="display: none;" class="titlepopup">Enter the actual times when you started and ended each working day, and the total break time in minutes</span></span>
+	               		<br/>hh &nbsp; &nbsp; &nbsp; &nbsp; <span class="mm" >mm &nbsp; &nbsp;</span></span>
+				   		<div class="freezedHeader" >
+				   			<div style="width:120px!important;">
+		               		HOURS WORKED 
+		               		</div>
+		               		<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/><span id="hlpbtn">Start time<img src="{!$Resource.Help_icon}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Enter the actual times when you started and ended each working day, and the total break time in minutes</span></span>
+		               		<br/>hh &nbsp; &nbsp; &nbsp; &nbsp; <span class="mm" >mm &nbsp; &nbsp;</span></span>
+					   	</div>
+				   	</div>
+				</apex:facet>
+			   	<!-- START :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+			   	<apex:inputField value="{!ot.ts.Time_in_hours__c}" id="if3" onfocus="removeNone(this.id);" onchange="calculateWorked(this.id);" style="{!IF(IsTimeClocked == true,'width: 40%;pointer-events: none;','width: 40%;')}" styleclass="selectlistt"/>
+				<apex:inputField value="{!ot.ts.Time_in_mins__c}" id="if4" onfocus="removeNone(this.id);" onchange="calculateWorked(this.id);" style="{!IF(IsTimeClocked == true,'width: 40%;pointer-events: none;','width: 40%;')}" styleclass="selectlistt"/>
+   			   	<!-- END :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+
+	    </apex:column> 
+            
+            <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 6% !important;background-color: #f5f5f5', 'width: 6%')}" styleclass="selectlistcol">
+               <apex:facet name="header">
+               		<div style="width:120px!important;">
+               		AND DUE 
+               		</div>
+               		<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>End time<br/>hh &nbsp; &nbsp; &nbsp; &nbsp; <span class="mm" >mm &nbsp; &nbsp;</span></span>
+			   		<div class="freezedHeader">
+			   			<div style="width:120px!important;">
+	               		AND DUE 
+	               		</div>
+	               		<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>End time<br/>hh &nbsp; &nbsp; &nbsp; &nbsp; <span class="mm" >mm &nbsp; &nbsp;</span></span>
+				   	</div>
+			   </apex:facet>
+  			   	<!-- START :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+			    <apex:inputField value="{!ot.ts.Time_out_hours__c}" id="if5" onfocus="removeNone(this.id);" onchange="calculateWorked(this.id);" style="{!IF(IsTimeClocked == true,'width: 40%;pointer-events: none;','width: 40%;')}" styleclass="selectlistt"/>
+                <apex:inputField value="{!ot.ts.Time_out_mins__c}" id="if6" onfocus="removeNone(this.id);" onchange="calculateWorked(this.id);" style="{!IF(IsTimeClocked == true,'width: 40%;pointer-events: none;','width: 40%;')}" styleclass="selectlistt"/>
+   			   	<!-- END :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+	</apex:column>
+                       
+            <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 5.3% !important; background-color: #f5f5f5', 'width: 5.3% !important;')}">
+                <apex:facet name="header">
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>Breaks&nbsp; <br/>mm</span>
+					<div class="freezedHeader">
+			   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>Breaks&nbsp; <br/>mm</span>
+			   		</div>
+			   	</apex:facet>
+			   	<apex:facet name="footer"><br/>
+					
+					<span style="float:left;width:100%;">Totals: </span>
+			   	</apex:facet>
+			    <apex:inputField value="{!ot.ts.Unpaid_breaks_minutes__c}" id="if7" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" style="" />
+			</apex:column>
+            
+            <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 8.3% !important; background-color: #f5f5f5', 'width: 8.3% !important;')}">
+                <apex:facet name="header">
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;">Total<br/>worked<br/>hh.mm</span>
+					<div class="freezedHeader">
+			   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;">Total<br/>worked<br/>hh.mm</span>
+			   		</div>
+			   	</apex:facet>
+			   	<apex:facet name="footer"><br/>
+					
+					<span style="float:left;width:100%;">{!TotalWorkedHours}</span>
+			   	</apex:facet>
+			   	<!-- START :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+		       <apex:inputField value="{!ot.ts.Worked__c}" id="if8" onmousedown="disable(this.id);" style="background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;pointer-events: none;" styleclass="inputfclass1"/>
+			   	<!-- END :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+		       
+            </apex:column>
+            
+            <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 8.3%; background-color: #f5f5f5', 'width: 8.3%;')}" styleclass="duecol" >
+                <apex:facet name="header">
+					<br/>
+					<div style="pointer-events: visible;">
+						<span style="border-top: 1px solid #cde2f5 !important;float:left;width:85%;"><br/><span id="hlpbtn">Due&nbsp;<img src="{!$Resource.Help_icon}" style=""/>
+						<span style="display: none;" class="titlepopup">Confirm or enter the number of hours you were due to work on each day</span></span> <br/>hh.mm</span>
+						<div class="freezedHeader">
+							<!-- START :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+				   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;"><br/><span id="hlpbtn">Due&nbsp;<img src="{!$Resource.Help_icon}" style=""/>
+							<!-- END :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+							<span style="display: none;" class="titlepopup">Confirm or enter the number of hours you were due to work on each day</span></span> <br/>hh.mm</span>
+				   		</div>
+			   		</div>
+			   	</apex:facet> 
+			   	<apex:facet name="footer"><br/>
+					
+					<span style="float:left;width:100%;">{!TotalDue}</span>
+			   	</apex:facet>
+			   	<!-- START :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+                <apex:inputField value="{!ot.ts.Due__c}" id="if9" onchange="calculateWorked(this.id);" style="{!IF((jobrole_pattern == 'Regular work pattern - days' || jobrole_pattern == 'Regular work pattern - hours'),'background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;pointer-events: none;','')}" styleclass="inputfclass3"/>
+            	<!-- END :: 20/04/2017 NPPD-1387 Freeze Timesheet columns when using Time & Attendance module added by Farhan 
+	    </apex:column>
+            
+            <!-- START :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+            <!-- START :: 17/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+             <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 12% !important; background-color: #f5f5f5;', 'width:12% !important;')}">
+				<apex:facet name="header">
+					LEAVE&nbsp;<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:85%;"><br/>Booked<br/>hh.mm</span>
+					<div class="freezedHeader">
+						LEAVE&nbsp;<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;"><br/>Booked<br/>hh.mm</span>
+					</div>
+				</apex:facet> 
+			<!-- END :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan  
+		   		<apex:facet name="footer"><br/>
+					
+					<span style="float:left;width:100%;">{!TotalLeave}</span>
+			   	</apex:facet>
+				<apex:outputField value="{!ot.ts.Leave_booked__c}" style="" rendered="{!(ot.ts.Leave_booked_id__c == null )}"/>
+		   		<apex:inputField value="{!ot.ts.Leave_booked__c}" id="if10a" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" 
+		   		   style="{!IF((ot.ts.Leave_booked_id__c != null && (jobrole_pattern == 'Irregular shift pattern' || jobrole_pattern == 'Flexible working days')),IF(ot.ts.Leave_booked_id_2__c !=null,
+		   		    IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c),'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;','pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;'),
+	                IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;'),	
+                    IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c)),'background-color: #f5f5f5',''))),
+				    IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width:60% !important;','pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+	                IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;','pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),	 
+                    IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c)),'background-color: #f5f5f5','')))),'display:none;')}"/>
+               <apex:outputLink target="_blank" title="Leave booked" id="leavebooked1Value" value="/{!ot.ts.Leave_booked_id__c}" style="{!IF((ot.ts.Leave_booked_id__c != null && (jobrole_pattern == 'Regular work pattern - days' || jobrole_pattern == 'Regular work pattern - hours')),
+					 IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;', 'pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+		   		     IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+					 IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c)),'background-color: #f5f5f5',''))),'display:none;')}">
+					<apex:outputField value="{!ot.ts.Leave_booked__c}" id="if10" style="" styleclass="inputfclass1"/>
+				</apex:OutputLink>&nbsp;&nbsp;
+				
+				  <apex:inputField value="{!ot.ts.Leave_booked_2__c}" id="if10b" onchange="calculateWorked(this.id);" onkeypress="return isNumberKey(event)" style="{!IF((ot.ts.Leave_booked_id_2__c != null && (jobrole_pattern == 'Irregular shift pattern' || jobrole_pattern == 'Flexible working days')),
+		   		   IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id_2__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id_2__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;', 'pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;'),
+		   		   IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id_2__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id_2__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 35% !important;'),
+		   		   IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c)),'background-color: #f5f5f5',''))),'display:none;')}"/>
+				<apex:outputLink target="_blank" title="Leave booked" id="leavebooked2Value" value="/{!ot.ts.Leave_booked_id_2__c}" style="{!IF((ot.ts.Leave_booked_id_2__c != null && (jobrole_pattern == 'Regular work pattern - days' || jobrole_pattern == 'Regular work pattern - hours')),
+					 IF(AND(contains(leave_approved_Dates, TEXT(ot.ts.Date__c)),contains(leave_approved_Dates,ot.ts.Leave_booked_id_2__c)),IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id_2__c), 'pointer-events: auto;background-color: #27c24c;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;', 'pointer-events: auto;background-color: #bcf1c9;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+		   		     IF(AND(contains(leave_await_app_Dates, TEXT(ot.ts.Date__c)),contains(leave_await_app_Dates,ot.ts.Leave_booked_id_2__c)) ,IF(contains(workingTimeLeaveId,ot.ts.Leave_booked_id_2__c),'pointer-events: auto;background-color: #e74c2e;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;', 'pointer-events: auto;background-color: #fdc5bb;color: #fff; padding: 2px 2px; text-align: left; border-radius: 3px; text-decoration: none;width: 60% !important;'),
+					 IF(contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c)),'background-color: #f5f5f5',''))),'display:none;')}">
+					<apex:outputField value="{!ot.ts.Leave_booked_2__c}" id="if10ab" style="" styleclass="inputfclass1"/>
+				</apex:OutputLink>
+				<!-- END :: 17/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+			</apex:column>
+	        <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 8.5% !important; background-color: #f5f5f5', 'width: 8.5% !important;')}">
+                <apex:facet name="header">
+					&nbsp;HOURS&nbsp;AND<br/>
+					<div style="pointer-events: visible;">
+						<!-- START :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+						<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;">Standard&nbsp;
+							<span id="hlpbtn"><br/>payable<img src="{!$Resource.Help_icon}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Calculated as total hours worked less hours worked at Overtime rates.</span></span>
+	               			<br/>hh.mm
+	               		</span>
+						<div class="freezedHeader">
+							&nbsp;HOURS&nbsp;AND<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;">
+							Standard&nbsp;<span id="hlpbtn"><br/>payable<img src="{!$Resource.Help_icon}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Calculated as total hours worked less hours worked at Overtime rates.</span>
+		               		</span>
+							<br/>hh.mm</span>
+						</div>
+						<!-- END :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+					</div>
+			   	</apex:facet>
+			   	<apex:facet name="footer"><br/>
+					
+					<span style="float:left;width:100%;">{!totalStandardPayable}</span>
+			   	</apex:facet>
+		       <apex:inputField value="{!ot.ts.Standard_payable__c}" id="if11" onmousedown="disable(this.id);" style="background-color: #dddddd; box-shadow: none; color: #666; padding: 1px;" />
+		    </apex:column>
+		    
+     		<apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 8.5% !important; background-color: #f5f5f5; ', 'width: 8.5% !important; ')}">
+	            <apex:facet name="header">
+	            	<!-- START :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+					&nbsp;PAYMENT<br/>
+					<div style="pointer-events: visible;">
+						<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;margin-right: -15px !important;"><br/>
+						Overtime 1<span id="hlpbtn"><br/>hh.mm<img src="{!$Resource.Help_icon}" style=""/>
+	               		<span style="display: none;" class="titlepopup">Enter the number of hours payable at an Overtime rate and the Reason or type of this Overtime.</span></span>
+						</span>
+						<div class="freezedHeader">
+							&nbsp;PAYMENT&nbsp;<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+							<span id="hlpbtn">Overtime 1
+							<br/>hh.mm<img src="{!$Resource.Help_icon}" style=""/>
+		               		<span style="display: none;" class="titlepopup">Enter the number of hours payable at an Overtime rate and the Reason or type of this Overtime.</span></span></span>
+						</div>
+						<!-- END :: 25/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+					</div>
+			   	</apex:facet>
+			   	<apex:facet name="footer"><br/>
+					<span style="float:left;width:100%;">{!totalOvertime1Value}</span>
+			   	</apex:facet>
+			   <apex:inputText value="{!ot.otHours1}" id="if12" style="width: 42% !important;" onchange="calculateStandardPay(this.id,'{!rowCounter}');" onkeypress="return isNumberKey(event)" styleclass="inputfclass"/>
+		    	<div id="Msg1{!rowCounter}"  style="display:none; color: #e74c2e; " > 
+		    		<!-- START :: NPPD-1336 Use consistent syntax and labelling when entering hours/minutes/decimals modified by Farhan 
+			    	<div style="width:85px;float:left;height:12px;" >
+				    	<font style="float:left">Invalid hh.mm</font>
+			        </div>
+			        <!-- END :: NPPD-1336 Use consistent syntax and labelling when entering hours/minutes/decimals modified by Farhan 
+		    	</div>
+		    
+		    </apex:column>
+	        <!-- START :: 06/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+	        <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 20.5% !important; background-color: #f5f5f5; padding-right: 2% !important;', 'width: 20.5% !important;padding-right: 2% !important;')}">
+			<!-- END :: 06/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+                <apex:facet name="header">
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+					<br/>Reason</span>
+			   		<div class="freezedHeader" style="width: 11.5% !important;">
+			   			<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+						<br/>Reason</span>
+			   		</div>
+			   </apex:facet>
+			   <apex:SelectList size="1" value="{!ot.otCategory1}" id="if13" onkeydown="{!if((approvalStatus != 'Not Submitted' || approvalStatus != 'Rejected'),'disableNotes(this.id);','')}"> 
+	        		<apex:selectOptions value="{!OvertimeReasonValues}" /> 
+               	</apex:SelectList>
+		    </apex:column>
+	        <!-- START :: 06/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 
+	        <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 8.5% !important; background-color: #f5f5f5;padding-left: 12px !important;', 'width: 8.5% !important;padding-left: 12px !important;')}">
+                <apex:facet name="header">
+					<br/>
+					<div style="pointer-events: visible;">
+						<span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+						<span id="hlpbtn" style="padding-left: 10px !important;">Overtime 2
+						<br/><span style="padding-left: 10px !important;">hh.mm<img src="{!$Resource.Help_icon}" style=""/>
+	               		<span style="display: none;" class="titlepopup2">Enter the number of hours payable at an Overtime rate and the Reason or type of this Overtime.</span></span></span></span>
+						<div class="freezedHeader" style="width: 8.5% !important;">
+							<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+							<span id="hlpbtn" style="padding-left: 10px !important;">Overtime 2
+							<br/><span style="padding-left: 10px !important;">hh.mm<img src="{!$Resource.Help_icon}" style=""/>
+		               		<span style="display: none;" class="titlepopup2">Enter the number of hours payable at an Overtime rate and the Reason or type of this Overtime.</span></span></span></span>
+						</div>
+					</div>
+			   	</apex:facet>
+			   	<apex:facet name="footer"><br/>
+					<span style="float:left;width:100%;padding-left: 15px !important;">{!totalOvertime2Value}</span>
+			   	</apex:facet>
+		       <apex:inputText value="{!ot.otHours2}" id="if14" style="width: 45% !important;" onchange="calculateStandardPay(this.id,'{!rowCounter}');" onkeypress="return isNumberKey(event)" styleclass="inputfclass"/>
+		   <!-- END :: 06/01/2017 NPAY-240 Overtime and Timesheet - fixes modified by Farhan 				   		
+		   		<div id="Msg2{!rowCounter}"  style="display:none; color: #e74c2e;" > 
+		   			<!-- START :: NPPD-1336 Use consistent syntax and labelling when entering hours/minutes/decimals modified by Farhan 
+			   		<div style="width:85px;float:left;height:12px;" >
+				   		<font style="float:left">Invalid hh.mm</font>
+			   		</div>
+			   		<!-- END :: NPPD-1336 Use consistent syntax and labelling when entering hours/minutes/decimals modified by Farhan 
+		   		</div>
+		   		
+		    </apex:column>
+	        
+	        <apex:column style="{!IF((ot.ts.Leave_booked__c != 0.0 || ot.ts.Leave_booked_id__c != null || contains(comPubHolidays, TEXT(ot.ts.Date__c)) || NOT(contains(workingdays, ot.ts.Day__c))), 'width: 8.5% !important; background-color: #f5f5f5', 'width: 8.5% !important;')}">
+                <apex:facet name="header">
+					<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+					<br/>Reason</span>
+					<div class="freezedHeader" style="width: 11.5% !important;">
+						<br/><span style="border-top: 1px solid #cde2f5 !important;float:left;width:100%;"><br/>
+						<br/>Reason</span>
+					</div>
+			   </apex:facet>
+			   <apex:SelectList size="1" value="{!ot.otCategory2}" id="if15" onkeydown="{!if((approvalStatus != 'Not Submitted' || approvalStatus != 'Rejected'),'disableNotes(this.id);','')}"> 
+	        		<apex:selectOptions value="{!OvertimeReasonValues}" /> 
+               	</apex:SelectList>
+               	<apex:variable var="rowCounter" value="{!rowCounter+1}"/>
+            </apex:column>
+            
+        </apex:pageBlockTable>
+    </apex:outputPanel>
+        <br/>
+        <apex:outputLabel rendered="{!TimeSheetRecordList.size!=0}" value="{!$Label.xcdhcm__timesheet_declaration}" style="font-weight: bold; font-size: 13px; display: inline-block;padding-top:10px;"/>
+    </apex:pageBlock>  
+    <br/>
+   
+    <apex:outputPanel id="ButtonsId1" rendered="{!TimeSheetRecordList.size!=0}">
+    <table style="width:100%;" cellpadding="5px;" cellspacing="5px">
+    	<tr>
+    		<td style=" width:35%;border: 1.5px solid black;">
+    			<apex:repeat value="{!TimesheetNotes}" var="f">
+	 				<apex:outputText value="{!f}" style="font-size: 13px; height:25px;"/><br/>
+				</apex:repeat>
+    		</td>
+    	
+    		<td style=" margin-left: 10%; padding-left:5%;" valign="bottom" >
+    			<apex:outputPanel >
+					<!-- START :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan 
+					<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbsave}" action="{!saveTimeSheets}" id="btnBottomSave" onClick="disableButton(this,'saveBtn');" reRender="errorId,ButtonsId,theform" style="{!if(((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null) || (TimesheetEditablePermission == true && approvalStatus!='Confirmed')),'','opacity:0.5; pointer-events: none;')}"/>
+		        	<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbsubmittimesheet}" id="btnSubmit" action="{!submitForApprove}" rendered="{!TS_approver != 'yes'}" rerender="popup,errorId,ButtonsId,theform" onClick="disableButton(this,'saveBtn');" style="{!if((approvalStatus=='Not Submitted' || approvalStatus=='Rejected' || approvalStatus=='Recalled' || approvalStatus==null),'','opacity:0.5; pointer-events: none;')}"/>
+        			<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbapprovereject}" action="{!approveRejectTS}" rendered="{!TS_approver == 'yes'}" onClick="disableButton(this);" rerender="errorId,SummaryPanel,ButtonsId" style="{!if(approvalStatus=='Awaiting Approval','','opacity:0.5; pointer-events: none;')}"/> 
+		        	<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbcancel}" id="btnBottomCancel" action="{!cancelTS}" onClick="disableButton(this);" rerender="errorId,SummaryPanel,ButtonsId"/> 
+		    		<!-- END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan 
+		    	</apex:outputPanel>
+		    </td>
+    	</tr>
+    </table>
+    </apex:outputPanel><br/>
+    
+     <!-- popup 
+    <apex:outputPanel id="popup">
+		<apex:outputPanel styleClass="popupBg" rendered="{!(displayPopup)}"/>
+		<apex:outputPanel id="popup1" styleClass="customPopup" layout="block" rendered="{!(displayPopup)}">
+			<center>
+				<apex:outputtext id="oText2" value="{! $Label.Confirm_message_to_submit_timesheet}"/>
+				<br />
+					<!-- START :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan 
+					<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbok}" action="{!acceptTSApproval}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId,ButtonsId1,theblock" styleClass="butt"/>
+					<apex:commandButton value="{!$Label.xcdhcm__timesheethoursbcancel}" action="{!cancelTSApproval}" style="width: 100px;" onClick="disableButton(this);" rerender="popup,errorId,ButtonsId1,theblock" styleClass="butt"/>
+					<!-- END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan 
+			</center>
+		</apex:outputPanel>
+	</apex:outputPanel>
+	<!-- popup 
+    
+	<div style="border-bottom: 2px solid #63a4c5!important;"></div><br/>
+
+	<script type="text/javascript">
+
+			/*Calculating number of hours worked, Balance, Flexi claim*/
+			function calculateWorked(idval) 
+			{  
+				//console.log(idval+'  & '+ottableval);
+			    var id = idval.split(':if'); 
+			    var idarray = id[0].split(':'); 
+			    var rowNumber = idarray[idarray.length-1]
+			     //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim  
+			    var workingTimeLeaveId = '{!workingTimeLeaveId}';
+			     //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+			    var sthours  = parseInt(document.getElementById(id[0]+':if3').value);
+			    var stmins = parseInt(document.getElementById(id[0]+':if4').value);
+			    var endhours = parseInt(document.getElementById(id[0]+':if5').value);
+			    var endmins = parseInt(document.getElementById(id[0]+':if6').value);
+			    var breaks = parseInt(document.getElementById(id[0]+':if7').value);
+			    //var due = document.getElementById(id[0]+':if9').innerHTML;
+			    var due = document.getElementById(id[0]+':if9').value;
+			     //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+			    var jobpattern = '{!jobrole_pattern}';
+			    var leavebooked = 0.00;
+			     //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+			    if(jobpattern == 'Irregular shift pattern' || jobpattern == 'Flexible working days')
+			    {
+			      //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) commented by wasim 
+			      //  leavebooked = document.getElementById(id[0]+':if10a').value;
+			      //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) commented by wasim 
+			      
+			      //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+			        var leavebooked1 = document.getElementById(id[0]+':if10').innerHTML;
+    		        var leavebooked2 = document.getElementById(id[0]+':if10ab').innerHTML;
+	                    if(leavebooked1 > 0)
+	                   {
+	        	          var leavebooked1Link = document.getElementById(id[0]+':leavebooked1Value').getAttribute("href");
+	    		          leavebooked1Link = leavebooked1Link.split('/');
+	    		          var leavebooked1Id = leavebooked1Link[leavebooked1Link.length -1];
+	    		          if(workingTimeLeaveId.includes(leavebooked1Id))
+	    		          {
+	    			        leavebooked = leavebooked1;
+	    		          }
+	                    }
+	                    if(leavebooked2 > 0)
+	                    {
+	        	           var leavebooked2Link = document.getElementById(id[0]+':leavebooked2Value').getAttribute("href");
+	    		           leavebooked2Link = leavebooked2Link.split('/');
+	    		           var leavebooked2Id = leavebooked2Link[leavebooked2Link.length -1];
+	    		           if(workingTimeLeaveId.includes(leavebooked2Id))
+	    		            {
+	    			          leavebooked = (((parseInt(leavebooked)*60) + ((leavebooked - parseInt(leavebooked))*100)) + ((parseInt(leavebooked2)*60) + ((leavebooked2 - parseInt(leavebooked2))*100)))/60;
+	    			          leavebooked = (parseInt(leavebooked) + (leavebooked.toFixed(2) - parseInt(leavebooked))*0.6).toFixed(2);
+	    		            }
+	                     }
+	                  //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim    
+			    }
+			    else
+			    {
+			         //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) commented by wasim 
+			          // leavebooked = document.getElementById(id[0]+':if10').innerHTML;
+			          //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) commented by wasim 
+			          
+			          //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim    
+			             var leavebooked1 = document.getElementById(id[0]+':if10').innerHTML;
+    		             var leavebooked2 = document.getElementById(id[0]+':if10ab').innerHTML;
+	                    if(leavebooked1 > 0)
+	                   {
+	        	          var leavebooked1Link = document.getElementById(id[0]+':leavebooked1Value').getAttribute("href");
+	    		          leavebooked1Link = leavebooked1Link.split('/');
+	    		          var leavebooked1Id = leavebooked1Link[leavebooked1Link.length -1];
+	    		          if(workingTimeLeaveId.includes(leavebooked1Id))
+	    		          {
+	    			        leavebooked = leavebooked1;
+	    		          }
+	                    }
+	                    if(leavebooked2 > 0)
+	                    {
+	        	           var leavebooked2Link = document.getElementById(id[0]+':leavebooked2Value').getAttribute("href");
+	    		           leavebooked2Link = leavebooked2Link.split('/');
+	    		           var leavebooked2Id = leavebooked2Link[leavebooked2Link.length -1];
+	    		           if(workingTimeLeaveId.includes(leavebooked2Id))
+	    		            {
+	    			          leavebooked = (((parseInt(leavebooked)*60) + ((leavebooked - parseInt(leavebooked))*100)) + ((parseInt(leavebooked2)*60) + ((leavebooked2 - parseInt(leavebooked2))*100)))/60;
+	    			          leavebooked = (parseInt(leavebooked) + (leavebooked.toFixed(2) - parseInt(leavebooked))*0.6).toFixed(2);
+	    		            }
+	                     }
+	                   //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim    
+			    }
+			    var rate1 = document.getElementById(id[0]+':if12').value;
+				var rate2 = document.getElementById(id[0]+':if14').value;
+			    if(!(isNaN(sthours)) && !(isNaN(stmins)) && !(isNaN(endhours)) && !(isNaN(endmins)))
+			    {
+			    	var calVal;
+			    	if(((endhours*60)+endmins) < ((sthours*60)+stmins))
+			    	{
+			    		calVal = ((((endhours*60)+endmins) - ((sthours*60)+stmins)-breaks)/60)+24.00;
+			    	}
+			    	else
+			    	{
+			    		calVal = ((((endhours*60)+endmins) - ((sthours*60)+stmins)-breaks)/60);
+			    	}
+    				//var calVal = ((((endhours*60)+endmins) - ((sthours*60)+stmins)-breaks)/60);
+			        document.getElementById(id[0]+':if8').value =  (parseInt(calVal) + (calVal.toFixed(2) - parseInt(calVal))*0.6).toFixed(2) ;
+			        var worked = document.getElementById(id[0]+':if8').value;
+				    document.getElementById(id[0]+':if11').value = worked;
+			        var calValhrs = ((parseInt(worked)*60 + (worked - parseInt(worked))*100) + (parseInt(leavebooked)*60 + (leavebooked - parseInt(leavebooked))*100) - (parseInt(rate1)*60 + (rate1 - parseInt(rate1))*100) - (parseInt(rate2)*60 + (rate2 - parseInt(rate2))*100))/60;
+					//START :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan
+					calValhrs = calValhrs.toFixed(2);
+					var calValhrsmins = (parseInt(calValhrs) + (calValhrs - parseInt(calValhrs))*0.6).toFixed(2) ;
+					//END :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan
+					document.getElementById(id[0]+':if11').value =calValhrsmins;
+			    }
+			    return false;
+			}
+			function isNumberKey(evt)
+			{
+			   var charCode = (evt.which) ? evt.which : evt.keyCode;
+			   //if(charCode != 46 && charCode != 37 && charCode != 39 && ((charCode > 31 && charCode <48)||(charCode>57 && charCode<93) ||charCode >105 ))
+			   if (charCode != 46 && charCode > 31 && charCode != 37 && charCode != 39 && (charCode < 48 || charCode > 57))
+			      return false;
+			
+			   return true;
+			}
+			//START :: NPPD-1336 Use consistent syntax and labelling when entering hours/minutes/decimals commented by Farhan
+			/*function HideDiv(idval,col,rowid,textval)
+			{
+				if(col == 1)
+				{
+					document.getElementById(rowid+':if12').value = textval;
+				}
+				else if(col == 2)
+				{
+					document.getElementById(rowid+':if14').value = textval;
+				}
+				document.getElementById(idval).style.display = "none";
+				
+			}*/
+			//END :: NPPD-1336 Use consistent syntax and labelling when entering hours/minutes/decimals commented by Farhan 
+			/*To calculate the Standard payable hours */
+			function calculateStandardPay(idval,rowNumber,statutoryPayTableId)
+			{
+				//START :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan
+				document.getElementById('Msg1'+rowNumber).style.display = "none";
+				document.getElementById('Msg2'+rowNumber).style.display = "none";
+				//END :: 07/12/2016 NPAY-239 Payroll4Patch1 issue list modified by Farhan
+				//alert(rowNumber+ '-' +idval+' , '+statutoryPayTableId);
+				var RE = /^\d{0,2}(\.\d{1})?\d{0,1}$/;
+				var id = idval.split(':if');  
+				var totalWorked = document.getElementById(id[0]+':if8').value;
+				var rate1 = document.getElementById(id[0]+':if12').value;
+				var rate2 = document.getElementById(id[0]+':if14').value;
+				var rate1mins = ((rate1 - parseInt(rate1))*100).toFixed(0);
+				var rate1hr = rate1 - rate1mins;
+				var rate2mins = ((rate2 - parseInt(rate2))*100).toFixed(0);
+				var rate2hr = rate2 - rate2mins;
+				//START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+				var workingTimeLeaveId = '{!workingTimeLeaveId}';
+				var leavebooked=0.00;
+				var jobpattern = '{!jobrole_pattern}';
+				//END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim    
+				if((RE.test(rate1) == false) || rate1mins >= 60 || rate1hr >= 24 || isNaN(rate1mins))
+				{
+					document.getElementById('Msg1'+rowNumber).style.display = "block";
+				}
+				else if((RE.test(rate2) == false) || rate2mins >= 60 || rate2hr >= 24 || isNaN(rate2mins))
+				{
+					document.getElementById('Msg2'+rowNumber).style.display = "block";
+				}
+				else
+				{
+					console.log(rate1mins+','+rate2mins);
+					console.log(totalWorked);
+					console.log(rate1);
+					console.log(rate2);
+					var jobpattern = '{!jobrole_pattern}';
+				    var leavebooked;
+				    if(jobpattern == 'Irregular shift pattern' || jobpattern == 'Flexible working days')
+				    {
+				          
+				           //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+				             var leavebooked1 = document.getElementById(id[0]+':if10').innerHTML;
+    		                 var leavebooked2 = document.getElementById(id[0]+':if10ab').innerHTML;
+	                      if(leavebooked1 > 0)
+	                     {
+	        	             var leavebooked1Link = document.getElementById(id[0]+':leavebooked1Value').getAttribute("href");
+	    		             leavebooked1Link = leavebooked1Link.split('/');
+	    		             var leavebooked1Id = leavebooked1Link[leavebooked1Link.length -1];
+	    		             if(workingTimeLeaveId.includes(leavebooked1Id))
+	    		             {
+	    			           leavebooked = leavebooked1;
+	    		             }
+	                      }
+	                    
+	                    if(leavebooked2 > 0)
+	                    {
+	        	              var leavebooked2Link = document.getElementById(id[0]+':leavebooked2Value').getAttribute("href");
+	    		              leavebooked2Link = leavebooked2Link.split('/');
+	    		              var leavebooked2Id = leavebooked2Link[leavebooked2Link.length -1];
+	    		              if(workingTimeLeaveId.includes(leavebooked2Id))
+	    		              {
+	    			            leavebooked = (((parseInt(leavebooked)*60) + ((leavebooked - parseInt(leavebooked))*100)) + ((parseInt(leavebooked2)*60) + ((leavebooked2 - parseInt(leavebooked2))*100)))/60;
+	    			            leavebooked = (parseInt(leavebooked) + (leavebooked.toFixed(2) - parseInt(leavebooked))*0.6).toFixed(2);
+	    		              }
+	                      }
+	                      //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim
+				    }
+				    else
+				    {
+				          //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) commented by wasim
+				          // leavebooked = document.getElementById(id[0]+':if10').innerHTML;
+				         // console.log(leavebooked);
+				         //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) commented by wasim
+				         
+				          //START :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim
+				            var leavebooked1 = document.getElementById(id[0]+':if10').innerHTML;
+    		                var leavebooked2 = document.getElementById(id[0]+':if10ab').innerHTML;
+	                    if(leavebooked1 > 0)
+	                    {
+	        	              var leavebooked1Link = document.getElementById(id[0]+':leavebooked1Value').getAttribute("href");
+	    		              leavebooked1Link = leavebooked1Link.split('/');
+	    		              var leavebooked1Id = leavebooked1Link[leavebooked1Link.length -1];
+	    		              if(workingTimeLeaveId.includes(leavebooked1Id))
+	    		             {
+	    			           leavebooked = leavebooked1;
+	    		              }
+	                     }
+	                     if(leavebooked2 > 0)
+	                     {
+	        	              var leavebooked2Link = document.getElementById(id[0]+':leavebooked2Value').getAttribute("href");
+	    		              leavebooked2Link = leavebooked2Link.split('/');
+	    		              var leavebooked2Id = leavebooked2Link[leavebooked2Link.length -1];
+	    		              if(workingTimeLeaveId.includes(leavebooked2Id))
+	    		              {
+	    			             leavebooked = (((parseInt(leavebooked)*60) + ((leavebooked - parseInt(leavebooked))*100)) + ((parseInt(leavebooked2)*60) + ((leavebooked2 - parseInt(leavebooked2))*100)))/60;
+	    			             leavebooked = (parseInt(leavebooked) + (leavebooked.toFixed(2) - parseInt(leavebooked))*0.6).toFixed(2);
+	    		              }
+	                      }
+	                       //END :: 19/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim
+	                      
+				    }
+					var calValhrs = ((parseInt(totalWorked)*60 + (totalWorked - parseInt(totalWorked))*100) + (parseInt(leavebooked)*60 + (leavebooked - parseInt(leavebooked))*100) - (parseInt(rate1)*60 + (rate1 - parseInt(rate1))*100) - (parseInt(rate2)*60 + (rate2 - parseInt(rate2))*100))/60;
+					var calValhrsmins = (parseInt(calValhrs) + (calValhrs.toFixed(2) - parseInt(calValhrs))*0.6).toFixed(2) ;
+					console.log(calValhrsmins);
+					document.getElementById(id[0]+':if11').value =calValhrsmins;
+				}
+				return false;
+			}
+			/*To disable the inputfield(which will manipulate automatically)*/
+			function disable(idval)
+			{
+			    /*document.getElementById(idval).disabled = true;*/
+			    document.getElementById(idval).setAttribute("readonly", "true"); 
+			}
+			
+			/*To disable the notes field*/
+			function disableNotes(idval)
+			{
+			    document.getElementById(idval).disabled = true;
+			}
+			
+			/*To disable the button*/
+			function disableButton(objBtn,compo) 
+			{
+			    objBtn.disabled = true;
+			    objBtn.style.color='#336699';
+			    objBtn.value='Processing...';
+			    window.scrollTo(0, 0);
+				//START :: 30/01/2017 NPAY-223 Payroll5 issue modified/commented by farhan
+			    /*if(compo != null)
+			    {
+				    document.getElementById(compo).setAttribute("value", "Processing..."); 
+				    document.getElementById(compo).setAttribute("disabled", "true");
+				}*/
+				if(compo == 'saveBtn')
+				{
+					$("[id$='btnTopSave']").val('Processing...');
+					$("[id$='btnBottomSave']").val('Processing...');
+				}
+				$("[id$='btn1']").prop('disabled', true);
+				$("[id$='btnTopSave']").prop('disabled', true);
+				$("[id$='btnTopCancel']").prop('disabled', true);
+				$("[id$='btnBottomSave']").prop('disabled', true);
+				$("[id$='btnSubmit']").prop('disabled', true);
+				$("[id$='btnBottomCancel']").prop('disabled', true);
+				//END :: 30/01/2017 NPAY-223 Payroll5 issue modified by farhan
+			}
+			
+			/*To remove --none-- option in picklist*/
+			function removeNone(idval)
+			{
+			    var list = document.getElementById(idval);
+			   // alert(list.options[0].text);
+			    if(list.options[0].text == '--None--')
+			    {
+			    	list.remove(0);
+			    }
+			}
+	</script>
+	<!--  START :: 20/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim 
+	</apex:form>
+	<!--  END :: 20/11/2017 NPPD-1486 Timesheet improvements (Leave worked, Overtime worked) added by wasim -->
+</apex:page>

@@ -1,0 +1,1365 @@
+<!--  START :: 28/11/2018 NPAY-503 P60 and Year End Issues added by Jamil   -->
+<apex:page standardStylesheets="false" sidebar="false"
+    showHeader="false" applyBodyTag="false" applyHtmlTag="false"
+    docType="html-5.0" controller="xcdhcm.RtiGenerateP60Controller"  renderAs="pdf" >
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>P60 form</title>
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/> 
+<script
+    src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+
+
+<script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script
+    src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script
+    src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+
+<script
+    src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script>
+      // define the app
+      var demoApp = angular.module('demoApp', []);
+      // add the controller
+      demoApp.controller('DemoCtrl', function ($scope) {
+          
+           // $scope.p60details = {!P60Details}
+           // $scope.date = new Date();
+      });
+    </script>
+ -->   
+ <style>
+        
+        table, th, td {
+            border: none;
+        }
+        
+        body {
+            color:#022a51 !important;
+        }
+       
+        
+        @page {
+          size: A4;
+          margin: 0.2cm auto;
+        }
+        
+        @media print {
+          
+          html, body {
+            width: 210mm;
+            height: 99%;
+            scale:94;
+          }
+          
+        }
+        </style> 
+
+</head>
+<body class="container" ng-controller="DemoCtrl">
+
+    <div style="margin-left: 13pt !important;">
+       <!--  <div ng-repeat="p60detail in p60details"> -->
+       <apex:variable var="cnt" value="{!0}" />  
+       <apex:repeat value="{!P60Data}" var="p" id="theList">
+       <div style="{!if(cnt < 1, 'page-break-before:avoid;','page-break-before:always;')}">
+       <apex:variable var="cnt" value="{!cnt+1}"/> 
+            <table width="734" border="0px" cellpadding="0px" cellspacing="0px"
+                style="width: 734px; background-color: #fde6d6;" valign="top">
+                <tr>
+                    <td width="317" valign="top"
+                        style="width: 300px; border: 0px; padding-top: 7px;">
+                        <!----------------------------------------------START -------------------------------------------------->
+                        <table>
+                            <tr>
+                                <td
+                                    style="padding-left: 10px; background-color: #ffffff; width: 300px; color: #00305e; font-size: 22px;">P60
+                                    End of Year Certificate</td>
+                            </tr>
+
+                            <tr>
+                                <!--  START 25/10/2017 NPAY-376 P60 - 2017/18 version  added by Jamil -->
+                                <td
+                                    style="padding-left: 2px; background-color: #f4741d; width: 300px; color: #fff; font-size: 20px; height: 40px;">
+                                    Tax year to 5 April&nbsp;&nbsp; <span
+                                    style="background-color: #fff; color: black; font-size: 20px; color: #00305e;">&nbsp;{!strTaxYearLastPart}&nbsp;</span>
+                                </td>
+                                <!--  START 25/10/2017 NPAY-376 P60 - 2017/18 version  added by Jamil -->
+                            </tr>
+
+                            <tr>
+                            
+                                <td
+                                    style="padding-left: 2px; background-color: #fde6d6; width: 300px; color: #11104b; font-size: 18px; height: 6px;">
+                                    <!-- <strong>This is a printed copy of an eP60</strong> -->
+                                </td>
+                                
+                            </tr>
+
+                        </table>
+
+                        <table style="padding-top: 4px;">
+                            <tr>
+                                <td
+                                    style="padding-left: 3px; background-color: #fff; width: 300px; color: #00305e; font-size: 16px;">
+                                    <strong>To the employee:</strong> <br />
+                               <span style="font: 12px 'Times New Roman'; color: #00305e; line-height: 12px;"> Please keep this certificate in a safe place as</span>
+                                  <br /><span
+                                    style="font-size: 13px; font-family:Times New Roman;font-weight:bold; color: #00305e; line-height: 12px;">
+                                       you will need it if you have to fill in a tax return. You also
+                                        need it to make a claim for tax credits or to renew your
+                                        claim.</span><br />
+                                <br /> <span
+                                    style="font: 13px 'Times New Roman'; color: #00305e; line-height: 15px;">It
+                                        also helps you check that your employer is using the correct
+                                        National Insurance number and deducting the right rate of
+                                        National Insurance contributions.</span><br />
+                                <br /> <span
+                                    style="font: bold 12px 'Times New Roman'; color: #00305e; line-height: 15px;">
+                                        By law you are required to tell HM Revenue and Customs about any
+                                        income that is not fully taxed, even if you are not sent a tax
+                                        return.</span> <br />
+                                    <p
+                                        style="font: bold 10px 'Times New Roman'; color: #00305e; line-height: 15px; text-align: right; padding-right: 5px;">HM
+                                        Revenue and Customs</p>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <table
+                            style="padding-top: 8px; padding-left: 20px; padding-right: 20px; padding-bottom: 8px;">
+                            <tr>
+                                <td
+                                    style="padding: 10px; background-color: #336; width: 250px; color: #fff; font-size: 14px;">
+                                    <strong>The figures marked * should be used for your
+                                        tax return, if you get one</strong> <br />
+                                </td>
+                            </tr>
+                        </table>
+                    <td width="5"></td>
+                    <td  valign="top" style="width: 440px; border: 0px;">
+
+                        <table>
+
+                            <tr>
+                                <td
+                                    style="padding-left: 2px; background-color: #f4741d; width: 440px; color: #fff; font-size: 14px; height: 20px;">
+                                    <span style="padding-top: 10px;font-size: 15px;">Employee's details</span>
+                                </td>
+                            </tr>
+
+                        </table> <br />
+                        <table>
+
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 180px; color: #000; font-size: 14px; height: 20px;">
+                                    <span style="padding-top: 10px; color: #00305e;">Surname</span>
+                                </td>
+
+                                <td
+                                    style="padding-left: 0px; width: 240px; color: #000; font-size: 14px; height: 0px;">
+                                   <!--  START:: 23/01/2019 fetching legal first name and Last Name added by Jamil -->
+                                  <!--   <div style="width: 206px;height:28px;border: 1px solid #999;background: white; ">{!p.Employee__r.Personal_L__r.Last_name__c} </div> -->
+                                     <div style="width: 206px;height:28px;border: 1px solid #999;background: white; ">{!p.Employee__r.Personal_L__r.Legal_last_name__c} </div> 
+                                   <!-- START:: 23/01/2019 fetching legal first name and Last Name added by Jamil --> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 180px; color: #000; font-size: 14px; height: 0px;margin-top:-10px;">
+                                    <span style="padding-top: 10px; color: #00305e;">Forenames or initials</span>
+                                </td>
+
+                                <td
+                                    style="padding-left: 0px; width: 240px; color: #000; font-size: 14px; height: 0px;">
+                                    <!--  START:: 23/01/2019 fetching legal first name and Last Name added by Jamil -->
+                                   <!--  <div style="width: 206px;height:28px;border: 1px solid #999;background: white;margin-top:-4px;"> {!p.Employee__r.Personal_L__r.First_name__c}</div> -->
+                                    <div style="width: 206px;height:28px;border: 1px solid #999;background: white;margin-top:-4px;"> {!p.Employee__r.Personal_L__r.Legal_name__c}</div> 
+                                    <!--  END:: 23/01/2019 fetching legal first name and Last Name added by Jamil -->
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 180px; color: #000; font-size: 14px; height: 20px; color: #00305e;">
+                                    National Insurance number</td>
+
+                                <td
+                                    style="padding-left: 0px; width: 240px; color: #000; font-size: 14px; height: 20px; color: #00305e;">
+                                    Works/payroll number</td>
+                            </tr>
+
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 180px; color: #000; font-size: 14px; height: 20px;">
+                                    <div style="width: 206px;height:28px;border: 1px solid #999;background: white;">{!p.Employee__r.NI_number__c} </div>
+                                
+                                </td>
+
+                                <td style="padding-left: 0px; width: 240px; color: #000; font-size: 14px; height: 20px;">
+                                   <div style="width: 206px;height:28px;border: 1px solid #999;background: white;">{!p.Employee__r.Payroll_no__c} </div> 
+                                    
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <table>
+
+                            <tr>
+                                <td style="padding-left: 2px; background-color: #f4741d; width: 440px; color: #fff; font-size: 14px; height: 20px;">
+                                    <span style="padding-top: 10px;font-size:15px; ">Pay and Income Tax
+                                        details</span>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <table>
+
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 60px; color: #000; font-size: 14px; height: 20px;">
+                                    <span style="padding-top: 10px;"></span>
+                                </td>
+
+                                <td
+                                    style="padding-left: 0px; width: 130px; color: #000; font-size: 14px; height: 20px; color: #00305e;"
+                                    align="left"><strong>Pay</strong></td>
+
+                                <td
+                                    style="padding-left: 0px; width: 130px; color: #000; font-size: 14px; height: 20px; color: #00305e;"
+                                    align="left"><strong > Tax deducted</strong></td>
+
+                            </tr>
+
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 60px; color: #000; font-size: 14px; height: 20px;">
+                                </td>
+                                <td
+                                    style="padding-left: 12px; width: 60px; color: #000; font-size: 14px; height: 20px;color: #00305e;"
+                                    align="center">&nbsp;&nbsp;£ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p</td>
+                                <td
+                                    style="padding-left: 0px; width: 50px; color: #000; font-size: 14px; height: 20px;color: #00305e;"
+                                    align="center">&nbsp;&nbsp;£ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p</td>
+                            </tr>
+                            <!-- START :: 09/05 2017 NPAY-284 P60 corrections added by Jamil -->
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 100px; color: #000; font-size: 14px; height: 20px;color: #00305e; "> In
+                                    previous employment(s)</td>
+                                <td style="padding-left: 12px; width: 150px; color: #000; font-size: 14px;">
+                                    <div style="width: 140px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                    
+                                    <apex:outputText value="{!IF((p.Employee__r.Personal_L__r.Taxable_pay_to_date__c == null), '0.00', p.Employee__r.Personal_L__r.Taxable_pay_to_date__c) }"/></div> 
+                                    
+                                </td>
+                                <td
+                                    style="padding-left: 0px; width: 150px; color: #000; font-size: 14px;">
+                                    <div style="width: 145px;height:28px;border: 1px solid #999;background: white; text-align: right;">
+                                   <!--  {!p.Employee__r.Personal_L__r.Total_tax_to_date__c} -->
+                                    <apex:outputText value="{!IF((p.Employee__r.Personal_L__r.Total_tax_to_date__c == null), '0.00', p.Employee__r.Personal_L__r.Total_tax_to_date__c) }"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- END :: 09/05 2017 NPAY-284 P60 corrections added by Jamil -->
+                        </table>
+
+                        <table>
+                            <tr>
+                                <td style="font-size: 10px; width: 420px;" align="right">if
+                                    refund mark ‘R’</td>
+                            </tr>
+                        </table>
+
+
+                        <table>
+                            <!-- START :: 09/05 2017 NPAY-284 P60 corrections added by Jamil -->
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 97px; color: #000; font-size: 14px; height: 20px; color: #00305e;">In
+                                    this <br />employment
+                                </td>
+                                <td
+                                    style="width: 12px;margin-right:0px;  color: #000; font-size: 14px;text-align:center; background-color: #003;"><span
+                                    style="color: #FFF;font-size:15px;">*</span></td>
+                                <td
+                                    style="width: 135px;color: #000; margin-left:0px;font-size: 14px; border: #003 solid 2px;">
+                                    <div style="width: 135px;height:28px;border: 1px solid #999;background: white; text-align: right;">
+                                   {!p.Total_taxable_pay_YTD__c}
+                                    </div>
+                                    
+                                </td>
+                                <td><div style="width:12px; height:10px;background-color: #003;margin:-3px;"></div></td>
+                                <td
+                                    style="width: 135px; color: #000; font-size: 14px; border: #003 solid 2px;">
+                                    <div style="width: 140px;height:28px;border: 1px solid #999;background: white; text-align: right;">
+                                    {!p.Total_tax_paid_YTD__c}
+                                    </div>
+                                   
+                                </td>
+                            </tr>
+                            <!-- END :: 09/05 2017 NPAY-284 P60 corrections added by Jamil -->
+                        </table>
+
+                        <table style="padding-top: 5px;">
+                            <!-- START :: 09/05 2017 NPAY-284 P60 corrections added by Jamil -->
+                            <tr>
+                                <td
+                                    style="padding-left: 12px; width: 100px; color: #000; font-size: 14px; height: 20px;color: #00305e;">Total
+                                    for year</td>
+                                <td
+                                    style="padding-left: 12px; width: 142px; color: #000; font-size: 14px;padding-right:10px;">
+                                    <div style="width: 142px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                    <!-- {!p.Employee__r.Personal_L__r.Taxable_pay_to_date__c + p.Total_taxable_pay_YTD__c} -->
+                                     <!-- {! p.Total_taxable_pay_YTD__c} -->
+                                     <apex:outputText value="{!IF((p.Employee__r.Personal_L__r.Taxable_pay_to_date__c == null), p.Total_taxable_pay_YTD__c, p.Employee__r.Personal_L__r.Taxable_pay_to_date__c + p.Total_taxable_pay_YTD__c) }"/></div>
+                                    
+                                    
+                                </td>
+                                <td                                  
+                                    style="padding-left: 0px; width: 145px; color: #000; font-size: 14px;padding-right:5px;">
+                                   
+                                    
+                                    
+                                    <div style="width: 145px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                    <!--  {{(p60detail.Employee__r.Personal_L__r.Total_tax_to_date__c == null ? 0.00 : p60detail.Employee__r.Personal_L__r.Total_tax_to_date__c) + (p60detail.Total_Tax_to_dt__c == null ? 0.00 : p60detail.Total_Tax_to_dt__c) | number:2}} -->                                
+                                    <apex:outputText value="{!IF((p.Employee__r.Personal_L__r.Total_tax_to_date__c == null), p.Total_tax_paid_YTD__c, p.Employee__r.Personal_L__r.Total_tax_to_date__c + p.Total_tax_paid_YTD__c) }"/></div>                               
+                                </td>
+                            </tr>
+                            <!-- END :: 09/05 2017 NPAY-284 P60 corrections added by Jamil -->
+                        </table>
+
+                        <table style="padding-top: 15px;" align="right">
+                           <tr></tr>
+                            <tr></tr>
+                             <tr></tr>
+                              <tr></tr>
+                            <tr>
+                                <td
+                                    style="padding-left: 2px; width: 120px; color: #000; font-size: 14px;"
+                                    align="right"></td>
+                                <td
+                                    style="padding-left: 2px; width: 150px; color: #000; font-size: 14px;color: #00305e;"
+                                    align="center">Final tax code</td>
+                                    
+                                <!--  START::10/04/2018  NPAY-466 P60 - Tax code Week1/Month1 fix -->
+                                <!--  The X should only appear if the final FPS submission for the employee has the Week1 month1 indicator as "Y"  -->
+                                <!-- 
+                                <td ng-if="p60detail.wk_month_indctr__c =='Y'"
+                                    style="padding-left: 0px; width: 145px; color: #000; font-size: 14px;">
+                                    <div style="width: 145px;height:28px;border: 1px solid #999;background: white;">
+                                   {!p.Employee__r.Personal_L__r.Tax_Code__c}  X
+                                    </div>
+                                    
+                                </td>
+                                
+                                <td ng-if="p60detail.wk_month_indctr__c != 'Y'"
+                                    style="padding-left: 0px; width: 145px; color: #000; font-size: 14px;">
+                                    <div style="width: 145px;height:28px;border: 1px solid #999;background: white;">
+                                   {!p.Employee__r.Personal_L__r.Tax_Code__c}
+                                    </div>
+                                    
+                                </td>
+                                -->
+                                <td style="padding-left: 0px; width: 145px; color: #000; font-size: 14px;padding-right:5px;">
+                                
+                                     <div style="width: 145px;height:28px;border: 1px solid #999;background: white;">
+                                   <!--  START :: Jamil 10/01/2018 NPAY-503  --> 
+                                   <!--  <apex:outputText value="{!IF((p.Employee__r.Personal_L__r.Tax_basis__c == 'Week1/Month1'), 'X', p.Employee__r.Personal_L__r.Tax_code__c) }"/> -->
+                                   <apex:outputText value="{!IF((p.Employee__r.Personal_L__r.Tax_basis__c == 'Week1/Month1'), p.Employee__r.Personal_L__r.Tax_code__c+'X', p.Employee__r.Personal_L__r.Tax_code__c) }"/>
+                                   <!-- END:: Jamil 10/01/2018 NPAY-503  --> 
+                                    </div>
+                                <!-- 
+                               <apex:outputPanel rendered="{p.Employee__r.Personal_L__r.Tax_basis__c !=Week1/Month1}">
+                                 <div style="width: 150px;height:28px;border: 1px solid #999;background: white;">
+                                   {!p.Employee__r.Personal_L__r.Tax_code__c}
+                                    </div>
+                               </apex:outputPanel> 
+                               -->   
+                               </td> 
+
+
+                                <!--  END::10/04/2018  NPAY-466 P60 - Tax code Week1/Month1 fix -->
+                            </tr>
+                        </table>
+
+
+                    </td>
+                <tr>
+                    <td width="10"></td>
+                </tr>
+
+
+                <!------------------------------------------------------------END -------------------------------------------------->
+                <table cellpadding="0px" cellspacing="0px" border="0px"
+                    style="padding-top: 0px;">
+                    <tr>
+                        <td width="733px" bgcolor="#fde6d6" height="100px">
+
+                            <table cellpadding="0px" cellspacing="0px" border="0px">
+                                <tr>
+                                    <td
+                                        style="padding-left: 2px; background-color: #f4741d; width: 733px; color: #fff; font-size: 14px; height: 20px;">
+                                        <span style="padding-top: 5px; vertical-align: middle;font-size:15px;">National
+                                            Insurance contributions in this employment</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table cellpadding="0px" cellspacing="0px" border="0px"
+                                style="padding-left: 5px; padding-top: 5px; width: 734px;">
+                                <tr>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">NIC table letter</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">Earnings at the Lower Earnings
+                                        Limit(LEL)(where earnings are equal to or exceed the LEL)</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">Earnings above the LEL, up to and including
+                                        the Primary Threshold (PT)</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">Earnings above the PT, up to and including
+                                        the Upper Earnings Limit (UEL)</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">Employee's contributions due on all
+                                        earnings above the PT</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top"></td>
+                                </tr>
+
+                                <tr>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top"></td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top" align="center">£</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top" align="center">£</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top" align="center">£</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;£
+                                        &nbsp;&nbsp;&nbsp;&nbsp; P</td>
+                                    <td style="width: 15px;"></td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top"></td>
+                                </tr>
+                                <!-- START :: 09/05 2017 NPAY-284 P60 corrections added by Jamil -->
+                                
+                                <!--  Condition # 1 -->
+                                
+                                <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== false ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== false),'','display: none ')}">
+                                
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width: 40px;height:28px;border: 1px solid #999;background: white;">
+                                       <!--  {!p.Employee__r.Personal_L__r.NI_category__c} -->
+                                        {!LEFT(p.Employee__r.Personal_L__r.NI_category__c,2)} 
+                                        </div>
+                                     </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                         {!p.LEL_pay_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                          {!p.LEL_to_PT_pay_YTD__c} 
+                                         
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        {!p.PT_to_UEL_pay_YTD__c} 
+                                       
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        <!--  {!p.Above_UEL_pay_YTD__c} -->
+                                        {!p.Employee_NI_YTD__c} 
+                                         
+                                        
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+                              
+                                   <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== false ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== false),'','display: none ')}">
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width: 40px;height:28px;border: 1px solid #999;background: white;">
+                                        
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                         0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                
+                                </tr>
+                                
+                               <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== false ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== false),'','display: none ')}">
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width:40px;height:28px;border: 1px solid #999;background: white;">
+                                         
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                      0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+                                
+                                <!--  Condition # 2  --> 
+                               
+                                <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== true ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== false),'','display: none ')}">
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width: 40px;height:28px;border: 1px solid #999;background: white;">
+                                       
+                                        {!LEFT(p.Employee__r.Personal_L__r.NI_category__c,2)} 
+                                      
+                                       
+                                        </div>
+                                     </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                         {!p.LEL_pay1_YTD__c} 
+                                        
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                          {!p.LEL_to_PT_pay1_YTD__c} 
+                                        
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        {!p.PT_to_UEL_pay1_YTD__c}
+                                       
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        <!--  {!p.Above_UEL_pay1_YTD__c} -->
+                                        {!p.Employee_NI1_YTD__c}  
+                                        
+                                        
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+
+                                <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== true ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== false),'','display: none ')}">
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width: 40px;height:28px;border: 1px solid #999;background: white;">
+                                        {!p.Employee__r.Personal_L__r.Previous_NI_category__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        {!p.LEL_pay_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        {!p.LEL_to_PT_pay_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                         {!p.PT_to_UEL_pay_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                      <!--  {!p.Above_UEL_pay_YTD__c} -->
+                                      {!p.Employee_NI_YTD__c} 
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+
+                                <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== true ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== false),'','display: none ')}">
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width:40px;height:28px;border: 1px solid #999;background: white;">
+                                        
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                      0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       0.00
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+                                
+                                 
+                                <!--  Condition # 3 -->
+                                
+                                <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== false ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== true),'','display: none ')}">
+                                  
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width: 40px;height:28px;border: 1px solid #999;background: white;">
+                                       
+                                        {!LEFT(p.Employee__r.Personal_L__r.NI_category__c,2)} 
+                                                                              
+                                        </div>
+                                     </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                         {!p.LEL_pay2_YTD__c} 
+                                       
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                          {!p.LEL_to_PT_pay2_YTD__c} 
+                                         
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        {!p.PT_to_UEL_pay2_YTD__c} 
+                                       
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        <!--  {!p.Above_UEL_pay_YTD__c}  -->
+                                        {!p.Employee_NI2_YTD__c}
+                                         
+                                        
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+
+                                 <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== false ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== true),'','display: none ')}">
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width: 40px;height:28px;border: 1px solid #999;background: white;">
+                                        {!p.Employee__r.Personal_L__r.Previous_NI_category__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        {!p.LEL_pay_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width:15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        {!p.LEL_to_PT_pay_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                         {!p.PT_to_UEL_pay_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       <!-- {!p.Above_UEL_pay_YTD__c} -->
+                                       {!p.Employee_NI_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+
+                                <tr style="{!IF(AND(p.Employee__r.Personal_L__r.First_NI_category_change__c== false ,p.Employee__r.Personal_L__r.Second_NI_category_change__c== true),'','display: none ')}">
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width:40px;height:28px;border: 1px solid #999;background: white;">
+                                         {!p.Employee__r.Personal_L__r.Previous_NI_category2__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                        {!p.LEL_pay1_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       {!p.LEL_to_PT_pay1_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       {!p.PT_to_UEL_pay1_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                       <!-- {!p.Above_UEL_pay1_YTD__c} -->
+                                       {!p.Employee_NI1_YTD__c}
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 146px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+                                
+                                
+                                
+                                <!-- END :: 09/05 2017 NPAY-284 P60 corrections added by Jamil -->
+
+                                <!--  START :: 28/07/2016 NPAY-338 Payroll6 Issue List Payroll issue 6 added by jamil -->
+                                <tr>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+                                        <div style="width:40px;height:28px;border: 1px solid #999;background: white;">
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;">
+                                        </div>
+                                        <input type="text"
+                                        name="lastname" value="" size="15" alt="" readonly="readonly" /></td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;">
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;">
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" align="center">
+                                        <div style="width:120px;height:28px;border: 1px solid #999;background: white;">
+                                        </div>
+                                    </td>
+                                    <td style="width: 15px;">&nbsp;</td>
+                                    <td
+                                        style="width: 154px; font: 12px 'Times New Roman'; color: #000; line-height: 15px; padding-bottom: 10px;"
+                                        valign="top">&nbsp;&nbsp;</td>
+                                </tr>
+                                <!-- END :: 28/07/2016 NPAY-338 Payroll6 Issue List Payroll issue 6 added by jamil -->
+                            </table>
+
+                            <table cellpadding="0px" cellspacing="0px" border="0px"
+                                style="padding-left: 5px; padding-top:3px; width: 734px;">
+
+                                <tr>
+                                    <td
+                                        style="width: 180px; font: 12px 'Times New Roman'; color: #fff; line-height: 14px; background-color: #f4741d; padding: 5px;"
+                                        valign="top"><span style="font-size: 14px;"><strong>Statutory
+                                                payments</strong></span> included in the pay In this employment figure above</td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">Statutory Maternity Pay</td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" height="30px;">
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 120px; font: 12px 'Times New Roman';padding-left:30px; color: #000; line-height: 15px;color: #00305e;"
+                                                    valign="top" align="center">£ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P</td>
+                                                    
+                                            </tr>
+                                            <tr>
+                                                <!-- START :: 28/07/2016 NPAY-338 Payroll6 Issue List Payroll issue 6 added by jamil -->
+                                                <td>
+                                                <div style="width: 120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                                {!p.Statutory_maternity_pay_YTD__c}
+                                                </div>
+                                                
+                                                </td>
+                                                <!-- END  START :: 28/07/2016 NPAY-338 Payroll6 Issue List Payroll issue 6 added by jamil-->
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">Statutory Paternity Pay</td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 120px; font: 12px 'Times New Roman';padding-left:30px; color: #000; line-height: 15px;color: #00305e;"
+                                                    valign="top" align="center">£ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                                    {!p.Statutory_paternity_pay_YTD__c}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">Statutory Shared Parental Pay</td>
+                                    <td style="width: 15px;"></td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 120px; font: 12px 'Times New Roman';padding-left:30px; color: #000; line-height: 15px;color: #00305e;"
+                                                    valign="top" align="center">£ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <div style="width:120px;height:28px;border: 1px solid #999;background: white;text-align: right;">
+                                                   {!p.Statutory_parental_pay_YTD__c}
+                                                </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <table cellpadding="0px" cellspacing="0px" border="0px"
+                                style="padding-left: 5px; padding-top: 10px; width: 734px; background-color: #fde6d6;">
+
+                                <tr>
+                                    <td
+                                        style="width: 140px; font: 12px 'Times New Roman'; color: #fff; line-height: 15px; background-color: #fde6d6; padding: 5px;"
+                                        valign="top">&nbsp;</td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                        valign="top">Statutory Adoption Pay</td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top" height="30px;">
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px; padding-left:30px;color: #00305e;"
+                                                    valign="top" align="center">£ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P</td>
+                                                   
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <div style="width:120px;height:28px;border: 1px solid #999;background: white;color: #000;text-align: right;">
+                                                {!p.Statutory_adoption_pay_YTD__c}
+                                                </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;</td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                                    valign="top" align="center">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 40px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">&nbsp;</td>
+                                    <td style="width: 15px;"></td>
+                                    <td style="width: 10px;"></td>
+                                    <td
+                                        style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                        valign="top">
+
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;"
+                                                    valign="top" align="center">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    <tr>
+                        <td>
+                            <table cellpadding="0px" cellspacing="0px" border="0px"
+                                style="padding-left: 5px; width: 734px; background-color: #fde6d6;">
+
+                                <tr>
+                                    <td width="360px" valign="top">
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 360px; font: Bold 14px 'Times New Roman'; color: #fff; line-height: 15px;font-siz:15px; background-color: #f4741d; padding: 5px; vertical-align: middle;"
+                                                    valign="top" height="20px;">Other details</td>
+
+                                            </tr>
+                                        </table>
+
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px; padding-top: 15px; vertical-align: middle; padding-left: 40px;color: #00305e;"
+                                                    valign="top">Student Loan deductions in this
+                                                    employment (whole £s only)</td>
+
+                                                <td
+                                                    style="width: 240px; font: Bold 14px 'Times New Roman'; color: #fff; line-height: 15px; padding-top: 15px; vertical-align: middle;"
+                                                    valign="top" height="20px;">
+
+                                                    <table>
+                                                        <tr>
+                                                            <td
+                                                                style="width: 120px; font: 12px 'Times New Roman'; color: #000; line-height: 15px;color: #00305e;"
+                                                                valign="top" align="center">£</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                            <div style="width:120px;height:28px;border: 1px solid #999;background: white;color:#000;font-size:12px;font-weight:normal;text-align: right;">
+                                                             {!p.Student_loan_YTD__c}
+                                                            </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+
+
+                                                </td>
+
+                                            </tr>
+                                        </table>
+
+                                        <table>
+                                            <tr>
+                                                <td
+                                                    style="width: 360px; font: 13px 'Times New Roman'; color: #000; line-height: 15px; padding-left: 10px; vertical-align: middle; padding-top: 10px;color: #00305e;">To
+                                                    employee</td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td
+                                                    style="width: 360px; font: 12px 'Times New Roman'; color: #000; line-height: 15px; padding-left: 10px; vertical-align: middle"
+                                                    valign="top">
+                                                    <!-- START:: 25/10/2017 NPAY-376 P60 - 2017/18 version  added by Jamil -->
+                                                    <!-- START:: 17/05/2018 NPAY-496 P60 address does not display postcode  added by Jamil  -->
+                                                    <!--  <textarea rows="6" cols="45" maxlength="50"
+                                                        readonly="readonly">{{p60detail.Forename__c}} {{p60detail.Surname__c}}&#13;&#10;{{p60detail.Address1__c}}&#13;&#10;{{p60detail.Address2__c}}&#13;&#10;{{p60detail.Address3__c}}&#13;&#10;{{p60detail.Address4__c}}</textarea> -->
+                                                   <div style="width:360px;height: 23mm;border: 1px solid #999;background: white;white-space: pre-wrap;line-height:normal;">{!p.Employee__r.Personal_L__r.First_name__c} {!p.Employee__r.Personal_L__r.Last_name__c}&#13;&#10;{!p.Employee__r.Personal_L__r.Address__c}&#13;&#10;{!p.Employee__r.Personal_L__r.Postcode__c}  </div>
+                                                    
+                                                    <!-- START:: 17/05/2018 NPAY-496 P60 address does not display postcode  added by Jamil  -->
+                                                </td>
+                                                <!-- END:: 25/10/2017 NPAY-376 P60 - 2017/18 version  added by Jamil -->
+                                            </tr>
+                                        </table>
+
+                                    </td>
+
+
+
+
+                                    <td width="14px"></td>
+                                    <td width="360px" valign="top">
+                                        <table style="padding-top: 5px;">
+                                            <tr>
+                                                <td
+                                                    style="width: 350px; font: Bold 14px 'Times New Roman'; color: #fff; line-height: 15px; background-color: #000033; height: 2px;">
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td
+                                                    style="width: 340px; font: 14px 'Times New Roman'; color: #00305e; line-height: 12px; padding-left: 5px; padding-top: 2px; vertical-align: middle"
+                                                    valign="top">Your employer's full name and address
+                                                    (including postcode)</td>
+                                            </tr>
+
+                                            <tr>
+                                                <!-- START :: 28/07/2016 NPAY-338 Payroll6 Issue List Payroll issue 6 added by jamil -->
+
+                                                <!-- START:: 25/10/2017 NPAY-376 P60 - 2017/18 version  added by Jamil -->
+                                                <!-- <td style="width:360px;font:12px 'Times New Roman';color: #000;line-height: 15px; padding-left:10px; vertical-align:middle" valign="top" ><textarea rows="4"  readonly="readonly" cols="45" maxlength="50">{{p60detail.RTI_summary__r.Company_name__c}}{{}}</textarea></td> -->
+                                                <td
+                                                    style="width: 360px; font: 12px 'Times New Roman'; color: #000; line-height: 15px; padding-left: 10px; vertical-align: middle"
+                                                    valign="top">
+                                                    <div style="width:334px;height: 25mm;border: 1px solid #999;background: white;white-space: pre-wrap;line-height:normal;">{!p.Employee__r.Job_Role__r.Companies__r.Employer__r.Name} &#13;&#10;{!p.Employee__r.Job_Role__r.Companies__r.Employer__r.Address_line_1__c} &#13;&#10;{!p.Employee__r.Job_Role__r.Companies__r.Employer__r.City__c}&#13;&#10;{!p.Employee__r.Job_Role__r.Companies__r.Employer__r.Postcode__c}</div></td>
+                                                <!-- END:: 25/10/2017 NPAY-376 P60 - 2017/18 version  added by Jamil -->
+                                                <!-- END :: 28/07/2016 NPAY-338 Payroll6 Issue List Payroll issue 6 added by jamil-->
+                                            </tr>
+
+                                            <tr>
+                                                <td
+                                                    style="width: 360px; font: 12px 'Times New Roman'; color: #000; line-height: 15px; padding-left: 10px; vertical-align: middle"
+                                                    valign="top">
+
+                                                    <table>
+                                                        <tr>
+                                                            <td
+                                                                style="width: 100px; font: 12px 'Times New Roman'; color: #00305e; line-height: 15px; padding-left: 0px; vertical-align: middle"
+                                                                valign="top">Employer PAYE reference</td>
+                                                            <td
+                                                                style="width: 20px; font: 12px 'Times New Roman'; color: #00305e; line-height: 15px; padding-right: 10px; vertical-align: middle"
+                                                                valign="top">&nbsp;</td>
+                                                            <td
+                                                                style="width: 210px; font: 12px 'Times New Roman'; color: #000; line-height: 15px; padding-right: 10px; vertical-align: middle"
+                                                                valign="top" align="right">
+                                                                <div style="width:210px;height:28px;border: 1px solid #999;background: white;text-align:left;">
+                                                                {!p.Employee__r.Job_Role__r.Companies__r.Employer__r.HMRC_office_number__c}/{!p.Employee__r.Job_Role__r.Companies__r.Employer__r.Employer_PAYE_reference__c}</div>
+                                                                </td>
+                                                        </tr>
+                                                    </table>
+
+                                                </td>
+
+                                            </tr>
+
+
+                                            <tr>
+                                                <td
+                                                    style="width: 360px; font: 14px 'Times New Roman'; color: #00305e; line-height: 15px; padding-left: 10px; padding-top: 2px; vertical-align: middle; padding-bottom: 3px;"
+                                                    valign="top"><strong>Certificate by
+                                                        Employer/Paying Office:</strong></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td
+                                                    style="width: 360px; font: 12px 'Times New Roman'; color: #00305e; line-height: 15px; padding-left: 10px; vertical-align: text-top; padding-bottom: 3px;"
+                                                    valign="top">This form shows your total pay for
+                                                    Income Tax purposes in this employment for the year.<br />
+                                                    Any overtime, bonus, commission etc, Statutory Sick Pay,
+                                                    Statutory Maternity Pay, Statutory Paternity Pay, Statutory
+                                                    Shared Parental Pay or Statutory Adoption Pay is included.
+                                                </td>
+
+                                            </tr>
+
+                                        </table>
+
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                        </td>
+                    </tr>
+
+
+
+                    </tr>
+                </table>
+
+                </td>
+                </tr>
+                
+            </table>
+            
+
+            <!-- -------------------------------------------START Pensioner detail----------------------------------- -->
+            <!-- -------------------------------------------END Pensioner detail----------------------------------- -->
+       <!--  </div> -->
+                     
+            <table style="width:734px;">
+            <tr>
+                    <td>
+                     <apex:outputPanel rendered="{!p.xcdhcm__Tax_year__c == '2016/2017'}">
+                        <div>
+                           <span style="float: left;color: #00305e;">P60(Single
+                                sheet)({!strTaxYearDisplayFooter})</span>
+                            <center>
+                                <span style="float: center;color: #00305e;">Do not destroy</span> <span style="float: right;color: #00305e;"> xxxxxxx HMRC
+                                    12/15 </span>
+                            </center>
+                          
+                        </div>
+                       </apex:outputPanel>
+                       <apex:outputPanel rendered="{!p.xcdhcm__Tax_year__c == '2018/2019'}">
+                        <div>
+                           <span style="float: left;color: #00305e;">P60(Single
+                                sheet)({!strTaxYearDisplayFooter})</span>
+                            <center>
+                                <span style="float: center;color: #00305e;">Do not destroy</span> <span style="float: right;color: #00305e;"> HMRC 
+                                12/17</span> 
+                            </center>
+                          
+                        </div>
+                       </apex:outputPanel>      
+                    </td>
+                </tr>
+            </table>
+         </div>    
+        </apex:repeat>
+  
+</div>
+</body>
+</html> 
+</apex:page>
+<!--  END :: 28/11/2018 NPAY-503 P60 and Year End Issues added by Jamil   -->

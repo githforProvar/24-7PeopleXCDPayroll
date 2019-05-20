@@ -3057,7 +3057,9 @@
       </clauses>
     </apiCall>
     <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="1442" title="Reports for only TYPE">
-      <tags/>
+      <tags>
+        <string>disabled</string>
+      </tags>
       <arguments>
         <argument id="description">
           <value class="value" valueClass="string">Reports Tab</value>

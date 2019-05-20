@@ -1,0 +1,37 @@
+<apex:page standardController="xcdhcm__Applicant__c" extensions="xcdhcm.ApplicationViewController" showHeader="true" sidebar="false" wizard="false">
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'RecruitmentAppCSS/Recruitmentsub.css')}" />
+<style>
+ .Custom108Tab .tertiaryPalette, .individualPalette .Custom108Block .tertiaryPalette, .layoutEdit .individualPalette .Custom108Block .tertiaryPalette {
+    background-color: #FFFFFF;
+    border-top: 2px solid #63a4c5!important;
+}
+</style>
+ <apex:form >
+ 	<apex:pageBlock title="{!$Label.xcdhcm__phnewinterview}">
+        <apex:pageBlockButtons location="Both">   
+	          <apex:commandButton value="{!$Label.xcdhcm__newinterviewbsave}" action="{!saveInterview}" styleclass="formbutton" style="display:inline!important" />
+	          <!-- START :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal  -->
+	           <apex:commandButton value="{!$Label.xcdhcm__newinterviewbsaveandattach}" action="{!saveInterviewAttach}" styleclass="formbutton" style="display:inline!important" />
+	          <!-- END :: 13/06/2016 NPPD-1071 Recruitment changes added by Kamal  -->  
+	          <apex:commandButton value="{!$Label.xcdhcm__newinterviewbcancel}" action="{!ICancle}" immediate="true" styleclass="formbutton" style="display:inline!important" />	 							    
+         </apex:pageBlockButtons>
+                        
+ 		<apex:pageBlockSection title="{!$Label.xcdhcm__newinterviewinformation}" columns="2"> 
+            <apex:repeat value="{!$ObjectType.xcdhcm__Interview_record__c.Fieldsets.xcdhcm__Information}" var="i">
+                <apex:inputField value="{!interviewIns[i]}" required="{!i.required}"/>                                                                                                                                               
+             </apex:repeat>
+        </apex:pageBlockSection>
+ 		<apex:pageBlockSection title="{!$Label.xcdhcm__newinterviewinterviewdetails}" columns="2">
+            <apex:repeat value="{!$ObjectType.xcdhcm__Interview_record__c.Fieldsets.xcdhcm__Interview_details}" var="i">
+                <apex:inputField value="{!interviewIns[i]}" required="{!i.required}"/>                                                                                                                                               
+             </apex:repeat>
+        </apex:pageBlockSection>
+ 		<apex:pageBlockSection title="{!$Label.xcdhcm__newinterviewinterviewnotes}" columns="2">
+            <apex:repeat value="{!$ObjectType.xcdhcm__Interview_record__c.Fieldsets.xcdhcm__Interview_notes}" var="i">
+                <apex:inputField value="{!interviewIns[i]}" required="{!i.required}"/>                                                                                                                                               
+             </apex:repeat>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+  <div style="border-bottom: 2px solid #63a4c5!important;"></div>   
+ </apex:form>
+</apex:page>

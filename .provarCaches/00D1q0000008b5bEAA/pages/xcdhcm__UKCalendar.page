@@ -1,0 +1,696 @@
+<!-- START 21/10/2016 NPAY-141 Payroll calendar added by Jamil -->
+
+<apex:page tabStyle="Payroll_Calendar__tab" controller="xcdhcm.UKCalendarController" sidebar="false" >
+  <!--   <apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" /> -->
+  <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+<style type="text/css">
+ .customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette, .layoutEdit .individualPalette .customnotabBlock .tertiaryPalette {
+   background-color: #FFFFFF!important;
+   border-color: #FFFFFF!important;
+}
+<!--START::25/11/2015 added by Farhan -->
+body .pbBody table.list tr.headerRow th 
+{
+    border-bottom: 2px solid #cde2f5 !important;
+}
+<!--END::25/11/2015 added by Farhan -->
+td.dataCol.first {
+    width: 500px !important;
+    height: 40px !important;
+}
+tbody {
+    display: table-row-group;
+    hori
+    border-color: inherit;
+}
+.homeTab .tertiaryPalette, .individualPalette .homeBlock .tertiaryPalette, .layoutEdit .individualPalette .homeBlock .tertiaryPalette {
+    background-color: #FFFFFF!important;
+    border-color: #FFFFFF!important;
+}
+body .pbBody table.list tr.headerRow th:first-child, body .pbBody table.list tr.dataRow td:first-child {
+    width:3%!important;
+}
+input[type='text'] {
+    width: 100px!important;
+    text-align: right!important;
+}
+</style>
+
+<html lang="en" ng-app="demoApp">  
+<head>  
+   <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>UK Calender</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+      
+      
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        
+      <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+            
+            <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+    <script>
+      // define the app
+      var demoApp = angular.module('demoApp', []);
+      // add the controller
+      demoApp.controller('DemoCtrl', function ($scope) {
+            $scope.ukpayrolldata = {!UKPayrollData}
+            $scope.ukcalenders = {!UKCalendar}
+            $scope.ukpayrollWeeklydata = {!UKPayrollWeeklyData}
+            $scope.date = new Date();
+      });
+    </script>
+    <!--  
+    <STYLE TYPE="text/css">
+
+        TD{font-family: Arial; font-size: 8.5pt;}
+        p{
+          font-family: Arial;
+        }
+        body{
+          font-family: Arial;
+         }
+    </STYLE>
+    -->
+    <STYLE TYPE="text/css"> 
+    th.firstRow {
+    text-align: center;
+    padding: 8px;
+    align:center;
+    background-color: #f2f2f2;
+    }
+    td.firstCol {
+    text-align: left;
+    padding: 8px;
+    background-color: #f2f2f2;
+    }
+    
+     td.firstAstriskCol {
+    text-align: center;
+    padding: 8px;
+     font-color: red;
+    background-color: #f2f2f2;
+    }
+    
+    td.firstCol1 {
+    text-align: center;
+     padding: 8px;
+    }
+    
+    td.labelRow {
+    text-align: left;
+    padding: 8px;
+    align:center;
+    /*START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil */ 
+   color: #ADD8E6;
+   /*END :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil */ 
+    font-weight:bold;
+    }
+    td.labelRow1 {
+    text-align: left;
+    padding: 8px;
+    align:center;
+   //START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil 
+    color:black;
+    font-style: italic; 
+    font-size:12px;
+    //START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil 
+     
+    }
+    </STYLE> 
+
+</head>  
+<body  ng-controller="DemoCtrl" style="font-family:Arial;" >
+
+
+  <script type="text/javascript"> 
+      function openLookup(baseURL, width, modified, searchParam){
+        var originalbaseURL = baseURL;
+        var originalwidth = width;
+        var originalmodified = modified;
+        var originalsearchParam = searchParam;
+    
+        var lookupType = baseURL.substr(baseURL.length-3, 3);
+        if (modified == '1') baseURL = baseURL + searchParam;
+    
+        var isCustomLookup = false;
+    
+        // Following "001" is the lookup type for Account object so change this as per your standard or custom object
+        if(lookupType == "001"){
+    
+          var urlArr = baseURL.split("&");
+          var txtId = '';
+          if(urlArr.length > 2) {
+            urlArr = urlArr[1].split('=');
+            txtId = urlArr[1];
+          }
+    
+          // Following is the url of Custom Lookup page. You need to change that accordingly
+          baseURL = "/apex/xcdhcm__CustomUKPayrollLookup?txt=" + txtId;
+    
+          // Following is the id of apex:form control "myForm". You need to change that accordingly
+          baseURL = baseURL + "&frm=" + escapeUTF("{!$Component.myForm}");
+          if (modified == '1') {
+            baseURL = baseURL + "&lksearch=" + searchParam;
+          }
+    
+          // Following is the ID of inputField that is the lookup to be customized as custom lookup
+          if(txtId.indexOf('Account') > -1 ){
+            isCustomLookup = true;
+          }
+        }
+    
+    
+        if(isCustomLookup == true){
+          openPopup(baseURL, "lookup", 350, 480, "width="+width+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+        }
+        else {
+          if (modified == '1') originalbaseURL = originalbaseURL + originalsearchParam;
+          openPopup(originalbaseURL, "lookup", 350, 480, "width="+originalwidth+",height=480,toolbar=no,status=no,directories=no,menubar=no,resizable=yes,scrollable=no", true);
+        } 
+      }
+</script>
+
+<apex:PageBlock rendered="{!frequencyString == 'Monthly'}">
+<table>
+<div >
+     <thead>
+        <tr> 
+         <!--  START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->
+        <th style="text-align:left"><b>
+             <!--  START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->
+              <!--  <apex:outputLink target="_top"                 
+              value="/{{ukpayrolldata[0].payperiod.XCD_PAY_Payroll__c}}"> {{ ukpayrolldata[0].payperiod.XCD_PAY_Payroll__r.Payroll__c }} &nbsp;&nbsp;{{ ukpayrolldata[0].payperiod.Tax_Year__c }}
+              </apex:OutputLink> -->
+              <a ng-href="/{{ukpayrolldata[0].payperiod.xcdhcm__XCD_PAY_Payroll__c}}"  ng-bind="ukpayrolldata[0].payperiod.xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c"></a> &nbsp;&nbsp;{{ukpayrolldata[0].payperiod.xcdhcm__Tax_Year__c }} 
+              <!-- END ::  19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil -->
+              </b></th>
+          <!--  END :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->     
+        </tr>
+    </thead>
+</div>
+</table>
+</apex:PageBlock>
+
+<apex:PageBlock rendered="{!frequencyString == 'Weekly'}">
+<table>
+<div >
+ <thead>
+
+<tr> 
+ <!--  START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->
+<th style="text-align:left"><b>
+   <!-- START :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil  -->
+     <!--  ><apex:outputLink target="_top"             
+      value="/{{ukpayrollWeeklydata[0].PayrollID}}"> {{ukpayrollWeeklydata [0].Name}} &nbsp;&nbsp;{{ukpayrollWeeklydata [0].Taxyear}}
+      </apex:OutputLink> -->
+      <a ng-href="/{{ukpayrollWeeklydata[0].PayrollID}}"  ng-bind="ukpayrollWeeklydata [0].Name"></a> &nbsp;&nbsp;{{ukpayrollWeeklydata [0].Taxyear}}
+     <!--  END :: 19/12/2017 NPAY-366 Rework Payroll Pages for Lightning modified by by Jamil --> 
+      </b></th>
+   <!-- END :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->    
+</tr>
+</thead>
+</div>
+</table>
+</apex:PageBlock>
+
+
+<apex:PageBlock >
+
+            <br/><br/>
+  <apex:form id="myForm">  
+     
+      
+   <table>
+         <tr>   
+            <td>
+                <apex:outputLabel value="Select payroll" style="margin-right:10px;"/>
+            </td>
+             <td> <apex:inputField id="Account" value="{!period.xcdhcm__XCD_PAY_Payroll__c}"  />  
+            </td>
+            <td>
+                 <!-- START :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+                 <!-- <apex:commandButton value="Next"  action="{!GoToPage}" /> -->
+                 <apex:commandButton value="{!$Label.xcdhcm__ukcalendarbnext}"  action="{!GoToPage}" />
+                 <!-- END :: 30/08/2016 NPPD-1160 Section headers and translations Modified by Rahul S -->
+            </td>
+            
+            
+        </tr>
+    </table>
+
+  
+  </apex:form>
+</apex:PageBlock>
+<apex:PageBlock rendered="{!frequencyString == 'Monthly'}">
+<table class="table  table-hover data-table myTable " >
+<div >
+ <thead>
+
+<tr> 
+<!--
+ <th style="text-align:left"><b><apex:outputLink target="_top"
+                   
+      value="/{{ukpayrolldata[0].XCD_PAY_Payroll__c}}"> {{ ukpayrolldata[0].XCD_PAY_Payroll__r.Name }}
+      </apex:OutputLink></b></th>
+      
+
+
+<th style="text-align:left"><b><apex:outputLink target="_top"
+                   
+      value="/{{ukpayrolldata[0].xcdhcm__XCD_PAY_Payroll__c}}"> {{ ukpayrolldata[0].xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c }}
+      </apex:OutputLink></b></th>
+-->
+<th></th>
+
+ 
+ 
+ <th class="firstRow "><b>{{ukpayrolldata[0].payperiod.Name.substring(0,3) | uppercase}}</b> </th>
+ 
+ <th class="firstRow "><b>{{ukpayrolldata[1].payperiod.Name.substring(0,3) | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrolldata[2].payperiod.Name.substring(0,3) | uppercase}}</b> </th>
+ <th class="firstRow "><b>{{ukpayrolldata[3].payperiod.Name.substring(0,3) | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrolldata[4].payperiod.Name.substring(0,3) | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrolldata[5].payperiod.Name.substring(0,3) | uppercase}}</b> </th>
+ <th class="firstRow "><b>{{ukpayrolldata[6].payperiod.Name.substring(0,3) | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrolldata[7].payperiod.Name.substring(0,3) | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrolldata[8].payperiod.Name.substring(0,3) | uppercase}}</b> </th>
+ <th class="firstRow "><b>{{ukpayrolldata[9].payperiod.Name.substring(0,3) | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrolldata[10].payperiod.Name.substring(0,3) | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrolldata[11].payperiod.Name.substring(0,3) | uppercase}}</b> </th>
+</tr> 
+ </thead>
+<!--  Start of tax year -->
+
+<tr>
+<td class="labelRow" >Run payroll</td>
+</tr>
+<!--  Payroll run date -->
+<tr> 
+ 
+ <td class="firstCol">Payroll run date</td><td class="firstCol1">{{ukpayrolldata[0].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[0].asterikMarkRunDay}} </td><td class="firstCol1">{{ukpayrolldata[1].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}} {{ukpayrolldata[1].asterikMarkRunDay}}</td><td class="firstCol1">{{ukpayrolldata[2].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[2].asterikMarkRunDay}} </td>
+ <td class="firstCol1">{{ukpayrolldata[3].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[3].asterikMarkRunDay}} </td><td class="firstCol1">{{ukpayrolldata[4].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}} {{ukpayrolldata[4].asterikMarkRunDay}}</td><td class="firstCol1">{{ukpayrolldata[5].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}} {{ukpayrolldata[5].asterikMarkRunDay}}</td>
+ <td class="firstCol1">{{ukpayrolldata[6].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[6].asterikMarkRunDay}} </td><td class="firstCol1">{{ukpayrolldata[7].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[7].asterikMarkRunDay}} </td><td class="firstCol1">{{ukpayrolldata[8].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[8].asterikMarkRunDay}} </td>
+ <td class="firstCol1">{{ukpayrolldata[9].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[9].asterikMarkRunDay}} </td><td class="firstCol1">{{ukpayrolldata[10].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[10].asterikMarkRunDay}} </td><td class="firstCol1">{{ukpayrolldata[11].payperiod.xcdhcm__Payroll_rundate__c | date:'dd'}}{{ukpayrolldata[11].asterikMarkRunDay}} </td>
+</tr> 
+<!--  Process BACS -->
+<tr>
+ <td class="firstCol">Process BACS </td><td class="firstCol1">{{ukpayrolldata[0].payperiod.xcdhcm__BACS_processing_day__c | date:'dd'}}{{ukpayrolldata[0].asterikMarkBACS}} </td><td class="firstCol1">{{ukpayrolldata[1].payperiod.xcdhcm__BACS_processing_day__c | date:'dd'}} {{ukpayrolldata[1].asterikMarkBACS}}</td>
+<td class="firstCol1">{{ukpayrolldata[2].payperiod.xcdhcm__BACS_processing_day__c | date:'dd'}}{{ukpayrolldata[2].asterikMarkBACS}} </td> <td class="firstCol1">{{ukpayrolldata[3].payperiod.xcdhcm__BACS_processing_day__c | date:'dd'}} {{ukpayrolldata[3].asterikMarkBACS}}</td><td class="firstCol1">{{ukpayrolldata[4].payperiod.xcdhcm__BACS_processing_day__c| date:'dd'}}{{ukpayrolldata[4].asterikMarkBACS}} </td><td class="firstCol1">{{ukpayrolldata[5].payperiod.xcdhcm__BACS_processing_day__c | date:'dd' }}{{ukpayrolldata[5].asterikMarkBACS}} </td>
+ <td class="firstCol1">{{ukpayrolldata[6].payperiod.xcdhcm__BACS_processing_day__c | date:'dd'}}{{ukpayrolldata[6].asterikMarkBACS}} </td><td class="firstCol1">{{ukpayrolldata[7].payperiod.xcdhcm__BACS_processing_day__c | date:'dd' }} {{ukpayrolldata[7].asterikMarkBACS}}</td><td class="firstCol1">{{ukpayrolldata[8].payperiod.xcdhcm__BACS_processing_day__c| date:'dd'}}{{ukpayrolldata[8].asterikMarkBACS}} </td>
+ <td class="firstCol1">{{ukpayrolldata[9].payperiod.xcdhcm__BACS_processing_day__c| date:'dd' }}{{ukpayrolldata[9].asterikMarkBACS}} </td><td class="firstCol1">{{ukpayrolldata[10].payperiod.xcdhcm__BACS_processing_day__c| date:'dd'}}{{ukpayrolldata[10].asterikMarkBACS}} </td><td class="firstCol1">{{ukpayrolldata[11].payperiod.xcdhcm__BACS_processing_day__c | date:'dd'}}{{ukpayrolldata[11].asterikMarkBACS}} </td>
+
+</tr>
+<!--  Pay day -->
+<tr> 
+ <td class="firstCol">Pay day </td><td class="firstCol1">{{ukpayrolldata[0].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[0].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[1].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[1].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[2].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[2].asterikMark}} </td>
+ <td class="firstCol1">{{ukpayrolldata[3].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[3].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[4].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[4].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[5].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[5].asterikMark}} </td>
+ <td class="firstCol1">{{ukpayrolldata[6].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[6].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[7].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[7].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[8].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[8].asterikMark}} </td>
+ <td class="firstCol1">{{ukpayrolldata[9].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[9].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[10].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[10].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[11].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[11].asterikMark}} </td>
+</tr> 
+<tr>
+<td class="labelRow" >HMRC reporting and payments</td>
+</tr>
+<!--  Employer payment summary latest submission -->
+<tr> 
+ <td class="firstCol">Employer payment summary latest submission </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td>
+</tr>
+<!--  Payments due to HMRC (electronic remittance) -->
+<tr> 
+ <td class="firstCol">Payments due to HMRC (electronic remittance) </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td>
+</tr> 
+<!--  Payments due to HMRC - Small Employer -->
+<tr> 
+ <td class="firstCol">Payments due to HMRC - Small Employer </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC_small_employer__c }} </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC_small_employer__c }} </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC_small_employer__c }} </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC_small_employer__c }} </td>
+</tr> 
+<!--  Full payment submission -->
+
+<tr> 
+ <td class="firstCol"> Full payment submission </td><td class="firstCol1">{{ukpayrolldata[0].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[0].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[1].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[1].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[2].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[2].asterikMark}} </td>
+ <td class="firstCol1">{{ukpayrolldata[3].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[3].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[4].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[4].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[5].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[5].asterikMark}} </td>
+ <td class="firstCol1">{{ukpayrolldata[6].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[6].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[7].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[7].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[8].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[8].asterikMark}} </td>
+ <td class="firstCol1">{{ukpayrolldata[9].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[9].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[10].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[10].asterikMark}} </td><td class="firstCol1">{{ukpayrolldata[11].payperiod.xcdhcm__Pay_day__c | date:'dd'}}{{ukpayrolldata[11].asterikMark}} </td>
+</tr> 
+
+<tr>
+<td class="labelRow" >Key dates</td>
+</tr>
+<!--  National Living Wage - assessment date -->
+<tr> 
+ <td class="firstCol"> National Living Wage - assessment date </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__National_living_wage_assessment_date__c}} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__National_living_wage_assessment_date__c}} </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp;</td>
+</tr>
+
+<tr> 
+ <td class="firstCol">Start of tax year</td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Start_of_tax_year__c }} </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr> 
+<!--    P11D due  -->
+
+<tr> 
+ <td class="firstCol"> P11D forms due </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__P11D_due__c }} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>
+
+<!--  Last_date for adjusting latest previous_year_FPS -->
+<tr> 
+ <td class="firstCol">Last date for adjusting previous year FPS </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Last_Dt_adjusting_previous_yr_FPS__c}} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>
+<!--  (P11D NI payments payable) -->
+
+<tr> 
+ <td class="firstCol"> (P11D NI payments payable) </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__P11D_NI_payments_payable__c  }} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>
+<!--  P60 due  -->
+<tr> 
+ <td class="firstCol"> P60 due </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__P60_due__c }} </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>  
+<tr>
+<!--  START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->
+<!--  START :: 05/12/2017 Payroll Calendar fix and bugs added by Jamil  -->
+<!-- <td class='labelRow1'> *  Denotes a public holiday</td> -->
+<td class='labelRow1'> *  Denotes public holiday</td>
+<!--  START :: 05/12/2017 Payroll Calendar fix and bugs added by Jamil  -->
+<!--  END :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->
+
+</tr>
+<!--  Payroll cutoff date -->
+<!--
+<tr> 
+  <td class="firstCol">Payroll cutoff date </td><td>{{ukpayrolldata[0].Payroll_cutoff_day__c | date:'dd/MM/yy' }} </td><td>{{ukpayrolldata[1].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[2].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td>
+ <td>{{ukpayrolldata[3].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[4].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[5].Payroll_cutoff_day__c | date:'dd/MM/yy' }} </td>
+ <td>{{ukpayrolldata[6].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[7].Payroll_cutoff_day__c | date:'dd/MM/yy' }} </td><td>{{ukpayrolldata[8].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td>
+ <td>{{ukpayrolldata[9].Payroll_cutoff_day__c| date:'dd/MM/yy' }} </td><td>{{ukpayrolldata[10].Payroll_cutoff_day__c| date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[11].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td>
+</tr> 
+
+<!--  No payment EPS - recommend submission by 
+<tr> 
+ <td class="firstCol">No payment EPS - recommend submission by </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}}</td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td>
+</tr> 
+
+
+<!-- Share scheme returns 
+<tr> 
+ <td class="firstCol"> Share scheme returns </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td class="firstCol1">{{ukcalenders[0].Share_scheme_returns__c }} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>
+-->
+
+</div>
+</table>
+</apex:PageBlock>
+<!-- Jamil weekly --->
+<apex:PageBlock rendered="{!frequencyString == 'Weekly'}">
+<table class="table  table-hover data-table myTable " >
+<div >
+ <thead>
+
+<tr> 
+<!--
+ <th style="text-align:left"><b><apex:outputLink target="_top"
+                   
+      value="/{{ukpayrollWeeklydata[0].XCD_PAY_Payroll__c}}"> {{ ukpayrollWeeklydata[0].XCD_PAY_Payroll__r.Name }}
+      </apex:OutputLink></b></th>
+      
+
+
+<th style="text-align:left"><b><apex:outputLink target="_top"
+                   
+      value="/{{ukpayrollWeeklydata[0].XCD_PAY_Payroll__c}}"> {{ ukpayrollWeeklydata[0].XCD_PAY_Payroll__r.Payroll__c }}
+      </apex:OutputLink></b></th>
+-->
+
+ <th></th>
+ <!--  START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->
+ <th class="firstRow "><b>{{ukpayrollWeeklydata[0].month| uppercase }}  </b> </th>
+ 
+ <th class="firstRow "><b>{{ ukpayrollWeeklydata[1].month | uppercase}}</b> </th><th class="firstRow "><b>{{ ukpayrollWeeklydata[2].month | uppercase}}</b> </th>
+ <th class="firstRow "><b>{{ukpayrollWeeklydata[3].month | uppercase}} </b> </th><th class="firstRow "><b>{{ukpayrollWeeklydata[4].month | uppercase}}</b> </th><th class="firstRow "><b>{{ ukpayrollWeeklydata[5].month | uppercase}}</b> </th>
+ <th class="firstRow "><b>{{ukpayrollWeeklydata[6].month | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrollWeeklydata[7].month | uppercase}}</b> </th><th class="firstRow "><b>{{ ukpayrollWeeklydata[8].month | uppercase}}</b> </th>
+ <th class="firstRow "><b>{{ukpayrollWeeklydata[9].month | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrollWeeklydata[10].month | uppercase}}</b> </th><th class="firstRow "><b>{{ukpayrollWeeklydata[11].month | uppercase}}</b> </th>
+</tr> 
+ </thead>
+<!--  Start of tax year -->
+
+<tr>
+<td class="labelRow" >Run payroll</td>
+</tr>
+<!--  Payroll run date -->
+<tr> 
+ 
+ <td class="firstCol">Payroll run date</td>
+ <td class="firstCol1">{{ukpayrollWeeklydata[0].payRunDay}}{{ukpayrollWeeklydata[0].asterikMarkRunDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[1].payRunDay}}{{ukpayrollWeeklydata[1].asterikMarkRunDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[2].payRunDay}}{{ukpayrollWeeklydata[2].asterikMarkRunDay}}</td>
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[3].payRunDay}} {{ukpayrollWeeklydata[3].asterikMarkRunDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[4].payRunDay}} {{ukpayrollWeeklydata[4].asterikMarkRunDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[5].payRunDay}}{{ukpayrollWeeklydata[5].asterikMarkRunDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[6].payRunDay}}{{ukpayrollWeeklydata[6].asterikMarkRunDay}}</td> 
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[7].payRunDay}} {{ukpayrollWeeklydata[7].asterikMarkRunDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[8].payRunDay}}{{ukpayrollWeeklydata[8].asterikMarkRunDay}}</td>
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[9].payRunDay}}{{ukpayrollWeeklydata[9].asterikMarkRunDay}}</td>
+  
+  <td class="firstCol1">{{ukpayrollWeeklydata[10].payRunDay}}{{ukpayrollWeeklydata[10].asterikMarkRunDay}}</td>
+  
+   <td class="firstCol1">{{ukpayrollWeeklydata[11].payRunDay}}{{ukpayrollWeeklydata[11].asterikMarkRunDay}}</td>
+  
+</tr> 
+<!--  Process BACS -->
+
+<tr>
+<td class="firstCol">Process BACS</td>
+ <td class="firstCol1">{{ukpayrollWeeklydata[0].BACSDay}}{{ukpayrollWeeklydata[0].asterikMarkBACSDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[1].BACSDay}}{{ukpayrollWeeklydata[1].asterikMarkBACSDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[2].BACSDay}}{{ukpayrollWeeklydata[2].asterikMarkBACSDay}}</td>
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[3].BACSDay}} {{ukpayrollWeeklydata[3].asterikMarkBACSDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[4].BACSDay}} {{ukpayrollWeeklydata[4].asterikMarkBACSDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[5].BACSDay}}{{ukpayrollWeeklydata[5].asterikMarkBACSDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[6].BACSDay}}{{ukpayrollWeeklydata[6].asterikMarkBACSDay}}</td> 
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[7].BACSDay}} {{ukpayrollWeeklydata[7].asterikMarkBACSDay}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[8].BACSDay}}{{ukpayrollWeeklydata[8].asterikMarkBACSDay}}</td>
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[9].BACSDay}}{{ukpayrollWeeklydata[9].asterikMarkBACSDay}}</td>
+  
+  <td class="firstCol1">{{ukpayrollWeeklydata[10].BACSDay}}{{ukpayrollWeeklydata[10].asterikMarkBACSDay}}</td>
+  
+   <td class="firstCol1">{{ukpayrollWeeklydata[11].BACSDay}}{{ukpayrollWeeklydata[11].asterikMarkBACSDay}}</td>
+
+</tr>
+<!--  Pay day -->
+<tr> 
+ <td class="firstCol">Pay day </td>
+ <td class="firstCol1">{{ukpayrollWeeklydata[0].payDay}}{{ukpayrollWeeklydata[0].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[1].payDay}}{{ukpayrollWeeklydata[1].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[2].payDay}}{{ukpayrollWeeklydata[2].asterikPayDayMark}}</td>
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[3].payDay}} {{ukpayrollWeeklydata[3].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[4].payDay}} {{ukpayrollWeeklydata[4].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[5].payDay}}{{ukpayrollWeeklydata[5].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[6].payDay}}{{ukpayrollWeeklydata[6].asterikPayDayMark}}</td> 
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[7].payDay}} {{ukpayrollWeeklydata[7].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[8].payDay}}{{ukpayrollWeeklydata[8].asterikPayDayMark}}</td>
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[9].payDay}}{{ukpayrollWeeklydata[9].asterikPayDayMark}}</td>
+  
+  <td class="firstCol1">{{ukpayrollWeeklydata[10].payDay}}{{ukpayrollWeeklydata[10].asterikPayDayMark}}</td>
+  
+   <td class="firstCol1">{{ukpayrollWeeklydata[11].payDay}}{{ukpayrollWeeklydata[11].asterikPayDayMark}}</td>
+</tr> 
+<tr>
+<td class="labelRow" >HMRC reporting and payments</td>
+</tr>
+<!--  Employer payment summary latest submission -->
+<tr> 
+ <td class="firstCol">Employer payment summary latest submission </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Employer_payment_summary__c }} </td>
+</tr>
+<!--  Payments due to HMRC (electronic remittance) -->
+<tr> 
+ <td class="firstCol">Payments due to HMRC (electronic remittance) </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC__c}} </td>
+</tr> 
+<!--  Payments due to HMRC - Small Employer -->
+<tr> 
+ <td class="firstCol">Payments due to HMRC - Small Employer </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC_small_employer__c }} </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC_small_employer__c }} </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC_small_employer__c }} </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Payments_due_to_HMRC_small_employer__c }} </td>
+</tr> 
+<!--  Full payment submission -->
+
+<tr> 
+ <td class="firstCol"> Full payment submission </td>
+ <td class="firstCol1">{{ukpayrollWeeklydata[0].payDay}}{{ukpayrollWeeklydata[0].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[1].payDay}}{{ukpayrollWeeklydata[1].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[2].payDay}}{{ukpayrollWeeklydata[2].asterikPayDayMark}}</td>
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[3].payDay}} {{ukpayrollWeeklydata[3].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[4].payDay}} {{ukpayrollWeeklydata[4].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[5].payDay}}{{ukpayrollWeeklydata[5].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[6].payDay}}{{ukpayrollWeeklydata[6].asterikPayDayMark}}</td> 
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[7].payDay}} {{ukpayrollWeeklydata[7].asterikPayDayMark}}</td>
+ 
+ <td class="firstCol1">{{ukpayrollWeeklydata[8].payDay}}{{ukpayrollWeeklydata[8].asterikPayDayMark}}</td>
+
+ <td class="firstCol1">{{ukpayrollWeeklydata[9].payDay}}{{ukpayrollWeeklydata[9].asterikPayDayMark}}</td>
+  
+  <td class="firstCol1">{{ukpayrollWeeklydata[10].payDay}}{{ukpayrollWeeklydata[10].asterikPayDayMark}}</td>
+  
+   <td class="firstCol1">{{ukpayrollWeeklydata[11].payDay}}{{ukpayrollWeeklydata[11].asterikPayDayMark}}</td>
+</tr> 
+ <!--  END :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->
+<tr>
+<td class="labelRow" >Key dates</td>
+</tr>
+<!--  National Living Wage - assessment date -->
+<tr> 
+ <td class="firstCol"> National Living Wage - assessment date </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__National_living_wage_assessment_date__c}} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__National_living_wage_assessment_date__c}} </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp;</td>
+</tr>
+
+<tr> 
+ <td class="firstCol">Start of tax year</td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Start_of_tax_year__c }} </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr> 
+<!--    P11D due  -->
+
+<tr> 
+ <td class="firstCol"> P11D forms due </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__P11D_due__c }} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>
+
+<!--  Last_date for adjusting latest previous_year_FPS -->
+<tr> 
+ <td class="firstCol">Last date for adjusting previous year FPS </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__Last_Dt_adjusting_previous_yr_FPS__c}} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>
+<!--  (P11D NI payments payable) -->
+
+<tr> 
+ <td class="firstCol"> (P11D NI payments payable) </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td class="firstCol1">{{ukcalenders[0].xcdhcm__P11D_NI_payments_payable__c  }} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>
+<!--  P60 due  -->
+<tr> 
+ <td class="firstCol"> P60 due </td><td>&nbsp;&nbsp; </td><td class="firstCol1">{{ukcalenders[0].xcdhcm__P60_due__c }} </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr> 
+
+<tr>
+<!--  START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->
+<!--  START :: 05/12/2017 Payroll Calendar fix and bugs added by Jamil  -->
+<!-- <td class='labelRow1'> *  Denotes a public holiday</td> -->
+<td class='labelRow1'> *  Denotes public holiday</td>
+<!--  START :: 05/12/2017 Payroll Calendar fix and bugs added by Jamil  -->
+<!--  START :: 05/10/2017 NPAY-359 Payroll Calendar fix and bugs added by Jamil  -->
+</tr>
+
+<!--  Payroll cutoff date -->
+<!--
+<tr> 
+  <td class="firstCol">Payroll cutoff date </td><td>{{ukpayrolldata[0].Payroll_cutoff_day__c | date:'dd/MM/yy' }} </td><td>{{ukpayrolldata[1].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[2].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td>
+ <td>{{ukpayrolldata[3].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[4].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[5].Payroll_cutoff_day__c | date:'dd/MM/yy' }} </td>
+ <td>{{ukpayrolldata[6].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[7].Payroll_cutoff_day__c | date:'dd/MM/yy' }} </td><td>{{ukpayrolldata[8].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td>
+ <td>{{ukpayrolldata[9].Payroll_cutoff_day__c| date:'dd/MM/yy' }} </td><td>{{ukpayrolldata[10].Payroll_cutoff_day__c| date:'dd/MM/yy'}} </td><td>{{ukpayrolldata[11].Payroll_cutoff_day__c | date:'dd/MM/yy'}} </td>
+</tr> 
+
+<!--  No payment EPS - recommend submission by 
+<tr> 
+ <td class="firstCol">No payment EPS - recommend submission by </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}}</td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td>
+ <td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td><td class="firstCol1">{{ukcalenders[0].No_payment_EPS__c}} </td>
+</tr> 
+
+
+<!-- Share scheme returns 
+<tr> 
+ <td class="firstCol"> Share scheme returns </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td class="firstCol1">{{ukcalenders[0].Share_scheme_returns__c }} </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+ <td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td><td>&nbsp;&nbsp; </td>
+</tr>
+-->
+
+</div>
+</table>
+</apex:PageBlock>
+<!-- end of weekly -->
+
+</body>  
+</html>
+</apex:page>
+<!-- END 21/10/2016 NPAY-141 Payroll calendar added by Jamil -->

@@ -1,0 +1,41 @@
+<apex:page id="uploadImagePage" standardController="User" extensions="xcdhcm.EmployeeImageUploadController" sidebar="false" showHeader="true" action="{!init}" >  
+   <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Lite/LiteEditPage.css')}" />      
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+     <head><apex:slds /></head> 
+     <body class="slds-scope">  
+     <apex:form id="uploadAttachment">                               
+        <div role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open slds-modal--large">
+               <div class="slds-modal__container">
+                   <div class="slds-modal__header">
+                       <apex:commandLink action="{!cancel}" id="theCommandLink1" immediate="true" styleclass="slds-button slds-modal__close slds-button--icon-inverse">
+                           <img src="{!URLFOR($Resource.XCD_static_resources,'Css/Lite/close.PNG')}" alt="Cancel" style="width: 67%;"/>
+                       </apex:commandLink>
+                       <h2 id="header43" class="slds-text-heading--medium"></h2>
+                   </div>
+                 <div class="slds-modal__content slds-p-around--medium"> 
+                 <!-- ================================== Page content  ==========================================================    -->                                   
+	             <div class="input" >  
+			       <center>		               
+			              You can upload a JPG, GIF or PNG file. Maximum file size is 16 MB.<br/><br/>  			             
+				          <apex:inputFile value="{!document.body}" filename="{!document.name}" id="file"/>             
+		                  <apex:param name="q" value="xxx"  assignTo="{!document.name}"/>	  <br/> <br/> 
+		                  Current Photo: <br/>		                     
+		                  <apex:image id="theImage" value="{!imageURL}" width="210" height="55" rendered="{!hasPicture==true}" />     
+		                  <apex:image id="theImage0" value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/F.png')}" width="200" height="55" rendered="{!hasPicture==false}"/> <br/><br/>  
+		              </center>	                                                                      		     
+			       </div>						           
+			      <!-- ================================== Page content  ==========================================================    -->
+			      </div>
+			         <div class="slds-modal__footer">			          
+		                <div class="buttons">          
+			               <apex:commandButton id="Cancel" action="{!cancel}" value="{!$Label.xcdhcm__employeeimageuploadbcancel}" styleclass="slds-button slds-button--neutral" />  
+			               <apex:commandButton id="Accept" action="{!uploadAction}"  value="{!$Label.xcdhcm__employeeimageuploadbupload}" styleclass="slds-button slds-button--brand" />         
+			            </div>  
+			        </div>
+			      </div>
+			  </div>
+	       <div class="slds-backdrop slds-backdrop--open"></div>		           
+	   </apex:form>       
+	 </body>
+	</html>  
+</apex:page>

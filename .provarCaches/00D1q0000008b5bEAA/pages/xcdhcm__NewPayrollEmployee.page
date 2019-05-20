@@ -1,0 +1,470 @@
+<!-- 
+* @Name: NewPayrollEmployee.page 
+* @author: Praveen Murugesan
+* @date: 28/04/2015 
+* @description: this page is to display or capture fields related to payroll.	
+* @jira : NPAY-35 Tax information Employer Added by Praveen
+-->
+
+<apex:page standardController="xcdhcm__Employee_Detail__c"
+    extensions="xcdhcm.NewPayrollEmployeeController" sidebar="false" showHeader="true"
+    wizard="false" cache="false" readOnly="false" >
+    <!-- START :: 20/01/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan -->
+    <apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+    <!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+    <!-- Jquery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+    <style>
+	#hlpbtn:hover .titlepopup1
+	{
+		display: block !important;
+	    width: 520px;
+	    background: #FEFDB9;
+	    padding: 4px;
+	    color: #000;
+	    position: absolute;
+	    z-index: 1;
+	    left:370px;
+	    border: 1px solid #FFA603;
+	    text-align: justify;
+	    white-space: normal;
+	    font-weight: normal;
+	
+	}
+	
+	 .popupBg
+     {
+     //background-color:#FFFFFF;
+     opacity: 1.0;
+     filter: alpha(opacity = 60);
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     top: 0;
+     left: 0;
+     z-index: 9998;
+     }
+     .customPopup
+     {
+     line-height: 25px;
+     position: absolute;
+     left: 50%;
+     padding:10px;
+     z-index: 9999;
+     text-align: center;
+     top: 40%;
+     width: 500px;
+     margin-left: -250px;
+     text-decoration: none;
+     font-weight: bold;
+     
+     background: #ffffff !important;
+     border: 1px solid #ccc !important;
+     
+
+     -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+     color:#336699;
+     }
+    </style>
+    <!-- START :: 19/03/2016 NPAY-116(commented code for optimization) payroll issue list commented by Farhan 
+    <script type="text/javascript">
+	var originalOnLoad = window.onload;	//save original onload reference
+	window.onload = hideStudentLoanSection1; 
+	
+	// function for hiding/displaying the student loan section when ever the page loads 
+	function hideStudentLoanSection1()
+	{
+		originalOnLoad();  //run the original onload first
+		var studentLoanCheckbox = '{!StudentLoanCheckboxValue}';
+		if(studentLoanCheckbox == 'true')
+		{
+			document.getElementById('divId2').style.display = "inline";
+		}
+		else
+		{
+			document.getElementById('divId2').style.display = "none";
+		}
+	}
+	
+	</script>
+	END :: 19/03/2016 NPAY-116(commented code for optimization) payroll issue list commented by Farhan -->
+    <!-- END :: 20/01/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan -->
+    <apex:form id="theform">
+    <apex:pageBlock title="{!$Label.xcdhcm__phnewpayrollemployee}" id="PBlck">
+    	<apex:pageMessages id="errMsg"/>
+    	<!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+    	<p>Please enter these data carefully and accurately, as they may affect payments and tax.
+    	</p><br/>
+    	<apex:pageBlockSection title="{!$Label.xcdhcm__newpayrollemployeepersonalfinancialinfo}" columns="2">
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Bank__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Bank__c}" required="true"/> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Account_name__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Account_name__c}" required="true"/> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__P_Sort_code__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__P_Sort_code__c}" required="true"/> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Account_number__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Account_number__c}" required="true"/> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Building_society_reference__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Building_society_reference__c}" /> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Bank_address__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Bank_address__c}" /> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Payment_method__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Payment_method__c}" required="true"/> 
+	            </apex:pageBlockSectionItem>
+    	</apex:pageBlockSection>	
+    	<!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+    
+    	<apex:pageBlockSection title="{!$Label.xcdhcm__newpayrollemployeepayrollstarterdetails}" id="PBSec" columns="1">
+    		
+            <apex:pageBlockSectionItem id="pbSecItm">
+                <apex:outputLabel value="Do you have a P45 from your previous employer?" />
+                <apex:inputCheckbox value="{!personal.xcdhcm__P45_previous_employer__c}"  id="chkbox"  onclick="hideSection(this.id);"/> 
+            </apex:pageBlockSectionItem>
+            
+            <!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+    		<apex:pageBlockSection id="payrollStarterSubSection1">
+    		
+	    		<apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Employer_PAYE_reference__c.Label}" id="payeReferenceLabel" /> 
+	                <apex:inputField value="{!personal.xcdhcm__Employer_PAYE_reference__c}" id="payeReferenceValue"/> 
+	            </apex:pageBlockSectionItem>
+	            <!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__National_insurance_number__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__National_insurance_number__c}" /> 
+	            </apex:pageBlockSectionItem>
+            <!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection id="OTPanelId">
+            <!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	   		  	<apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Leaving_date_on_P45__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Leaving_date_on_P45__c}" /> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <!-- START :: 20/01/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan -->
+	            <apex:pageBlockSectionItem id="studentLoan" HelpText="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Student_loan__c.inlineHelpText}">
+	               	<apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Student_loan__c.Label}" />
+	 				<!-- START :: 19/03/2016 NPAY-116 payroll issue list modified by Farhan -->
+	 				<!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	 				<!-- We need to use actionregion or else actionsupport will throw an error if required=true field is blank -->
+	               	<apex:actionRegion >
+	               	<!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	               	<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+		               	<apex:inputCheckbox id="studLoan" value="{!personal.xcdhcm__Student_loan__c}">
+		               		<!-- START :: 05/10/2018 P1.7 regression issue modified by Farhan -->	
+					      	<apex:actionSupport event="onclick" rerender="studentLoanSection,finishedStudies" action="{!finishedStudiesCheck}" status="loadingstatusmsg"/>
+					      	<!-- END :: 05/10/2018 P1.7 regression issue modified by Farhan -->	
+					      	<apex:actionStatus startText="Loading..." id="loadingstatusmsg" />
+					   	</apex:inputCheckbox> 
+					<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+					<!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+				   	</apex:actionRegion>
+				   	<!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	 				<!-- END :: 19/03/2016 NPAY-116 payroll issue list modified by Farhan -->
+	            </apex:pageBlockSectionItem>
+	            <!-- END :: 20/01/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan -->
+	            <!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+		    </apex:pageBlockSection>
+	            
+	            <apex:pageBlockSection >
+		    <!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Tax_code__c.Label}" />
+	                <!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+			<apex:inputField value="{!personal.xcdhcm__Tax_code__c}" required="true"/> 
+			<!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Tax_basis__c.Label}" />
+			<!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	                <apex:inputField value="{!personal.xcdhcm__Tax_basis__c}" required="true"/> 
+			<!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	            </apex:pageBlockSectionItem>
+		    <!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	            </apex:pageBlockSection>
+	            
+	            <apex:pageBlockSection id="OTPanelId2" >
+		    <!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Tax_week_number__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Tax_week_number__c}" /> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Tax_month_number__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Tax_month_number__c}" /> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Taxable_pay_to_date__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Taxable_pay_to_date__c}" /> 
+	            </apex:pageBlockSectionItem>
+	            
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Total_tax_to_date__c.Label}" />
+	                <apex:inputField value="{!personal.xcdhcm__Total_tax_to_date__c}" /> 
+	            </apex:pageBlockSectionItem>
+            </apex:pageBlockSection> 
+    	</apex:pageBlockSection>	
+    	
+    	<!-- START :: 20/01/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan -->
+    <!-- START :: 19/03/2016 NPAY-116 payroll issue list modified by Farhan -->	
+    <!-- START :: 05/10/2018 P1.7 regression issue modified by Farhan -->	
+	<apex:outputPanel id="studentLoanSection">
+	<!-- END :: 05/10/2018 P1.7 regression issue modified by Farhan -->
+	<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->	
+    	<!--	<apex:pageBlockSection title="{!$Label.NewPayrollEmployeeStudentloan}" columns="1" rendered="{!personal.Student_loan__c == true}">
+    			<apex:outputPanel >
+    				<table>
+    					<tr>
+    						<td style="width:320px;">
+    							I am repaying my Student Loan direct to the  Student Loan Company by agreed monthly payments and my employer shouldn't  deduct loan repayments from my pay.
+	              			</td>
+	              			<td>
+	              				<apex:actionRegion >
+		              				<apex:SelectList size="1" required="true" style="border-left:3px solid #c00!important;padding-left: 1px!important;"
+		              				 value="{!LoanRepayOptionValue}" > 
+						        		<apex:selectOptions value="{!LoanRepayPicklistValues}" /> 
+						        		<apex:actionSupport event="onchange" reRender="plan" status="load">
+						        		</apex:actionSupport>
+						        		<apex:actionStatus startText="Loading..." id="load" />
+					        		</apex:SelectList>
+				        		</apex:actionRegion>
+	        				</td>
+    					</tr>
+    				</table>
+	        	</apex:outputPanel> rendered="{!LoanRepayOptionValue=='No'}"  -->
+	        		
+			 	<apex:pageBlockSection title="Student/Postgraduate loan" id="plan" rendered="{!personal.xcdhcm__Student_loan__c==true}" columns="1">
+			 	<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+					<apex:pageBlockSection columns="1">
+					 	<apex:outputPanel >
+					 		<table>
+						 		<tr>
+						 			<td style="width:320px;height:30px;">
+						 				<span id="hlpbtn">
+						 				<span style="color: #999999 !important;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt;font-weight: bold;">
+						 					Student loan plan
+						 				</span>
+						 				<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+	                					<span style="display: none;" class="titlepopup1">
+		                					<p>You will have a Plan 1 Student Loan if,</p>
+											<ul>
+											<li>You lived in Scotland or Northern Ireland when you started your course, or</li>
+											<li>You lived in England or Wales and started your course before 1 Sept 2012</li>
+											</ul>
+											<p>You will have a Plan 2 Student Loan if,</p>
+											<ul>
+											<li>You lived in England or Wales and started your course after 1 September 2012</li>
+											</ul>
+											<p>If you do not know select Plan 1</p>
+	                					</span></span>
+	                				</td>
+						 			<td>
+						 				<apex:actionRegion >
+						 				<apex:inputField value="{!personal.xcdhcm__Student_loan_plan__c}" />
+						 				</apex:actionRegion>
+						 			</td>
+						 		</tr>
+						 		<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+						 		<tr> 
+						 			<td style="width:320px;height:30px;">
+						 				<span id="hlpbtn">
+						 				<span style="color: #999999 !important;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt;font-weight: bold;">
+						 					Postgraduate loan plan
+						 				</span>
+						 				<img src="{!URLFOR($Resource.XCD_static_resources,'Icons/Help_icon.png')}" style=""/>
+	                					<span style="display: none;" class="titlepopup1">
+		                					<p>You will have a Postgrad EW Postgraduate Loan if,</p>
+											<li>You lived in England or Wales and started your course after 1 September 2012</li>
+	                					</span></span>
+	                				</td>
+	                				<td>
+						 				<apex:actionRegion >
+						 				<apex:inputField value="{!personal.xcdhcm__Postgraduate_loan_plan__c}" />
+						 				</apex:actionRegion>
+						 			</td>
+						 		</tr>
+						 		<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+						 		<tr>
+						 			<td style="width:320px;">
+						 				<span style="color: #999999 !important;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;font-size: 10pt;font-weight: bold;">
+						 					I finished my studies before last 6 April
+						 				</span>
+						 			</td>
+						 			<td>
+						 			<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+						 			<apex:actionRegion >
+						 				<apex:inputCheckbox id="finishedStudies" selected="{!finishedStudiesCheckbox}">
+						 				<apex:actionSupport event="onclick" action="{!showPopup}"
+						 				 rerender="popupStudentLoan,popupSub1" status="loadingpopupmsg"/>
+								      	<apex:actionStatus startText="Loading..." id="loadingpopupmsg" />
+										</apex:inputCheckbox>
+									</apex:actionRegion>
+						 			</td>
+						 		</tr>
+					 		</table>
+						</apex:outputPanel>
+					 	
+					 	<p>Please attach a P45 and if you have one a copy of the Student Loan SL1 and/or Postgraduate Loan PGL1 notification.</p> 	
+			<!--		</apex:pageBlockSection> -->
+					<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+
+				</apex:pageBlockSection>
+			</apex:pageBlockSection> 
+		<!-- END :: 19/03/2016 NPAY-116 payroll issue list modified by Farhan -->
+		<!-- START :: 05/10/2018 P1.7 regression issue modified by Farhan -->	
+		</apex:outputPanel>
+		<!-- END :: 05/10/2018 P1.7 regression issue modified by Farhan -->	
+    	<!--</apex:pageBlockSection>-->
+    	<p>Employee declaration: By submitting this form I declare the information is true and accurate.</p>
+    	<!-- START :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva --> 
+    	<apex:actionRegion > 
+    	<apex:outputPanel id="popupStudentLoan">
+		    <apex:outputpanel id="popupSub1" styleClass="popupBg" rendered="{!displayPopup}"/>
+	        <apex:outputPanel id="popup1" styleClass="customPopup" layout="block" rendered="{!displayPopup}">
+	            <center>
+	            	<apex:outputtext id="oText" value="For student loan or postgraduate loan to be repayable through the payroll, studies must have finished before previous 6th April.  
+	            	If statement is unchecked i.e studies have continued beyond previous 6th April, any plan types that have been entered along with the student/postgraduate loan indicator 
+	            	will be automatically removed.  To enable the student and postgraduate loan plan fields the finished studies before previous 6th April should be ticked." 
+	            	rendered="{!displayPopup}"/>
+                    <br/> 
+	                <apex:commandButton id="okButton" value="OK" action="{!popupClickOk}" rerender="popupStudentLoan,studLoan,studentLoanSection" styleclass="slds-button slds-button--neutral"/>
+	                <apex:commandButton id="cancelButton" value="Cancel" action="{!closePopup}" rerender="popupStudentLoan" styleclass="slds-button slds-button--neutral"/>
+	            </center> 
+	        </apex:outputPanel>
+	    </apex:outputPanel>
+    	</apex:actionRegion>
+    	
+    	
+    	<div id="divId1" style="display:inline;">
+	    	<apex:pageBlockSection title="{!$Label.xcdhcm__newpayrollemployeestarterdeclaration}" id="PBSec1" columns="1">
+	            <apex:pageBlockSectionItem >
+	                <apex:outputLabel value="{!$ObjectType.xcdhcm__Personal__c.Fields.xcdhcm__Starter_declaration__c.Label}" />
+	                <apex:actionRegion >
+	                <!-- START :: 20/01/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan -->
+	                <apex:inputField required="true" value="{!personal.xcdhcm__Starter_declaration__c}" /> 
+	                <!-- END :: 20/01/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan -->
+	                </apex:actionRegion>
+	            </apex:pageBlockSectionItem>
+	            <p>
+		            A: This is my first job since last 6 April and I have not been receiving taxable Jobseekers allowance, Employment and Support Allowance, taxable Incapacity Benefit, state pension or occupational pension. 
+					<br/>
+					B: This is my only job, but since last 6 April I have had another job or have received taxable Jobseekers allowance, Employment and Support Allowance or taxable Incapacity Benefit.  I do not receive state pension or occupational pension.
+					<br/>
+					C: I have another job or receive a state or occupational pension.
+					<br/>	            
+	            </p>
+	            
+	        </apex:pageBlockSection>
+    	</div>
+    	<!-- END :: 10/12/2018 NPAY-651 Postgraduate loan deductions modified by Shiva -->
+    	
+	    <apex:pageBlockButtons location="Bottom">
+	    <!-- START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	    	<apex:commandButton id="btn1" value="{!$Label.xcdhcm__newpayrollemployeebsave}" action="{!saveEmpPayroll}" reRender="errMsg,btn1" onClick="this.style.color='#336699';this.value='Processing...';window.scrollTo(0,0);" styleClass="butt"/>
+	    	<apex:commandButton id="btn2" value="{!$Label.xcdhcm__newpayrollemployeebsaveandattachdocument}" action="{!saveAndAttachp45}" reRender="errMsg,btn2" onClick="this.style.color='#336699';this.value='Processing...';window.scrollTo(0,0);" styleClass="butt"/>
+		<!-- END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan -->
+	    	<apex:commandButton id="btn3" value="{!$Label.xcdhcm__newpayrollemployeebcancel}" action="{!CancelEmpPayroll}" immediate="true"/>
+	    </apex:pageBlockButtons>
+	    
+	    	 <!-- START :: 19/3/2016 NPAY-116 (commented for code optimization) payroll issue list commented by Farhan
+	    <apex:actionFunction name="callForTrueCheckbox" oncomplete="" > 
+            <apex:param name="checkboxvalue" value="true" assignTo="{!StudentLoanCheckboxValue}"/>
+        </apex:actionFunction>
+        <apex:actionFunction name="callForFalseCheckbox" oncomplete="" > 
+            <apex:param name="checkboxvalue" value="false" assignTo="{!StudentLoanCheckboxValue}"/>
+        </apex:actionFunction>
+    	 		END :: 19/3/2016 NPAY-116 (commented for code optimization) payroll issue list commented by Farhan -->
+    </apex:pageBlock>
+  	<!-- END :: 20/01/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan -->
+ 	<!-- BEGIN: Following fields used by developer -->
+	<apex:pageBlock rendered="false">
+		<apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__Leaving_Date__c}" />
+		<apex:outputField value="{!xcdhcm__Employee_Detail__c.xcdhcm__Company__c}" />
+		<apex:outputField value="{!xcdhcm__Employee_Detail__c.Company__r.xcdhcm__Parent_Company__c}" />
+	    <apex:outputField value="{!xcdhcm__Employee_Detail__c.id}" />
+	</apex:pageBlock>
+	<!-- END: Following fields used by developer -->
+    </apex:form>
+    
+<script>
+	function hideSection(idval)
+	{
+		var id = idval.split(':pbSecItm');
+		var id1 = idval.split(':PBSec');  
+		
+		if(document.getElementById(idval).checked == false)
+		// START :: 19/3/2016 NPAY-116 payroll issue list modified by Farhan
+		{
+			document.getElementById(id[0]+':OTPanelId').style.display = "none";
+			//START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan
+			document.getElementById(id[0]+':OTPanelId2').style.display = "none";
+			//END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan
+			// START :: 03/03/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan
+			//START :: 05/10/2018 P1.7 regression issue modified by Farhan
+			document.getElementById(id1[0]+':studentLoanSection').style.display = "none";
+			//END :: 05/10/2018 P1.7 regression issue modified by Farhan
+			//START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan
+			var payeReferenceLabel = "[id$='"+':payeReferenceLabel'+"']";
+			var payeReferenceValue = "[id$='"+':payeReferenceValue'+"']";
+			$(payeReferenceLabel).hide();
+			$(payeReferenceValue).hide();
+			//END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan
+		}
+		else
+		{
+			document.getElementById(id[0]+':OTPanelId').style.display = "inline";
+			//START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan
+			document.getElementById(id[0]+':OTPanelId2').style.display = "inline";
+			//END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan
+			//START :: 05/10/2018 P1.7 regression issue modified by Farhan
+			document.getElementById(id1[0]+':studentLoanSection').style.display = "inline";
+			//END :: 05/10/2018 P1.7 regression issue modified by Farhan
+			// END :: 03/03/2016 NPAY-112 Payroll process changes in Payroll2. added by Farhan
+			//START :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan
+			var payeReferenceLabel = "[id$='"+':payeReferenceLabel'+"']";
+			var payeReferenceValue = "[id$='"+':payeReferenceValue'+"']";
+			$(payeReferenceLabel).show();
+			$(payeReferenceValue).show();
+			//END :: 09/08/2018 NPAY-524 Payroll Setup Improvements modified by Farhan
+		}
+		// END :: 19/3/2016 NPAY-116 payroll issue list modified by Farhan
+	}
+	
+	function removeNone(idval)
+	{
+	    var list = document.getElementById(idval);
+	   	alert(list.options[0].text);
+	   
+	}
+	
+	
+</script>    
+
+</apex:page>

@@ -1,0 +1,310 @@
+<apex:page standardController="xcdhcm__Pay_Period__c" sidebar="false" extensions="xcdhcm.PayrollReportsController">
+ <!-- START :: 21/12/2015 NPAY-102 Minor issues in Payroll 1 modified by Farhan -->
+<!--<apex:stylesheet value="{!URLFOR($Resource.Css,'Companysubpagecss.css')}" />-->
+<apex:stylesheet value="{!URLFOR($Resource.xcdhcm__XCD_static_resources,'Css/Companysubpagecss.css')}" />
+<style>
+.customnotabTab .tertiaryPalette, .individualPalette .customnotabBlock .tertiaryPalette, .layoutEdit .individualPalette .customnotabBlock .tertiaryPalette 
+{
+    background-color: #FFFFFF;
+}
+body .bPageBlock .pbBody .labelCol 
+{
+    color: #336699 !important;
+    font-size:10pt !important;
+}
+.pbBody, .pbBody a, .pbBody td, .lbBody a, .lbBodyDescription, .list .headerRow .noRowsHeader 
+{
+    color: #336699;
+}
+
+.Custom38Tab .tertiaryPalette, .individualPalette .Custom38Block .tertiaryPalette, .layoutEdit .individualPalette .Custom38Block .tertiaryPalette {
+    background-color: #FFFFFF;
+  }
+.rowleftalign
+{
+	color:#336699;
+	font-size:10pt !important;
+	margin-left:250px;
+}
+.rowrightalign
+{
+	color:#336699;
+	font-size:10pt !important;
+	margin-left:290px;
+}
+
+</style>
+<apex:form id="theForm">
+    <br/>
+    <apex:PageMessages id="errId" />
+    <apex:outputText value="Reports" style="color:#336699;font-size:12pt !important;font-weight:bold;margin-right:10px;"/>
+        <apex:pageBlock >
+            <apex:pageBlocksection title="" collapsible="false">
+                <apex:repeat value="{!$ObjectType.xcdhcm__Pay_Period__c.Fieldsets.xcdhcm__Key_Dates_For_Report}" var="i">
+                    <apex:outputField value="{!payPeriod[i]}" />
+                </apex:repeat> 
+            </apex:pageBlocksection>
+        </apex:pageBlock>
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div> <br/>
+
+        <apex:outputText value="Employers and employees" style="color:#336699;font-size:10pt !important;font-weight:bold;margin-right:10px;"/>
+        <table>
+            <tr style="height: 25px;">
+                <td style="width:600px"> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="Employers and Payrolls" styleclass="rowleftalign"  target="_blank">
+                        <apex:param name="contIdParam" value="Employers_and_Payrolls" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Cost Codes" styleclass="rowrightalign"  target="_blank">
+                        <apex:param name="contIdParam" value="Cost_Codes" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Employees" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Employees" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Joiners" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Joiners" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Payroll Joiners" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Payroll_Joiners" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Leavers" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Leavers" assignTo="{!reportName}"/>
+                    </apex:commandLink>        
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Changes – Key Personal Data" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Key_Personal_Data_Changes" assignTo="{!reportName}"/>
+                    </apex:commandLink>         
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Changes – Compensation and Benefits" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Changes_Compensation_and_Benefits" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Changes – One Off Payments/Deductions" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Changes_One_Off_Payments_Deductions" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="NI Category Changes"  styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="NI_category_changes" assignTo="{!reportName}"/>
+                    </apex:commandLink>         
+                </td>
+            </tr>
+        </table>        
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div> <br/>
+
+        <apex:outputText value="Control reports" style="color:#336699;font-size:10pt !important;font-weight:bold;margin-right:10px;"/>
+        <table>
+            <tr style="height: 25px;">
+                <td style="width:600px">
+                    <apex:commandLink action="{!generatePayrollReports}" value="Overtime Claims" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Overtime_Claims_Awaiting_Approval" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Expense Claims Review" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Expense_Claims_Review" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="Sickness and Parenting Absences" styleclass="rowleftalign"  target="_blank">
+                        <apex:param name="contIdParam" value="Employee_Sickness_and_Maternity_Absences" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="Unpaid Absences" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Unpaid_Absences" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>   
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Statutory Payments" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Statutory_Payments" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Employee Tax and NI Outstanding" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Employee_Tax_and_NI_Outstanding" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr> 
+            <tr style="height: 25px;">
+                <td> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="Leavers Final Compensation and Benefits"  styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Leavers_Final_Compensation_Benefits" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Leavers Remaining on Payroll" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Leavers_Remaining_on_Payroll" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr> 
+            <tr style="height: 25px;">
+                <td> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="Leavers and Leave" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Leavers_and_Leave" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+<!--
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Auto Enrolment Eligibility" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Auto_Enrolment_Eligibility" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+-->
+            </tr>      
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Pay Variances" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Pay_Variances" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Zero Payments" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Zero_Payments" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>  
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Minimum Wage Checker"  styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Minimum_Wage_Checker" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>                                                              
+        </table>                
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div> <br/>
+
+        <apex:outputText value="Payment reports" style="color:#336699;font-size:10pt !important;font-weight:bold;margin-right:10px;"/>
+        <table>
+            <tr style="height: 25px;">
+                <td style="width:600px"> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="Employee Payments" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Employee_Payments" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Pay Summary" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Pay_Summary" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="HMRC Payments" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="HMRC_Payments" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Student Loans" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Student_Loans" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>       
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Pension Contributions" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Pension_Contributions" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Benefit Payments" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Benefit_Payments" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Employee Gross Pay Details" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Pay_Details_Matrix" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Employee Pay Details - Upload" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Pay_Details_by_Employee" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+        </table>               
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div> <br/>
+        
+        <apex:outputText value="Payroll settings" style="color:#336699;font-size:10pt !important;font-weight:bold;margin-right:10px;"/>
+        <table>
+            <tr style="height: 25px;">
+                <td style="width:600px"> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="Tax Rates" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Tax_Rates" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="National Insurance Rates" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="National_Insurance_Rates" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td> 
+                    <apex:commandLink action="{!generatePayrollReports}" value="Statutory Pay Rates" styleclass="rowleftalign"  target="_blank">
+                        <apex:param name="contIdParam" value="Statutory_Pay_Rates" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Statutory Pay Bases" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Statutory_Pay_Bases" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr>
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Court Orders" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Court_Orders" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Auto Enrolment" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Auto_Enrollment" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+            </tr> 
+            <tr style="height: 25px;">
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Benefit Types and Tax and NI Status" styleclass="rowrightalign" target="_blank">
+                        <apex:param name="contIdParam" value="Benefit_Types_and_Status" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+<!--
+                <td>
+                    <apex:commandLink action="{!generatePayrollReports}" value="Student Loan Rate" styleclass="rowleftalign" target="_blank">
+                        <apex:param name="contIdParam" value="Student_Loan_Rate" assignTo="{!reportName}"/>
+                    </apex:commandLink>
+                </td>
+-->
+            </tr>
+        </table>     
+        <div style="border-bottom: 2px solid #63a4c5; margin-top: 20px;"></div>           
+</apex:form>
+ <!-- END :: 21/12/2015 NPAY-102 Minor issues in Payroll 1 modified by Farhan -->
+</apex:page>
