@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testCase failureBehaviour="Continue" id="3" registryId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" visibility="Internal">
+<testCase failureBehaviour="Continue" id="1" registryId="bbf98c33-2f36-49a0-8771-bcb1803a1c4b" visibility="Internal">
   <summary/>
   <steps>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.testapis.ApexConnect" name="ApexConnect" testItemId="1" title="Salesforce Connect: Admin (Test)">
@@ -56,22 +56,21 @@
       </arguments>
       <parameterValueSources>
         <parameterValueSource variableName="ReportData" variableScope="Test">
-          <cacheToken>C:/Users/AzizMugdal/ProvarFeb202019/PayrollProject/OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx;1551248665505</cacheToken>
+          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1559038524667</cacheToken>
           <cachedParameters>
             <apiParam name="RowNumber"/>
-            <apiParam name="ColumnHeading"/>
+            <apiParam name="PayrunApril2019"/>
             <apiParam name="AutomationEmployeeNames"/>
-            <apiParam name="StudentLoan"/>
-            <apiParam name="NetPay"/>
-            <apiParam name="InitialDeductionAmount"/>
-            <apiParam name="AttachableEarnings"/>
-            <apiParam name="ProtectedEarnings"/>
-            <apiParam name="TypeStudentLoan"/>
+            <apiParam name="EstmtdLevyAlwnceAprnmentThisPeriod"/>
+            <apiParam name="AprntshipLevyPayBill"/>
+            <apiParam name="AprntshipLevyPayGross"/>
+            <apiParam name="AprntshipLevyThisPeriod"/>
+            <apiParam name="TotalHMRCPymtsWithLevy"/>
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-            <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
-            <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
+            <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
+            <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
+            <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
           </sourceValue>
         </parameterValueSource>
       </parameterValueSources>
@@ -214,7 +213,7 @@
                         </apiParam>
                       </generatedParameters>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DO NOT StudentLoanOct">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DO NOT AprnticLevy NMApril">
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=searchAllReports&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -223,7 +222,7 @@
                           <value class="uiInteraction" uri="ui:interaction?name=set"/>
                         </argument>
                         <argument id="value">
-                          <value class="value" valueClass="string">DO NOT StudentLoanOct</value>
+                          <value class="value" valueClass="string">DO NOT AprnticLevy NMApril</value>
                         </argument>
                         <argument id="blur">
                           <value class="value" valueClass="boolean">false</value>
@@ -241,10 +240,10 @@
                           <value class="uiWait" uri="default"/>
                         </argument>
                         <argument id="afterWait">
-                          <value class="uiWait" uri="default"/>
+                          <value class="uiWait" uri="ui:wait:timed?seconds=10"/>
                         </argument>
                         <argument id="interactionDescription">
-                          <value class="value" valueClass="string">Set the Search All Reports to DO NOT StudentLoanOct</value>
+                          <value class="value" valueClass="string">Set the Search All Reports to DO NOT AprnticLevy NMApril</value>
                         </argument>
                         <argument id="autoRetry"/>
                       </arguments>
@@ -341,13 +340,13 @@
                   <value class="value" valueClass="string">Admin</value>
                 </argument>
                 <argument id="target">
-                  <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.StudentLoan"/>
+                  <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.ApprenticshipLevy"/>
                 </argument>
                 <argument id="navigate">
                   <value class="value" valueClass="string">Dont</value>
                 </argument>
                 <argument id="targetDescription">
-                  <value class="value" valueClass="string">On Student Loan page</value>
+                  <value class="value" valueClass="string">On Apprenticship Levy page</value>
                 </argument>
                 <argument id="windowSelection">
                   <value class="value" valueClass="string">Default</value>
@@ -409,7 +408,7 @@
                                     </lhs>
                                     <rhs class="match">
                                       <lhs class="variable">
-                                        <path element="intitialDeduction"/>
+                                        <path element="aprntshipLevyPayBill"/>
                                       </lhs>
                                       <rhs class="value" valueClass="string">GBP.*</rhs>
                                     </rhs>
@@ -446,13 +445,13 @@
                                       <clauses>
                                         <clause name="hidden" testItemId="710">
                                           <steps>
-                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="672" title="Read Actual StudentLoan Value">
+                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="672" title="Read Estimated levy allowance appornment Value">
                                               <tags/>
                                               <arguments>
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="studentLoan">
-                                                      <fieldLocator uri="ui:pageobject:field?field=studentLoan&amp;pageId=pageobjects.StudentLoan"/>
+                                                    <uiFieldAssertion resultName="estmtdLevyAlwnceAprnmentThisPeriod">
+                                                      <fieldLocator uri="ui:pageobject:field?field=estmtdLevyAlwnceAprnmentThisPeriod&amp;pageId=pageobjects.ApprenticshipLevy"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -471,7 +470,7 @@
                                                   <value class="valueList" mutable="Mutable"/>
                                                 </argument>
                                                 <argument id="resultName">
-                                                  <value class="value" valueClass="string">studentloanValue</value>
+                                                  <value class="value" valueClass="string">estimatedLevyAlwanceAportnmentValue</value>
                                                 </argument>
                                                 <argument id="resultScope">
                                                   <value class="value" valueClass="string">Test</value>
@@ -483,13 +482,13 @@
                                                 <argument id="autoRetry"/>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="673" title="Read Actual Net Pay Value">
+                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="673" title="Read Apprentiship levy pay bill Value">
                                               <tags/>
                                               <arguments>
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="netPay">
-                                                      <fieldLocator uri="ui:pageobject:field?field=netPay&amp;pageId=pageobjects.StudentLoan"/>
+                                                    <uiFieldAssertion resultName="aprntshipLevyPayBill">
+                                                      <fieldLocator uri="ui:pageobject:field?field=aprntshipLevyPayBill&amp;pageId=pageobjects.ApprenticshipLevy"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -508,7 +507,7 @@
                                                   <value class="valueList" mutable="Mutable"/>
                                                 </argument>
                                                 <argument id="resultName">
-                                                  <value class="value" valueClass="string">NePayValue</value>
+                                                  <value class="value" valueClass="string">apprntishipLevyPaybillValue</value>
                                                 </argument>
                                                 <argument id="resultScope">
                                                   <value class="value" valueClass="string">Test</value>
@@ -520,13 +519,13 @@
                                                 <argument id="autoRetry"/>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="674" title="Read Actual InitialDeduction Value">
+                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="674" title="Read Actual ApprntishipLevyPay Gross Value">
                                               <tags/>
                                               <arguments>
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="intitialDeduction">
-                                                      <fieldLocator uri="ui:pageobject:field?field=intitialDeduction&amp;pageId=pageobjects.StudentLoan"/>
+                                                    <uiFieldAssertion resultName="aprntshipLevyPayGross">
+                                                      <fieldLocator uri="ui:pageobject:field?field=aprntshipLevyPayGross&amp;pageId=pageobjects.ApprenticshipLevy"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -545,7 +544,7 @@
                                                   <value class="valueList" mutable="Mutable"/>
                                                 </argument>
                                                 <argument id="resultName">
-                                                  <value class="value" valueClass="string">InitialDeductionValue</value>
+                                                  <value class="value" valueClass="string">apprntishipLevyPaygrossValue</value>
                                                 </argument>
                                                 <argument id="resultScope">
                                                   <value class="value" valueClass="string">Test</value>
@@ -557,13 +556,13 @@
                                                 <argument id="autoRetry"/>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="675" title="Read Actual attachableEarningsTwo Value">
+                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="675" title="Read Actual ApprnticeshipLevy this period Value">
                                               <tags/>
                                               <arguments>
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="attachableEarnings">
-                                                      <fieldLocator uri="ui:pageobject:field?field=attachableEarnings&amp;pageId=pageobjects.StudentLoan"/>
+                                                    <uiFieldAssertion resultName="aprntshipLevyThisPeriod">
+                                                      <fieldLocator uri="ui:pageobject:field?field=aprntshipLevyThisPeriod&amp;pageId=pageobjects.ApprenticshipLevy"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -582,7 +581,7 @@
                                                   <value class="valueList" mutable="Mutable"/>
                                                 </argument>
                                                 <argument id="resultName">
-                                                  <value class="value" valueClass="string">attachableEarningsValue</value>
+                                                  <value class="value" valueClass="string">apprentshipLevyThisPeriodValue</value>
                                                 </argument>
                                                 <argument id="resultScope">
                                                   <value class="value" valueClass="string">Test</value>
@@ -594,13 +593,13 @@
                                                 <argument id="autoRetry"/>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="676" title="Read Actual ProtectedEarnings Value">
+                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="676" title="Read Actual total hmrc pymt Value">
                                               <tags/>
                                               <arguments>
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="protectedEarnings">
-                                                      <fieldLocator uri="ui:pageobject:field?field=protectedEarnings&amp;pageId=pageobjects.StudentLoan"/>
+                                                    <uiFieldAssertion resultName="totalHMRCPymtsWithLevy">
+                                                      <fieldLocator uri="ui:pageobject:field?field=totalHMRCPymtsWithLevy&amp;pageId=pageobjects.ApprenticshipLevy"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -619,7 +618,7 @@
                                                   <value class="valueList" mutable="Mutable"/>
                                                 </argument>
                                                 <argument id="resultName">
-                                                  <value class="value" valueClass="string">protectedEarningsValue</value>
+                                                  <value class="value" valueClass="string">totalHMRCPymtValue</value>
                                                 </argument>
                                                 <argument id="resultScope">
                                                   <value class="value" valueClass="string">Test</value>
@@ -666,20 +665,20 @@
                                                 </argument>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="687" title="Set Values: O.StudentLoan">
+                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="687" title="Set Values: O.EstmtdLevyAlwnceAprnmentThisPeriod">
                                               <tags/>
                                               <arguments>
                                                 <argument id="values">
                                                   <value class="valueList" mutable="Mutable">
                                                     <namedValues mutable="Mutable">
                                                       <namedValue name="valuePath">
-                                                        <value class="value" valueClass="string">O.StudentLoan</value>
+                                                        <value class="value" valueClass="string">O.EstmtdLevyAlwnceAprnmentThisPeriod</value>
                                                       </namedValue>
                                                       <namedValue name="value">
                                                         <value class="variable">
-                                                          <path element="studentloanValue"/>
+                                                          <path element="estimatedLevyAlwanceAportnmentValue"/>
                                                           <path element="fields"/>
-                                                          <path element="studentLoan"/>
+                                                          <path element="estmtdLevyAlwnceAprnmentThisPeriod"/>
                                                           <path element="value"/>
                                                         </value>
                                                       </namedValue>
@@ -691,20 +690,20 @@
                                                 </argument>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="688" title="Set Values: O.NetPay">
+                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="688" title="Set Values: O.AprntshipLevyPayBill">
                                               <tags/>
                                               <arguments>
                                                 <argument id="values">
                                                   <value class="valueList" mutable="Mutable">
                                                     <namedValues mutable="Mutable">
                                                       <namedValue name="valuePath">
-                                                        <value class="value" valueClass="string">O.NetPay</value>
+                                                        <value class="value" valueClass="string">O.AprntshipLevyPayBill</value>
                                                       </namedValue>
                                                       <namedValue name="value">
                                                         <value class="variable">
-                                                          <path element="NePayValue"/>
+                                                          <path element="apprntishipLevyPaybillValue"/>
                                                           <path element="fields"/>
-                                                          <path element="netPay"/>
+                                                          <path element="aprntshipLevyPayBill"/>
                                                           <path element="value"/>
                                                         </value>
                                                       </namedValue>
@@ -716,20 +715,20 @@
                                                 </argument>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="690" title="Set Values: O.InitialDeductionAmount">
+                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="690" title="Set Values: O.AprntshipLevyPayGross">
                                               <tags/>
                                               <arguments>
                                                 <argument id="values">
                                                   <value class="valueList" mutable="Mutable">
                                                     <namedValues mutable="Mutable">
                                                       <namedValue name="valuePath">
-                                                        <value class="value" valueClass="string">O.InitialDeductionAmount</value>
+                                                        <value class="value" valueClass="string">O.AprntshipLevyPayGross</value>
                                                       </namedValue>
                                                       <namedValue name="value">
                                                         <value class="variable">
-                                                          <path element="InitialDeductionValue"/>
+                                                          <path element="apprntishipLevyPaygrossValue"/>
                                                           <path element="fields"/>
-                                                          <path element="intitialDeduction"/>
+                                                          <path element="aprntshipLevyPayGross"/>
                                                           <path element="value"/>
                                                         </value>
                                                       </namedValue>
@@ -741,20 +740,20 @@
                                                 </argument>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="691" title="Set Values: O.AttachableEarnings">
+                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="691" title="Set Values: O.AprntshipLevyThisPeriod">
                                               <tags/>
                                               <arguments>
                                                 <argument id="values">
                                                   <value class="valueList" mutable="Mutable">
                                                     <namedValues mutable="Mutable">
                                                       <namedValue name="valuePath">
-                                                        <value class="value" valueClass="string">O.AttachableEarnings</value>
+                                                        <value class="value" valueClass="string">O.AprntshipLevyThisPeriod</value>
                                                       </namedValue>
                                                       <namedValue name="value">
                                                         <value class="variable">
-                                                          <path element="attachableEarningsValue"/>
+                                                          <path element="apprentshipLevyThisPeriodValue"/>
                                                           <path element="fields"/>
-                                                          <path element="attachableEarnings"/>
+                                                          <path element="aprntshipLevyThisPeriod"/>
                                                           <path element="value"/>
                                                         </value>
                                                       </namedValue>
@@ -766,20 +765,20 @@
                                                 </argument>
                                               </arguments>
                                             </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="692" title="Set Values: O.ProtectedEarnings">
+                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="692" title="Set Values: O.TotalHMRCPymtsWithLevy">
                                               <tags/>
                                               <arguments>
                                                 <argument id="values">
                                                   <value class="valueList" mutable="Mutable">
                                                     <namedValues mutable="Mutable">
                                                       <namedValue name="valuePath">
-                                                        <value class="value" valueClass="string">O.ProtectedEarnings</value>
+                                                        <value class="value" valueClass="string">O.TotalHMRCPymtsWithLevy</value>
                                                       </namedValue>
                                                       <namedValue name="value">
                                                         <value class="variable">
-                                                          <path element="protectedEarningsValue"/>
+                                                          <path element="totalHMRCPymtValue"/>
                                                           <path element="fields"/>
-                                                          <path element="protectedEarnings"/>
+                                                          <path element="totalHMRCPymtsWithLevy"/>
                                                           <path element="value"/>
                                                         </value>
                                                       </namedValue>
@@ -804,12 +803,12 @@
                                         </argument>
                                         <argument id="dataUrl">
                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
+                                            <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
+                                            <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
                                           </value>
                                         </argument>
                                         <argument id="targetDescription">
-                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
+                                          <value class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</value>
                                         </argument>
                                         <argument id="updateValueRange"/>
                                         <argument id="updateColumnNames">
@@ -868,22 +867,21 @@
                                       </arguments>
                                       <parameterValueSources>
                                         <parameterValueSource variableName="ExcelDataExpectedVal" variableScope="Test">
-                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/Student Loan Scenarios Test result.xlsx;1557210423494</cacheToken>
+                                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1559039591571</cacheToken>
                                           <cachedParameters>
                                             <apiParam name="RowNumber"/>
-                                            <apiParam name="ColumnHeading"/>
+                                            <apiParam name="PayrunApril2019"/>
                                             <apiParam name="AutomationEmployeeNames"/>
-                                            <apiParam name="StudentLoan"/>
-                                            <apiParam name="NetPay"/>
-                                            <apiParam name="InitialDeductionAmount"/>
-                                            <apiParam name="AttachableEarnings"/>
-                                            <apiParam name="ProtectedEarnings"/>
-                                            <apiParam name="TypeStudentLoan"/>
+                                            <apiParam name="EstmtdLevyAlwnceAprnmentThisPeriod"/>
+                                            <apiParam name="AprntshipLevyPayBill"/>
+                                            <apiParam name="AprntshipLevyPayGross"/>
+                                            <apiParam name="AprntshipLevyThisPeriod"/>
+                                            <apiParam name="TotalHMRCPymtsWithLevy"/>
                                           </cachedParameters>
                                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
-                                            <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
+                                            <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
+                                            <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
+                                            <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
                                           </sourceValue>
                                         </parameterValueSource>
                                       </parameterValueSources>
@@ -899,19 +897,19 @@
                                               <clauses>
                                                 <clause name="hidden" testItemId="733">
                                                   <steps>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="913" title="If: {ExcelDataExpectedVal.StudentLoan = studentloanValue.fields.studentLoan.value}">
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="913" title="If: {ExcelDataExpectedVal.EstmtdLevyAlwnceAprnmentThisPeriod = estimatedLevyAlwanceAportnmentValue.fields.estmtdLevyAlwnceAprnmentThisPeriod.value}">
                                                       <tags/>
                                                       <arguments>
                                                         <argument id="condition">
                                                           <value class="eq">
                                                             <lhs class="variable">
                                                               <path element="ExcelDataExpectedVal"/>
-                                                              <path element="StudentLoan"/>
+                                                              <path element="EstmtdLevyAlwnceAprnmentThisPeriod"/>
                                                             </lhs>
                                                             <rhs class="variable">
-                                                              <path element="studentloanValue"/>
+                                                              <path element="estimatedLevyAlwanceAportnmentValue"/>
                                                               <path element="fields"/>
-                                                              <path element="studentLoan"/>
+                                                              <path element="estmtdLevyAlwnceAprnmentThisPeriod"/>
                                                               <path element="value"/>
                                                             </rhs>
                                                           </value>
@@ -920,13 +918,13 @@
                                                       <clauses>
                                                         <clause name="then" testItemId="914">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="915" title="Set Values: O.StudentLoan">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="915" title="Set Values: O.EstmtdLevyAlwnceAprnmentThisPeriod">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.StudentLoan</value>
+                                                                        <value class="value" valueClass="string">O.EstmtdLevyAlwnceAprnmentThisPeriod</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">True</value>
@@ -943,13 +941,13 @@
                                                         </clause>
                                                         <clause name="else" testItemId="916">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="917" title="Set Values: O.StudentLoan">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="917" title="Set Values: O.EstmtdLevyAlwnceAprnmentThisPeriod">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.StudentLoan</value>
+                                                                        <value class="value" valueClass="string">O.EstmtdLevyAlwnceAprnmentThisPeriod</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">False</value>
@@ -966,19 +964,19 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="929" title="If: {ExcelDataExpectedVal.NetPay = NePayValue.fields.netPay.value}">
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="929" title="If: {ExcelDataExpectedVal.AprntshipLevyPayBill = apprntishipLevyPaybillValue.fields.aprntshipLevyPayBill.value}">
                                                       <tags/>
                                                       <arguments>
                                                         <argument id="condition">
                                                           <value class="eq">
                                                             <lhs class="variable">
                                                               <path element="ExcelDataExpectedVal"/>
-                                                              <path element="NetPay"/>
+                                                              <path element="AprntshipLevyPayBill"/>
                                                             </lhs>
                                                             <rhs class="variable">
-                                                              <path element="NePayValue"/>
+                                                              <path element="apprntishipLevyPaybillValue"/>
                                                               <path element="fields"/>
-                                                              <path element="netPay"/>
+                                                              <path element="aprntshipLevyPayBill"/>
                                                               <path element="value"/>
                                                             </rhs>
                                                           </value>
@@ -987,13 +985,13 @@
                                                       <clauses>
                                                         <clause name="then" testItemId="930">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="931" title="Set Values: O.NetPay">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="931" title="Set Values: O.AprntshipLevyPayBill">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.NetPay</value>
+                                                                        <value class="value" valueClass="string">O.AprntshipLevyPayBill</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">True</value>
@@ -1010,13 +1008,13 @@
                                                         </clause>
                                                         <clause name="else" testItemId="932">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="933" title="Set Values: O.NetPay">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="933" title="Set Values: O.AprntshipLevyPayBill">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.NetPay</value>
+                                                                        <value class="value" valueClass="string">O.AprntshipLevyPayBill</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">False</value>
@@ -1033,19 +1031,19 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="944" title="If: {ExcelDataExpectedVal.InitialDeductionAmount = InitialDeductionValue.fields.intitialDeduction.value}">
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="944" title="If: {ExcelDataExpectedVal.AprntshipLevyPayGross = apprntishipLevyPaygrossValue.fields.aprntshipLevyPayGross.value}">
                                                       <tags/>
                                                       <arguments>
                                                         <argument id="condition">
                                                           <value class="eq">
                                                             <lhs class="variable">
                                                               <path element="ExcelDataExpectedVal"/>
-                                                              <path element="InitialDeductionAmount"/>
+                                                              <path element="AprntshipLevyPayGross"/>
                                                             </lhs>
                                                             <rhs class="variable">
-                                                              <path element="InitialDeductionValue"/>
+                                                              <path element="apprntishipLevyPaygrossValue"/>
                                                               <path element="fields"/>
-                                                              <path element="intitialDeduction"/>
+                                                              <path element="aprntshipLevyPayGross"/>
                                                               <path element="value"/>
                                                             </rhs>
                                                           </value>
@@ -1054,13 +1052,13 @@
                                                       <clauses>
                                                         <clause name="then" testItemId="945">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="946" title="Set Values: O.InitialDeductionAmount">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="946" title="Set Values: O.AprntshipLevyPayGross">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.InitialDeductionAmount</value>
+                                                                        <value class="value" valueClass="string">O.AprntshipLevyPayGross</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">True</value>
@@ -1077,13 +1075,13 @@
                                                         </clause>
                                                         <clause name="else" testItemId="947">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="948" title="Set Values: O.InitialDeductionAmount">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="948" title="Set Values: O.AprntshipLevyPayGross">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.InitialDeductionAmount</value>
+                                                                        <value class="value" valueClass="string">O.AprntshipLevyPayGross</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">False</value>
@@ -1100,19 +1098,19 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="954" title="If: {ExcelDataExpectedVal.AttachableEarnings = attachableEarningsValue.fields.attachableEarnings.value}">
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="954" title="If: {ExcelDataExpectedVal.AprntshipLevyThisPeriod = apprentshipLevyThisPeriodValue.fields.aprntshipLevyThisPeriod.value}">
                                                       <tags/>
                                                       <arguments>
                                                         <argument id="condition">
                                                           <value class="eq">
                                                             <lhs class="variable">
                                                               <path element="ExcelDataExpectedVal"/>
-                                                              <path element="AttachableEarnings"/>
+                                                              <path element="AprntshipLevyThisPeriod"/>
                                                             </lhs>
                                                             <rhs class="variable">
-                                                              <path element="attachableEarningsValue"/>
+                                                              <path element="apprentshipLevyThisPeriodValue"/>
                                                               <path element="fields"/>
-                                                              <path element="attachableEarnings"/>
+                                                              <path element="aprntshipLevyThisPeriod"/>
                                                               <path element="value"/>
                                                             </rhs>
                                                           </value>
@@ -1121,13 +1119,13 @@
                                                       <clauses>
                                                         <clause name="then" testItemId="955">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="956" title="Set Values: O.AttachableEarnings">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="956" title="Set Values: O.AprntshipLevyThisPeriod">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.AttachableEarnings</value>
+                                                                        <value class="value" valueClass="string">O.AprntshipLevyThisPeriod</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">True</value>
@@ -1144,13 +1142,13 @@
                                                         </clause>
                                                         <clause name="else" testItemId="957">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="958" title="Set Values: O.AttachableEarnings">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="958" title="Set Values: O.AprntshipLevyThisPeriod">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.AttachableEarnings</value>
+                                                                        <value class="value" valueClass="string">O.AprntshipLevyThisPeriod</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">False</value>
@@ -1167,19 +1165,19 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="964" title="If: {ExcelDataExpectedVal.ProtectedEarnings = protectedEarningsValue.fields.protectedEarnings.value}">
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="964" title="If: {ExcelDataExpectedVal.TotalHMRCPymtsWithLevy = totalHMRCPymtValue.fields.totalHMRCPymtsWithLevy.value}">
                                                       <tags/>
                                                       <arguments>
                                                         <argument id="condition">
                                                           <value class="eq">
                                                             <lhs class="variable">
                                                               <path element="ExcelDataExpectedVal"/>
-                                                              <path element="ProtectedEarnings"/>
+                                                              <path element="TotalHMRCPymtsWithLevy"/>
                                                             </lhs>
                                                             <rhs class="variable">
-                                                              <path element="protectedEarningsValue"/>
+                                                              <path element="totalHMRCPymtValue"/>
                                                               <path element="fields"/>
-                                                              <path element="protectedEarnings"/>
+                                                              <path element="totalHMRCPymtsWithLevy"/>
                                                               <path element="value"/>
                                                             </rhs>
                                                           </value>
@@ -1188,13 +1186,13 @@
                                                       <clauses>
                                                         <clause name="then" testItemId="965">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="966" title="Set Values: O.ProtectedEarnings">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="966" title="Set Values: O.TotalHMRCPymtsWithLevy">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.ProtectedEarnings</value>
+                                                                        <value class="value" valueClass="string">O.TotalHMRCPymtsWithLevy</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">True</value>
@@ -1211,13 +1209,13 @@
                                                         </clause>
                                                         <clause name="else" testItemId="967">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="968" title="Set Values: O.ProtectedEarnings">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="968" title="Set Values: O.TotalHMRCPymtsWithLevy">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.ProtectedEarnings</value>
+                                                                        <value class="value" valueClass="string">O.TotalHMRCPymtsWithLevy</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">False</value>
@@ -1243,12 +1241,12 @@
                                                         </argument>
                                                         <argument id="dataUrl">
                                                           <value class="excelTarget" sheetWriteMode="Update">
-                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-                                                            <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
+                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
+                                                            <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
                                                           </value>
                                                         </argument>
                                                         <argument id="targetDescription">
-                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
+                                                          <value class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</value>
                                                         </argument>
                                                         <argument id="updateValueRange"/>
                                                         <argument id="updateColumnNames">
@@ -1298,745 +1296,6 @@
                                                           <summary>Identifies which rows in the Range will be updated. \n It can either be a row number (where the first row = 1) or a filtering condition against one or more columns (e.g. {firstName = "Joe" and surname = "Bloggs"}.</summary>
                                                         </apiParam>
                                                       </generatedParameters>
-                                                    </apiCall>
-                                                  </steps>
-                                                </clause>
-                                              </clauses>
-                                            </apiCall>
-                                          </steps>
-                                        </clause>
-                                      </clauses>
-                                    </apiCall>
-                                  </steps>
-                                </clause>
-                              </clauses>
-                              <generatedParameters>
-                                <apiParam group="options" name="autoRetry" title="Auto Retry">
-                                  <summary>Whether to wait for the rows to be visible.</summary>
-                                  <type>
-                                    <booleanType/>
-                                  </type>
-                                </apiParam>
-                              </generatedParameters>
-                            </apiCall>
-                          </steps>
-                        </clause>
-                      </clauses>
-                    </apiCall>
-                  </steps>
-                </clause>
-              </clauses>
-              <generatedParameters>
-                <apiParam group="target" name="uiTargetUrl" title="Web Page">
-                  <type>
-                    <textType/>
-                  </type>
-                </apiParam>
-              </generatedParameters>
-            </apiCall>
-          </steps>
-        </clause>
-      </clauses>
-    </apiCall>
-    <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="1437" title="Reports for only TYPE">
-      <tags/>
-      <arguments>
-        <argument id="description">
-          <value class="value" valueClass="string">Reports Tab</value>
-        </argument>
-      </arguments>
-      <parameterValueSources>
-        <parameterValueSource variableName="ReportData" variableScope="Test">
-          <cacheToken>C:/Users/AzizMugdal/ProvarFeb202019/PayrollProject/OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx;1551248665505</cacheToken>
-          <cachedParameters>
-            <apiParam name="RowNumber"/>
-            <apiParam name="ColumnHeading"/>
-            <apiParam name="AutomationEmployeeNames"/>
-            <apiParam name="StudentLoan"/>
-            <apiParam name="NetPay"/>
-            <apiParam name="InitialDeductionAmount"/>
-            <apiParam name="AttachableEarnings"/>
-            <apiParam name="ProtectedEarnings"/>
-            <apiParam name="TypeStudentLoan"/>
-          </cachedParameters>
-          <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-            <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
-            <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
-          </sourceValue>
-        </parameterValueSource>
-      </parameterValueSources>
-      <clauses>
-        <clause name="hidden" testItemId="1438">
-          <steps>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" isTitleUpdated="true" name="UiWithScreen" testItemId="1439" title="On Report View Screen">
-              <arguments>
-                <argument id="uiConnectionName">
-                  <value class="value" valueClass="string">Admin</value>
-                </argument>
-                <argument id="target">
-                  <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.StudentLoan"/>
-                </argument>
-                <argument id="navigate">
-                  <value class="value" valueClass="string">Dont</value>
-                </argument>
-                <argument id="targetDescription">
-                  <value class="value" valueClass="string">On Student Loan page</value>
-                </argument>
-                <argument id="windowSelection">
-                  <value class="value" valueClass="string">Default</value>
-                </argument>
-                <argument id="windowSize">
-                  <value class="value" valueClass="string">Default</value>
-                </argument>
-                <argument id="closeWindow">
-                  <value class="value" valueClass="boolean">false</value>
-                </argument>
-                <argument id="captureBefore">
-                  <value class="value" valueClass="string">false</value>
-                </argument>
-                <argument id="captureAfter">
-                  <value class="value" valueClass="string">false</value>
-                </argument>
-                <argument id="uiTargetUrl"/>
-              </arguments>
-              <clauses>
-                <clause name="substeps" testItemId="1440">
-                  <steps>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="1441" title="UI Assert">
-                      <arguments>
-                        <argument id="fieldAssertions">
-                          <value class="valueList" mutable="Mutable"/>
-                        </argument>
-                        <argument id="columnAssertions">
-                          <value class="valueList" mutable="Mutable">
-                            <uiColumnAssertion resultName="employeeName">
-                              <fieldLocator uri="ui:pageobject:field?field=frame1%2FDoNotTouchPayrollReport%2FemployeeName&amp;pageId=pageobjects.StudentLoan"/>
-                              <attributeAssertions>
-                                <uiAttributeAssertion attributeName="columnValues" comparisonType="None"/>
-                              </attributeAssertions>
-                            </uiColumnAssertion>
-                            <uiColumnAssertion resultName="amount1">
-                              <fieldLocator uri="ui:pageobject:field?field=frame1%2FDoNotTouchPayrollReport%2Famount1&amp;pageId=pageobjects.StudentLoan"/>
-                              <attributeAssertions>
-                                <uiAttributeAssertion attributeName="columnValues" comparisonType="None"/>
-                              </attributeAssertions>
-                            </uiColumnAssertion>
-                          </value>
-                        </argument>
-                        <argument id="pageAssertions">
-                          <value class="valueList" mutable="Mutable"/>
-                        </argument>
-                        <argument id="resultName">
-                          <value class="value" valueClass="string">EmpName</value>
-                        </argument>
-                        <argument id="resultScope">
-                          <value class="value" valueClass="string">Test</value>
-                        </argument>
-                        <argument id="captureAfter">
-                          <value class="value" valueClass="string">false</value>
-                        </argument>
-                        <argument id="beforeWait"/>
-                        <argument id="autoRetry"/>
-                      </arguments>
-                      <expectedExceptions>
-                        <expectedException caseInsensitive="true" comparisonType="Contains" title="SF Target">
-                          <assertionValue class="value" valueClass="string">A Salesforce target is required.</assertionValue>
-                        </expectedException>
-                      </expectedExceptions>
-                    </apiCall>
-                    <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="1442" title="Set Values: rowcount">
-                      <arguments>
-                        <argument id="values">
-                          <value class="valueList" mutable="Mutable">
-                            <namedValues mutable="Mutable">
-                              <namedValue name="valuePath">
-                                <value class="value" valueClass="string">rowcount</value>
-                              </namedValue>
-                              <namedValue name="value">
-                                <value class="funcCall" id="Count">
-                                  <argument id="value">
-                                    <value class="variable">
-                                      <path element="EmpName"/>
-                                      <path element="columns"/>
-                                      <path element="employeeName"/>
-                                      <path element="columnValues"/>
-                                    </value>
-                                  </argument>
-                                </value>
-                              </namedValue>
-                              <namedValue name="valueScope">
-                                <value class="value" valueClass="string">Test</value>
-                              </namedValue>
-                            </namedValues>
-                          </value>
-                        </argument>
-                      </arguments>
-                    </apiCall>
-                    <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" name="StepGroup" testItemId="1443" title="Extracting Expected Value">
-                      <arguments>
-                        <argument id="description">
-                          <value class="value" valueClass="string">Extracting Expected Value</value>
-                        </argument>
-                      </arguments>
-                      <parameterValueSources>
-                        <parameterValueSource variableName="ExcelData" variableScope="Test">
-                          <cacheToken>C:/Users/AzizMugdal/ProvarFeb202019/PayrollProject/OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx;1551248665505</cacheToken>
-                          <cachedParameters>
-                            <apiParam name="RowNumber"/>
-                            <apiParam name="ColumnHeading"/>
-                            <apiParam name="AutomationEmployeeNames"/>
-                            <apiParam name="StudentLoan"/>
-                            <apiParam name="NetPay"/>
-                            <apiParam name="InitialDeductionAmount"/>
-                            <apiParam name="AttachableEarnings"/>
-                            <apiParam name="ProtectedEarnings"/>
-                            <apiParam name="TypeStudentLoan"/>
-                          </cachedParameters>
-                          <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-                            <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
-                            <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
-                          </sourceValue>
-                        </parameterValueSource>
-                      </parameterValueSources>
-                      <clauses>
-                        <clause name="hidden" testItemId="1444"/>
-                      </clauses>
-                    </apiCall>
-                    <apiCall apiId="com.provar.plugins.bundled.apis.control.DoWhile" name="DoWhile" testItemId="1445" title="While: {true}">
-                      <arguments>
-                        <argument id="condition">
-                          <value class="value" valueClass="boolean">true</value>
-                        </argument>
-                        <argument id="counterName">
-                          <value class="value" valueClass="string">LoopCounter</value>
-                        </argument>
-                        <argument id="counterStart">
-                          <value class="value" valueClass="decimal">1</value>
-                        </argument>
-                        <argument id="counterEnd">
-                          <value class="variable">
-                            <path element="rowcount"/>
-                          </value>
-                        </argument>
-                        <argument id="continueOnFailure">
-                          <value class="value" valueClass="boolean">true</value>
-                        </argument>
-                      </arguments>
-                      <clauses>
-                        <clause name="substeps" testItemId="1446">
-                          <steps>
-                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="1447" title="With DoNotTouchPayrollReport row">
-                              <arguments>
-                                <argument id="uiConnectionName">
-                                  <value class="value" valueClass="string">Admin</value>
-                                </argument>
-                                <argument id="locator">
-                                  <value class="uiLocator" uri="ui:pageobject:row?field=frame1%2FDoNotTouchPayrollReport&amp;pageId=pageobjects.AEO1971"/>
-                                </argument>
-                                <argument id="uiRowLocator">
-                                  <value class="variable">
-                                    <path element="LoopCounter"/>
-                                  </value>
-                                </argument>
-                                <argument id="locatorDescription">
-                                  <value class="value" valueClass="string">With DoNotTouchPayrollReport row</value>
-                                </argument>
-                                <argument id="failIfNotFound">
-                                  <value class="value" valueClass="boolean">true</value>
-                                </argument>
-                                <argument id="debugRowLocator">
-                                  <value class="value" valueClass="boolean">true</value>
-                                </argument>
-                                <argument id="resultName">
-                                  <value class="value" valueClass="string">Row</value>
-                                </argument>
-                                <argument id="resultScope">
-                                  <value class="value" valueClass="string">Local</value>
-                                </argument>
-                                <argument id="autoRetry">
-                                  <value class="value" valueClass="boolean">false</value>
-                                </argument>
-                              </arguments>
-                              <clauses>
-                                <clause name="substeps" testItemId="1448">
-                                  <steps>
-                                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="1449" title="Extracting current column values">
-                                      <arguments>
-                                        <argument id="fieldAssertions">
-                                          <value class="valueList" mutable="Mutable">
-                                            <uiFieldAssertion resultName="type">
-                                              <fieldLocator uri="ui:pageobject:field?field=type&amp;pageId=pageobjects.StudentLoan"/>
-                                              <attributeAssertions>
-                                                <uiAttributeAssertion attributeName="value" comparisonType="None"/>
-                                              </attributeAssertions>
-                                            </uiFieldAssertion>
-                                            <uiFieldAssertion resultName="employeeName">
-                                              <fieldLocator uri="ui:pageobject:field?field=employeeName&amp;pageId=pageobjects.StudentLoan"/>
-                                              <attributeAssertions>
-                                                <uiAttributeAssertion attributeName="value" comparisonType="None"/>
-                                              </attributeAssertions>
-                                            </uiFieldAssertion>
-                                          </value>
-                                        </argument>
-                                        <argument id="columnAssertions">
-                                          <value class="valueList" mutable="Mutable"/>
-                                        </argument>
-                                        <argument id="pageAssertions">
-                                          <value class="valueList" mutable="Mutable"/>
-                                        </argument>
-                                        <argument id="resultName">
-                                          <value class="value" valueClass="string">colValues</value>
-                                        </argument>
-                                        <argument id="resultScope">
-                                          <value class="value" valueClass="string">Test</value>
-                                        </argument>
-                                        <argument id="captureAfter">
-                                          <value class="value" valueClass="string">false</value>
-                                        </argument>
-                                        <argument id="beforeWait"/>
-                                        <argument id="autoRetry"/>
-                                      </arguments>
-                                    </apiCall>
-                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1450" title="If: {colValues.fields.employeeName.value = ExcelData.AutomationEmployeeNames AND colValues.fields.type.value = &quot;Student loan&quot;}">
-                                      <arguments>
-                                        <argument id="condition">
-                                          <value class="and">
-                                            <lhs class="eq">
-                                              <lhs class="variable">
-                                                <path element="colValues"/>
-                                                <path element="fields"/>
-                                                <path element="employeeName"/>
-                                                <path element="value"/>
-                                              </lhs>
-                                              <rhs class="variable">
-                                                <path element="ExcelData"/>
-                                                <path element="AutomationEmployeeNames"/>
-                                              </rhs>
-                                            </lhs>
-                                            <rhs class="eq">
-                                              <lhs class="variable">
-                                                <path element="colValues"/>
-                                                <path element="fields"/>
-                                                <path element="type"/>
-                                                <path element="value"/>
-                                              </lhs>
-                                              <rhs class="value" valueClass="string">Student loan</rhs>
-                                            </rhs>
-                                          </value>
-                                        </argument>
-                                      </arguments>
-                                      <clauses>
-                                        <clause name="then" testItemId="1451">
-                                          <steps>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" name="StepGroup" testItemId="1452" title="Reading Actual Value">
-                                              <tags/>
-                                              <arguments>
-                                                <argument id="description">
-                                                  <value class="value" valueClass="string">Reading Actual Value</value>
-                                                </argument>
-                                              </arguments>
-                                              <clauses>
-                                                <clause name="hidden" testItemId="1453">
-                                                  <steps/>
-                                                </clause>
-                                              </clauses>
-                                            </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" name="StepGroup" testItemId="1454" title="Setting Actual values for ExcelWrite">
-                                              <arguments>
-                                                <argument id="description">
-                                                  <value class="value" valueClass="string">Setting Actual values for ExcelWrite</value>
-                                                </argument>
-                                              </arguments>
-                                              <clauses>
-                                                <clause name="hidden" testItemId="1455">
-                                                  <steps>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1459" title="If: {colValues.fields.type.value = &quot;Student loan&quot;}">
-                                                      <arguments>
-                                                        <argument id="condition">
-                                                          <value class="eq">
-                                                            <lhs class="variable">
-                                                              <path element="colValues"/>
-                                                              <path element="fields"/>
-                                                              <path element="type"/>
-                                                              <path element="value"/>
-                                                            </lhs>
-                                                            <rhs class="value" valueClass="string">Student loan</rhs>
-                                                          </value>
-                                                        </argument>
-                                                      </arguments>
-                                                      <clauses>
-                                                        <clause name="then" testItemId="1460">
-                                                          <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="1505" title="Set Values: L.TypeStudentLoan">
-                                                              <tags/>
-                                                              <arguments>
-                                                                <argument id="values">
-                                                                  <value class="valueList" mutable="Mutable">
-                                                                    <namedValues mutable="Mutable">
-                                                                      <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">L.TypeStudentLoan</value>
-                                                                      </namedValue>
-                                                                      <namedValue name="value">
-                                                                        <value class="variable">
-                                                                          <path element="EmpName"/>
-                                                                          <path element="columns"/>
-                                                                          <path element="amount1"/>
-                                                                          <path element="columnValues">
-                                                                            <filter class="conditionFilter">
-                                                                              <condition class="variable">
-                                                                                <path element="LoopCounter"/>
-                                                                              </condition>
-                                                                            </filter>
-                                                                          </path>
-                                                                        </value>
-                                                                      </namedValue>
-                                                                      <namedValue name="valueScope">
-                                                                        <value class="value" valueClass="string">Test</value>
-                                                                      </namedValue>
-                                                                    </namedValues>
-                                                                  </value>
-                                                                </argument>
-                                                              </arguments>
-                                                            </apiCall>
-                                                          </steps>
-                                                        </clause>
-                                                      </clauses>
-                                                    </apiCall>
-                                                  </steps>
-                                                </clause>
-                                              </clauses>
-                                            </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.io.Write" isTitleUpdated="true" name="Write" testItemId="1467" title="Write: Actual Values">
-                                              <arguments>
-                                                <argument id="data">
-                                                  <value class="variable">
-                                                    <path element="L"/>
-                                                  </value>
-                                                </argument>
-                                                <argument id="dataUrl">
-                                                  <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-                                                    <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
-                                                  </value>
-                                                </argument>
-                                                <argument id="targetDescription">
-                                                  <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
-                                                </argument>
-                                                <argument id="updateValueRange"/>
-                                                <argument id="updateColumnNames">
-                                                  <value class="value" valueClass="string">FirstRowOfRange</value>
-                                                </argument>
-                                                <argument id="updateMatchType">
-                                                  <value class="value" valueClass="string">RowOrColNumber</value>
-                                                </argument>
-                                                <argument id="updateMatchLocator">
-                                                  <value class="value" valueClass="string">3</value>
-                                                </argument>
-                                              </arguments>
-                                              <generatedParameters>
-                                                <apiParam group="result" name="updateValueRange" title="Values Range">
-                                                  <summary>The range of cells that needs to updated. If nothing is specified entire sheet is targeted</summary>
-                                                  <type>
-                                                    <textType>
-                                                      <constraints>
-                                                        <valueConstraint name="disableTemplateEditor">true</valueConstraint>
-                                                      </constraints>
-                                                    </textType>
-                                                  </type>
-                                                </apiParam>
-                                                <apiParam group="result" name="updateColumnNames" title="Column Names">
-                                                  <summary>Identifies where the column names are in the spreadsheet:</summary>
-                                                  <defaultValue>FirstRowOfRange</defaultValue>
-                                                  <type>
-                                                    <choiceType>
-                                                      <constraints>
-                                                        <valueConstraint name="boundedValues">FirstRowOfRange:Across the first row|FirstColumnOfRange:Down the first column</valueConstraint>
-                                                      </constraints>
-                                                    </choiceType>
-                                                  </type>
-                                                </apiParam>
-                                                <apiParam group="result" internal="true" name="updateMatchType" title="">
-                                                  <summary/>
-                                                  <defaultValue>RowOrColNumber</defaultValue>
-                                                  <type>
-                                                    <choiceType>
-                                                      <constraints>
-                                                        <valueConstraint name="boundedValues">RowOrColNumber:Match by Position|Where:Match on Condition|MatchColumns:Match by Columns</valueConstraint>
-                                                      </constraints>
-                                                    </choiceType>
-                                                  </type>
-                                                </apiParam>
-                                                <apiParam group="result" manuallyResolved="true" name="updateMatchLocator" title="Match Locator">
-                                                  <summary>Identifies which rows in the Range will be updated. \n It can either be a row number (where the first row = 1) or a filtering condition against one or more columns (e.g. {firstName = "Joe" and surname = "Bloggs"}.</summary>
-                                                </apiParam>
-                                              </generatedParameters>
-                                            </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="1468" title="ExpectedValueFromSheet-Nov payroll period">
-                                              <arguments>
-                                                <argument id="description">
-                                                  <value class="value" valueClass="string">ExpectedValueFromSheet-Nov</value>
-                                                </argument>
-                                              </arguments>
-                                              <parameterValueSources>
-                                                <parameterValueSource variableName="ExcelDataExpectedVal" variableScope="Test">
-                                                  <cacheToken>C:/Users/AzizMugdal/ProvarFeb202019/PayrollProject/OutPutTestResult/Student Loan Scenarios Test result 201819.xlsx;1551254155629</cacheToken>
-                                                  <cachedParameters>
-                                                    <apiParam name="RowNumber"/>
-                                                    <apiParam name="ColumnHeading"/>
-                                                    <apiParam name="AutomationEmployeeNames"/>
-                                                    <apiParam name="StudentLoan"/>
-                                                    <apiParam name="NetPay"/>
-                                                    <apiParam name="InitialDeductionAmount"/>
-                                                    <apiParam name="AttachableEarnings"/>
-                                                    <apiParam name="ProtectedEarnings"/>
-                                                    <apiParam name="TypeStudentLoan"/>
-                                                  </cachedParameters>
-                                                  <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                                                    <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-                                                    <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
-                                                    <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
-                                                  </sourceValue>
-                                                </parameterValueSource>
-                                              </parameterValueSources>
-                                              <clauses>
-                                                <clause name="hidden" testItemId="1469"/>
-                                              </clauses>
-                                            </apiCall>
-                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" name="StepGroup" testItemId="1470" title="Comparing actual and expected vlaues">
-                                              <arguments>
-                                                <argument id="description">
-                                                  <value class="value" valueClass="string">Comparing actual and expected vlaues</value>
-                                                </argument>
-                                              </arguments>
-                                              <clauses>
-                                                <clause name="hidden" testItemId="1471">
-                                                  <steps>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1544" title="If: {colValues.fields.type.value = &quot;Student loan&quot;}">
-                                                      <tags/>
-                                                      <arguments>
-                                                        <argument id="condition">
-                                                          <value class="eq">
-                                                            <lhs class="variable">
-                                                              <path element="colValues"/>
-                                                              <path element="fields"/>
-                                                              <path element="type"/>
-                                                              <path element="value"/>
-                                                            </lhs>
-                                                            <rhs class="value" valueClass="string">Student loan</rhs>
-                                                          </value>
-                                                        </argument>
-                                                      </arguments>
-                                                      <clauses>
-                                                        <clause name="then" testItemId="1545">
-                                                          <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1546" title="If: {ExcelDataExpectedVal.TypeStudentLoan = EmpName.columns.amount1.columnValues[LoopCounter]}">
-                                                              <arguments>
-                                                                <argument id="condition">
-                                                                  <value class="eq">
-                                                                    <lhs class="variable">
-                                                                      <path element="ExcelDataExpectedVal"/>
-                                                                      <path element="TypeStudentLoan"/>
-                                                                    </lhs>
-                                                                    <rhs class="variable">
-                                                                      <path element="EmpName"/>
-                                                                      <path element="columns"/>
-                                                                      <path element="amount1"/>
-                                                                      <path element="columnValues">
-                                                                        <filter class="conditionFilter">
-                                                                          <condition class="variable">
-                                                                            <path element="LoopCounter"/>
-                                                                          </condition>
-                                                                        </filter>
-                                                                      </path>
-                                                                    </rhs>
-                                                                  </value>
-                                                                </argument>
-                                                              </arguments>
-                                                              <clauses>
-                                                                <clause name="then" testItemId="1547">
-                                                                  <steps>
-                                                                    <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="1548" title="Set Values: M.TypeStudentLoan">
-                                                                      <arguments>
-                                                                        <argument id="values">
-                                                                          <value class="valueList" mutable="Mutable">
-                                                                            <namedValues mutable="Mutable">
-                                                                              <namedValue name="valuePath">
-                                                                                <value class="value" valueClass="string">M.TypeStudentLoan</value>
-                                                                              </namedValue>
-                                                                              <namedValue name="value">
-                                                                                <value class="value" valueClass="string">True</value>
-                                                                              </namedValue>
-                                                                              <namedValue name="valueScope">
-                                                                                <value class="value" valueClass="string">Test</value>
-                                                                              </namedValue>
-                                                                            </namedValues>
-                                                                          </value>
-                                                                        </argument>
-                                                                      </arguments>
-                                                                    </apiCall>
-                                                                    <apiCall apiId="com.provar.plugins.bundled.apis.io.Write" isTitleUpdated="true" name="Write" testItemId="1549" title="Write: Test Remarks">
-                                                                      <arguments>
-                                                                        <argument id="data">
-                                                                          <value class="variable">
-                                                                            <path element="M"/>
-                                                                          </value>
-                                                                        </argument>
-                                                                        <argument id="dataUrl">
-                                                                          <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-                                                                            <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
-                                                                          </value>
-                                                                        </argument>
-                                                                        <argument id="targetDescription">
-                                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
-                                                                        </argument>
-                                                                        <argument id="updateValueRange"/>
-                                                                        <argument id="updateColumnNames">
-                                                                          <value class="value" valueClass="string">FirstRowOfRange</value>
-                                                                        </argument>
-                                                                        <argument id="updateMatchType">
-                                                                          <value class="value" valueClass="string">RowOrColNumber</value>
-                                                                        </argument>
-                                                                        <argument id="updateMatchLocator">
-                                                                          <value class="value" valueClass="string">4</value>
-                                                                        </argument>
-                                                                      </arguments>
-                                                                      <generatedParameters>
-                                                                        <apiParam group="result" name="updateValueRange" title="Values Range">
-                                                                          <summary>The range of cells that needs to updated. If nothing is specified entire sheet is targeted</summary>
-                                                                          <type>
-                                                                            <textType>
-                                                                              <constraints>
-                                                                                <valueConstraint name="disableTemplateEditor">true</valueConstraint>
-                                                                              </constraints>
-                                                                            </textType>
-                                                                          </type>
-                                                                        </apiParam>
-                                                                        <apiParam group="result" name="updateColumnNames" title="Column Names">
-                                                                          <summary>Identifies where the column names are in the spreadsheet:</summary>
-                                                                          <defaultValue>FirstRowOfRange</defaultValue>
-                                                                          <type>
-                                                                            <choiceType>
-                                                                              <constraints>
-                                                                                <valueConstraint name="boundedValues">FirstRowOfRange:Across the first row|FirstColumnOfRange:Down the first column</valueConstraint>
-                                                                              </constraints>
-                                                                            </choiceType>
-                                                                          </type>
-                                                                        </apiParam>
-                                                                        <apiParam group="result" internal="true" name="updateMatchType" title="">
-                                                                          <summary/>
-                                                                          <defaultValue>RowOrColNumber</defaultValue>
-                                                                          <type>
-                                                                            <choiceType>
-                                                                              <constraints>
-                                                                                <valueConstraint name="boundedValues">RowOrColNumber:Match by Position|Where:Match on Condition|MatchColumns:Match by Columns</valueConstraint>
-                                                                              </constraints>
-                                                                            </choiceType>
-                                                                          </type>
-                                                                        </apiParam>
-                                                                        <apiParam group="result" manuallyResolved="true" name="updateMatchLocator" title="Match Locator">
-                                                                          <summary>Identifies which rows in the Range will be updated. \n It can either be a row number (where the first row = 1) or a filtering condition against one or more columns (e.g. {firstName = "Joe" and surname = "Bloggs"}.</summary>
-                                                                        </apiParam>
-                                                                      </generatedParameters>
-                                                                    </apiCall>
-                                                                  </steps>
-                                                                </clause>
-                                                                <clause name="else" testItemId="1550">
-                                                                  <steps>
-                                                                    <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="1551" title="Set Values: M.TypeStudentLoan">
-                                                                      <tags/>
-                                                                      <arguments>
-                                                                        <argument id="values">
-                                                                          <value class="valueList" mutable="Mutable">
-                                                                            <namedValues mutable="Mutable">
-                                                                              <namedValue name="valuePath">
-                                                                                <value class="value" valueClass="string">M.TypeStudentLoan</value>
-                                                                              </namedValue>
-                                                                              <namedValue name="value">
-                                                                                <value class="value" valueClass="string">False</value>
-                                                                              </namedValue>
-                                                                              <namedValue name="valueScope">
-                                                                                <value class="value" valueClass="string">Test</value>
-                                                                              </namedValue>
-                                                                            </namedValues>
-                                                                          </value>
-                                                                        </argument>
-                                                                      </arguments>
-                                                                    </apiCall>
-                                                                    <apiCall apiId="com.provar.plugins.bundled.apis.io.Write" isTitleUpdated="true" name="Write" testItemId="1552" title="Write: Test Remarks">
-                                                                      <arguments>
-                                                                        <argument id="data">
-                                                                          <value class="variable">
-                                                                            <path element="M"/>
-                                                                          </value>
-                                                                        </argument>
-                                                                        <argument id="dataUrl">
-                                                                          <value class="excelTarget" debug="true" sheetWriteMode="Update">
-                                                                            <workbookPath class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</workbookPath>
-                                                                            <worksheetName class="value" valueClass="string">StudentLoans</worksheetName>
-                                                                          </value>
-                                                                        </argument>
-                                                                        <argument id="targetDescription">
-                                                                          <value class="value" valueClass="string">OutPutTestResult/Student Loan Scenarios Test result.xlsx</value>
-                                                                        </argument>
-                                                                        <argument id="updateValueRange"/>
-                                                                        <argument id="updateColumnNames">
-                                                                          <value class="value" valueClass="string">FirstRowOfRange</value>
-                                                                        </argument>
-                                                                        <argument id="updateMatchType">
-                                                                          <value class="value" valueClass="string">RowOrColNumber</value>
-                                                                        </argument>
-                                                                        <argument id="updateMatchLocator">
-                                                                          <value class="value" valueClass="string">4</value>
-                                                                        </argument>
-                                                                      </arguments>
-                                                                      <generatedParameters>
-                                                                        <apiParam group="result" name="updateValueRange" title="Values Range">
-                                                                          <summary>The range of cells that needs to updated. If nothing is specified entire sheet is targeted</summary>
-                                                                          <type>
-                                                                            <textType>
-                                                                              <constraints>
-                                                                                <valueConstraint name="disableTemplateEditor">true</valueConstraint>
-                                                                              </constraints>
-                                                                            </textType>
-                                                                          </type>
-                                                                        </apiParam>
-                                                                        <apiParam group="result" name="updateColumnNames" title="Column Names">
-                                                                          <summary>Identifies where the column names are in the spreadsheet:</summary>
-                                                                          <defaultValue>FirstRowOfRange</defaultValue>
-                                                                          <type>
-                                                                            <choiceType>
-                                                                              <constraints>
-                                                                                <valueConstraint name="boundedValues">FirstRowOfRange:Across the first row|FirstColumnOfRange:Down the first column</valueConstraint>
-                                                                              </constraints>
-                                                                            </choiceType>
-                                                                          </type>
-                                                                        </apiParam>
-                                                                        <apiParam group="result" internal="true" name="updateMatchType" title="">
-                                                                          <summary/>
-                                                                          <defaultValue>RowOrColNumber</defaultValue>
-                                                                          <type>
-                                                                            <choiceType>
-                                                                              <constraints>
-                                                                                <valueConstraint name="boundedValues">RowOrColNumber:Match by Position|Where:Match on Condition|MatchColumns:Match by Columns</valueConstraint>
-                                                                              </constraints>
-                                                                            </choiceType>
-                                                                          </type>
-                                                                        </apiParam>
-                                                                        <apiParam group="result" manuallyResolved="true" name="updateMatchLocator" title="Match Locator">
-                                                                          <summary>Identifies which rows in the Range will be updated. \n It can either be a row number (where the first row = 1) or a filtering condition against one or more columns (e.g. {firstName = "Joe" and surname = "Bloggs"}.</summary>
-                                                                        </apiParam>
-                                                                      </generatedParameters>
-                                                                    </apiCall>
-                                                                  </steps>
-                                                                </clause>
-                                                              </clauses>
-                                                            </apiCall>
-                                                          </steps>
-                                                        </clause>
-                                                      </clauses>
                                                     </apiCall>
                                                   </steps>
                                                 </clause>

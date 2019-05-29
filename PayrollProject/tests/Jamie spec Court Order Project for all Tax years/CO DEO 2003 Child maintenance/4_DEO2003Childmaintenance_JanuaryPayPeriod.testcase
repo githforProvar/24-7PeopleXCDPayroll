@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testCase failureBehaviour="Continue" id="25">
+<testCase failureBehaviour="Continue" id="427">
   <summary/>
   <steps>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.testapis.ApexConnect" name="ApexConnect" testItemId="1" title="Salesforce Connect: Admin (Test)">
@@ -2063,7 +2063,7 @@
                                                       </namedValue>
                                                       <namedValue name="value">
                                                         <value class="variable">
-                                                          <path element="NetPayValue"/>
+                                                          <path element="netPayValue"/>
                                                           <path element="fields"/>
                                                           <path element="netPay"/>
                                                           <path element="value"/>
@@ -2240,7 +2240,7 @@
                                                         <value class="variable">
                                                           <path element="protectedEarningsCarryForwardValue"/>
                                                           <path element="fields"/>
-                                                          <path element="protectedEarningsCariedForward"/>
+                                                          <path element="bprotectedEarningsCarryForward"/>
                                                           <path element="value"/>
                                                         </value>
                                                       </namedValue>
@@ -2500,7 +2500,7 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1308" title="If: {ExcelDataExpectedVal.NetPay = NetPayValue.fields.netPay.value}">
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1308" title="If: {ExcelDataExpectedVal.NetPay = netPayValue.fields.netPay.value}">
                                                       <tags/>
                                                       <arguments>
                                                         <argument id="condition">
@@ -2510,7 +2510,7 @@
                                                               <path element="NetPay"/>
                                                             </lhs>
                                                             <rhs class="variable">
-                                                              <path element="NetPayValue"/>
+                                                              <path element="netPayValue"/>
                                                               <path element="fields"/>
                                                               <path element="netPay"/>
                                                               <path element="value"/>
@@ -2969,7 +2969,7 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1350" title="If: {ExcelDataExpectedVal.ProtectedEarningsCarriedForward = protectedEarningsCarryForwardValue.fields.protectedEarningsCariedForward.value}">
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="1350" title="If: {ExcelDataExpectedVal.ProtectedEarningsCarriedForward = protectedEarningsCarryForwardValue.fields.bprotectedEarningsCarryForward.value}">
                                                       <tags/>
                                                       <arguments>
                                                         <argument id="condition">
@@ -2981,7 +2981,7 @@
                                                             <rhs class="variable">
                                                               <path element="protectedEarningsCarryForwardValue"/>
                                                               <path element="fields"/>
-                                                              <path element="protectedEarningsCariedForward"/>
+                                                              <path element="bprotectedEarningsCarryForward"/>
                                                               <path element="value"/>
                                                             </rhs>
                                                           </value>

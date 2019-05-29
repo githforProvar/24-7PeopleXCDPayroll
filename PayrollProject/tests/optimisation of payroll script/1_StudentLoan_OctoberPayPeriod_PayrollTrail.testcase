@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testCase failureBehaviour="Continue" id="7">
+<testCase failureBehaviour="Continue" id="5">
   <summary/>
   <steps>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.testapis.ApexConnect" name="ApexConnect" testItemId="1" title="Salesforce Connect: Admin (Test)">
@@ -1064,106 +1064,7 @@
                 </apiParam>
               </generatedParameters>
             </apiCall>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="512" title="UI Assert">
-              <arguments>
-                <argument id="fieldAssertions">
-                  <value class="valueList" mutable="Mutable">
-                    <uiFieldAssertion resultName="draftStatus">
-                      <fieldLocator uri="ui:locator?name=draftStatus"/>
-                      <attributeAssertions>
-                        <uiAttributeAssertion attributeName="value" comparisonType="None"/>
-                      </attributeAssertions>
-                    </uiFieldAssertion>
-                  </value>
-                </argument>
-                <argument id="columnAssertions">
-                  <value class="valueList" mutable="Mutable"/>
-                </argument>
-                <argument id="pageAssertions">
-                  <value class="valueList" mutable="Mutable"/>
-                </argument>
-                <argument id="resultName">
-                  <value class="value" valueClass="string">DraftStatus</value>
-                </argument>
-                <argument id="resultScope">
-                  <value class="value" valueClass="string">Test</value>
-                </argument>
-                <argument id="captureAfter">
-                  <value class="value" valueClass="string">false</value>
-                </argument>
-                <argument id="beforeWait"/>
-                <argument id="autoRetry"/>
-              </arguments>
-            </apiCall>
-          </steps>
-        </clause>
-      </clauses>
-    </apiCall>
-    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3245" title="If: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}">
-      <arguments>
-        <argument id="condition">
-          <value class="eq">
-            <lhs class="variable">
-              <path element="DraftStatus"/>
-              <path element="fields"/>
-              <path element="draftStatus"/>
-              <path element="value"/>
-            </lhs>
-            <rhs class="value" valueClass="string">Draft</rhs>
-          </value>
-        </argument>
-      </arguments>
-      <expectedExceptions/>
-      <parameterValueSources/>
-      <clauses>
-        <clause name="then" testItemId="2672">
-          <steps>
-            <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="2673" title="Call Reports Script">
-              <tags/>
-              <arguments>
-                <argument id="description">
-                  <value class="value" valueClass="string">Reports Tab</value>
-                </argument>
-              </arguments>
-              <parameterValueSources>
-                <parameterValueSource variableName="ReportData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554274964373</cacheToken>
-                  <cachedParameters>
-                    <apiParam name="RowNumber"/>
-                    <apiParam name="EmployeeName"/>
-                    <apiParam name="ExpectedStudentLoan"/>
-                    <apiParam name="ActualStudentLoan"/>
-                    <apiParam name="TestResmarksForStudentLoan"/>
-                    <apiParam name="ExpectedPostGraduateLoan"/>
-                    <apiParam name="ActualPostGraduateLoan"/>
-                    <apiParam name="TestResmarksForGraduateLoan"/>
-                  </cachedParameters>
-                  <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                    <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoanWeekly</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
-                  </sourceValue>
-                </parameterValueSource>
-              </parameterValueSources>
-              <clauses>
-                <clause name="hidden" testItemId="2674">
-                  <steps>
-                    <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3285">
-                      <arguments>
-                        <argument id="reuseConnectionName">
-                          <value class="value" valueClass="string">Admin</value>
-                        </argument>
-                      </arguments>
-                    </caseCall>
-                  </steps>
-                </clause>
-              </clauses>
-            </apiCall>
-          </steps>
-        </clause>
-        <clause name="else" testItemId="2714">
-          <steps>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiNavigate" name="UiNavigate" testItemId="3351" title="Navigate: Refresh">
+            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiNavigate" name="UiNavigate" testItemId="3452" title="Navigate: Refresh">
               <arguments>
                 <argument id="navigate">
                   <value class="value" valueClass="string">Refresh</value>
@@ -1176,14 +1077,14 @@
                 </argument>
               </arguments>
             </apiCall>
-            <apiCall apiId="com.provar.plugins.bundled.apis.control.Sleep" name="Sleep" testItemId="3247" title="Sleep for {20} seconds">
+            <apiCall apiId="com.provar.plugins.bundled.apis.control.Sleep" name="Sleep" testItemId="3454" title="Sleep for {15} seconds">
               <arguments>
                 <argument id="sleepSecs">
-                  <value class="value" valueClass="decimal">20</value>
+                  <value class="value" valueClass="decimal">15</value>
                 </argument>
               </arguments>
             </apiCall>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="2909" title="On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period">
+            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="3456" title="On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period">
               <tags/>
               <arguments>
                 <argument id="uiConnectionName">
@@ -1213,9 +1114,9 @@
                 </argument>
               </arguments>
               <clauses>
-                <clause name="substeps" testItemId="2910">
+                <clause name="substeps" testItemId="3396">
                   <steps>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="2922" title="UI Assert">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3397" title="UI Assert">
                       <arguments>
                         <argument id="fieldAssertions">
                           <value class="valueList" mutable="Mutable">
@@ -1246,7 +1147,7 @@
                         <argument id="autoRetry"/>
                       </arguments>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.bundled.apis.control.WaitFor" name="WaitFor" testItemId="3153" title="Wait For: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}=&gt;{30}">
+                    <apiCall apiId="com.provar.plugins.bundled.apis.control.WaitFor" name="WaitFor" testItemId="3398" title="Wait For: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}=&gt;{30}">
                       <tags>
                         <string>disabled</string>
                       </tags>
@@ -1276,9 +1177,9 @@
                         </argument>
                       </arguments>
                       <clauses>
-                        <clause name="substeps" testItemId="3154">
+                        <clause name="substeps" testItemId="3399">
                           <steps>
-                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3155" title="UI Assert">
+                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3400" title="UI Assert">
                               <arguments>
                                 <argument id="fieldAssertions">
                                   <value class="valueList" mutable="Mutable">
@@ -1317,7 +1218,7 @@
                 </clause>
               </clauses>
             </apiCall>
-            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3333" title="If: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}">
+            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3387" title="If: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}">
               <arguments>
                 <argument id="condition">
                   <value class="eq">
@@ -1334,9 +1235,9 @@
               <expectedExceptions/>
               <parameterValueSources/>
               <clauses>
-                <clause name="then" testItemId="3334">
+                <clause name="then" testItemId="3388">
                   <steps>
-                    <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="3335" title="Call Reports script">
+                    <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="3389" title="Call Reports Script">
                       <tags/>
                       <arguments>
                         <argument id="description">
@@ -1364,9 +1265,9 @@
                         </parameterValueSource>
                       </parameterValueSources>
                       <clauses>
-                        <clause name="hidden" testItemId="3336">
+                        <clause name="hidden" testItemId="3390">
                           <steps>
-                            <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3337">
+                            <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3391">
                               <arguments>
                                 <argument id="reuseConnectionName">
                                   <value class="value" valueClass="string">Admin</value>
@@ -1379,9 +1280,29 @@
                     </apiCall>
                   </steps>
                 </clause>
-                <clause name="else" testItemId="3338">
+                <clause name="else" testItemId="3392">
                   <steps>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="3339" title="On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiNavigate" name="UiNavigate" testItemId="3393" title="Navigate: Refresh">
+                      <arguments>
+                        <argument id="navigate">
+                          <value class="value" valueClass="string">Refresh</value>
+                        </argument>
+                        <argument id="captureBefore">
+                          <value class="value" valueClass="string">false</value>
+                        </argument>
+                        <argument id="captureAfter">
+                          <value class="value" valueClass="string">false</value>
+                        </argument>
+                      </arguments>
+                    </apiCall>
+                    <apiCall apiId="com.provar.plugins.bundled.apis.control.Sleep" name="Sleep" testItemId="3394" title="Sleep for {20} seconds">
+                      <arguments>
+                        <argument id="sleepSecs">
+                          <value class="value" valueClass="decimal">20</value>
+                        </argument>
+                      </arguments>
+                    </apiCall>
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="3395" title="On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period">
                       <tags/>
                       <arguments>
                         <argument id="uiConnectionName">
@@ -1411,61 +1332,9 @@
                         </argument>
                       </arguments>
                       <clauses>
-                        <clause name="substeps" testItemId="3340">
+                        <clause name="substeps" testItemId="3457">
                           <steps>
-                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="3341" title="Click the Generate Draft button">
-                              <tags/>
-                              <arguments>
-                                <argument id="locator">
-                                  <value class="uiLocator" uri="ui:locator?name=generateDraft"/>
-                                </argument>
-                                <argument id="interaction">
-                                  <value class="uiInteraction" uri="ui:interaction?name=action"/>
-                                </argument>
-                                <argument id="hover">
-                                  <value class="value" valueClass="boolean">false</value>
-                                </argument>
-                                <argument id="captureBefore">
-                                  <value class="value" valueClass="boolean">false</value>
-                                </argument>
-                                <argument id="captureAfter">
-                                  <value class="value" valueClass="boolean">false</value>
-                                </argument>
-                                <argument id="beforeWait">
-                                  <value class="uiWait" uri="default"/>
-                                </argument>
-                                <argument id="afterWait">
-                                  <value class="uiWait" uri="ui:wait:timed?seconds=30"/>
-                                </argument>
-                                <argument id="interactionDescription">
-                                  <value class="value" valueClass="string">Click the Generate Draft button</value>
-                                </argument>
-                                <argument id="autoRetry"/>
-                                <argument id="ieClickMethod">
-                                  <value class="value" valueClass="string">Default</value>
-                                </argument>
-                              </arguments>
-                              <generatedParameters>
-                                <apiParam group="value" name="hover" seq="10000" title="Hover before Clicking">
-                                  <summary>Whether the mouse should hover over the field before it is clicked.</summary>
-                                  <type>
-                                    <booleanType/>
-                                  </type>
-                                </apiParam>
-                                <apiParam group="value" name="ieClickMethod" seq="10001" title="IE Click Method">
-                                  <summary>How the click should be executed for Internet Explorer.</summary>
-                                  <type>
-                                    <choiceType>
-                                      <constraints>
-                                        <valueConstraint name="valuesSource">com.provar.core.model.base.java.EnumChoiceListValuesSource</valueConstraint>
-                                        <valueConstraint name="valuesSourceDependencies">com.provar.core.model.ui.api.ClickMethod</valueConstraint>
-                                      </constraints>
-                                    </choiceType>
-                                  </type>
-                                </apiParam>
-                              </generatedParameters>
-                            </apiCall>
-                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3342" title="UI Assert">
+                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3458" title="UI Assert">
                               <arguments>
                                 <argument id="fieldAssertions">
                                   <value class="valueList" mutable="Mutable">
@@ -1496,7 +1365,7 @@
                                 <argument id="autoRetry"/>
                               </arguments>
                             </apiCall>
-                            <apiCall apiId="com.provar.plugins.bundled.apis.control.WaitFor" name="WaitFor" testItemId="3343" title="Wait For: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}=&gt;{30}">
+                            <apiCall apiId="com.provar.plugins.bundled.apis.control.WaitFor" name="WaitFor" testItemId="3459" title="Wait For: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}=&gt;{30}">
                               <tags>
                                 <string>disabled</string>
                               </tags>
@@ -1526,9 +1395,9 @@
                                 </argument>
                               </arguments>
                               <clauses>
-                                <clause name="substeps" testItemId="3344">
+                                <clause name="substeps" testItemId="3460">
                                   <steps>
-                                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3345" title="UI Assert">
+                                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3461" title="UI Assert">
                                       <arguments>
                                         <argument id="fieldAssertions">
                                           <value class="valueList" mutable="Mutable">
@@ -1567,7 +1436,7 @@
                         </clause>
                       </clauses>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3346" title="If: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}">
+                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3401" title="If: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}">
                       <arguments>
                         <argument id="condition">
                           <value class="eq">
@@ -1584,9 +1453,9 @@
                       <expectedExceptions/>
                       <parameterValueSources/>
                       <clauses>
-                        <clause name="then" testItemId="3347">
+                        <clause name="then" testItemId="3402">
                           <steps>
-                            <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="3348" title="Call Reports Script">
+                            <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="3403" title="Call Reports script">
                               <tags/>
                               <arguments>
                                 <argument id="description">
@@ -1614,9 +1483,9 @@
                                 </parameterValueSource>
                               </parameterValueSources>
                               <clauses>
-                                <clause name="hidden" testItemId="3349">
+                                <clause name="hidden" testItemId="3404">
                                   <steps>
-                                    <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3350">
+                                    <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3405">
                                       <arguments>
                                         <argument id="reuseConnectionName">
                                           <value class="value" valueClass="string">Admin</value>
@@ -1629,10 +1498,334 @@
                             </apiCall>
                           </steps>
                         </clause>
+                        <clause name="else" testItemId="3406">
+                          <steps>
+                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="3407" title="On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period">
+                              <tags/>
+                              <arguments>
+                                <argument id="uiConnectionName">
+                                  <value class="value" valueClass="string">Admin</value>
+                                </argument>
+                                <argument id="target">
+                                  <value class="uiTarget" uri="sf:ui:target?page=xcdhcm__PayrollPeriod&amp;pageObject=pageobjects.xcdhcm__PayrollPeriod"/>
+                                </argument>
+                                <argument id="navigate">
+                                  <value class="value" valueClass="string">Dont</value>
+                                </argument>
+                                <argument id="targetDescription">
+                                  <value class="value" valueClass="string">On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period</value>
+                                </argument>
+                                <argument id="windowSelection">
+                                  <value class="value" valueClass="string">Default</value>
+                                </argument>
+                                <argument id="windowSize">
+                                  <value class="value" valueClass="string">Default</value>
+                                </argument>
+                                <argument id="closeWindow"/>
+                                <argument id="captureBefore">
+                                  <value class="value" valueClass="string">false</value>
+                                </argument>
+                                <argument id="captureAfter">
+                                  <value class="value" valueClass="string">false</value>
+                                </argument>
+                              </arguments>
+                              <clauses>
+                                <clause name="substeps" testItemId="3408">
+                                  <steps>
+                                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="3409" title="Click the Generate Draft button">
+                                      <tags/>
+                                      <arguments>
+                                        <argument id="locator">
+                                          <value class="uiLocator" uri="ui:locator?name=generateDraft"/>
+                                        </argument>
+                                        <argument id="interaction">
+                                          <value class="uiInteraction" uri="ui:interaction?name=action"/>
+                                        </argument>
+                                        <argument id="hover">
+                                          <value class="value" valueClass="boolean">false</value>
+                                        </argument>
+                                        <argument id="captureBefore">
+                                          <value class="value" valueClass="boolean">false</value>
+                                        </argument>
+                                        <argument id="captureAfter">
+                                          <value class="value" valueClass="boolean">false</value>
+                                        </argument>
+                                        <argument id="beforeWait">
+                                          <value class="uiWait" uri="default"/>
+                                        </argument>
+                                        <argument id="afterWait">
+                                          <value class="uiWait" uri="ui:wait:timed?seconds=30"/>
+                                        </argument>
+                                        <argument id="interactionDescription">
+                                          <value class="value" valueClass="string">Click the Generate Draft button</value>
+                                        </argument>
+                                        <argument id="autoRetry"/>
+                                        <argument id="ieClickMethod">
+                                          <value class="value" valueClass="string">Default</value>
+                                        </argument>
+                                      </arguments>
+                                      <generatedParameters>
+                                        <apiParam group="value" name="hover" seq="10000" title="Hover before Clicking">
+                                          <summary>Whether the mouse should hover over the field before it is clicked.</summary>
+                                          <type>
+                                            <booleanType/>
+                                          </type>
+                                        </apiParam>
+                                        <apiParam group="value" name="ieClickMethod" seq="10001" title="IE Click Method">
+                                          <summary>How the click should be executed for Internet Explorer.</summary>
+                                          <type>
+                                            <choiceType>
+                                              <constraints>
+                                                <valueConstraint name="valuesSource">com.provar.core.model.base.java.EnumChoiceListValuesSource</valueConstraint>
+                                                <valueConstraint name="valuesSourceDependencies">com.provar.core.model.ui.api.ClickMethod</valueConstraint>
+                                              </constraints>
+                                            </choiceType>
+                                          </type>
+                                        </apiParam>
+                                      </generatedParameters>
+                                    </apiCall>
+                                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3410" title="UI Assert">
+                                      <arguments>
+                                        <argument id="fieldAssertions">
+                                          <value class="valueList" mutable="Mutable">
+                                            <uiFieldAssertion resultName="draftStatus">
+                                              <fieldLocator uri="ui:locator?name=draftStatus"/>
+                                              <attributeAssertions>
+                                                <uiAttributeAssertion attributeName="value" comparisonType="None"/>
+                                              </attributeAssertions>
+                                            </uiFieldAssertion>
+                                          </value>
+                                        </argument>
+                                        <argument id="columnAssertions">
+                                          <value class="valueList" mutable="Mutable"/>
+                                        </argument>
+                                        <argument id="pageAssertions">
+                                          <value class="valueList" mutable="Mutable"/>
+                                        </argument>
+                                        <argument id="resultName">
+                                          <value class="value" valueClass="string">DraftStatus</value>
+                                        </argument>
+                                        <argument id="resultScope">
+                                          <value class="value" valueClass="string">Test</value>
+                                        </argument>
+                                        <argument id="captureAfter">
+                                          <value class="value" valueClass="string">false</value>
+                                        </argument>
+                                        <argument id="beforeWait"/>
+                                        <argument id="autoRetry"/>
+                                      </arguments>
+                                    </apiCall>
+                                    <apiCall apiId="com.provar.plugins.bundled.apis.control.WaitFor" name="WaitFor" testItemId="3411" title="Wait For: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}=&gt;{30}">
+                                      <tags>
+                                        <string>disabled</string>
+                                      </tags>
+                                      <arguments>
+                                        <argument id="condition">
+                                          <value class="eq">
+                                            <lhs class="variable">
+                                              <path element="DraftStatus"/>
+                                              <path element="fields"/>
+                                              <path element="draftStatus"/>
+                                              <path element="value"/>
+                                            </lhs>
+                                            <rhs class="value" valueClass="string">Draft</rhs>
+                                          </value>
+                                        </argument>
+                                        <argument id="testAtStart">
+                                          <value class="value" valueClass="boolean">true</value>
+                                        </argument>
+                                        <argument id="maxIterations">
+                                          <value class="value" valueClass="decimal">1</value>
+                                        </argument>
+                                        <argument id="sleepSecs">
+                                          <value class="value" valueClass="decimal">30</value>
+                                        </argument>
+                                        <argument id="continueOnFailure">
+                                          <value class="value" valueClass="boolean">true</value>
+                                        </argument>
+                                      </arguments>
+                                      <clauses>
+                                        <clause name="substeps" testItemId="3412">
+                                          <steps>
+                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3413" title="UI Assert">
+                                              <arguments>
+                                                <argument id="fieldAssertions">
+                                                  <value class="valueList" mutable="Mutable">
+                                                    <uiFieldAssertion resultName="draftStatus">
+                                                      <fieldLocator uri="ui:locator?name=draftStatus"/>
+                                                      <attributeAssertions>
+                                                        <uiAttributeAssertion attributeName="value" comparisonType="None"/>
+                                                      </attributeAssertions>
+                                                    </uiFieldAssertion>
+                                                  </value>
+                                                </argument>
+                                                <argument id="columnAssertions">
+                                                  <value class="valueList" mutable="Mutable"/>
+                                                </argument>
+                                                <argument id="pageAssertions">
+                                                  <value class="valueList" mutable="Mutable"/>
+                                                </argument>
+                                                <argument id="resultName">
+                                                  <value class="value" valueClass="string">DraftStatus</value>
+                                                </argument>
+                                                <argument id="resultScope">
+                                                  <value class="value" valueClass="string">Test</value>
+                                                </argument>
+                                                <argument id="captureAfter">
+                                                  <value class="value" valueClass="string">false</value>
+                                                </argument>
+                                                <argument id="beforeWait"/>
+                                                <argument id="autoRetry"/>
+                                              </arguments>
+                                            </apiCall>
+                                          </steps>
+                                        </clause>
+                                      </clauses>
+                                    </apiCall>
+                                  </steps>
+                                </clause>
+                              </clauses>
+                            </apiCall>
+                            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="3414" title="If: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}">
+                              <arguments>
+                                <argument id="condition">
+                                  <value class="eq">
+                                    <lhs class="variable">
+                                      <path element="DraftStatus"/>
+                                      <path element="fields"/>
+                                      <path element="draftStatus"/>
+                                      <path element="value"/>
+                                    </lhs>
+                                    <rhs class="value" valueClass="string">Draft</rhs>
+                                  </value>
+                                </argument>
+                              </arguments>
+                              <expectedExceptions/>
+                              <parameterValueSources/>
+                              <clauses>
+                                <clause name="then" testItemId="3415">
+                                  <steps>
+                                    <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" isTitleUpdated="true" name="StepGroup" testItemId="3416" title="Call Reports Script">
+                                      <tags/>
+                                      <arguments>
+                                        <argument id="description">
+                                          <value class="value" valueClass="string">Reports Tab</value>
+                                        </argument>
+                                      </arguments>
+                                      <parameterValueSources>
+                                        <parameterValueSource variableName="ReportData" variableScope="Test">
+                                          <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554274964373</cacheToken>
+                                          <cachedParameters>
+                                            <apiParam name="RowNumber"/>
+                                            <apiParam name="EmployeeName"/>
+                                            <apiParam name="ExpectedStudentLoan"/>
+                                            <apiParam name="ActualStudentLoan"/>
+                                            <apiParam name="TestResmarksForStudentLoan"/>
+                                            <apiParam name="ExpectedPostGraduateLoan"/>
+                                            <apiParam name="ActualPostGraduateLoan"/>
+                                            <apiParam name="TestResmarksForGraduateLoan"/>
+                                          </cachedParameters>
+                                          <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
+                                            <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
+                                            <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoanWeekly</worksheetName>
+                                            <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
+                                          </sourceValue>
+                                        </parameterValueSource>
+                                      </parameterValueSources>
+                                      <clauses>
+                                        <clause name="hidden" testItemId="3417">
+                                          <steps>
+                                            <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3418">
+                                              <arguments>
+                                                <argument id="reuseConnectionName">
+                                                  <value class="value" valueClass="string">Admin</value>
+                                                </argument>
+                                              </arguments>
+                                            </caseCall>
+                                          </steps>
+                                        </clause>
+                                      </clauses>
+                                    </apiCall>
+                                  </steps>
+                                </clause>
+                              </clauses>
+                            </apiCall>
+                          </steps>
+                          <tags/>
+                        </clause>
                       </clauses>
                     </apiCall>
                   </steps>
-                  <tags/>
+                </clause>
+              </clauses>
+            </apiCall>
+            <apiCall apiId="com.provar.plugins.bundled.apis.control.WaitFor" name="WaitFor" testItemId="3384" title="Wait For: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}=&gt;{30}">
+              <tags>
+                <string>disabled</string>
+              </tags>
+              <arguments>
+                <argument id="condition">
+                  <value class="eq">
+                    <lhs class="variable">
+                      <path element="DraftStatus"/>
+                      <path element="fields"/>
+                      <path element="draftStatus"/>
+                      <path element="value"/>
+                    </lhs>
+                    <rhs class="value" valueClass="string">Draft</rhs>
+                  </value>
+                </argument>
+                <argument id="testAtStart">
+                  <value class="value" valueClass="boolean">true</value>
+                </argument>
+                <argument id="maxIterations">
+                  <value class="value" valueClass="decimal">2</value>
+                </argument>
+                <argument id="sleepSecs">
+                  <value class="value" valueClass="decimal">30</value>
+                </argument>
+                <argument id="continueOnFailure">
+                  <value class="value" valueClass="boolean">true</value>
+                </argument>
+              </arguments>
+              <clauses>
+                <clause name="substeps" testItemId="3385">
+                  <steps>
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" name="UiAssert" testItemId="3386" title="UI Assert">
+                      <tags>
+                        <string>disabled</string>
+                      </tags>
+                      <arguments>
+                        <argument id="fieldAssertions">
+                          <value class="valueList" mutable="Mutable">
+                            <uiFieldAssertion resultName="draftStatus">
+                              <fieldLocator uri="ui:locator?name=draftStatus"/>
+                              <attributeAssertions>
+                                <uiAttributeAssertion attributeName="value" comparisonType="None"/>
+                              </attributeAssertions>
+                            </uiFieldAssertion>
+                          </value>
+                        </argument>
+                        <argument id="columnAssertions">
+                          <value class="valueList" mutable="Mutable"/>
+                        </argument>
+                        <argument id="pageAssertions">
+                          <value class="valueList" mutable="Mutable"/>
+                        </argument>
+                        <argument id="resultName">
+                          <value class="value" valueClass="string">DraftStatus</value>
+                        </argument>
+                        <argument id="resultScope">
+                          <value class="value" valueClass="string">Test</value>
+                        </argument>
+                        <argument id="captureAfter">
+                          <value class="value" valueClass="string">false</value>
+                        </argument>
+                        <argument id="beforeWait"/>
+                        <argument id="autoRetry"/>
+                      </arguments>
+                    </apiCall>
+                  </steps>
                 </clause>
               </clauses>
             </apiCall>

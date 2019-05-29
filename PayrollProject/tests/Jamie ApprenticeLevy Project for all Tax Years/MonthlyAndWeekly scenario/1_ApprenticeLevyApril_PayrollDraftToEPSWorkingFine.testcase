@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testCase failureBehaviour="Continue" id="7">
+<testCase failureBehaviour="Continue" id="0">
   <summary/>
   <steps>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.testapis.ApexConnect" name="ApexConnect" testItemId="1" title="Salesforce Connect: Admin (Test)">
@@ -162,7 +162,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData2" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/ProvarFeb202019/PayrollProject/templates/StudentloanInputSheet.xlsx;1550842742776</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/ApprenticeshipLevyInputSheet.xlsx;1559029697058</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="EmpName"/>
@@ -172,11 +172,12 @@
                     <apiParam name="Payrolid"/>
                     <apiParam name="PayRunName"/>
                     <apiParam name="FirstReportNameInApplication"/>
+                    <apiParam name="SecondReportNameInApplication"/>
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                    <workbookPath class="value" valueClass="string">templates/StudentloanInputSheet.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">October2018PayPeriod</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
+                    <workbookPath class="value" valueClass="string">templates/ApprenticeshipLevyInputSheet.xlsx</workbookPath>
+                    <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
@@ -661,7 +662,7 @@
       <clauses>
         <clause name="substeps" testItemId="588">
           <steps>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="589" title="With xcdhcm__XCD_PAY_Periods__r rows {7}">
+            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="589" title="With xcdhcm__XCD_PAY_Periods__r rows {1}">
               <tags/>
               <arguments>
                 <argument id="uiConnectionName">
@@ -671,10 +672,10 @@
                   <value class="uiLocator" uri="sf:ui:locator:row?table=xcdhcm__XCD_PAY_Periods__r%2Fxcdhcm__XCD_PAY_Periods__rTable"/>
                 </argument>
                 <argument id="uiRowLocator">
-                  <value class="value" valueClass="decimal">7</value>
+                  <value class="value" valueClass="decimal">1</value>
                 </argument>
                 <argument id="locatorDescription">
-                  <value class="value" valueClass="string">With xcdhcm__XCD_PAY_Periods__r rows {7}</value>
+                  <value class="value" valueClass="string">With xcdhcm__XCD_PAY_Periods__r rows {1}</value>
                 </argument>
                 <argument id="failIfNotFound">
                   <value class="value" valueClass="boolean">true</value>
@@ -889,7 +890,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/ProvarFeb202019/PayrollProject/templates/StudentloanInputSheet.xlsx;1550842742776</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/ApprenticeshipLevyInputSheet.xlsx;1559029697058</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="EmpName"/>
@@ -899,11 +900,12 @@
                     <apiParam name="Payrolid"/>
                     <apiParam name="PayRunName"/>
                     <apiParam name="FirstReportNameInApplication"/>
+                    <apiParam name="SecondReportNameInApplication"/>
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                    <workbookPath class="value" valueClass="string">templates/StudentloanInputSheet.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">October2018PayPeriod</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
+                    <workbookPath class="value" valueClass="string">templates/ApprenticeshipLevyInputSheet.xlsx</workbookPath>
+                    <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
@@ -1127,32 +1129,30 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ReportData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554274964373</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1559113721196</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
-                    <apiParam name="EmployeeName"/>
-                    <apiParam name="ExpectedStudentLoan"/>
-                    <apiParam name="ActualStudentLoan"/>
-                    <apiParam name="TestResmarksForStudentLoan"/>
-                    <apiParam name="ExpectedPostGraduateLoan"/>
-                    <apiParam name="ActualPostGraduateLoan"/>
-                    <apiParam name="TestResmarksForGraduateLoan"/>
+                    <apiParam name="PayrunApril2019"/>
+                    <apiParam name="AutomationEmployeeNames"/>
+                    <apiParam name="EstmtdLevyAlwnceAprnmentThisPeriod"/>
+                    <apiParam name="AprntshipLevyPayBill"/>
+                    <apiParam name="AprntshipLevyPayGross"/>
+                    <apiParam name="AprntshipLevyThisPeriod"/>
+                    <apiParam name="TotalHMRCPymtsWithLevy"/>
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                    <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoanWeekly</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
+                    <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
+                    <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
               <clauses>
                 <clause name="hidden" testItemId="2674">
                   <steps>
-                    <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3285">
+                    <caseCall testCaseId="bbf98c33-2f36-49a0-8771-bcb1803a1c4b" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/MonthlyAndWeekly scenario/2_ApprenticeLevyApril__ReportOne.testcase" testItemId="3352">
                       <arguments>
-                        <argument id="reuseConnectionName">
-                          <value class="value" valueClass="string">Admin</value>
-                        </argument>
+                        <argument id="reuseConnectionName"/>
                       </arguments>
                     </caseCall>
                   </steps>
@@ -1345,32 +1345,30 @@
                       </arguments>
                       <parameterValueSources>
                         <parameterValueSource variableName="ReportData" variableScope="Test">
-                          <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554274964373</cacheToken>
+                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1559113721196</cacheToken>
                           <cachedParameters>
                             <apiParam name="RowNumber"/>
-                            <apiParam name="EmployeeName"/>
-                            <apiParam name="ExpectedStudentLoan"/>
-                            <apiParam name="ActualStudentLoan"/>
-                            <apiParam name="TestResmarksForStudentLoan"/>
-                            <apiParam name="ExpectedPostGraduateLoan"/>
-                            <apiParam name="ActualPostGraduateLoan"/>
-                            <apiParam name="TestResmarksForGraduateLoan"/>
+                            <apiParam name="PayrunApril2019"/>
+                            <apiParam name="AutomationEmployeeNames"/>
+                            <apiParam name="EstmtdLevyAlwnceAprnmentThisPeriod"/>
+                            <apiParam name="AprntshipLevyPayBill"/>
+                            <apiParam name="AprntshipLevyPayGross"/>
+                            <apiParam name="AprntshipLevyThisPeriod"/>
+                            <apiParam name="TotalHMRCPymtsWithLevy"/>
                           </cachedParameters>
                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                            <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                            <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoanWeekly</worksheetName>
-                            <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
+                            <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
+                            <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
+                            <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
                           </sourceValue>
                         </parameterValueSource>
                       </parameterValueSources>
                       <clauses>
                         <clause name="hidden" testItemId="3336">
                           <steps>
-                            <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3337">
+                            <caseCall testCaseId="bbf98c33-2f36-49a0-8771-bcb1803a1c4b" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/MonthlyAndWeekly scenario/2_ApprenticeLevyApril__ReportOne.testcase" testItemId="3353">
                               <arguments>
-                                <argument id="reuseConnectionName">
-                                  <value class="value" valueClass="string">Admin</value>
-                                </argument>
+                                <argument id="reuseConnectionName"/>
                               </arguments>
                             </caseCall>
                           </steps>
@@ -1595,32 +1593,30 @@
                               </arguments>
                               <parameterValueSources>
                                 <parameterValueSource variableName="ReportData" variableScope="Test">
-                                  <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx;1554274964373</cacheToken>
+                                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1559113721196</cacheToken>
                                   <cachedParameters>
                                     <apiParam name="RowNumber"/>
-                                    <apiParam name="EmployeeName"/>
-                                    <apiParam name="ExpectedStudentLoan"/>
-                                    <apiParam name="ActualStudentLoan"/>
-                                    <apiParam name="TestResmarksForStudentLoan"/>
-                                    <apiParam name="ExpectedPostGraduateLoan"/>
-                                    <apiParam name="ActualPostGraduateLoan"/>
-                                    <apiParam name="TestResmarksForGraduateLoan"/>
+                                    <apiParam name="PayrunApril2019"/>
+                                    <apiParam name="AutomationEmployeeNames"/>
+                                    <apiParam name="EstmtdLevyAlwnceAprnmentThisPeriod"/>
+                                    <apiParam name="AprntshipLevyPayBill"/>
+                                    <apiParam name="AprntshipLevyPayGross"/>
+                                    <apiParam name="AprntshipLevyThisPeriod"/>
+                                    <apiParam name="TotalHMRCPymtsWithLevy"/>
                                   </cachedParameters>
                                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                                    <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Student Loan Scenarios Test result 201920.xlsx</workbookPath>
-                                    <worksheetName class="value" valueClass="string">PlanAndPGLStudentLoanWeekly</worksheetName>
-                                    <valuesRange class="value" valueClass="string">A1:G19</valuesRange>
+                                    <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
+                                    <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
+                                    <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
                                   </sourceValue>
                                 </parameterValueSource>
                               </parameterValueSources>
                               <clauses>
                                 <clause name="hidden" testItemId="3349">
                                   <steps>
-                                    <caseCall testCaseId="d9a4f223-9662-4a3a-835e-c5c2e67ac0c6" testCasePath="tests/optimisation of payroll script/2_StudentLoan_OctoberPayPeriod_Report.testcase" testItemId="3350">
+                                    <caseCall testCaseId="bbf98c33-2f36-49a0-8771-bcb1803a1c4b" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/MonthlyAndWeekly scenario/2_ApprenticeLevyApril__ReportOne.testcase" testItemId="3354">
                                       <arguments>
-                                        <argument id="reuseConnectionName">
-                                          <value class="value" valueClass="string">Admin</value>
-                                        </argument>
+                                        <argument id="reuseConnectionName"/>
                                       </arguments>
                                     </caseCall>
                                   </steps>
