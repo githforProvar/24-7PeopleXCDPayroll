@@ -7,69 +7,44 @@ import org.openqa.selenium.support.FindBy;
 
 import com.provar.core.testapi.annotations.*;
 
-@Page( title="Studnt Lon One Priorty One Other"                                
+@Page( title="Apprenticship Levy Report Two"                                
      , summary=""
      , relativeUrl=""
      , connection="Admin"
      )             
-public class StudntLonOnePriortyOneOther {
-
+public class ApprenticshipLevyReportTwo {
+			
 @PageRow()
 	public static class DoNotTouchPayrollReport {
-		
-		/*
-
-			CourtOrders	StudentLoan	AttachableEarnings1	NetPay	initialDeductionAmount1	
-
-			attachableEarnings2	ProtectedEarnings1	Benefit2	COPaymentToThirdPartyAmount1
-	
-			TypeCODeductionAmount1	InitialDeductionAmount2	AttachableEarnings3	ProtectedEarnings2
-	
-			Benefit1	COPaymentToThirdPartyAmount2	TypeCODeductionAmount2	
-
-			TypeStudentLoan	InitialDeductionAmount3			AttachableEarnings4	ProtectedEarnings3
-
-
-		 */
-		
 		
 		@FindBy(xpath = ".//td[1]//a")
 		public WebElement employeeName;
 	
 		
 		@FindBy(xpath = ".//td[2]//div[@class='wave-table-cell-text']")
-		public WebElement courtOrder;
+		public WebElement annualApprentshipLevyAllownce;
 		
 		@FindBy(xpath = ".//td[3]//div[@class='wave-table-cell-text']")
-		public WebElement studentLoan;
+		public WebElement aprntshipLevyPayBillThisPeriod;
 		
 		@FindBy(xpath = ".//td[4]//div[@class='wave-table-cell-text']")
-		public WebElement attachableEarnings1;
+		public WebElement aprntshipLevyPayBillToDate;
 		
 		@FindBy(xpath = ".//td[5]//div[@class='wave-table-cell-text']")
-		public WebElement netPay;
+		public WebElement aprntshipLevyPayGrossToDate;
 		
 		@FindBy(xpath = ".//td[6]//div[@class='wave-table-cell-text']")
-		public WebElement initialDeductionAmount1;
+		public WebElement aprntshipLevyAllwnceToDate;
+		
 		
 		@FindBy(xpath = ".//td[7]//div[@class='wave-table-cell-text']")
-		public WebElement attachableEarnings2;
+		public WebElement levyYearToDate;
 		
 		@FindBy(xpath = ".//td[8]//div[@class='wave-table-cell-text']")
-		public WebElement protectedEarnings1;
+		public WebElement apprenticshipLevyPaidToDate;
 		
-		@TextType
-		@FindBy(xpath = ".//td[9]/div/div[@class='wave-table-cell-text']/a")
-		//@FindBy(xpath = ".//td[9]//div[@class='wave-table-cell-text']")
-		public WebElement benefit;
-			
-		@TextType
-		@FindBy(xpath = ".//td[last()-1]/div/div")
-		public WebElement type;
-		
-		@TextType
-		@FindBy(xpath = ".//td[last()]/div/div")
-		public WebElement amount1;
+		@FindBy(xpath = ".//td[9]//div[@class='wave-table-cell-text']")
+		public WebElement apprenticshipLevyDueThisMonth;
 		
 		
 		
@@ -83,20 +58,15 @@ public class StudntLonOnePriortyOneOther {
 	@PageTable(firstRowContainsHeaders = false, row = DoNotTouchPayrollReport.class)
 	public List<DoNotTouchPayrollReport> DoNotTouchPayrollReport;
 	@LinkType()
-	@FindBy(linkText = "DO NOT TOUCH AUTOMATION EMP 141")
-	public WebElement dONOTTOUCHAUTOMATIONEMP141;
+	@FindBy(linkText = "DO NOT TOUCH AUTOMATION EMP 108")
+	public WebElement dONOTTOUCHAUTOMATIONEMP108;
 	
 	
 	}
 	
 	@FindBy(xpath="//iframe[@class='isView reportsReportBuilder']")
 	public Frame1 frame1;
-	@LinkType()
-	@FindBy(xpath = "//a[normalize-space(.)='Edit']")
-	public WebElement Edit;
 			
 }
-
-
 
 
