@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testCase failureBehaviour="Continue" id="1" visibility="Internal">
+<testCase failureBehaviour="Continue" id="0" visibility="Internal">
   <summary/>
   <steps>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.testapis.ApexConnect" name="ApexConnect" testItemId="1" title="Salesforce Connect: Admin (Test)">
@@ -399,21 +399,13 @@
                                   <value class="uiLocator" uri="ui:pageobject:row?field=frame1%2FDoNotTouchPayrollReport&amp;pageId=pageobjects.PAEO2003Fine"/>
                                 </argument>
                                 <argument id="uiRowLocator">
-                                  <value class="and">
-                                    <lhs class="eq">
-                                      <lhs class="variable">
-                                        <path element="employeeName"/>
-                                      </lhs>
-                                      <rhs class="variable" topLevel="true">
-                                        <path element="rep"/>
-                                        <path element="AutomationEmployeeNames"/>
-                                      </rhs>
+                                  <value class="eq">
+                                    <lhs class="variable">
+                                      <path element="employeeName"/>
                                     </lhs>
-                                    <rhs class="match">
-                                      <lhs class="variable">
-                                        <path element="aprntshipLevyPayBill"/>
-                                      </lhs>
-                                      <rhs class="value" valueClass="string">GBP.*</rhs>
+                                    <rhs class="variable" topLevel="true">
+                                      <path element="rep"/>
+                                      <path element="AutomationEmployeeNames"/>
                                     </rhs>
                                   </value>
                                 </argument>
@@ -732,7 +724,7 @@
                                                   <value class="valueList" mutable="Mutable"/>
                                                 </argument>
                                                 <argument id="resultName">
-                                                  <value class="value" valueClass="string">apprnticlvyThisMonthValue</value>
+                                                  <value class="value" valueClass="string">apprnticlvydueThisMonthValue</value>
                                                 </argument>
                                                 <argument id="resultScope">
                                                   <value class="value" valueClass="string">Test</value>
@@ -965,7 +957,7 @@
                                                       </namedValue>
                                                       <namedValue name="value">
                                                         <value class="variable">
-                                                          <path element="apprnticlvyThisMonthValue"/>
+                                                          <path element="apprnticlvydueThisMonthValue"/>
                                                           <path element="fields"/>
                                                           <path element="apprenticshipLevyDueThisMonth"/>
                                                           <path element="value"/>
@@ -1442,13 +1434,13 @@
                                                       <clauses>
                                                         <clause name="then" testItemId="976">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="977" title="Set Values: O.ApprenticeshipAllowanceToDate">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="977" title="Set Values: O.LevyDueYearToDate">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.ApprenticeshipAllowanceToDate</value>
+                                                                        <value class="value" valueClass="string">O.LevyDueYearToDate</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">True</value>
@@ -1465,13 +1457,13 @@
                                                         </clause>
                                                         <clause name="else" testItemId="978">
                                                           <steps>
-                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="979" title="Set Values: O.ApprenticeshipAllowanceToDate">
+                                                            <apiCall apiId="com.provar.plugins.bundled.apis.control.SetValues" name="SetValues" testItemId="979" title="Set Values: O.LevyDueYearToDate">
                                                               <arguments>
                                                                 <argument id="values">
                                                                   <value class="valueList" mutable="Mutable">
                                                                     <namedValues mutable="Mutable">
                                                                       <namedValue name="valuePath">
-                                                                        <value class="value" valueClass="string">O.ApprenticeshipAllowanceToDate</value>
+                                                                        <value class="value" valueClass="string">O.LevyDueYearToDate</value>
                                                                       </namedValue>
                                                                       <namedValue name="value">
                                                                         <value class="value" valueClass="string">False</value>
@@ -1555,7 +1547,7 @@
                                                         </clause>
                                                       </clauses>
                                                     </apiCall>
-                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="985" title="If: {ExcelDataExpectedVal.ApprenticeshipLevyThisMonth = apprnticlvyThisMonthValue.fields.apprenticshipLevyDueThisMonth.value}">
+                                                    <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="985" title="If: {ExcelDataExpectedVal.ApprenticeshipLevyThisMonth = apprnticlvydueThisMonthValue.fields.apprenticshipLevyDueThisMonth.value}">
                                                       <tags/>
                                                       <arguments>
                                                         <argument id="condition">
@@ -1565,7 +1557,7 @@
                                                               <path element="ApprenticeshipLevyThisMonth"/>
                                                             </lhs>
                                                             <rhs class="variable">
-                                                              <path element="apprnticlvyThisMonthValue"/>
+                                                              <path element="apprnticlvydueThisMonthValue"/>
                                                               <path element="fields"/>
                                                               <path element="apprenticshipLevyDueThisMonth"/>
                                                               <path element="value"/>

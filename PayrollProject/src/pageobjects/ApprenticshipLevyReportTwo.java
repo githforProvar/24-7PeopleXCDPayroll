@@ -43,7 +43,9 @@ public class ApprenticshipLevyReportTwo {
 		@FindBy(xpath = ".//td[8]//div[@class='wave-table-cell-text']")
 		public WebElement apprenticshipLevyPaidToDate;
 		
-		@FindBy(xpath = ".//td[9]//div[@class='wave-table-cell-text']")
+		//@FindBy(xpath = ".//td[9]//div/div[@class='wave-table-cell-text']")
+		
+		@FindBy(xpath = ".//td[last()]/div/div")
 		public WebElement apprenticshipLevyDueThisMonth;
 		
 		
