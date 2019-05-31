@@ -213,7 +213,7 @@
                         </apiParam>
                       </generatedParameters>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DO NOT AprnticLevy NMApril">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to AppLevy NMAprlVariance">
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=searchAllReports&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -222,7 +222,7 @@
                           <value class="uiInteraction" uri="ui:interaction?name=set"/>
                         </argument>
                         <argument id="value">
-                          <value class="value" valueClass="string">DO NOT AprnticLevy NMApril</value>
+                          <value class="value" valueClass="string">AppLevy NMAprlVariance</value>
                         </argument>
                         <argument id="blur">
                           <value class="value" valueClass="boolean">false</value>
@@ -243,7 +243,7 @@
                           <value class="uiWait" uri="ui:wait:timed?seconds=10"/>
                         </argument>
                         <argument id="interactionDescription">
-                          <value class="value" valueClass="string">Set the Search All Reports to DO NOT AprnticLevy NMApril</value>
+                          <value class="value" valueClass="string">Set the Search All Reports to AppLevy NMAprlVariance</value>
                         </argument>
                         <argument id="autoRetry"/>
                       </arguments>
@@ -340,13 +340,13 @@
                   <value class="value" valueClass="string">Admin</value>
                 </argument>
                 <argument id="target">
-                  <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.ApprenticshipLevy"/>
+                  <value class="uiTarget" uri="ui:pageobject:target?pageId=pageobjects.ApprenticshipLevyNMAprilVariance"/>
                 </argument>
                 <argument id="navigate">
                   <value class="value" valueClass="string">Dont</value>
                 </argument>
                 <argument id="targetDescription">
-                  <value class="value" valueClass="string">On Apprenticship Levy page</value>
+                  <value class="value" valueClass="string">On Apprenticship Levy NM April Variance page</value>
                 </argument>
                 <argument id="windowSelection">
                   <value class="value" valueClass="string">Default</value>
@@ -396,21 +396,13 @@
                                   <value class="uiLocator" uri="ui:pageobject:row?field=frame1%2FDoNotTouchPayrollReport&amp;pageId=pageobjects.PAEO2003Fine"/>
                                 </argument>
                                 <argument id="uiRowLocator">
-                                  <value class="and">
-                                    <lhs class="eq">
-                                      <lhs class="variable">
-                                        <path element="employeeName"/>
-                                      </lhs>
-                                      <rhs class="variable" topLevel="true">
-                                        <path element="rep"/>
-                                        <path element="AutomationEmployeeNames"/>
-                                      </rhs>
+                                  <value class="eq">
+                                    <lhs class="variable">
+                                      <path element="employeeName"/>
                                     </lhs>
-                                    <rhs class="match">
-                                      <lhs class="variable">
-                                        <path element="aprntshipLevyPayBill"/>
-                                      </lhs>
-                                      <rhs class="value" valueClass="string">GBP.*</rhs>
+                                    <rhs class="variable" topLevel="true">
+                                      <path element="rep"/>
+                                      <path element="Employer"/>
                                     </rhs>
                                   </value>
                                 </argument>
@@ -450,8 +442,8 @@
                                               <arguments>
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="estmtdLevyAlwnceAprnmentThisPeriod">
-                                                      <fieldLocator uri="ui:pageobject:field?field=estmtdLevyAlwnceAprnmentThisPeriod&amp;pageId=pageobjects.ApprenticshipLevy"/>
+                                                    <uiFieldAssertion resultName="employerName">
+                                                      <fieldLocator uri="ui:pageobject:field?field=employerName&amp;pageId=pageobjects.ApprenticshipLevyNMAprilVariance"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -470,7 +462,7 @@
                                                   <value class="valueList" mutable="Mutable"/>
                                                 </argument>
                                                 <argument id="resultName">
-                                                  <value class="value" valueClass="string">estimatedLevyAlwanceAportnmentValue</value>
+                                                  <value class="value" valueClass="string">employerValue</value>
                                                 </argument>
                                                 <argument id="resultScope">
                                                   <value class="value" valueClass="string">Test</value>
@@ -487,8 +479,8 @@
                                               <arguments>
                                                 <argument id="fieldAssertions">
                                                   <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="aprntshipLevyPayBill">
-                                                      <fieldLocator uri="ui:pageobject:field?field=aprntshipLevyPayBill&amp;pageId=pageobjects.ApprenticshipLevy"/>
+                                                    <uiFieldAssertion resultName="variance">
+                                                      <fieldLocator uri="ui:pageobject:field?field=variance&amp;pageId=pageobjects.ApprenticshipLevyNMAprilVariance"/>
                                                       <attributeAssertions>
                                                         <uiAttributeAssertion attributeName="value" comparisonType="None">
                                                           <value class="variable">
@@ -507,118 +499,7 @@
                                                   <value class="valueList" mutable="Mutable"/>
                                                 </argument>
                                                 <argument id="resultName">
-                                                  <value class="value" valueClass="string">apprntishipLevyPaybillValue</value>
-                                                </argument>
-                                                <argument id="resultScope">
-                                                  <value class="value" valueClass="string">Test</value>
-                                                </argument>
-                                                <argument id="captureAfter">
-                                                  <value class="value" valueClass="string">true</value>
-                                                </argument>
-                                                <argument id="beforeWait"/>
-                                                <argument id="autoRetry"/>
-                                              </arguments>
-                                            </apiCall>
-                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="674" title="Read Actual ApprntishipLevyPay Gross Value">
-                                              <tags/>
-                                              <arguments>
-                                                <argument id="fieldAssertions">
-                                                  <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="aprntshipLevyPayGross">
-                                                      <fieldLocator uri="ui:pageobject:field?field=aprntshipLevyPayGross&amp;pageId=pageobjects.ApprenticshipLevy"/>
-                                                      <attributeAssertions>
-                                                        <uiAttributeAssertion attributeName="value" comparisonType="None">
-                                                          <value class="variable">
-                                                            <path element="rep"/>
-                                                            <path element="ThisPeriod"/>
-                                                          </value>
-                                                        </uiAttributeAssertion>
-                                                      </attributeAssertions>
-                                                    </uiFieldAssertion>
-                                                  </value>
-                                                </argument>
-                                                <argument id="columnAssertions">
-                                                  <value class="valueList" mutable="Mutable"/>
-                                                </argument>
-                                                <argument id="pageAssertions">
-                                                  <value class="valueList" mutable="Mutable"/>
-                                                </argument>
-                                                <argument id="resultName">
-                                                  <value class="value" valueClass="string">apprntishipLevyPaygrossValue</value>
-                                                </argument>
-                                                <argument id="resultScope">
-                                                  <value class="value" valueClass="string">Test</value>
-                                                </argument>
-                                                <argument id="captureAfter">
-                                                  <value class="value" valueClass="string">true</value>
-                                                </argument>
-                                                <argument id="beforeWait"/>
-                                                <argument id="autoRetry"/>
-                                              </arguments>
-                                            </apiCall>
-                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="675" title="Read Actual ApprnticeshipLevy this period Value">
-                                              <tags/>
-                                              <arguments>
-                                                <argument id="fieldAssertions">
-                                                  <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="aprntshipLevyThisPeriod">
-                                                      <fieldLocator uri="ui:pageobject:field?field=aprntshipLevyThisPeriod&amp;pageId=pageobjects.ApprenticshipLevy"/>
-                                                      <attributeAssertions>
-                                                        <uiAttributeAssertion attributeName="value" comparisonType="None">
-                                                          <value class="variable">
-                                                            <path element="rep"/>
-                                                            <path element="ThisPeriod"/>
-                                                          </value>
-                                                        </uiAttributeAssertion>
-                                                      </attributeAssertions>
-                                                    </uiFieldAssertion>
-                                                  </value>
-                                                </argument>
-                                                <argument id="columnAssertions">
-                                                  <value class="valueList" mutable="Mutable"/>
-                                                </argument>
-                                                <argument id="pageAssertions">
-                                                  <value class="valueList" mutable="Mutable"/>
-                                                </argument>
-                                                <argument id="resultName">
-                                                  <value class="value" valueClass="string">apprentshipLevyThisPeriodValue</value>
-                                                </argument>
-                                                <argument id="resultScope">
-                                                  <value class="value" valueClass="string">Test</value>
-                                                </argument>
-                                                <argument id="captureAfter">
-                                                  <value class="value" valueClass="string">true</value>
-                                                </argument>
-                                                <argument id="beforeWait"/>
-                                                <argument id="autoRetry"/>
-                                              </arguments>
-                                            </apiCall>
-                                            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiAssert" isTitleUpdated="true" name="UiAssert" testItemId="676" title="Read Actual total hmrc pymt Value">
-                                              <tags/>
-                                              <arguments>
-                                                <argument id="fieldAssertions">
-                                                  <value class="valueList" mutable="Mutable">
-                                                    <uiFieldAssertion resultName="totalHMRCPymtsWithLevy">
-                                                      <fieldLocator uri="ui:pageobject:field?field=totalHMRCPymtsWithLevy&amp;pageId=pageobjects.ApprenticshipLevy"/>
-                                                      <attributeAssertions>
-                                                        <uiAttributeAssertion attributeName="value" comparisonType="None">
-                                                          <value class="variable">
-                                                            <path element="rep"/>
-                                                            <path element="ThisPeriod"/>
-                                                          </value>
-                                                        </uiAttributeAssertion>
-                                                      </attributeAssertions>
-                                                    </uiFieldAssertion>
-                                                  </value>
-                                                </argument>
-                                                <argument id="columnAssertions">
-                                                  <value class="valueList" mutable="Mutable"/>
-                                                </argument>
-                                                <argument id="pageAssertions">
-                                                  <value class="valueList" mutable="Mutable"/>
-                                                </argument>
-                                                <argument id="resultName">
-                                                  <value class="value" valueClass="string">totalHMRCPymtValue</value>
+                                                  <value class="value" valueClass="string">varianceValue</value>
                                                 </argument>
                                                 <argument id="resultScope">
                                                   <value class="value" valueClass="string">Test</value>
