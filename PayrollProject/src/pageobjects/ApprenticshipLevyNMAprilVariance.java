@@ -18,11 +18,11 @@ public class ApprenticshipLevyNMAprilVariance {
 	public static class DoNotTouchPayrollReport
 	 {
 		
-		@FindBy(xpath = ".//td[3]//a")
-		public WebElement employerName;
+		@FindBy(xpath = ".//td[4]//a")
+		public WebElement employerNameee;
 	
 		
-		@FindBy(xpath = ".//td[5]//div[@class='wave-table-cell-text']")
+		@FindBy(xpath = ".//td[6]//div[@class='wave-table-cell-text']")
 		public WebElement variance;
 		
 		
