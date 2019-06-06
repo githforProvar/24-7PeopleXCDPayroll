@@ -17,35 +17,26 @@ public class ApprenticshipLevyNMAprilVariance {
 @PageRow()
 	public static class DoNotTouchPayrollReport
 	 {
-		
-		@FindBy(xpath = ".//td[4]//a")
+		@TextType()
+		@FindBy(xpath = ".//td//a")
 		public WebElement employerNameee;
 	
-		
-		@FindBy(xpath = ".//td[6]//div[@class='wave-table-cell-text']")
+		@TextType()
+		@FindBy(xpath = ".//td[@class='data-grid-table-cell lightning-table-numeric-cell data-grid-table-cell-odd']//div//div")
 		public WebElement variance;
 		
-		
-		
 	}
-	
-	
 	@PageFrame()
 	public static class Frame1{
 	
+	@PageTable(row = DoNotTouchPayrollReport.class,firstRowContainsHeaders = false)
 	@FindBy(xpath = "//table[contains(@class, 'data-grid-table data-grid-full-table')]//tr[not(contains(@class,'data-grid-table-row-start data-grid-header-row'))]")
-	@PageTable(firstRowContainsHeaders = false, row = DoNotTouchPayrollReport.class)
-	public List<DoNotTouchPayrollReport> DoNotTouchPayrollReport;
-	@LinkType()
-	@FindBy(linkText = "DO NOT TOUCH AUTOMATION EMP 108")
-	public WebElement dONOTTOUCHAUTOMATIONEMP108;
-	
-	
+	public List<DoNotTouchPayrollReport> DoNotTouchPayrollReportList;
 	}
-	
-	@FindBy(xpath="//iframe[@class='isView reportsReportBuilder']")
+	@FindBy(xpath="//iframe[@title='Report Viewer']")
 	public Frame1 frame1;
-			
+	
+
 }
 
 
