@@ -69,7 +69,7 @@
           </cachedParameters>
           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
             <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
-            <worksheetName class="value" valueClass="string">NormalMonthlyVarianceReport</worksheetName>
+            <worksheetName class="value" valueClass="string">NormalMonthlyMayVarianceReport</worksheetName>
             <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
           </sourceValue>
         </parameterValueSource>
@@ -213,7 +213,7 @@
                         </apiParam>
                       </generatedParameters>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to AppLevy NMAprlVariance">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to AppLevy NMMayVariance">
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=searchAllReports&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -222,7 +222,7 @@
                           <value class="uiInteraction" uri="ui:interaction?name=set"/>
                         </argument>
                         <argument id="value">
-                          <value class="value" valueClass="string">AppLevy NMAprlVariance</value>
+                          <value class="value" valueClass="string">AppLevy NMMayVariance</value>
                         </argument>
                         <argument id="blur">
                           <value class="value" valueClass="boolean">false</value>
@@ -243,7 +243,7 @@
                           <value class="uiWait" uri="ui:wait:timed?seconds=10"/>
                         </argument>
                         <argument id="interactionDescription">
-                          <value class="value" valueClass="string">Set the Search All Reports to AppLevy NMAprlVariance</value>
+                          <value class="value" valueClass="string">Set the Search All Reports to AppLevy NMMayVariance</value>
                         </argument>
                         <argument id="autoRetry"/>
                       </arguments>
@@ -602,7 +602,7 @@
                                         <argument id="dataUrl">
                                           <value class="excelTarget" debug="true" sheetWriteMode="Update">
                                             <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">NormalMonthlyVarianceReport</worksheetName>
+                                            <worksheetName class="value" valueClass="string">NormalMonthlyMayVarianceReport</worksheetName>
                                           </value>
                                         </argument>
                                         <argument id="targetDescription">
@@ -678,7 +678,7 @@
                                           </cachedParameters>
                                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                                             <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
-                                            <worksheetName class="value" valueClass="string">NormalMonthlyVarianceReport</worksheetName>
+                                            <worksheetName class="value" valueClass="string">NormalMonthlyMayVarianceReport</worksheetName>
                                             <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
                                           </sourceValue>
                                         </parameterValueSource>
@@ -839,7 +839,7 @@
                                                         <argument id="dataUrl">
                                                           <value class="excelTarget" sheetWriteMode="Update">
                                                             <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
-                                                            <worksheetName class="value" valueClass="string">NormalMonthlyVarianceReport</worksheetName>
+                                                            <worksheetName class="value" valueClass="string">NormalMonthlyMayVarianceReport</worksheetName>
                                                           </value>
                                                         </argument>
                                                         <argument id="targetDescription">
@@ -950,5 +950,7 @@
   <args>
     <argument id="reuseConnectionName"/>
   </args>
-  <tags/>
+  <tags>
+    <string>disabled</string>
+  </tags>
 </testCase>
