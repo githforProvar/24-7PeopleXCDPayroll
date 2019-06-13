@@ -675,7 +675,7 @@
       <clauses>
         <clause name="substeps" testItemId="588">
           <steps>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="589" title="With xcdhcm__XCD_PAY_Periods__r rows {2}">
+            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="589" title="With xcdhcm__XCD_PAY_Periods__r rows {3}">
               <tags/>
               <arguments>
                 <argument id="uiConnectionName">
@@ -685,10 +685,10 @@
                   <value class="uiLocator" uri="sf:ui:locator:row?table=xcdhcm__XCD_PAY_Periods__r%2Fxcdhcm__XCD_PAY_Periods__rTable"/>
                 </argument>
                 <argument id="uiRowLocator">
-                  <value class="value" valueClass="decimal">2</value>
+                  <value class="value" valueClass="decimal">3</value>
                 </argument>
                 <argument id="locatorDescription">
-                  <value class="value" valueClass="string">With xcdhcm__XCD_PAY_Periods__r rows {2}</value>
+                  <value class="value" valueClass="string">With xcdhcm__XCD_PAY_Periods__r rows {3}</value>
                 </argument>
                 <argument id="failIfNotFound">
                   <value class="value" valueClass="boolean">true</value>
