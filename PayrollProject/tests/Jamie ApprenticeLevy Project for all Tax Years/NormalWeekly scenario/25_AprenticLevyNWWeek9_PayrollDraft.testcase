@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testCase failureBehaviour="Continue" id="0">
+<testCase failureBehaviour="Continue" id="458">
   <summary/>
   <steps>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.testapis.ApexConnect" name="ApexConnect" testItemId="1" title="Salesforce Connect: Admin (Test)">
@@ -162,7 +162,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData2" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/ApprenticeshipLevyInputSheet.xlsx;1559029697058</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/ApprenticeshipLevyInputSheet.xlsx;1560407751364</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="EmpName"/>
@@ -176,8 +176,8 @@
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">templates/ApprenticeshipLevyInputSheet.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
+                    <worksheetName class="value" valueClass="string">NormalWeekly</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:H3</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
@@ -662,7 +662,7 @@
       <clauses>
         <clause name="substeps" testItemId="588">
           <steps>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="589" title="With xcdhcm__XCD_PAY_Periods__r rows {1}">
+            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithRow" name="UiWithRow" testItemId="589" title="With xcdhcm__XCD_PAY_Periods__r rows {9}">
               <tags/>
               <arguments>
                 <argument id="uiConnectionName">
@@ -672,10 +672,10 @@
                   <value class="uiLocator" uri="sf:ui:locator:row?table=xcdhcm__XCD_PAY_Periods__r%2Fxcdhcm__XCD_PAY_Periods__rTable"/>
                 </argument>
                 <argument id="uiRowLocator">
-                  <value class="value" valueClass="decimal">1</value>
+                  <value class="value" valueClass="decimal">9</value>
                 </argument>
                 <argument id="locatorDescription">
-                  <value class="value" valueClass="string">With xcdhcm__XCD_PAY_Periods__r rows {1}</value>
+                  <value class="value" valueClass="string">With xcdhcm__XCD_PAY_Periods__r rows {9}</value>
                 </argument>
                 <argument id="failIfNotFound">
                   <value class="value" valueClass="boolean">true</value>
@@ -890,7 +890,7 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/ApprenticeshipLevyInputSheet.xlsx;1559029697058</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/ApprenticeshipLevyInputSheet.xlsx;1560407751364</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
                     <apiParam name="EmpName"/>
@@ -904,8 +904,8 @@
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">templates/ApprenticeshipLevyInputSheet.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:H2</valuesRange>
+                    <worksheetName class="value" valueClass="string">NormalWeekly</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:H3</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
@@ -1129,10 +1129,10 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ReportData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1559113721196</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1560430745296</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
-                    <apiParam name="PayrunApril2019"/>
+                    <apiParam name="PayrunWeek3"/>
                     <apiParam name="AutomationEmployeeNames"/>
                     <apiParam name="EstmtdLevyAlwnceAprnmentThisPeriod"/>
                     <apiParam name="AprntshipLevyPayBill"/>
@@ -1142,15 +1142,15 @@
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
+                    <worksheetName class="value" valueClass="string">NormalWeeklyDraft</worksheetName>
+                    <valuesRange class="value" valueClass="string">A65:G66</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>
               <clauses>
                 <clause name="hidden" testItemId="2674">
                   <steps>
-                    <caseCall testCaseId="bbf98c33-2f36-49a0-8771-bcb1803a1c4b" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/NormalMonthly scenario/2_ApprenticeLevyApril__ReportOne.testcase" testItemId="3352">
+                    <caseCall testCaseId="6a36a4db-f183-44d4-8922-b1fd96f8fc63" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/NormalWeekly scenario/26_AprenticeLevyNWWeek9__ReportOne.testcase" testItemId="3373">
                       <arguments>
                         <argument id="reuseConnectionName"/>
                       </arguments>
@@ -1345,10 +1345,10 @@
                       </arguments>
                       <parameterValueSources>
                         <parameterValueSource variableName="ReportData" variableScope="Test">
-                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1559113721196</cacheToken>
+                          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1560430745296</cacheToken>
                           <cachedParameters>
                             <apiParam name="RowNumber"/>
-                            <apiParam name="PayrunApril2019"/>
+                            <apiParam name="PayrunWeek3"/>
                             <apiParam name="AutomationEmployeeNames"/>
                             <apiParam name="EstmtdLevyAlwnceAprnmentThisPeriod"/>
                             <apiParam name="AprntshipLevyPayBill"/>
@@ -1358,23 +1358,22 @@
                           </cachedParameters>
                           <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                             <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
-                            <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
-                            <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
+                            <worksheetName class="value" valueClass="string">NormalWeeklyDraft</worksheetName>
+                            <valuesRange class="value" valueClass="string">A65:G66</valuesRange>
                           </sourceValue>
                         </parameterValueSource>
                       </parameterValueSources>
                       <clauses>
                         <clause name="hidden" testItemId="3336">
-                          <steps>
-                            <caseCall testCaseId="bbf98c33-2f36-49a0-8771-bcb1803a1c4b" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/NormalMonthly scenario/2_ApprenticeLevyApril__ReportOne.testcase" testItemId="3353">
-                              <arguments>
-                                <argument id="reuseConnectionName"/>
-                              </arguments>
-                            </caseCall>
-                          </steps>
+                          <steps/>
                         </clause>
                       </clauses>
                     </apiCall>
+                    <caseCall testCaseId="6a36a4db-f183-44d4-8922-b1fd96f8fc63" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/NormalWeekly scenario/26_AprenticeLevyNWWeek9__ReportOne.testcase" testItemId="3374">
+                      <arguments>
+                        <argument id="reuseConnectionName"/>
+                      </arguments>
+                    </caseCall>
                   </steps>
                 </clause>
                 <clause name="else" testItemId="3338">
@@ -1593,10 +1592,10 @@
                               </arguments>
                               <parameterValueSources>
                                 <parameterValueSource variableName="ReportData" variableScope="Test">
-                                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1559113721196</cacheToken>
+                                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx;1560430745296</cacheToken>
                                   <cachedParameters>
                                     <apiParam name="RowNumber"/>
-                                    <apiParam name="PayrunApril2019"/>
+                                    <apiParam name="PayrunWeek3"/>
                                     <apiParam name="AutomationEmployeeNames"/>
                                     <apiParam name="EstmtdLevyAlwnceAprnmentThisPeriod"/>
                                     <apiParam name="AprntshipLevyPayBill"/>
@@ -1606,15 +1605,15 @@
                                   </cachedParameters>
                                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                                     <workbookPath class="value" valueClass="string">OutPutTestResult/ApprenticeshipLevy Scenarios Test result.xlsx</workbookPath>
-                                    <worksheetName class="value" valueClass="string">NormalMonthly</worksheetName>
-                                    <valuesRange class="value" valueClass="string">A1:G2</valuesRange>
+                                    <worksheetName class="value" valueClass="string">NormalWeeklyDraft</worksheetName>
+                                    <valuesRange class="value" valueClass="string">A65:G66</valuesRange>
                                   </sourceValue>
                                 </parameterValueSource>
                               </parameterValueSources>
                               <clauses>
                                 <clause name="hidden" testItemId="3349">
                                   <steps>
-                                    <caseCall testCaseId="bbf98c33-2f36-49a0-8771-bcb1803a1c4b" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/NormalMonthly scenario/2_ApprenticeLevyApril__ReportOne.testcase" testItemId="3354">
+                                    <caseCall testCaseId="6a36a4db-f183-44d4-8922-b1fd96f8fc63" testCasePath="tests/Jamie ApprenticeLevy Project for all Tax Years/NormalWeekly scenario/26_AprenticeLevyNWWeek9__ReportOne.testcase" testItemId="3375">
                                       <arguments>
                                         <argument id="reuseConnectionName"/>
                                       </arguments>
