@@ -1,6 +1,6 @@
 <project default="runtests">
 	<property environment="env"/>
-	<property name="provar.home" value="C:/Program Files/ProvarApril 2019/"/>
+	<property name="provar.home" value="C:/Program Files/ProvarMay92019/"/>
 	<property name="testproject.home" value=".."/>
 	<property name="testproject.results" value="../ANT/Results"/>
 	<property name="secrets.password" value="${env.ProvarSecretsPassword}"/>
@@ -24,7 +24,7 @@
 				webBrowserConfiguration="Full Screen"
 				webBrowserProviderName="Desktop"
 				webBrowserDeviceName="Full Screen" 
-				excludeCallableTestCases="true" 
+				excludeCallableTestCases="false" 
 				salesforceMetadataCache="Reuse" 
 				projectCachePath="../../.provarCaches"
 				testOutputlevel="WARNING" 
@@ -35,7 +35,7 @@
 				invokeTestRunMonitor="true"
 				>
 		
-			<fileset dir="../tests/Jamie spec Student Loan Project for all tax years/StudentLoans"></fileset>
+			<fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="1_NITwoWeeklyCatATestScript.testcase"/></fileset><fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="2_NITwoWeeklyCatATestScript__ReportOne.testcase"/></fileset><fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="3_NITwoWeeklyCatBTestScript.testcase"/></fileset><fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="4_NITwoWeeklyCatBTestScript__ReportOne.testcase"/></fileset><fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="5_NITwoWeeklyCatCTestScript.testcase"/></fileset><fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="6_NITwoWeeklyCatCTestScript__ReportOne.testcase"/></fileset><fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="7_NITwoWeeklyCatHTestScript.testcase"/></fileset><fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="8_NITwoWeeklyCatHTestScript__ReportOne.testcase"/></fileset><fileset id="testcases" dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="9_NITwoWeeklyCatJTestScript.testcase"/></fileset>
 
 			<emailProperties sendEmail="true" primaryRecipients="azizm@peoplexcd.com" ccRecipients="" bccRecipients="" emailSubject="Provar test run report" attachExecutionReport="true" attachZip="false"/>
 			<attachmentProperties includeAllFailuresInSummary="true" includeOnlyFailures="false" includeOnlyBdd="false" includeSkipped="false" includeTestCaseDescription="true" includeScreenshots="true" includeWarningMessages="false" includeInfoMessages="false" includeDebugMessages="false" includeTestStepTime="false" includeTestStepPathHierarchy="true" includeFullScreenShot="false"/>

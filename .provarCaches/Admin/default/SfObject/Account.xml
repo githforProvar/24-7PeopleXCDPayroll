@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<sfObject creatable="true" deleteable="true" keyPrefix="001" label="Account" labelPlural="Accounts" layoutable="true" listViewFilterType="a" n="Account" queryable="true" retrieveable="true" s="" searchLayoutable="true" standardLabel="Account" t="Account (001)" updatable="true" urlDetail="https://xcdautomationlex--PayrolFull.cs107.my.salesforce.com/{ID}" urlEdit="https://xcdautomationlex--PayrolFull.cs107.my.salesforce.com/{ID}/e" urlNew="https://xcdautomationlex--PayrolFull.cs107.my.salesforce.com/001/e">
+  <fields>
+    <sfField createable="false" editPermission="false" length="18" n="Id" t="Account ID" type="id" updateable="false"/>
+    <sfField createable="false" editPermission="false" n="IsDeleted" t="Deleted" type="_boolean" updateable="false"/>
+    <sfField createable="false" editPermission="false" length="18" n="MasterRecordId" relationshipName="MasterRecord" t="Master Record ID" type="reference" updateable="false">
+      <referenceTos>
+        <string>Account</string>
+      </referenceTos>
+    </sfField>
+    <sfField extraTypeInfo="switchablepersonname" length="255" n="Name" nameField="true" required="true" t="Account Name"/>
+    <sfField length="40" n="Type" t="Account Type" type="picklist">
+      <picklistEntryIds>1,2,3,4,5,6,7,8,9,10</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="1" n="Analyst" s=""/>
+        <sfPLE id="2" n="Competitor" s=""/>
+        <sfPLE id="3" n="Customer" s=""/>
+        <sfPLE id="4" n="Integrator" s=""/>
+        <sfPLE id="5" n="Investor" s=""/>
+        <sfPLE id="6" n="Partner" s=""/>
+        <sfPLE id="7" n="Press" s=""/>
+        <sfPLE id="8" n="Prospect" s=""/>
+        <sfPLE id="9" n="Reseller" s=""/>
+        <sfPLE id="10" n="Other" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField length="18" n="ParentId" relationshipName="Parent" t="Parent Account ID" type="reference">
+      <referenceTos>
+        <string>Account</string>
+      </referenceTos>
+    </sfField>
+    <sfField editPermission="false" extraTypeInfo="plaintextarea" length="255" n="BillingStreet" readPermission="false" t="Billing Street" type="textarea"/>
+    <sfField editPermission="false" length="40" n="BillingCity" readPermission="false" t="Billing City"/>
+    <sfField editPermission="false" length="80" n="BillingState" readPermission="false" t="Billing State/Province"/>
+    <sfField editPermission="false" length="20" n="BillingPostalCode" readPermission="false" t="Billing Zip/Postal Code"/>
+    <sfField editPermission="false" length="80" n="BillingCountry" readPermission="false" t="Billing Country"/>
+    <sfField editPermission="false" n="BillingLatitude" precision="18" readPermission="false" scale="15" t="Billing Latitude" type="_double"/>
+    <sfField editPermission="false" n="BillingLongitude" precision="18" readPermission="false" scale="15" t="Billing Longitude" type="_double"/>
+    <sfField editPermission="false" length="40" n="BillingGeocodeAccuracy" readPermission="false" restrictedPicklist="true" t="Billing Geocode Accuracy" type="picklist">
+      <picklistEntryIds>11,12,13,14,15,16,17,18,19,20,21</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="11" n="Address" s=""/>
+        <sfPLE id="12" n="NearAddress" s=""/>
+        <sfPLE id="13" n="Block" s=""/>
+        <sfPLE id="14" n="Street" s=""/>
+        <sfPLE id="15" n="ExtendedZip" s=""/>
+        <sfPLE id="16" n="Zip" s=""/>
+        <sfPLE id="17" n="Neighborhood" s=""/>
+        <sfPLE id="18" n="City" s=""/>
+        <sfPLE id="19" n="County" s=""/>
+        <sfPLE id="20" n="State" s=""/>
+        <sfPLE id="21" n="Unknown" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField createable="false" n="BillingAddress" t="Billing Address" type="address" updateable="false"/>
+    <sfField editPermission="false" extraTypeInfo="plaintextarea" length="255" n="ShippingStreet" readPermission="false" t="Shipping Street" type="textarea"/>
+    <sfField editPermission="false" length="40" n="ShippingCity" readPermission="false" t="Shipping City"/>
+    <sfField editPermission="false" length="80" n="ShippingState" readPermission="false" t="Shipping State/Province"/>
+    <sfField editPermission="false" length="20" n="ShippingPostalCode" readPermission="false" t="Shipping Zip/Postal Code"/>
+    <sfField editPermission="false" length="80" n="ShippingCountry" readPermission="false" t="Shipping Country"/>
+    <sfField editPermission="false" n="ShippingLatitude" precision="18" readPermission="false" scale="15" t="Shipping Latitude" type="_double"/>
+    <sfField editPermission="false" n="ShippingLongitude" precision="18" readPermission="false" scale="15" t="Shipping Longitude" type="_double"/>
+    <sfField editPermission="false" length="40" n="ShippingGeocodeAccuracy" readPermission="false" restrictedPicklist="true" t="Shipping Geocode Accuracy" type="picklist">
+      <picklistEntryIds>11,12,13,14,15,16,17,18,19,20,21</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="11" n="Address" s=""/>
+        <sfPLE id="12" n="NearAddress" s=""/>
+        <sfPLE id="13" n="Block" s=""/>
+        <sfPLE id="14" n="Street" s=""/>
+        <sfPLE id="15" n="ExtendedZip" s=""/>
+        <sfPLE id="16" n="Zip" s=""/>
+        <sfPLE id="17" n="Neighborhood" s=""/>
+        <sfPLE id="18" n="City" s=""/>
+        <sfPLE id="19" n="County" s=""/>
+        <sfPLE id="20" n="State" s=""/>
+        <sfPLE id="21" n="Unknown" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField createable="false" n="ShippingAddress" t="Shipping Address" type="address" updateable="false"/>
+    <sfField length="40" n="Phone" t="Account Phone" type="phone"/>
+    <sfField length="40" n="Fax" t="Account Fax" type="phone"/>
+    <sfField length="255" n="Website" type="url"/>
+    <sfField createable="false" extraTypeInfo="imageurl" length="255" n="PhotoUrl" t="Photo URL" type="url" updateable="false"/>
+    <sfField length="40" n="Industry" type="picklist">
+      <picklistEntryIds>22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,10,46,47,48,49,50,51,52</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="22" n="Agriculture" s=""/>
+        <sfPLE id="23" n="Apparel" s=""/>
+        <sfPLE id="24" n="Banking" s=""/>
+        <sfPLE id="25" n="Biotechnology" s=""/>
+        <sfPLE id="26" n="Chemicals" s=""/>
+        <sfPLE id="27" n="Communications" s=""/>
+        <sfPLE id="28" n="Construction" s=""/>
+        <sfPLE id="29" n="Consulting" s=""/>
+        <sfPLE id="30" n="Education" s=""/>
+        <sfPLE id="31" n="Electronics" s=""/>
+        <sfPLE id="32" n="Energy" s=""/>
+        <sfPLE id="33" n="Engineering" s=""/>
+        <sfPLE id="34" n="Entertainment" s=""/>
+        <sfPLE id="35" n="Environmental" s=""/>
+        <sfPLE id="36" n="Finance" s=""/>
+        <sfPLE id="37" n="Food &amp; Beverage" s=""/>
+        <sfPLE id="38" n="Government" s=""/>
+        <sfPLE id="39" n="Healthcare" s=""/>
+        <sfPLE id="40" n="Hospitality" s=""/>
+        <sfPLE id="41" n="Insurance" s=""/>
+        <sfPLE id="42" n="Machinery" s=""/>
+        <sfPLE id="43" n="Manufacturing" s=""/>
+        <sfPLE id="44" n="Media" s=""/>
+        <sfPLE id="45" n="Not For Profit" s=""/>
+        <sfPLE id="10" n="Other" s=""/>
+        <sfPLE id="46" n="Recreation" s=""/>
+        <sfPLE id="47" n="Retail" s=""/>
+        <sfPLE id="48" n="Shipping" s=""/>
+        <sfPLE id="49" n="Technology" s=""/>
+        <sfPLE id="50" n="Telecommunications" s=""/>
+        <sfPLE id="51" n="Transportation" s=""/>
+        <sfPLE id="52" n="Utilities" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField n="AnnualRevenue" precision="18" t="Annual Revenue" type="currency"/>
+    <sfField digits="8" n="NumberOfEmployees" t="Employees" type="_int"/>
+    <sfField extraTypeInfo="plaintextarea" filterable="false" length="32000" n="Description" t="Account Description" type="textarea"/>
+    <sfField length="3" n="CurrencyIsoCode" restrictedPicklist="true" t="Account Currency" type="picklist">
+      <picklistEntryIds>53,54</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE defaultValue="true" id="53" n="GBP" s="" t="British Pound"/>
+        <sfPLE id="54" n="USD" s="" t="U.S. Dollar"/>
+      </picklistEntries>
+    </sfField>
+    <sfField length="18" n="OwnerId" relationshipName="Owner" t="Owner ID" type="reference">
+      <referenceTos>
+        <string>User</string>
+      </referenceTos>
+    </sfField>
+    <sfField createable="false" editPermission="false" n="CreatedDate" t="Created Date" type="datetime" updateable="false"/>
+    <sfField createable="false" editPermission="false" length="18" n="CreatedById" relationshipName="CreatedBy" t="Created By ID" type="reference" updateable="false">
+      <referenceTos>
+        <string>User</string>
+      </referenceTos>
+    </sfField>
+    <sfField createable="false" editPermission="false" n="LastModifiedDate" t="Last Modified Date" type="datetime" updateable="false"/>
+    <sfField createable="false" editPermission="false" length="18" n="LastModifiedById" relationshipName="LastModifiedBy" t="Last Modified By ID" type="reference" updateable="false">
+      <referenceTos>
+        <string>User</string>
+      </referenceTos>
+    </sfField>
+    <sfField createable="false" editPermission="false" n="SystemModstamp" t="System Modstamp" type="datetime" updateable="false"/>
+    <sfField createable="false" editPermission="false" n="LastActivityDate" t="Last Activity" type="date" updateable="false"/>
+    <sfField createable="false" editPermission="false" n="LastViewedDate" t="Last Viewed Date" type="datetime" updateable="false"/>
+    <sfField createable="false" editPermission="false" n="LastReferencedDate" t="Last Referenced Date" type="datetime" updateable="false"/>
+    <sfField length="20" n="Jigsaw" t="Data.com Key"/>
+    <sfField createable="false" editPermission="false" length="20" n="JigsawCompanyId" readPermission="false" relationshipName="JigsawCompany" t="Jigsaw Company ID" updateable="false"/>
+    <sfField length="40" n="AccountSource" t="Account Source" type="picklist">
+      <picklistEntryIds>55,56,57,6,58,59,60,61,62,63,10</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="55" n="Advertisement" s=""/>
+        <sfPLE id="56" n="Employee Referral" s=""/>
+        <sfPLE id="57" n="External Referral" s=""/>
+        <sfPLE id="6" n="Partner" s=""/>
+        <sfPLE id="58" n="Public Relations" s=""/>
+        <sfPLE id="59" n="Seminar - Internal" s=""/>
+        <sfPLE id="60" n="Seminar - Partner" s=""/>
+        <sfPLE id="61" n="Trade Show" s=""/>
+        <sfPLE id="62" n="Web" s=""/>
+        <sfPLE id="63" n="Word of mouth" s=""/>
+        <sfPLE id="10" n="Other" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField length="80" n="SicDesc" t="SIC Description"/>
+    <sfField editPermission="false" filterable="false" internal="true" n="AccountNumber" notVisibleToMetadataUser="true" readPermission="false"/>
+    <sfField editPermission="false" filterable="false" internal="true" n="Ownership" notVisibleToMetadataUser="true" readPermission="false" type="picklist"/>
+    <sfField filterable="false" internal="true" n="Rating" notVisibleToMetadataUser="true" type="picklist"/>
+    <sfField editPermission="false" filterable="false" internal="true" n="Sic" notVisibleToMetadataUser="true" readPermission="false"/>
+    <sfField editPermission="false" filterable="false" n="Site" notVisibleToMetadataUser="true" readPermission="false"/>
+    <sfField editPermission="false" filterable="false" internal="true" n="TickerSymbol" notVisibleToMetadataUser="true" readPermission="false"/>
+  </fields>
+  <childRelationships>
+    <sfObjectRelationship childName="Account" field="ParentId" n="ChildAccounts" relationshipName="ChildAccounts" s="2-" t="Account"/>
+    <sfObjectRelationship alias="RelatedAccountContactRoleList" childName="AccountContactRole" field="AccountId" n="AccountContactRoles" relationshipName="AccountContactRoles" s="2-" t="AccountContactRole"/>
+    <sfObjectRelationship childName="AccountFeed" field="ParentId" n="Feeds" relationshipName="Feeds" s="2-" t="AccountFeed"/>
+    <sfObjectRelationship alias="RelatedEntityHistoryList" childName="AccountHistory" field="AccountId" n="Histories" relationshipName="Histories" s="2-" t="AccountHistory"/>
+    <sfObjectRelationship alias="RelatedPartnerList" childName="AccountPartner" field="AccountFromId" n="AccountPartnersFrom" relationshipName="AccountPartnersFrom" s="2-" t="AccountPartner"/>
+    <sfObjectRelationship childName="AccountPartner" field="AccountToId" n="AccountPartnersTo" relationshipName="AccountPartnersTo" s="2-" t="AccountPartner"/>
+    <sfObjectRelationship childName="AccountShare" field="AccountId" n="Shares" relationshipName="Shares" s="2-" t="AccountShare"/>
+    <sfObjectRelationship alias="RelatedHistoryList" childName="ActivityHistory" field="AccountId" n="ActivityHistories" relationshipName="ActivityHistories" s="2-" t="ActivityHistory"/>
+    <sfObjectRelationship alias="RelatedAssetList" childName="Asset" field="AccountId" n="Assets" relationshipName="Assets" s="2-" t="Asset"/>
+    <sfObjectRelationship childName="Asset" field="AssetProvidedById" n="ProvidedAssets" relationshipName="ProvidedAssets" s="2-" t="Asset"/>
+    <sfObjectRelationship childName="Asset" field="AssetServicedById" n="ServicedAssets" relationshipName="ServicedAssets" s="2-" t="Asset"/>
+    <sfObjectRelationship alias="RelatedFileList" childName="AttachedContentDocument" field="LinkedEntityId" n="AttachedContentDocuments" relationshipName="AttachedContentDocuments" s="2-" t="AttachedContentDocument"/>
+    <sfObjectRelationship alias="RelatedActivityAttachmentList" childName="Attachment" field="ParentId" n="Attachments" relationshipName="Attachments" s="2-" t="Attachment"/>
+    <sfObjectRelationship alias="RelatedCaseList" childName="Case" field="AccountId" n="Cases" relationshipName="Cases" s="2-" t="Case"/>
+    <sfObjectRelationship alias="RelatedNoteList" childName="CombinedAttachment" field="ParentId" n="CombinedAttachments" relationshipName="CombinedAttachments" s="2-" t="CombinedAttachment"/>
+    <sfObjectRelationship alias="RelatedContactList" childName="Contact" field="AccountId" n="Contacts" relationshipName="Contacts" s="2-" t="Contact"/>
+    <sfObjectRelationship childName="ContactRequest" field="WhatId" n="ContactRequests" relationshipName="ContactRequests" s="2-" t="ContactRequest"/>
+    <sfObjectRelationship childName="ContentDocumentLink" field="LinkedEntityId" n="ContentDocumentLinks" relationshipName="ContentDocumentLinks" s="2-" t="ContentDocumentLink"/>
+    <sfObjectRelationship alias="RelatedContractList" childName="Contract" field="AccountId" n="Contracts" relationshipName="Contracts" s="2-" t="Contract"/>
+    <sfObjectRelationship childName="DuplicateRecordItem" field="RecordId" n="DuplicateRecordItems" relationshipName="DuplicateRecordItems" s="2-" t="DuplicateRecordItem"/>
+    <sfObjectRelationship childName="EmailMessage" field="RelatedToId" n="Emails" relationshipName="Emails" s="2-" t="EmailMessage"/>
+    <sfObjectRelationship childName="EntitySubscription" field="ParentId" n="FeedSubscriptionsForEntity" relationshipName="FeedSubscriptionsForEntity" s="2-" t="EntitySubscription"/>
+    <sfObjectRelationship childName="Event" field="WhatId" n="Events" relationshipName="Events" s="2-" t="Event"/>
+    <sfObjectRelationship childName="Note" field="ParentId" n="Notes" relationshipName="Notes" s="2-" t="Note"/>
+    <sfObjectRelationship childName="NoteAndAttachment" field="ParentId" n="NotesAndAttachments" relationshipName="NotesAndAttachments" s="2-" t="NoteAndAttachment"/>
+    <sfObjectRelationship alias="RelatedActivityList" childName="OpenActivity" field="AccountId" n="OpenActivities" relationshipName="OpenActivities" s="2-" t="OpenActivity"/>
+    <sfObjectRelationship alias="RelatedOpportunityList" childName="Opportunity" field="AccountId" n="Opportunities" relationshipName="Opportunities" s="2-" t="Opportunity"/>
+    <sfObjectRelationship childName="OpportunityPartner" field="AccountToId" n="OpportunityPartnersTo" relationshipName="OpportunityPartnersTo" s="2-" t="OpportunityPartner"/>
+    <sfObjectRelationship alias="RelatedOrderList" childName="Order" field="AccountId" n="Orders" relationshipName="Orders" s="2-" t="Order"/>
+    <sfObjectRelationship childName="Partner" field="AccountFromId" n="PartnersFrom" relationshipName="PartnersFrom" s="2-" t="Partner"/>
+    <sfObjectRelationship childName="Partner" field="AccountToId" n="PartnersTo" relationshipName="PartnersTo" s="2-" t="Partner"/>
+    <sfObjectRelationship alias="RelatedProcessInstanceHistory" childName="ProcessInstance" field="TargetObjectId" n="ProcessInstances" relationshipName="ProcessInstances" s="2-" t="ProcessInstance"/>
+    <sfObjectRelationship alias="RelatedProcessHistoryList" childName="ProcessInstanceHistory" field="TargetObjectId" n="ProcessSteps" relationshipName="ProcessSteps" s="2-" t="ProcessInstanceHistory"/>
+    <sfObjectRelationship childName="RecordAction" field="RecordId" n="RecordActions" relationshipName="RecordActions" s="2-" t="RecordAction"/>
+    <sfObjectRelationship childName="RecordActionHistory" field="ParentRecordId" n="RecordActionHistories" relationshipName="RecordActionHistories" s="2-" t="RecordActionHistory"/>
+    <sfObjectRelationship childName="SocialPersona" field="ParentId" n="Personas" relationshipName="Personas" s="2-" t="SocialPersona"/>
+    <sfObjectRelationship childName="SocialPost" field="WhoId" n="Posts" relationshipName="Posts" s="2-" t="SocialPost"/>
+    <sfObjectRelationship childName="Task" field="WhatId" n="Tasks" relationshipName="Tasks" s="2-" t="Task"/>
+    <sfObjectRelationship childName="TopicAssignment" field="EntityId" n="TopicAssignments" relationshipName="TopicAssignments" s="2-" t="TopicAssignment"/>
+    <sfObjectRelationship childName="User" field="AccountId" n="Users" relationshipName="Users" s="2-" t="User"/>
+    <sfObjectRelationship alias="RelatedContentDistributionList" childName="ContentDistribution" field="RelatedRecordId" n="RelatedContentDistributionList" relationshipName="RelatedContentDistributionList" s="2-" t="Content Deliveries"/>
+  </childRelationships>
+  <recordTypes>
+    <sfRecordType layoutsLoaded="false" n="&lt;default&gt;" t="Web Record Type Mapping"/>
+  </recordTypes>
+  <standardActions>
+    <sfActionLink modes="View" n="CallHighlightAction" t="Call"/>
+    <sfActionLink modes="View" n="CancelEdit"/>
+    <sfActionLink modes="View ChildAccounts" n="Delete" requiresRow="true" s="3"/>
+    <sfActionLink modes="View ChildAccounts" n="Edit" requiresRow="true" s="2"/>
+    <sfActionLink modes="View" n="EmailHighlightAction" t="Send Email"/>
+    <sfActionLink alias="prm" buttonName="prm" modes="Detail" n="EnableCustomerPortalUser" parentMenuAction="workWithPortal" t="Enable As Partner"/>
+    <sfActionLink modes="ObjectHome" n="List" requiresRow="true"/>
+    <sfActionLink n="ListClean" s=""/>
+    <sfActionLink modes="ObjectHome List ChildAccounts" n="New"/>
+    <sfActionLink n="RequestUpdate" s=""/>
+    <sfActionLink afterWaitUrl="ui:wait:timed?seconds=10" modes="View" n="SaveEdit"/>
+    <sfActionLink modes="View" n="SmsHighlightAction" t="Send Text"/>
+    <sfActionLink n="Tab" s=""/>
+    <sfActionLink modes="ObjectHome" n="View" requiresRow="true"/>
+    <sfActionLink buttonName="csp" modes="Detail" n="ViewCustomerPortalUser" parentMenuAction="workWithPortal" t="View Customer User"/>
+    <sfActionLink modes="View" n="WebsiteHighlightAction" t="View Website"/>
+    <sfActionLink buttonName="Mass_Edit" massAction="true" n="Mass_Edit" s="" t="Mass Edit"/>
+    <sfActionLink buttonName="Mass_Update" massAction="true" n="Mass_Update" s="" t="Mass Update"/>
+    <sfActionLink modes="View" n="Clone" requiresRow="true"/>
+    <sfActionLink modes="View Submit detail" n="Submit" requiresRow="true" t="Submit for Approval"/>
+    <sfActionLink modes="View Remove" n="Remove"/>
+    <sfActionLink modes="View Unlock" n="Unlock" t="Unlock Record"/>
+    <sfActionLink modes="Edit New Clone" n="save" requiresRow="true" t="Save"/>
+    <sfActionLink modes="Edit New Clone" n="save_new" requiresRow="true" t="Save and New"/>
+    <sfActionLink modes="Edit New Clone" n="cancel" requiresRow="true" t="Cancel"/>
+    <sfActionLink massAction="true" modes="View List all_related_lists" n="ChangeOwnerOne" t="Change Owner"/>
+    <sfActionLink massAction="true" modes="View List" n="ChangeRecordType" t="Change Record Type"/>
+    <sfActionLink modes="View" n="email" t="Send an Email"/>
+    <sfActionLink modes="View" n="Share"/>
+    <sfActionLink modes="QuickAction" n="publishersharebutton" t="Create"/>
+    <sfActionLink modes="ObjectHome List" n="Sort"/>
+    <sfActionLink modes="ObjectHome List" n="Filter"/>
+    <sfActionLink modes="ObjectHome View" n="Search"/>
+    <sfActionLink modes="ObjectHome List" n="Import"/>
+    <sfActionLink modes="View" n="PrintableView" t="Printable View"/>
+    <sfActionLink n="ObjectHome" requiresRow="true" t="Home"/>
+    <sfActionLink modes="Detail" n="workWithPortal" t="Manage External Accounts"/>
+    <sfActionLink modes="Detail" n="dprm" parentMenuAction="workWithPortal" t="Disable Partner Account"/>
+    <sfActionLink alias="dcsp" buttonName="dcsp" modes="Detail" n="DisableCustomerPortal" parentMenuAction="workWithPortal" t="Disable Customer Account"/>
+    <sfActionLink modes="View" n="XClean" t="Check Integration Status"/>
+    <sfActionLink modes="View" n="partnerscorecard" t="View Partner Scorecard"/>
+    <sfActionLink modes="View" n="AccountHierarchy" t="View Account Hierarchy"/>
+    <sfActionLink modes="View ChildAccounts" n="ShowMore" t="Show More"/>
+    <sfActionLink modes="View ChildAccounts" n="GoToList" t="Go To List"/>
+    <sfActionLink modes="RelatedList" n="PrevPage" t="Previous Page"/>
+    <sfActionLink modes="RelatedList" n="NextPage" t="Next Page"/>
+  </standardActions>
+  <homeListColumns>
+    <string>ACCOUNT.NAME</string>
+    <string>ACCOUNT.ADDRESS1_CITY</string>
+    <string>ACCOUNT.PHONE1</string>
+  </homeListColumns>
+  <lookupColumns>
+    <string>ACCOUNT.NAME</string>
+    <string>ACCOUNT.SITE</string>
+    <string>CORE.USERS.ALIAS</string>
+    <string>ACCOUNT.TYPE</string>
+  </lookupColumns>
+  <weblinks>
+    <sfWeblink displayType="link" linkType="url" n="AltavistaNews" s="" t="Altavista News" url="http://news.altavista.com/search?nc=0&amp;q={!Account_Name}"/>
+    <sfWeblink displayType="link" linkType="url" n="GoogleMaps" s="" t="Google Maps" url="http://maps.google.com/maps?f=q&amp;hl=en&amp;q={!Account_BillingStreet}+{!Account_BillingCity}+{!Account_BillingState}&amp;om=1"/>
+    <sfWeblink displayType="link" linkType="url" n="GoogleNews" s="" t="Google News" url="http://www.google.com/news?&amp;q={!Account_Name}&amp;btnG=Search+News"/>
+    <sfWeblink displayType="link" linkType="url" n="GoogleSearch" s="" t="Google Search" url="http://www.google.com/search?q={!Account_Name}"/>
+    <sfWeblink displayType="link" linkType="url" n="HooversProfile" s="" t="Hoovers Profile" url="http://search.hoovers.com/cgi-bin/hol_search?which=company&amp;query_string={!Account_Name}"/>
+    <sfWeblink displayType="link" linkType="url" n="YahooMaps" s="" t="Yahoo Maps" url="http://maps.yahoo.com/py/maps.py?cn={!Account_BillingCountry}&amp;csz={!Account_BillingCity}+{!Account_BillingState}+{!Account_BillingPostalCode}+&amp;addr={!Account_BillingAddress}"/>
+  </weblinks>
+  <searchResultColumns>
+    <string>ACCOUNT.NAME</string>
+    <string>ACCOUNT.SITE</string>
+    <string>ACCOUNT.PHONE1</string>
+    <string>CORE.USERS.ALIAS</string>
+  </searchResultColumns>
+  <listViewActions/>
+</sfObject>

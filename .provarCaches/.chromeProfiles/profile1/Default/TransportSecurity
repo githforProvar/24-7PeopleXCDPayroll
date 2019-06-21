@@ -1,0 +1,62 @@
+{
+   "4ePc2nTZvHXU7xmjoz+atncGTm2tldO4OrK0Ax33A2M=": {
+      "expiry": 1592566228.812942,
+      "mode": "force-https",
+      "sts_include_subdomains": true,
+      "sts_observed": 1561030228.812945
+   },
+   "5EdUoB7YUY9zZV+2DkgVXgho8WUvp+D+6KpeUOhNQIM=": {
+      "expiry": 1592566172.87784,
+      "mode": "force-https",
+      "sts_include_subdomains": false,
+      "sts_observed": 1561030172.877844
+   },
+   "8/RrMmQlCD2Gsp14wUCE1P8r7B2C5+yE0+g79IPyRsc=": {
+      "expiry": 1592566171.750458,
+      "mode": "force-https",
+      "sts_include_subdomains": false,
+      "sts_observed": 1561030171.750461
+   },
+   "ALV1O6fEdSWviGZ/kszPRcaHhkSozah5xNjGnPuipGg=": {
+      "expiry": 1592566177.550453,
+      "mode": "force-https",
+      "sts_include_subdomains": true,
+      "sts_observed": 1561030177.550457
+   },
+   "E10e7Gwg5+phsYD4E8qNYFsQySXnIHPAfo4zloUPESc=": {
+      "expect_ct": {
+         "expect_ct_enforce": false,
+         "expect_ct_expiry": 1561634989.757867,
+         "expect_ct_observed": 1561030189.757867,
+         "expect_ct_report_uri": "https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      },
+      "expiry": 1576810189.757857,
+      "mode": "force-https",
+      "sts_include_subdomains": true,
+      "sts_observed": 1561030189.75786
+   },
+   "F6I5ywqI+gS/auUyiSA+a4paLzwiEPIrT68LUC//cLM=": {
+      "expiry": 1592566230.884401,
+      "mode": "force-https",
+      "sts_include_subdomains": true,
+      "sts_observed": 1561030230.884404
+   },
+   "M8FCPDx/iztAurBHj5rqTMZrfy6572JZu9VqQVWm2Dc=": {
+      "expiry": 1592566175.900231,
+      "mode": "force-https",
+      "sts_include_subdomains": true,
+      "sts_observed": 1561030175.900242
+   },
+   "cIK/m3vzRZa1Vfb3fcSHjS42A6+PQX9QR0d69eWbsgQ=": {
+      "expiry": 1592566228.271626,
+      "mode": "force-https",
+      "sts_include_subdomains": true,
+      "sts_observed": 1561030228.271637
+   },
+   "pjNaqsYI0lmITz+Abf/uT/v5VtHrJep15r1V4C1GarM=": {
+      "expiry": 1592567066.071094,
+      "mode": "force-https",
+      "sts_include_subdomains": true,
+      "sts_observed": 1561031066.071115
+   }
+}

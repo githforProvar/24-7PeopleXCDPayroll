@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<sfObject creatable="true" defaultCompactLayoutId="xcdhcm__Pay_Period__c.SYSTEM" deleteable="true" keyPrefix="a0b" label="Payroll - Period" labelPlural="Payroll - Periods" layoutable="true" metadataLabel="Pay Run" n="xcdhcm__Pay_Period__c" queryable="true" retrieveable="true" s="" searchLayoutable="true" t="Payroll - Period (a0b)" updatable="true" urlDetail="/{ID}" urlEdit="/{ID}/e" urlNew="/a0b/e">
+  <fields>
+    <sfField createable="false" editPermission="false" length="18" n="Id" t="Record ID" type="id" updateable="false"/>
+    <sfField length="18" n="OwnerId" relationshipName="Owner" t="Owner ID" type="reference">
+      <referenceTos>
+        <string>Group</string>
+        <string>User</string>
+      </referenceTos>
+    </sfField>
+    <sfField createable="false" editPermission="false" n="IsDeleted" t="Deleted" type="_boolean" updateable="false"/>
+    <sfField length="80" n="Name" nameField="true" t="Payroll period"/>
+    <sfField length="3" n="CurrencyIsoCode" standardPickListName="xcdhcm__Pay_Period__c.CurrencyIsoCode" t="Currency ISO Code" type="picklist">
+      <picklistEntryIds/>
+      <picklistEntries/>
+    </sfField>
+    <sfField length="18" n="RecordTypeId" relationshipName="RecordType" t="Record Type ID" type="reference">
+      <referenceTos>
+        <string>RecordType</string>
+      </referenceTos>
+    </sfField>
+    <sfField createable="false" editPermission="false" n="CreatedDate" t="Created Date" type="datetime" updateable="false"/>
+    <sfField createable="false" editPermission="false" length="18" n="CreatedById" relationshipName="CreatedBy" t="Created By ID" type="reference" updateable="false">
+      <referenceTos>
+        <string>User</string>
+      </referenceTos>
+    </sfField>
+    <sfField createable="false" editPermission="false" n="LastModifiedDate" t="Last Modified Date" type="datetime" updateable="false"/>
+    <sfField createable="false" editPermission="false" length="18" n="LastModifiedById" relationshipName="LastModifiedBy" t="Last Modified By ID" type="reference" updateable="false">
+      <referenceTos>
+        <string>User</string>
+      </referenceTos>
+    </sfField>
+    <sfField createable="false" editPermission="false" n="SystemModstamp" t="System Modstamp" type="datetime" updateable="false"/>
+    <sfField createable="false" editPermission="false" n="LastActivityDate" t="Last Activity Date" type="date" updateable="false"/>
+    <sfField n="xcdhcm__Effective_from__c" t="Pay period starts" type="date"/>
+    <sfField n="xcdhcm__Effective_to__c" t="Pay period ends" type="date"/>
+    <sfField n="xcdhcm__Payroll_run_date__c" t="Pay run generated date" type="datetime"/>
+    <sfField n="xcdhcm__Payroll_rundate__c" t="Pay run date" type="date"/>
+    <sfField length="255" n="xcdhcm__Payroll_status__c" t="Status" type="picklist">
+      <picklistEntryIds>1,2,3</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE defaultValue="true" id="1" n="New" s=""/>
+        <sfPLE id="2" n="Draft" s=""/>
+        <sfPLE id="3" n="Final" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField length="255" n="xcdhcm__Period_Number__c" t="Period" type="picklist">
+      <picklistEntryIds>4,5,6,7,8,9,10,11,12,13,14,15</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="4" n="1" s=""/>
+        <sfPLE id="5" n="2" s=""/>
+        <sfPLE id="6" n="3" s=""/>
+        <sfPLE id="7" n="4" s=""/>
+        <sfPLE id="8" n="5" s=""/>
+        <sfPLE id="9" n="6" s=""/>
+        <sfPLE id="10" n="7" s=""/>
+        <sfPLE id="11" n="8" s=""/>
+        <sfPLE id="12" n="9" s=""/>
+        <sfPLE id="13" n="10" s=""/>
+        <sfPLE id="14" n="11" s=""/>
+        <sfPLE id="15" n="12" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField length="255" n="xcdhcm__Tax_Year__c" t="Tax year" type="picklist">
+      <picklistEntryIds>16,17,18,19,20</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="16" n="2015/2016" s=""/>
+        <sfPLE id="17" n="2016/2017" s=""/>
+        <sfPLE id="18" n="2017/2018" s=""/>
+        <sfPLE id="19" n="2018/2019" s=""/>
+        <sfPLE id="20" n="2019/2020" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField length="18" n="xcdhcm__XCD_PAY_Payroll__c" relationshipLabel="Pay Runs" relationshipName="xcdhcm__XCD_PAY_Payroll__r" t="Payroll" type="reference">
+      <referenceTos>
+        <string>xcdhcm__XCD_PAY_Payroll__c</string>
+      </referenceTos>
+    </sfField>
+    <sfField calculated="true" createable="false" editPermission="false" formula="xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Company__r.Name" formulaTreatBlanksAs="BlankAsZero" length="1300" n="xcdhcm__Company__c" t="Company" updateable="false"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="TEXT(xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Company__r.xcdhcm__Payroll_cutoff_day__c)" formulaTreatBlanksAs="BlankAsZero" length="1300" n="xcdhcm__Payroll_cutoff_day__c" t="Payroll cutoff day" updateable="false"/>
+    <sfField n="xcdhcm__Previous_payroll_run_date__c" t="Previous pay run date" type="date"/>
+    <sfField length="255" n="xcdhcm__Additional_payment_type__c" t="Payments"/>
+    <sfField n="xcdhcm__Pay_day__c" t="Pay day" type="date"/>
+    <sfField n="xcdhcm__isAdditionalPayrollRun__c" t="isAdditionalPayrollRun" type="_boolean"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.Name" formulaTreatBlanksAs="BlankAsZero" length="1300" n="xcdhcm__Employer__c" t="Employer" updateable="false"/>
+    <sfField digits="17" n="xcdhcm__Total_gross_pay__c" precision="17" scale="2" t="xTotal gross pay" type="currency"/>
+    <sfField n="xcdhcm__Eligible_employees__c" precision="7" t="Eligible employees" type="_double"/>
+    <sfField n="xcdhcm__Included_in_run__c" precision="7" t="Employees in pay run" type="_double"/>
+    <sfField length="255" n="xcdhcm__Late_reporting_reason__c" t="Late reporting reason" type="picklist">
+      <picklistEntryIds>21,22,23,24,25,26,27,28</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="21" n="A: Notional payment: Payment to Expat by third party or overseas employer" s=""/>
+        <sfPLE id="22" n="B: Notional payment: Employment related security" s=""/>
+        <sfPLE id="23" n="C: Notional payment: Other" s=""/>
+        <sfPLE id="24" n="D: Payment subject to Class 1 NICs but P11D/P9D for tax" s=""/>
+        <sfPLE id="25" n="E: Micro Employer using temporary &quot;on or before&quot; relaxation" s=""/>
+        <sfPLE id="26" n="F: No requirement to maintain a Deductions Working Sheet or Impractical to report work done on the day" s=""/>
+        <sfPLE id="27" n="G: Reasonable excuse" s=""/>
+        <sfPLE id="28" n="H: Correction to earlier submission" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField digits="16" n="xcdhcm__NIC_on_SAP_this_period__c" precision="16" scale="2" t="NIC on SAP this period" type="currency"/>
+    <sfField digits="16" n="xcdhcm__NIC_on_SMP_this_period__c" precision="16" scale="2" t="NIC on SMP this period" type="currency"/>
+    <sfField digits="16" n="xcdhcm__NIC_on_SPP_this_period__c" precision="16" scale="2" t="NIC on SPP this period" type="currency"/>
+    <sfField digits="16" n="xcdhcm__NIC_on_ShPP_this_period__c" precision="16" scale="2" t="NIC on ShPP this period" type="currency"/>
+    <sfField n="xcdhcm__Number_of_earnings_periods__c" precision="2" t="Number of earnings periods" type="_double"/>
+    <sfField n="xcdhcm__Provider_payment_date__c" t="Provider payment date" type="date"/>
+    <sfField n="xcdhcm__Reference_period_ends__c" t="Reference period ends" type="date"/>
+    <sfField n="xcdhcm__Reference_period_starts__c" t="Reference period starts" type="date"/>
+    <sfField digits="16" n="xcdhcm__SAP_recovered_this_period__c" precision="16" scale="2" t="SAP recovered this period" type="currency"/>
+    <sfField digits="16" n="xcdhcm__SMP_recovered_this_period__c" precision="16" scale="2" t="SMP recovered this period" type="currency"/>
+    <sfField digits="16" n="xcdhcm__SPP_recovered_this_period__c" precision="16" scale="2" t="SPP recovered this period" type="currency"/>
+    <sfField digits="16" n="xcdhcm__ShPP_recovered_this_period__c" precision="16" scale="2" t="ShPP recovered this period" type="currency"/>
+    <sfField n="xcdhcm__Tax_period_ends__c" t="Tax period ends" type="date"/>
+    <sfField n="xcdhcm__Tax_period_number__c" precision="2" t="Tax period" type="_double"/>
+    <sfField n="xcdhcm__Tax_period_starts__c" t="Tax period starts" type="date"/>
+    <sfField n="xcdhcm__Third_party_benefits__c" precision="18" scale="2" t="Third party benefits" type="currency"/>
+    <sfField n="xcdhcm__Total_HMRC_payments__c" precision="18" scale="2" t="Total HMRC payments from employees" type="currency"/>
+    <sfField n="xcdhcm__Total_attachments__c" precision="18" scale="2" t="Total court orders" type="currency"/>
+    <sfField n="xcdhcm__Total_employee_pay__c" precision="18" scale="2" t="Total employee net pay" type="currency"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="xcdhcm__Total_employee_pay__c + xcdhcm__Total_HMRC_payments_with_levy__c + xcdhcm__Total_attachments__c + xcdhcm__Benefit_contribution_this_period__c + xcdhcm__Pension_contribution_this_period__c" formulaTreatBlanksAs="BlankAsZero" n="xcdhcm__Total_outgoings__c" precision="18" scale="2" t="Total cost to employer" type="currency" updateable="false"/>
+    <sfField n="xcdhcm__Total_payments__c" precision="18" scale="2" t="xTotal gross pay" type="currency"/>
+    <sfField n="xcdhcm__Total_student_loans__c" precision="18" scale="2" t="Total student loans" type="currency"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="MAX(0,MIN(xcdhcm__Total_employer_NI__c,(xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employment_allowance__c  -   xcdhcm__Allowance_claimed_prev_period_to_date__c )))" formulaTreatBlanksAs="BlankAsZero" n="xcdhcm__Employment_allowance_this_period__c" precision="18" scale="2" t="Total employment allowance this period" type="currency" updateable="false"/>
+    <sfField n="xcdhcm__Expense_cutoff_day__c" t="Expense cutoff day" type="date"/>
+    <sfField n="xcdhcm__Included_in_EPS__c" t="Included in EPS" type="_boolean"/>
+    <sfField n="xcdhcm__Overtime_cutoff_day__c" t="Overtime cutoff day" type="date"/>
+    <sfField length="255" n="xcdhcm__P45_status__c" t="P45 status" type="picklist">
+      <picklistEntryIds>29,30</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE id="29" n="Publish" s=""/>
+        <sfPLE id="30" n="Published" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField length="255" n="xcdhcm__Payslip_status__c" t="Payslip status" type="picklist">
+      <picklistEntryIds>31,32</picklistEntryIds>
+      <picklistEntries>
+        <sfPLE defaultValue="true" id="31" n="Publish" s=""/>
+        <sfPLE id="32" n="Published" s=""/>
+      </picklistEntries>
+    </sfField>
+    <sfField calculated="true" createable="false" editPermission="false" formula="xcdhcm__SAP_recovered_this_period__c + xcdhcm__ShPP_recovered_this_period__c + xcdhcm__SMP_recovered_this_period__c + xcdhcm__SPP_recovered_this_period__c" formulaTreatBlanksAs="BlankAsZero" n="xcdhcm__Statutory_recovery__c" precision="18" scale="2" t="Statutory recovery" type="_double" updateable="false"/>
+    <sfField n="xcdhcm__Total_employee_NI__c" precision="18" scale="2" t="Total employee NI" type="currency"/>
+    <sfField digits="16" n="xcdhcm__Total_employee_contribution__c" precision="16" scale="2" t="Total employee pension contributions" type="currency"/>
+    <sfField n="xcdhcm__Total_employer_NI__c" precision="18" scale="2" t="Total employer NI" type="currency"/>
+    <sfField digits="16" n="xcdhcm__Total_employer_contributions__c" precision="16" scale="2" t="Total employer pension contributions" type="currency"/>
+    <sfField digits="17" n="xcdhcm__Total_payment__c" precision="17" scale="2" t="xTotal payment" type="currency"/>
+    <sfField n="xcdhcm__Total_tax__c" precision="18" scale="2" t="Total tax" type="currency"/>
+    <sfField n="xcdhcm__BACS_employee_payments__c" precision="18" t="BACS employee payments" type="_double"/>
+    <sfField n="xcdhcm__BACS_file_payment_value__c" precision="18" scale="2" t="BACS file payment value" type="currency"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="if(\n  MOD(xcdhcm__Pay_day__c - DATE(1900,1,8), 7) = 0,\n  xcdhcm__Pay_day__c - 3,\n  xcdhcm__Pay_day__c -1)" formulaTreatBlanksAs="BlankAsZero" n="xcdhcm__BACS_processing_day__c" t="BACS processing day" type="date" updateable="false"/>
+    <sfField n="xcdhcm__BACS_version_no__c" precision="15" t="BACS version no" type="_double"/>
+    <sfField n="xcdhcm__Total_employee_payroll_tax__c" precision="18" scale="2" t="Total employee payroll tax" type="currency"/>
+    <sfField n="xcdhcm__Total_employer_payroll_tax__c" precision="18" scale="2" t="Total employer payroll tax" type="currency"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="TEXT(xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Eligible_employees__c)" formulaTreatBlanksAs="BlankAsZero" length="1300" n="xcdhcm__Payroll_eligibility__c" t="Payroll eligibility" updateable="false"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="TEXT(xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Pay_Frequency__c)" length="1300" n="xcdhcm__Payroll_frequency__c" t="Payroll frequency" updateable="false"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="xcdhcm__XCD_PAY_Payroll__r.Name" formulaTreatBlanksAs="BlankAsZero" length="1300" n="xcdhcm__Payroll_name__c" t="Payroll name" updateable="false"/>
+    <sfField length="100" n="xcdhcm__zPayroll_eligibility__c" t="zPayroll eligibility"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="HYPERLINK(&quot;/&quot;&amp;LEFT(xcdhcm__EPS_status_system__c, FIND(&quot;,&quot;, xcdhcm__EPS_status_system__c)-1), RIGHT(xcdhcm__EPS_status_system__c, LEN(xcdhcm__EPS_status_system__c) - FIND(&quot;,&quot;, xcdhcm__EPS_status_system__c)))" length="1300" n="xcdhcm__EPS_status__c" t="EPS status" updateable="false"/>
+    <sfField length="255" n="xcdhcm__EPS_status_system__c" t="System: EPS status"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="HYPERLINK(&quot;/&quot;&amp;LEFT(xcdhcm__FPS_status_system__c, FIND(&quot;,&quot;, xcdhcm__FPS_status_system__c)-1), RIGHT(xcdhcm__FPS_status_system__c, LEN(xcdhcm__FPS_status_system__c) - FIND(&quot;,&quot;, xcdhcm__FPS_status_system__c)))" length="1300" n="xcdhcm__FPS_status__c" t="FPS status" updateable="false"/>
+    <sfField length="255" n="xcdhcm__FPS_status_system__c" t="System: FPS status"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="HYPERLINK(&quot;/&quot;&amp;xcdhcm__XCD_PAY_Payroll__r.Id, xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Payroll__c)" formulaTreatBlanksAs="BlankAsZero" length="1300" n="xcdhcm__Payroll__c" t="Payroll" updateable="false"/>
+    <sfField length="255" n="xcdhcm__Payslip_message__c" t="Payslip message"/>
+    <sfField n="xcdhcm__Pension_contribution_this_period__c" precision="18" scale="2" t="Total pension contributions" type="currency"/>
+    <sfField digits="16" n="xcdhcm__Apprentice_levy_this_period__c" precision="16" scale="2" t="xApprentice levy this period" type="currency"/>
+    <sfField n="xcdhcm__Benefit_contribution_this_period__c" precision="18" scale="2" t="Total benefit contributions" type="currency"/>
+    <sfField n="xcdhcm__Employee_payments_date__c" t="Employee payments date" type="date"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Employer__r.xcdhcm__Last_tax_code_update__c" n="xcdhcm__Last_tax_code_update__c" t="Last tax code update" type="date" updateable="false"/>
+    <sfField digits="16" n="xcdhcm__Levy_due_upto_this_period__c" precision="16" scale="2" t="xLevy due upto this period" type="currency"/>
+    <sfField digits="16" n="xcdhcm__NI_able_this_period__c" precision="16" scale="2" t="xNI-able this period" type="currency"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="NULLVALUE(xcdhcm__Total_HMRC_payments__c, 0.00) + NULLVALUE(xcdhcm__Estimated_levy_this_period__c, 0.00) - NULLVALUE( xcdhcm__Employment_allowance_this_period__c, 0.00)" formulaTreatBlanksAs="BlankAsZero" n="xcdhcm__Total_HMRC_payments_with_levy__c" precision="18" scale="2" t="Total HMRC payments" type="currency" updateable="false"/>
+    <sfField digits="7" n="xcdhcm__Allowance_claimed_prev_period_to_date__c" precision="7" scale="2" t="Allowance claimed prev period to date" type="currency"/>
+    <sfField digits="16" n="xcdhcm__Apprentice_levy_employees_this_period__c" precision="16" scale="2" t="Apprenticeship levy gross" type="currency"/>
+    <sfField digits="16" n="xcdhcm__Apprenticeship_levy_pay_bill__c" precision="16" scale="2" t="Apprenticeship levy pay bill" type="currency"/>
+    <sfField digits="16" n="xcdhcm__Estimated_levy_allowance_apportionment__c" precision="16" scale="2" t="Estimated levy allowance apportionment" type="currency"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="xcdhcm__Apprentice_levy_employees_this_period__c  - xcdhcm__Estimated_levy_allowance_apportionment__c" formulaTreatBlanksAs="BlankAsZero" n="xcdhcm__Estimated_levy_this_period__c" precision="18" scale="2" t="Total apprentice levy this period (est.)" type="currency" updateable="false"/>
+    <sfField length="18" n="xcdhcm__Included_in_this_EPS__c" relationshipLabel="Pay Runs" relationshipName="xcdhcm__Included_in_this_EPS__r" t="Included in this EPS" type="reference">
+      <referenceTos>
+        <string>xcdhcm__RTI_Submission__c</string>
+      </referenceTos>
+    </sfField>
+    <sfField calculated="true" createable="false" editPermission="false" formula="MONTH(xcdhcm__Pay_day__c) - 3\n/* Correct at end of tax year */\n+ IF(\n    OR(\n      MONTH(xcdhcm__Pay_day__c) &lt; 4,\n      AND(\n        MONTH(xcdhcm__Pay_day__c) = 4,\n        DAY(xcdhcm__Pay_day__c) &lt; 6)),\n    12,\n    0)\n/* Correct for first part of a month */\n- IF(DAY(xcdhcm__Pay_day__c) &lt; 6, 1, 0)" formulaTreatBlanksAs="BlankAsZero" n="xcdhcm__Tax_month__c" precision="18" t="Tax month" type="_double" updateable="false"/>
+    <sfField length="255" n="xcdhcm__Approval_status__c" t="Approval status"/>
+    <sfField n="xcdhcm__Draft_deleted__c" t="Draft deleted" type="_boolean"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="CASE(TEXT(xcdhcm__Tax_period_number__c),\n&quot;1&quot;,&quot;April&quot;,\n&quot;2&quot;,&quot;May&quot;,\n&quot;3&quot;,&quot;June&quot;,\n&quot;4&quot;,&quot;July&quot;,\n&quot;5&quot;,&quot;August&quot;,\n&quot;6&quot;,&quot;September&quot;,\n&quot;7&quot;,&quot;October&quot;,\n&quot;8&quot;,&quot;November&quot;,\n&quot;9&quot;,&quot;December&quot;,\n&quot;10&quot;,&quot;January&quot;,\n&quot;11&quot;,&quot;February&quot;,\n&quot;12&quot;,&quot;March&quot;,\n&quot;&quot;)" length="1300" n="xcdhcm__Month_of_payrun__c" t="Month of payrun" updateable="false"/>
+    <sfField extraTypeInfo="plaintextarea" filterable="false" length="5000" n="xcdhcm__Payroll_administrator_notes__c" t="Payroll administrator notes" type="textarea"/>
+    <sfField n="xcdhcm__System_error_logs__c" t="System error logs" type="_boolean"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="xcdhcm__XCD_PAY_Payroll__r.xcdhcm__Tax_year_fr__c" length="1300" n="xcdhcm__Tax_year_fr__c" t="Tax year" updateable="false"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="$Label.xcdhcm__reassign_approval_explanatory_message" formulaTreatBlanksAs="BlankAsZero" length="1300" n="xcdhcm__Reassign_note__c" t="Reassign note" updateable="false"/>
+    <sfField calculated="true" createable="false" editPermission="false" formula="BLANKVALUE(xcdhcm__SAP_recovered_this_period__c, 0.00) + \nBLANKVALUE(xcdhcm__ShPP_recovered_this_period__c, 0.00) + \nBLANKVALUE(xcdhcm__SMP_recovered_this_period__c, 0.00) + \nBLANKVALUE(xcdhcm__SPP_recovered_this_period__c, 0.00)\n+ BLANKVALUE( xcdhcm__NIC_on_SAP_this_period__c , 0.00)\n+ BLANKVALUE( xcdhcm__NIC_on_ShPP_this_period__c  , 0.00)\n+ BLANKVALUE( xcdhcm__NIC_on_SMP_this_period__c  , 0.00)\n+ BLANKVALUE( xcdhcm__NIC_on_SPP_this_period__c  , 0.00)" formulaTreatBlanksAs="BlankAsZero" n="xcdhcm__Total_statutory_recovery__c" precision="18" scale="2" t="Total statutory recovery" type="currency" updateable="false"/>
+    <sfField digits="16" n="xcdhcm__Total_postgraduate_loans__c" precision="16" scale="2" t="Total postgraduate loans" type="currency"/>
+  </fields>
+  <childRelationships>
+    <sfObjectRelationship childName="EntityHistory" field="ParentId" n="EntityHistories" relationshipName="EntityHistories" s="2-" t="EntityHistory"/>
+    <sfObjectRelationship alias="RelatedActivityAttachmentList" childName="Attachment" field="ParentId" n="Attachments" relationshipName="Attachments" s="2-" t="Attachment"/>
+    <sfObjectRelationship childName="ContentDocumentLink" field="LinkedEntityId" n="ContentDocumentLinks" relationshipName="ContentDocumentLinks" s="2-" t="ContentDocumentLink"/>
+    <sfObjectRelationship alias="RelatedFileList" childName="AttachedContentDocument" field="LinkedEntityId" n="AttachedContentDocuments" relationshipName="AttachedContentDocuments" s="2-" t="AttachedContentDocument"/>
+    <sfObjectRelationship alias="RelatedNoteList" childName="CombinedAttachment" field="ParentId" n="CombinedAttachments" relationshipName="CombinedAttachments" s="2-" t="CombinedAttachment"/>
+    <sfObjectRelationship childName="Note" field="ParentId" n="Notes" relationshipName="Notes" s="2-" t="Note"/>
+    <sfObjectRelationship childName="NoteAndAttachment" field="ParentId" n="NotesAndAttachments" relationshipName="NotesAndAttachments" s="2-" t="NoteAndAttachment"/>
+    <sfObjectRelationship childName="EntitySubscription" field="ParentId" n="FeedSubscriptionsForEntity" relationshipName="FeedSubscriptionsForEntity" s="2-" t="EntitySubscription"/>
+    <sfObjectRelationship alias="RelatedProcessInstanceHistory" childName="ProcessInstance" field="TargetObjectId" n="ProcessInstances" relationshipName="ProcessInstances" s="2-" t="ProcessInstance"/>
+    <sfObjectRelationship alias="RelatedProcessHistoryList" childName="ProcessInstanceHistory" field="TargetObjectId" n="ProcessSteps" relationshipName="ProcessSteps" s="2-" t="ProcessInstanceHistory"/>
+    <sfObjectRelationship childName="Task" field="WhatId" n="Tasks" relationshipName="Tasks" s="2-" t="Task"/>
+    <sfObjectRelationship childName="Event" field="WhatId" n="Events" relationshipName="Events" s="2-" t="Event"/>
+    <sfObjectRelationship childName="TaskRelation" field="RelationId" n="TaskRelations" relationshipName="TaskRelations" s="2-" t="TaskRelation"/>
+    <sfObjectRelationship alias="RelatedActivityList" childName="OpenActivity" field="WhatId" n="OpenActivities" relationshipName="OpenActivities" s="2-" t="OpenActivity"/>
+    <sfObjectRelationship alias="RelatedHistoryList" childName="ActivityHistory" field="WhatId" n="ActivityHistories" relationshipName="ActivityHistories" s="2-" t="ActivityHistory"/>
+    <sfObjectRelationship childName="TopicAssignment" field="EntityId" n="TopicAssignments" relationshipName="TopicAssignments" s="2-" t="TopicAssignment"/>
+    <sfObjectRelationship childName="EmailMessage" field="RelatedToId" n="Emails" relationshipName="Emails" s="2-" t="EmailMessage"/>
+    <sfObjectRelationship childName="DuplicateErrorLog" field="RecordId" n="DuplicateErrorLogs" relationshipName="DuplicateErrorLogs" s="2-" t="DuplicateErrorLog"/>
+    <sfObjectRelationship childName="DuplicateRecordItem" field="RecordId" n="DuplicateRecordItems" relationshipName="DuplicateRecordItems" s="2-" t="DuplicateRecordItem"/>
+    <sfObjectRelationship childName="RecordAction" field="RecordId" n="RecordActions" relationshipName="RecordActions" s="2-" t="RecordAction"/>
+    <sfObjectRelationship childName="ContactRequest" field="WhatId" n="ContactRequests" relationshipName="ContactRequests" s="2-" t="ContactRequest"/>
+    <sfObjectRelationship childName="RecordActionHistory" field="ParentRecordId" n="RecordActionHistories" relationshipName="RecordActionHistories" s="2-" t="RecordActionHistory"/>
+    <sfObjectRelationship childName="xcdhcm__Pay_Period__Share" field="ParentId" n="Shares" relationshipName="Shares" s="2-" t="01I0O000001NJR8.Share"/>
+    <sfObjectRelationship alias="RelatedEntityHistoryList" childName="xcdhcm__Pay_Period__History" field="ParentId" n="Histories" relationshipName="Histories" s="2-" t="01I0O000001NJR8.History"/>
+    <sfObjectRelationship childName="xcdhcm__Financial_Reporting__c" field="xcdhcm__Pay_Run__c" n="xcdhcm__Financial_Reportings__r" relationshipName="xcdhcm__Financial_Reportings__r" s="2-" t="01I0O0000016DfP"/>
+    <sfObjectRelationship childName="xcdhcm__Pay_Summary__c" field="xcdhcm__XCD_PAY_Period__c" n="xcdhcm__Monthly_Pay_Summaries__r" relationshipName="xcdhcm__Monthly_Pay_Summaries__r" s="2-" t="01I0O000001NJRB"/>
+    <sfObjectRelationship childName="xcdhcm__RTI_Submission__c" field="xcdhcm__Payroll_Period__c" n="xcdhcm__RTI_Submissions__r" relationshipName="xcdhcm__RTI_Submissions__r" s="2-" t="01I0O000001NJRh"/>
+  </childRelationships>
+  <recordTypes>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Additional" layoutsLoaded="false" n="Additional" namespacePrefix="xcdhcm" recordTypeId="0120O000000tlgBQAQ" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Bermuda_Draft" layoutsLoaded="false" n="Bermuda Draft" namespacePrefix="xcdhcm" recordTypeId="0120O000000tlgYQAQ" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Bermuda_Final" layoutsLoaded="false" n="Bermuda Final" namespacePrefix="xcdhcm" recordTypeId="0120O000000tlgZQAQ" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType fromToolingApi="true" fullName="Draft" n="Draft" namespacePrefix="xcdhcm" recordTypeId="0120O000000tlfYQAQ" s="3-" t="Web Record Type Mapping">
+      <children>
+        <sfLayout layoutFileName="xcdhcm__Pay_Period__c-xcdhcm__Pay Run Schedule Layout" n="Primary" profileLayout="false" s="" t="Page Layout">
+          <layoutTypes>
+            <sfLayoutType layoutType="Edit" n="Edit" t="Web Layout Type">
+              <children>
+                <sfLayoutSection customLabel="false" detailHeading="false" n="Information" s="" seqNum="0" style="TwoColumnsTopToBottom" t="Web Layout Section - true">
+                  <children>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="0">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Employer" n="Employer" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Employer__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Payroll" n="Payroll" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payroll__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="1">
+                      <children>
+                        <sfLI label="Payroll period" n="Payroll period" required="true" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="Name" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Tax period" n="Tax period" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Tax_period_number__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="2">
+                      <children>
+                        <sfLI label="Payslip message" n="Payslip message" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payslip_message__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Currency ISO Code" n="Currency ISO Code" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="CurrencyIsoCode" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                  </children>
+                </sfLayoutSection>
+                <sfLayoutSection customLabel="true" detailHeading="false" n="Key dates" s="" seqNum="1" style="TwoColumnsLeftToRight" t="Web Layout Section - true">
+                  <children>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="0">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Pay period starts" n="Pay period starts" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Effective_from__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Pay period ends" n="Pay period ends" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Effective_to__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="1">
+                      <children>
+                        <sfLI label="Pay run date" n="Pay run date" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payroll_rundate__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Previous pay run date" n="Previous pay run date" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Previous_payroll_run_date__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="2">
+                      <children>
+                        <sfLI label="Pay day" n="Pay day" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pay_day__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Pay run generated date" n="Pay run generated date" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payroll_run_date__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                  </children>
+                </sfLayoutSection>
+                <sfLayoutSection customLabel="true" detailHeading="false" n="Employees and payments" s="" seqNum="2" style="TwoColumnsLeftToRight" t="Web Layout Section - true">
+                  <children>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="0">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Eligible employees" n="Eligible employees" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Eligible_employees__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Employees in pay run" n="Employees in pay run" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Included_in_run__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="1">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Total employee net pay" n="Total employee net pay" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Total_employee_pay__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Total pension contributions" n="Total pension contributions" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pension_contribution_this_period__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="2">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Total benefit contributions" n="Total benefit contributions" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Benefit_contribution_this_period__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Total cost to employer" n="Total cost to employer" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Total_outgoings__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                  </children>
+                </sfLayoutSection>
+                <sfLayoutSection customLabel="false" detailHeading="false" n="Custom Links" s="" seqNum="4" style="CustomLinks" t="Web Layout Section - true">
+                  <children>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="0">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Joiners" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payroll_Joiners" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Leavers" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="1">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Employee_Sickness_and_Maternity_Absences" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Unpaid_Absences" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Leavers_and_Leave" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="2">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Key_Personal_Data_Changes" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Changes_Compensation_and_Benefits" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Changes_One_Off_Payments_Deductions" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="3">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Test_Report_Leavers_Final_Compensation" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Test_Report_Leavers_on_Payroll" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Zero_Payments" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="4">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="emptySpace" s="" seqNum="0" t="Web Layout Field" type="EmptySpace"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="emptySpace" s="" seqNum="0" t="Web Layout Field" type="EmptySpace"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="emptySpace" s="" seqNum="0" t="Web Layout Field" type="EmptySpace"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="5">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pay_and_Payment_Details_Reports" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pay_Summary" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pay_Variances" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="6">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pension_Contributions" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Benefit_Payments" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="" n="" s="" seqNum="2" t="Web Layout Item"/>
+                      </children>
+                    </sfLayoutRow>
+                  </children>
+                </sfLayoutSection>
+              </children>
+            </sfLayoutType>
+            <sfLayoutType layoutType="Detail" n="Detail" s="2-" t="Web Layout Type">
+              <children>
+                <sfLayoutSection customLabel="false" detailHeading="false" editHeading="false" n="Information" s="" seqNum="0" style="TwoColumnsTopToBottom" t="Web Layout Section - false">
+                  <children>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="0">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Employer" n="Employer" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Employer__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Payroll" n="Payroll" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payroll__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="1">
+                      <children>
+                        <sfLI label="Payroll period" n="Payroll period" required="true" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="Name" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Tax period" n="Tax period" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Tax_period_number__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="2">
+                      <children>
+                        <sfLI label="Payslip message" n="Payslip message" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payslip_message__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Currency ISO Code" n="Currency ISO Code" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="CurrencyIsoCode" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                  </children>
+                </sfLayoutSection>
+                <sfLayoutSection customLabel="true" editHeading="false" n="Key dates" s="" seqNum="1" style="TwoColumnsLeftToRight" t="Web Layout Section - true">
+                  <children>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="0">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Pay period starts" n="Pay period starts" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Effective_from__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Pay period ends" n="Pay period ends" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Effective_to__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="1">
+                      <children>
+                        <sfLI label="Pay run date" n="Pay run date" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payroll_rundate__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Previous pay run date" n="Previous pay run date" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Previous_payroll_run_date__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="2">
+                      <children>
+                        <sfLI label="Pay day" n="Pay day" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pay_day__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Pay run generated date" n="Pay run generated date" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payroll_run_date__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="3">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Created By ID" n="Created By ID" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="CreatedById" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Last Modified By ID" n="Last Modified By ID" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="LastModifiedById" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                  </children>
+                </sfLayoutSection>
+                <sfLayoutSection customLabel="true" editHeading="false" n="Employees and payments" s="" seqNum="2" style="TwoColumnsLeftToRight" t="Web Layout Section - true">
+                  <children>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="0">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Eligible employees" n="Eligible employees" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Eligible_employees__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Employees in pay run" n="Employees in pay run" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Included_in_run__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="1">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Total employee net pay" n="Total employee net pay" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Total_employee_pay__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Total pension contributions" n="Total pension contributions" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pension_contribution_this_period__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="2">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Total benefit contributions" n="Total benefit contributions" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Benefit_contribution_this_period__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="Total cost to employer" n="Total cost to employer" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Total_outgoings__c" s="" seqNum="0" t="Web Layout Field" type="Field"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                  </children>
+                </sfLayoutSection>
+                <sfLayoutSection customLabel="false" editHeading="false" n="Custom Links" s="" seqNum="4" style="CustomLinks" t="Web Layout Section - true">
+                  <children>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="0">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Joiners" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Payroll_Joiners" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Leavers" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="1">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Employee_Sickness_and_Maternity_Absences" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Unpaid_Absences" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Leavers_and_Leave" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="2">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Key_Personal_Data_Changes" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Changes_Compensation_and_Benefits" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Changes_One_Off_Payments_Deductions" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="3">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Test_Report_Leavers_Final_Compensation" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Test_Report_Leavers_on_Payroll" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Zero_Payments" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="4">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="emptySpace" s="" seqNum="0" t="Web Layout Field" type="EmptySpace"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="emptySpace" s="" seqNum="0" t="Web Layout Field" type="EmptySpace"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="emptySpace" s="" seqNum="0" t="Web Layout Field" type="EmptySpace"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="5">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pay_and_Payment_Details_Reports" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pay_Summary" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="2" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pay_Variances" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                      </children>
+                    </sfLayoutRow>
+                    <sfLayoutRow n="LayoutRow" s="" seqNum="6">
+                      <children>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="0" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Pension_Contributions" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" s="" seqNum="1" t="Web Layout Item">
+                          <children>
+                            <sfLIC n="xcdhcm__Benefit_Payments" s="" seqNum="0" t="Web Layout Field" type="CustomLink"/>
+                          </children>
+                        </sfLI>
+                        <sfLI editableForNew="false" editableForUpdate="false" label="" n="" s="" seqNum="2" t="Web Layout Item"/>
+                      </children>
+                    </sfLayoutRow>
+                  </children>
+                </sfLayoutSection>
+              </children>
+            </sfLayoutType>
+          </layoutTypes>
+          <relatedLists/>
+          <actionLinks/>
+          <excludeButtons>
+            <string>ChangeOwnerOne</string>
+            <string>ChangeRecordType</string>
+            <string>Clone</string>
+            <string>Delete</string>
+            <string>Edit</string>
+            <string>Share</string>
+            <string>Submit</string>
+          </excludeButtons>
+          <customTags/>
+          <quickActionNames/>
+          <consoleComponents/>
+          <platformActionNames/>
+        </sfLayout>
+      </children>
+    </sfRecordType>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Draft_Net" layoutsLoaded="false" n="Draft Net" namespacePrefix="xcdhcm" recordTypeId="0120O000000tlg1QAA" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Final" layoutsLoaded="false" n="Final" namespacePrefix="xcdhcm" recordTypeId="0120O000000tlfZQAQ" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Final_Bermuda_Pay_Run_Year_End" layoutsLoaded="false" n="Final Bermuda Pay Run - Year End" namespacePrefix="xcdhcm" recordTypeId="0120O000000p3rgQAA" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Final_Gross_Pay_Run_Year_End" layoutsLoaded="false" n="Final Gross Pay Run - Year End" namespacePrefix="xcdhcm" recordTypeId="0120O000000p3rhQAA" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Final_Net" layoutsLoaded="false" n="Final Net" namespacePrefix="xcdhcm" recordTypeId="0120O000000tlg2QAA" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="Final_Net_Pay_Run_Year_End" layoutsLoaded="false" n="Final Net Pay Run - Year End" namespacePrefix="xcdhcm" recordTypeId="0120O000000p3riQAA" s="3-" t="Web Record Type Mapping"/>
+    <sfRecordType defaultRecordType="false" fromToolingApi="true" fullName="New" layoutsLoaded="false" n="New" namespacePrefix="xcdhcm" recordTypeId="0120O000000tlfaQAA" s="3-" t="Web Record Type Mapping"/>
+  </recordTypes>
+  <standardActions>
+    <sfActionLink n="Tab" s="" t="Payroll - Periods Tab"/>
+    <sfActionLink modes="ObjectHome" n="List" requiresRow="true"/>
+    <sfActionLink modes="View" n="Edit" requiresRow="true" s="2"/>
+    <sfActionLink modes="View" n="Delete" requiresRow="true" s="3"/>
+    <sfActionLink modes="View" n="Clone" requiresRow="true"/>
+    <sfActionLink modes="ObjectHome List" n="New"/>
+    <sfActionLink n="Accept" s=""/>
+    <sfActionLink modes="ObjectHome" n="View" requiresRow="true" target="sf:ui:target?object=xcdhcm__Pay_Period__c&amp;page=PayrollPeriod"/>
+    <sfActionLink buttonName="xcdhcm__Additional_Payroll_Run" n="xcdhcm__Additional_Payroll_Run" s="" t="Additional payroll run"/>
+    <sfActionLink buttonName="xcdhcm__Change_To_Draft" n="xcdhcm__Change_To_Draft" s="" t="Change to draft"/>
+    <sfActionLink buttonName="xcdhcm__Generate_Final_Payroll" n="xcdhcm__Generate_Final_Payroll" s="" t="Generate final payroll"/>
+    <sfActionLink buttonName="xcdhcm__Generate_Payroll" n="xcdhcm__Generate_Payroll" s="" t="Generate draft payroll"/>
+    <sfActionLink modes="View Submit" n="Submit" requiresRow="true"/>
+    <sfActionLink modes="View Remove" n="Remove"/>
+    <sfActionLink modes="View Unlock" n="Unlock" t="Unlock Record"/>
+    <sfActionLink modes="Edit New Clone" n="save" requiresRow="true" t="Save"/>
+    <sfActionLink modes="Edit New Clone" n="save_new" requiresRow="true" t="Save and New"/>
+    <sfActionLink modes="Edit New Clone" n="cancel" requiresRow="true" t="Cancel"/>
+    <sfActionLink afterWaitUrl="ui:wait:timed?seconds=10" modes="View" n="SaveEdit" t="Save"/>
+    <sfActionLink modes="View" n="CancelEdit" t="Cancel"/>
+    <sfActionLink massAction="true" modes="View List" n="ChangeOwnerOne" t="Change Owner"/>
+    <sfActionLink massAction="true" modes="View List" n="ChangeRecordType" t="Change Record Type"/>
+    <sfActionLink modes="View" n="email" t="Send an Email"/>
+    <sfActionLink modes="View" n="Share"/>
+    <sfActionLink modes="QuickAction" n="publishersharebutton" t="Create"/>
+    <sfActionLink modes="ObjectHome List" n="Sort"/>
+    <sfActionLink modes="ObjectHome List" n="Filter"/>
+    <sfActionLink modes="ObjectHome View" n="Search"/>
+    <sfActionLink modes="ObjectHome List" n="Import"/>
+    <sfActionLink modes="View" n="PrintableView" t="Printable View"/>
+    <sfActionLink n="ObjectHome" requiresRow="true" t="Home"/>
+  </standardActions>
+  <homeListColumns>
+    <string>XCDHCM__PAY_PERIOD__C.NAME</string>
+  </homeListColumns>
+  <lookupColumns>
+    <string>XCDHCM__PAY_PERIOD__C.NAME</string>
+    <string>xcdhcm__Effective_from__c</string>
+    <string>xcdhcm__Effective_to__c</string>
+    <string>xcdhcm__XCD_PAY_Payroll__c</string>
+    <string>xcdhcm__Payroll_status__c</string>
+  </lookupColumns>
+  <weblinks>
+    <sfWeblink displayType="link" linkType="javascript" n="Absences_Awaiting_Approval" s="" t="Absences Awaiting Approval"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Additional_Pension_Contributions" s="" t="Additional Pension Contributions"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_Benefit_Payments" s="" t="Annual Benefit Payments"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_Employee_Payments" s="" t="Annual Employee Payments"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_HMRC_Payments" s="" t="Annual HMRC Payments"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_Joiners" s="" t="Annual Joiners"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_Leavers" s="" t="Annual Leavers"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_Pay_Summary" s="" t="Annual Pay Summary"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_Pension_Contributions" s="" t="Annual Pension Contributions"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_Sickness_and_Parenting_Absences" s="" t="Annual Sickness and Parenting Absences"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Annual_Unpaid_Absences" s="" t="Annual Unpaid Absences"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Apprenticeship_levy_variance" s="" t="Apprenticeship Levy Variance"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Bank_Details_Changes" s="" t="Bank Details Changes"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Benefits_Account" s="" t="Benefits Account"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Benefit_Changes" s="" t="Benefit Changes"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Benefit_Compensation_Setup" s="" t="Benefit Compensation Setup"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Benefit_Payments" s="" t="Benefit Payments"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Changes_Compensation_and_Benefits" s="" t="Changes - Compensation/Pensions"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Changes_Job_Role" s="" t="Changes - Job Role"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Changes_One_Off_Payments_Deductions" s="" t="Changes - One Off Payments/Deductions"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Changes_Regular_Payments_and_Deduction" s="" t="Changes - Regular Payments/ Deductions"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Compensation_Changes" s="" t="Compensation Changes"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Court_Order_Account" s="" t="Court Order Account"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Eligible_and_Included_Employees" s="" t="Eligible and Included Employees"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Employees_with_Back_Pay" s="" t="Employees with Back Pay"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Employee_Account" s="" t="Employee Account"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Employee_share_purchase" s="" t="Employee Share Purchase"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Employee_Sickness_and_Maternity_Absences" s="" t="Sickness and Parenting Absences"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Employee_Tax_and_NI_Outstanding" s="" t="Employee Tax and NI Outstanding"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Expense_Claims_Payable" s="" t="Expense Claims Payable"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Expense_Claims_Review" s="" t="Expense Claims Awaiting Approval"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Expense_reimbursement" s="" t="Expense Reimbursement"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Fixed_Term_Contracts" s="" t="Fixed Term Contracts"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Gross_Key_Personal_Data_Changes" s="" t="Changes - Key Personal Data"/>
+    <sfWeblink displayType="link" linkType="javascript" n="HMRC_Account" s="" t="HMRC Account"/>
+    <sfWeblink displayType="link" linkType="javascript" n="HMRC_Payments" s="" t="HMRC Payments"/>
+    <sfWeblink displayType="link" linkType="javascript" n="i_Connect" s="" t="i-Connect"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Joiners" s=""/>
+    <sfWeblink displayType="link" linkType="javascript" n="Joiners_Employment" s="" t="Joiners - Employment"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Joiners_Personal" s="" t="Joiners - Personal"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Key_Personal_Data_Changes" s="" t="Changes - Key Personal Data"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Leavers" s=""/>
+    <sfWeblink displayType="link" linkType="javascript" n="Leavers_and_Leave" s="" t="Leavers and Leave"/>
+    <sfWeblink displayType="link" linkType="javascript" n="NI_category_changes" s="" t="NI Category Changes Due"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Overtime_Approved_Claims" s="" t="Overtime Payable"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Overtime_Claims_Awaiting_Approval" s="" t="Overtime Awaiting Approval"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Payroll_Joiners" s="" t="Payroll Joiners"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Payroll_Ledger" s="" t="Payroll Ledger"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pay_and_Payment_Details_Reports" s="" t="Employee Payments"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pay_Details_by_Employee" s="" t="Employee Pay Details - Upload"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pay_Details_Matrix_Reports" s="" t="Employee Gross Pay Details"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pay_Summary" s="" t="Gross to Net"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pay_Variances" s="" t="Pay Variances"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pay_Variance_Report" s="" t="Pay Variance Report"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pensions_Account" s="" t="Pensions Account"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pension_Changes_50_50" s="" t="Pension Changes - 50/50"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pension_Changes_Absences" s="" t="Pension Changes - Absences"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pension_Changes_Working_Hours" s="" t="Pension Changes - Working Hours"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pension_Contributions" s="" t="Pension Contributions"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pension_Contribution_Report" s="" t="Pension Contribution Report"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pension_Opt_Outs" s="" t="Pension Opt Outs"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Pension_Scheme_Entrants" s="" t="Pension Scheme Entrants"/>
+    <sfWeblink displayType="link" linkType="javascript" n="RTI" s=""/>
+    <sfWeblink displayType="link" linkType="javascript" n="Statutory_Payments" s="" t="Statutory Payments"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Student_Loans" s="" t="Student Loans"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Test_Report_Leavers_Final_Compensation" s="" t="Leavers Final Comp &amp; Bens"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Test_Report_Leavers_on_Payroll" s="" t="Leavers Remaining on Payroll"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Timesheet_Awaiting_Approval" s="" t="Timesheet Awaiting Approval"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Timesheet_Payable" s="" t="Timesheet Payable"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Unpaid_Absences" s="" t="Unpaid Absences"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Year_End_Report" s="" t="Year End Report"/>
+    <sfWeblink displayType="link" linkType="javascript" n="Zero_Payments" s="" t="Zero Payments"/>
+  </weblinks>
+  <searchResultColumns>
+    <string>XCDHCM__PAY_PERIOD__C.NAME</string>
+  </searchResultColumns>
+  <compactLayoutFields>
+    <string>Name</string>
+  </compactLayoutFields>
+  <listViewActions/>
+</sfObject>
