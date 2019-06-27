@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite failures="2" hostname="XCD_92WLKP2" id="0" name="PayrollProject/tests" package="" skipped="0" tests="3" time="1207.732" timestamp="Fri Jun 21 12:53:51 IST 2019">
+	    <properties>
+		      <property name="excludeCallableTestCases" value="true" />
+
+		      <property name="testEnvironment" value="" />
+
+		      <property name="pluginOutputLevel" value="WARNING" />
+
+		      <property name="projectPath" value=".." />
+
+		      <property name="salesforceMetadataCache" value="Reuse" />
+
+		      <property name="resultsPathDisposition" value="Increment" />
+
+		      <property name="testOutputLevel" value="WARNING" />
+
+		      <property name="webBrowserType" value="Google Chrome" />
+
+		      <property name="resultsPath" value="../ANT/Results" />
+
+		      <property name="webBrowserConfiguration" value="Full Screen" />
+
+		      <property name="projectCachePath" value="C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\PayrollProject\ANT\..\..\.provarCaches" />
+
+	    </properties>
+
+	    <testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI 4 Weekly Tax year 2019_20\Optimized NI 4 Weekly scripts\1_NIFourWeeklyCatATestScript.testcase" name="1_NIFourWeeklyCatATestScript.testcase" time="346.998">
+	</testcase>
+
+	    <testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI 4 Weekly Tax year 2019_20\Optimized NI 4 Weekly scripts\3_NIFourWeeklyCatBTestScript.testcase" name="3_NIFourWeeklyCatBTestScript.testcase" time="468.211">
+		      <failure message="Execution failed"><![CDATA[The PageObject's built-in wait failed.  Cause: [WebDriverException: unknown error: unhandled inspector error: {"code":-32000,"message":"Cannot find context with specified id"}
+  (Session info: chrome=74.0.3729.169)
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17763 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 70 milliseconds
+Build info: version: 'unknown', revision: 'unknown', time: 'unknown'
+System info: host: 'XCD_92WLKP2', ip: '192.168.1.103', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0.0, pageLoad=300000.0, script=30000.0}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55255}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1), userDataDir=C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile1}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=74.0.3729.169, browserConnectionEnabled=false, proxy=Proxy(direct), nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: b1b6e86496c5e59f14cd2826264ea876]]]></failure>
+
+	    </testcase>
+
+	    <testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI 4 Weekly Tax year 2019_20\Optimized NI 4 Weekly scripts\5_NIFourWeeklyCatCTestScript.testcase" name="5_NIFourWeeklyCatCTestScript.testcase" time="382.924">
+		      <failure message="Execution failed"><![CDATA[The PageObject's built-in wait failed.  Cause: [WebDriverException: unknown error: unhandled inspector error: {"code":-32000,"message":"Cannot find context with specified id"}
+  (Session info: chrome=74.0.3729.169)
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17763 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 67 milliseconds
+Build info: version: 'unknown', revision: 'unknown', time: 'unknown'
+System info: host: 'XCD_92WLKP2', ip: '192.168.1.103', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0.0, pageLoad=300000.0, script=30000.0}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:55400}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1), userDataDir=C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile2}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=74.0.3729.169, browserConnectionEnabled=false, proxy=Proxy(direct), nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: eb6d073339d2844985641cb2849c4802]]]></failure>
+
+	    </testcase>
+
+  </testsuite>
+</testsuites>
