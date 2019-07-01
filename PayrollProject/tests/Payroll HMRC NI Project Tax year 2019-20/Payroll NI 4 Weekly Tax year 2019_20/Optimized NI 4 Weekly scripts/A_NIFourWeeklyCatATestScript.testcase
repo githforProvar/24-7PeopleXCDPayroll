@@ -265,7 +265,7 @@
       <clauses>
         <clause name="substeps" testItemId="15">
           <steps>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="16" title="Set the Search field to NI2WCA_Payroll">
+            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="16" title="Set the Search field to NI4WCA_Payroll">
               <arguments>
                 <argument id="locator">
                   <value class="uiLocator" uri="ui:locator?name=Search"/>
@@ -274,7 +274,7 @@
                   <value class="uiInteraction" uri="ui:interaction?name=set"/>
                 </argument>
                 <argument id="value">
-                  <value class="value" valueClass="string">NI2WCA_Payroll</value>
+                  <value class="value" valueClass="string">NI4WCA_Payroll</value>
                 </argument>
                 <argument id="blur">
                   <value class="value" valueClass="boolean">false</value>
@@ -295,7 +295,7 @@
                   <value class="uiWait" uri="ui:wait:timed?seconds=10"/>
                 </argument>
                 <argument id="interactionDescription">
-                  <value class="value" valueClass="string">Set the Search field to NI2WCA_Payroll</value>
+                  <value class="value" valueClass="string">Set the Search field to NI4WCA_Payroll</value>
                 </argument>
                 <argument id="autoRetry"/>
               </arguments>
@@ -494,7 +494,7 @@
                 </apiParam>
               </generatedParameters>
             </apiCall>
-            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="470" title="If: {Payrun.fields.payRun.value = &quot;Two Week-2&quot;}">
+            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="470" title="If: {Payrun.fields.payRun.value = &quot;Four Week-4&quot;}">
               <arguments>
                 <argument id="condition">
                   <value class="eq">
@@ -504,7 +504,7 @@
                       <path element="payRun"/>
                       <path element="value"/>
                     </lhs>
-                    <rhs class="value" valueClass="string">Two Week-2</rhs>
+                    <rhs class="value" valueClass="string">Four Week-4</rhs>
                   </value>
                 </argument>
               </arguments>
@@ -1267,7 +1267,7 @@
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">templates/HMRC Payroll  NI Input sheet tax year 201920.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">NI2WeeklyCatA</worksheetName>
+                    <worksheetName class="value" valueClass="string">NI4WeeklyCatA</worksheetName>
                     <valuesRange class="value" valueClass="string">A1:H12</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
