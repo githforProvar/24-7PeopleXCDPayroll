@@ -1,15 +1,24 @@
-[1536:3784:0627/154103.346:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
-[1536:3784:0627/154103.352:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
-[1536:3784:0627/154103.461:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
-[1536:10172:0627/154104.162:WARNING:leveldb_database.cc(106)] Unable to open C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile0\Default\shared_proto_db: Invalid argument: C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile0\Default\shared_proto_db: does not exist (create_if_missing is false)
-[1536:3784:0627/154126.871:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
-[1536:3784:0627/154128.614:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
-[1536:3784:0627/154136.602:INFO:CONSOLE(346)] "WARNING: Tried to load AngularJS more than once.", source: https://code.angularjs.org/snapshot/angular.min.js (346)
-[1536:3784:0627/154136.749:INFO:CONSOLE(246)] "WARNING: Tried to load angular more than once.", source: https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js (246)
-[1536:3784:0627/154137.210:INFO:CONSOLE(155)] "[LEXI:navigator:communication] waiting for connection on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (155)
-[1536:3784:0627/154137.350:INFO:CONSOLE(156)] "[LEXI:navigator:communication] connection established on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (156)
-[1536:9760:0627/155008.017:WARNING:dns_config_service_win.cc(672)] Failed to read DnsConfig.
-[1536:13436:0627/160357.076:ERROR:browser_process_sub_thread.cc(221)] Waited 156 ms for network service
-[1536:3784:0627/160357.081:WARNING:pref_notifier_impl.cc(36)] Pref observer for third_party_blocking_enabled found at shutdown.
-[1536:3784:0627/160357.081:WARNING:pref_notifier_impl.cc(36)] Pref observer for browser.relaunch_notification_period found at shutdown.
-[1536:3784:0627/160357.081:WARNING:pref_notifier_impl.cc(36)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
+[6260:9868:0701/121127.907:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
+[6260:9868:0701/121127.913:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
+[6260:9868:0701/121128.009:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
+[6260:12016:0701/121129.925:WARNING:leveldb_database.cc(106)] Unable to open C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile0\Default\shared_proto_db: Invalid argument: C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile0\Default\shared_proto_db: does not exist (create_if_missing is false)
+[6260:15288:0701/121136.783:WARNING:backend_impl.cc(1846)] Destroying invalid entry.
+[6260:9868:0701/121151.218:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
+[6260:9868:0701/121158.467:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
+[6260:9868:0701/121204.770:INFO:CONSOLE(346)] "WARNING: Tried to load AngularJS more than once.", source: https://code.angularjs.org/snapshot/angular.min.js (346)
+[6260:9868:0701/121204.956:INFO:CONSOLE(246)] "WARNING: Tried to load angular more than once.", source: https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js (246)
+[6260:9868:0701/121205.505:INFO:CONSOLE(155)] "[LEXI:navigator:communication] waiting for connection on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (155)
+[6260:9868:0701/121205.778:INFO:CONSOLE(156)] "[LEXI:navigator:communication] connection established on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (156)
+[6260:9868:0701/121258.901:INFO:CONSOLE(155)] "[LEXI:navigator:communication] waiting for connection on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (155)
+[6260:9868:0701/121259.029:INFO:CONSOLE(156)] "[LEXI:navigator:communication] connection established on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (156)
+[6260:9868:0701/121259.226:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
+[6260:9868:0701/121338.496:INFO:CONSOLE(155)] "[LEXI:navigator:communication] waiting for connection on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (155)
+[6260:9868:0701/121338.638:INFO:CONSOLE(156)] "[LEXI:navigator:communication] connection established on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (156)
+[6260:9868:0701/121338.836:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
+[6260:9868:0701/121354.738:INFO:CONSOLE(213)] "WARNING: Tried to load angular more than once.", source: https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js (213)
+[6260:9868:0701/121355.182:INFO:CONSOLE(155)] "[LEXI:navigator:communication] waiting for connection on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (155)
+[6260:9868:0701/121355.495:INFO:CONSOLE(156)] "[LEXI:navigator:communication] connection established on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (156)
+[6260:9868:0701/121355.624:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
+[6260:9868:0701/121557.886:INFO:CONSOLE(213)] "WARNING: Tried to load angular more than once.", source: https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js (213)
+[6260:9868:0701/121558.158:INFO:CONSOLE(155)] "[LEXI:navigator:communication] waiting for connection on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (155)
+[6260:9868:0701/121558.956:INFO:CONSOLE(156)] "[LEXI:navigator:communication] connection established on page", source: https://xcdautomationlex--payrolfull--xcdhcm.cs107.visual.force.com/jslibrary/1560967074220/sfdc/AuraAlohaFrameNavigator.js (156)

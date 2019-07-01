@@ -224,7 +224,7 @@
                         </apiParam>
                       </generatedParameters>
                     </apiCall>
-                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DO NOT TOUCH - NI2WCB_Payroll">
+                    <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="325" title="Set the Search All Reports to DO NOT TOUCH - NI2WCBB_Payroll">
                       <arguments>
                         <argument id="locator">
                           <value class="uiLocator" uri="ui:pageobject:field?field=searchAllReports&amp;pageId=pageobjects.MyPageObjectReportPage"/>
@@ -233,7 +233,7 @@
                           <value class="uiInteraction" uri="ui:interaction?name=set"/>
                         </argument>
                         <argument id="value">
-                          <value class="value" valueClass="string">DO NOT TOUCH - NI2WCB_Payroll</value>
+                          <value class="value" valueClass="string">DO NOT TOUCH - NI2WCBB_Payroll</value>
                         </argument>
                         <argument id="blur">
                           <value class="value" valueClass="boolean">false</value>
@@ -254,7 +254,7 @@
                           <value class="uiWait" uri="default"/>
                         </argument>
                         <argument id="interactionDescription">
-                          <value class="value" valueClass="string">Set the Search All Reports to DO NOT TOUCH - NI2WCB_Payroll</value>
+                          <value class="value" valueClass="string">Set the Search All Reports to DO NOT TOUCH - NI2WCBB_Payroll</value>
                         </argument>
                         <argument id="autoRetry"/>
                       </arguments>

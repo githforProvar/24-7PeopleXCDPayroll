@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite failures="1" hostname="XCD_92WLKP2" id="0" name="PayrollProject/tests" package="" skipped="0" tests="3" time="1321.471" timestamp="Fri Jun 28 18:08:00 IST 2019">
+	    <properties>
+		      <property name="excludeCallableTestCases" value="true" />
+
+		      <property name="testEnvironment" value="" />
+
+		      <property name="pluginOutputLevel" value="WARNING" />
+
+		      <property name="projectPath" value=".." />
+
+		      <property name="salesforceMetadataCache" value="Reuse" />
+
+		      <property name="resultsPathDisposition" value="Increment" />
+
+		      <property name="testOutputLevel" value="WARNING" />
+
+		      <property name="webBrowserType" value="Google Chrome" />
+
+		      <property name="resultsPath" value="../ANT/Results" />
+
+		      <property name="webBrowserConfiguration" value="Full Screen" />
+
+		      <property name="projectCachePath" value="C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\PayrollProject\ANT\..\..\.provarCaches" />
+
+	    </properties>
+
+	    <testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI 2 Weekly Tax year 2019_20\Optimized NI 2 Weekly\E_NITwoWeeklyCatJTestScript.testcase" name="E_NITwoWeeklyCatJTestScript.testcase" time="668.102">
+		      <failure message="Execution failed"><![CDATA[No rows were matched]]></failure>
+
+	    </testcase>
+
+	    <testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI 2 Weekly Tax year 2019_20\Optimized NI 2 Weekly\F_NITwoWeeklyCatMTestScript.testcase" name="F_NITwoWeeklyCatMTestScript.testcase" time="307.612">
+	</testcase>
+
+	    <testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI 2 Weekly Tax year 2019_20\Optimized NI 2 Weekly\G_NITwoWeeklyCatZTestScript.testcase" name="G_NITwoWeeklyCatZTestScript.testcase" time="333.52">
+	</testcase>
+
+  </testsuite>
+</testsuites>

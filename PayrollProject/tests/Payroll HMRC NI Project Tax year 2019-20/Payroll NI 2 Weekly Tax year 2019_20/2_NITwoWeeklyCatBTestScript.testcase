@@ -1253,27 +1253,21 @@
               </arguments>
               <parameterValueSources>
                 <parameterValueSource variableName="ExcelData" variableScope="Test">
-                  <cacheToken>C:/Users/AzizMugdal/March51920/PayrollProject/OutPutTestResult/HMRC Payroll NI Output Test result tax year 201920.xlsx;1553077683625</cacheToken>
+                  <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/templates/HMRC Payroll  NI Input sheet tax year 201920.xlsx;1561028534332</cacheToken>
                   <cachedParameters>
                     <apiParam name="RowNumber"/>
-                    <apiParam name="EmployeeName"/>
-                    <apiParam name="ExpectedEmployeeNI"/>
-                    <apiParam name="ActualEmployeeNI"/>
-                    <apiParam name="TestResmarksForEmployeeNI"/>
-                    <apiParam name="ExpectedEmployerNI"/>
-                    <apiParam name="ActualEmployerNI"/>
-                    <apiParam name="TestRemarksForEmployerNI"/>
-                    <apiParam name="ExpectedPTToUELPayYTD"/>
-                    <apiParam name="ActualPTToUELPayYTD"/>
-                    <apiParam name="TestRemarksOfPTToUELPayYTD"/>
-                    <apiParam name="ExpectedEmployeeContributionsPayableYTD1"/>
-                    <apiParam name="ActualExpectedEmployeeContributionsPayableYTD1"/>
-                    <apiParam name="TestRemarksOfExpectedEmployeeContributionsPayableYTD1"/>
+                    <apiParam name="EmpName"/>
+                    <apiParam name="NICategory"/>
+                    <apiParam name="AnnualSalary"/>
+                    <apiParam name="PayrollFrequency"/>
+                    <apiParam name="Payrolid"/>
+                    <apiParam name="PayRunName"/>
+                    <apiParam name="FirstReportNameInApplication"/>
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
-                    <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Payroll NI Output Test result tax year 201920.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">NI2WeeklyCBReport</worksheetName>
-                    <valuesRange class="value" valueClass="string">A1:M11</valuesRange>
+                    <workbookPath class="value" valueClass="string">templates/HMRC Payroll  NI Input sheet tax year 201920.xlsx</workbookPath>
+                    <worksheetName class="value" valueClass="string">NI2WeeklyCatB</worksheetName>
+                    <valuesRange class="value" valueClass="string">A1:G11</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
               </parameterValueSources>

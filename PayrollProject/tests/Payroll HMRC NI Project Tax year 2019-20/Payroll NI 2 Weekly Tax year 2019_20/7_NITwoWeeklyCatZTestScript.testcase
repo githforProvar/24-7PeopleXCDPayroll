@@ -265,7 +265,7 @@
       <clauses>
         <clause name="substeps" testItemId="15">
           <steps>
-            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="16" title="Set the Search field to NIWCJ_Payroll">
+            <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiDoAction" name="UiDoAction" testItemId="16" title="Set the Search field to NI2WCZ_Payroll">
               <arguments>
                 <argument id="locator">
                   <value class="uiLocator" uri="ui:locator?name=Search"/>
@@ -274,7 +274,7 @@
                   <value class="uiInteraction" uri="ui:interaction?name=set"/>
                 </argument>
                 <argument id="value">
-                  <value class="value" valueClass="string">NIWCJ_Payroll</value>
+                  <value class="value" valueClass="string">NI2WCZ_Payroll</value>
                 </argument>
                 <argument id="blur">
                   <value class="value" valueClass="boolean">false</value>
@@ -295,7 +295,7 @@
                   <value class="uiWait" uri="ui:wait:timed?seconds=10"/>
                 </argument>
                 <argument id="interactionDescription">
-                  <value class="value" valueClass="string">Set the Search field to NIWCJ_Payroll</value>
+                  <value class="value" valueClass="string">Set the Search field to NI2WCZ_Payroll</value>
                 </argument>
                 <argument id="autoRetry"/>
               </arguments>

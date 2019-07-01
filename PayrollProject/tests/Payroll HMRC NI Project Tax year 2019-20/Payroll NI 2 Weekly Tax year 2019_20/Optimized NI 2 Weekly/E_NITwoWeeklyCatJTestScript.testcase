@@ -494,7 +494,7 @@
                 </apiParam>
               </generatedParameters>
             </apiCall>
-            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="470" title="If: {Payrun.fields.payRun.value = &quot;Week-1&quot;}">
+            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="470" title="If: {Payrun.fields.payRun.value = &quot;Two Week-2&quot;}">
               <arguments>
                 <argument id="condition">
                   <value class="eq">
@@ -504,7 +504,7 @@
                       <path element="payRun"/>
                       <path element="value"/>
                     </lhs>
-                    <rhs class="value" valueClass="string">Week-1</rhs>
+                    <rhs class="value" valueClass="string">Two Week-2</rhs>
                   </value>
                 </argument>
               </arguments>
@@ -1266,7 +1266,7 @@
                   </cachedParameters>
                   <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
                     <workbookPath class="value" valueClass="string">templates/HMRC Payroll  NI Input sheet tax year 201920.xlsx</workbookPath>
-                    <worksheetName class="value" valueClass="string">NIWeeklyCatJ</worksheetName>
+                    <worksheetName class="value" valueClass="string">NI2WeeklyCatJ</worksheetName>
                     <valuesRange class="value" valueClass="string">A1:G11</valuesRange>
                   </sourceValue>
                 </parameterValueSource>
