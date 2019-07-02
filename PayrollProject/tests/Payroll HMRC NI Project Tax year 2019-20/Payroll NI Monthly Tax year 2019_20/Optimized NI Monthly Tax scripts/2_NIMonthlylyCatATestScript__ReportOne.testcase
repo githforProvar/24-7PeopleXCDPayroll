@@ -56,7 +56,7 @@
       </arguments>
       <parameterValueSources>
         <parameterValueSource variableName="ReportData" variableScope="Test">
-          <cacheToken>C:/Users/AzizMugdal/Desktop/Latest provar zip file/PayrollProject/OutPutTestResult/HMRC Payroll NI Output Test result tax year 201920.xlsx;1553595426025</cacheToken>
+          <cacheToken>C:/Users/AzizMugdal/git/24-7PeopleXCDPayroll/PayrollProject/OutPutTestResult/HMRC Payroll NI Output Test result tax year 201920.xlsx;1561986875833</cacheToken>
           <cachedParameters>
             <apiParam name="RowNumber"/>
             <apiParam name="EmployeeName"/>
@@ -66,14 +66,18 @@
             <apiParam name="ExpectedEmployerNI"/>
             <apiParam name="ActualEmployerNI"/>
             <apiParam name="TestRemarksForEmployerNI"/>
-            <apiParam name="ExpectedPTToUELPayYTD"/>
-            <apiParam name="ActualPTToUELPayYTD"/>
-            <apiParam name="TestRemarksOfPTToUELPayYTD"/>
-            <apiParam name="ExpectedEmployeeContributionsPayableYTD1"/>
-            <apiParam name="ActualExpectedEmployeeContributionsPayableYTD1"/>
-            <apiParam name="TestRemarksOfExpectedEmployeeContributionsPayableYTD1"/>
+            <apiParam name="ExpectedPTtoUELPayYTD"/>
+            <apiParam name="ActualPTtoUELPayYTD"/>
+            <apiParam name="TestRemarksForPTtoUELPayYTD"/>
+            <apiParam name="ExpectedEmployeeNIYTD"/>
+            <apiParam name="ActualEmployeeNIYTD"/>
+            <apiParam name="TestRemarksForEmployeeNIYTD"/>
           </cachedParameters>
-          <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo"/>
+          <sourceValue class="excelTarget" namesLocation="FirstRowOfRange" whereComparison="EqualTo">
+            <workbookPath class="value" valueClass="string">OutPutTestResult/HMRC Payroll NI Output Test result tax year 201920.xlsx</workbookPath>
+            <worksheetName class="value" valueClass="string">NIMonthlyCAReport</worksheetName>
+            <valuesRange class="value" valueClass="string">A1:M12</valuesRange>
+          </sourceValue>
         </parameterValueSource>
       </parameterValueSources>
       <clauses>

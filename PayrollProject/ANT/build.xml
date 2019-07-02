@@ -35,7 +35,7 @@
 				invokeTestRunMonitor="true"
 				>
 		
-			<fileset dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="E_NITwoWeeklyCatJTestScript.testcase"/></fileset><fileset dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="F_NITwoWeeklyCatMTestScript.testcase"/></fileset><fileset dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 2 Weekly Tax year 2019_20/Optimized NI 2 Weekly"><include name="G_NITwoWeeklyCatZTestScript.testcase"/></fileset>
+			<fileset dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 4 Weekly Tax year 2019_20/Optimized NI 4 Weekly scripts"></fileset>
 
 		</Run-Test-Case>
 
