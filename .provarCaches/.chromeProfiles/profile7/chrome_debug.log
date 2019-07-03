@@ -1,14 +1,19 @@
-[16128:10720:0701/140613.318:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
-[16128:10720:0701/140613.324:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
-[16128:10720:0701/140613.381:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
-[16128:10720:0701/140613.940:WARNING:CONSOLE(0)] "HTML Imports is deprecated and will be removed in M73, around March 2019. Please use ES modules instead. See https://www.chromestatus.com/features/5144752345317376 for more details.", source:  (0)
-[16128:10636:0701/140615.243:WARNING:leveldb_database.cc(106)] Unable to open C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile7\Default\shared_proto_db: Invalid argument: C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile7\Default\shared_proto_db: does not exist (create_if_missing is false)
-[16128:10720:0701/140626.660:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
-[16128:10720:0701/140630.436:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
-[16128:10720:0701/140639.782:INFO:CONSOLE(376)] "resolveAuraBy componentXPath: //ui:inputText[@aura:id = 'searchTextField'], multiple: null", source:  (376)
-[16128:10720:0701/140639.879:INFO:CONSOLE(783)] "Timings: ", source:  (783)
-[16128:10720:0701/140639.880:INFO:CONSOLE(554)] "resolveAuraBy Match: ", source:  (554)
-[16128:10720:0701/140648.504:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
-[16128:10720:0701/140651.675:INFO:CONSOLE(5)] "Failed to log to PowerInsights.", source: https://xcdautomationlex--payrolfull.lightning.force.com/jslibrary/1561754478000/ui-analytics-reporting/LightningReportSource.js (5)
-[16128:10720:0701/140809.959:INFO:CONSOLE(82)] "Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience. For more help, check https://xhr.spec.whatwg.org/.", source: https://c1.sfdcstatic.com/etc.clientlibs/clientlibs/granite/jquery/granite.min.a6c15d5e8643e4b9e6a6845ada2e7a36.js (82)
-[16128:10720:0701/140809.969:INFO:CONSOLE(660)] "getJSON Failed", source: https://c1.sfdcstatic.com/etc/clientlibs/sfdc-www/clientlibs_sfdc_forms.min.0449afcb5af944c60d8096d0237ffd67.js (660)
+[10784:4616:0703/132828.416:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
+[10784:4616:0703/132828.420:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
+[10784:4616:0703/132828.479:WARNING:chrome_command_line_pref_store.cc(122)] Additional command-line proxy switches specified when --no-proxy-server was also specified.
+[10784:6212:0703/132829.150:WARNING:leveldb_database.cc(106)] Unable to open C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile7\Default\shared_proto_db: Invalid argument: C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile7\Default\shared_proto_db: does not exist (create_if_missing is false)
+[10784:7300:0703/132829.292:WARNING:backend_impl.cc(1846)] Destroying invalid entry.
+[10784:7300:0703/132831.549:WARNING:backend_impl.cc(1846)] Destroying invalid entry.
+[10784:4616:0703/132841.462:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
+[10784:4616:0703/132845.059:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
+[10784:4616:0703/132854.583:INFO:CONSOLE(376)] "resolveAuraBy componentXPath: //ui:inputText[@aura:id = 'searchTextField'], multiple: null", source:  (376)
+[10784:4616:0703/132854.679:INFO:CONSOLE(783)] "Timings: ", source:  (783)
+[10784:4616:0703/132854.680:INFO:CONSOLE(554)] "resolveAuraBy Match: ", source:  (554)
+[10784:4616:0703/132904.214:INFO:CONSOLE(28)] "[object Object]", source: https://xcdautomationlex--payrolfull.lightning.force.com/libraries/instrumentation/beaconLib/BeaconLibrary.js (28)
+[10784:4616:0703/132907.003:INFO:CONSOLE(5)] "Failed to log to PowerInsights.", source: https://xcdautomationlex--payrolfull.lightning.force.com/jslibrary/1562103310000/ui-analytics-reporting/LightningReportSource.js (5)
+[10784:4616:0703/133029.710:INFO:CONSOLE(82)] "Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience. For more help, check https://xhr.spec.whatwg.org/.", source: https://c1.sfdcstatic.com/etc.clientlibs/clientlibs/granite/jquery/granite.min.a6c15d5e8643e4b9e6a6845ada2e7a36.js (82)
+[10784:4616:0703/133029.726:INFO:CONSOLE(660)] "getJSON Failed", source: https://c1.sfdcstatic.com/etc/clientlibs/sfdc-www/clientlibs_sfdc_forms.min.0449afcb5af944c60d8096d0237ffd67.js (660)
+[10784:10412:0703/133031.205:ERROR:browser_process_sub_thread.cc(221)] Waited 275 ms for network service
+[10784:4616:0703/133031.210:WARNING:pref_notifier_impl.cc(36)] Pref observer for third_party_blocking_enabled found at shutdown.
+[10784:4616:0703/133031.210:WARNING:pref_notifier_impl.cc(36)] Pref observer for browser.relaunch_notification_period found at shutdown.
+[10784:4616:0703/133031.210:WARNING:pref_notifier_impl.cc(36)] Pref observer for media_router.cast_allow_all_ips found at shutdown.

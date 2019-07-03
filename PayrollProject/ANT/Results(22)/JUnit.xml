@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="PayrollProject/tests" tests="7" failures="5" skipped="0" hostname="XCD_92WLKP2" time="2594.491" timestamp="Wed Jul 03 12:47:22 IST 2019">
+	<properties>
+		<property name="excludeCallableTestCases" value="true"/>
+		<property name="testEnvironment" value=""/>
+		<property name="pluginOutputLevel" value="WARNING"/>
+		<property name="projectPath" value=".."/>
+		<property name="salesforceMetadataCache" value="Reuse"/>
+		<property name="resultsPathDisposition" value="Increment"/>
+		<property name="testOutputLevel" value="WARNING"/>
+		<property name="webBrowserType" value=""/>
+		<property name="resultsPath" value="../ANT/Results"/>
+		<property name="webBrowserConfiguration" value="Full Screen"/>
+		<property name="projectCachePath" value="C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\PayrollProject\ANT\..\..\.provarCaches"/>
+	</properties>
+	<testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI Weekly Tax year 2019_20\Optimized NI Wekkly testscripts\A_NIWeeklyCatATestScript.testcase" name="A_NIWeeklyCatATestScript.testcase" time="367.761">
+		<failure message="Execution failed"><![CDATA[The PageObject's built-in wait failed.  Cause: [WebDriverException: unknown error: unhandled inspector error: {"code":-32000,"message":"Cannot find context with specified id"}
+  (Session info: chrome=75.0.3770.100)
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17763 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 168 milliseconds
+Build info: version: 'unknown', revision: 'unknown', time: 'unknown'
+System info: host: 'XCD_92WLKP2', ip: '192.168.1.103', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0.0, pageLoad=300000.0, script=30000.0}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:54042}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1), userDataDir=C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile0}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=75.0.3770.100, browserConnectionEnabled=false, proxy=Proxy(direct), nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 87cd411192f26e484f54f79df454a3b6]]]></failure>
+	</testcase>
+	<testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI Weekly Tax year 2019_20\Optimized NI Wekkly testscripts\B_NIWeeklyCatBTestScript.testcase" name="B_NIWeeklyCatBTestScript.testcase" time="301.515">
+	</testcase>
+	<testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI Weekly Tax year 2019_20\Optimized NI Wekkly testscripts\C_NIWeeklyCatCTestScript.testcase" name="C_NIWeeklyCatCTestScript.testcase" time="322.232">
+	</testcase>
+	<testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI Weekly Tax year 2019_20\Optimized NI Wekkly testscripts\D_NIWeeklyCatHTestScript.testcase" name="D_NIWeeklyCatHTestScript.testcase" time="314.905">
+		<failure message="Execution failed"><![CDATA[The row locator did not match any rows.]]></failure>
+	</testcase>
+	<testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI Weekly Tax year 2019_20\Optimized NI Wekkly testscripts\E_NIWeeklyCatJTestScript.testcase" name="E_NIWeeklyCatJTestScript.testcase" time="309.115">
+		<failure message="Execution failed"><![CDATA[The PageObject's built-in wait failed.  Cause: [WebDriverException: unknown error: unhandled inspector error: {"code":-32000,"message":"Cannot find context with specified id"}
+  (Session info: chrome=75.0.3770.100)
+  (Driver info: chromedriver=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1),platform=Windows NT 10.0.17763 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 173 milliseconds
+Build info: version: 'unknown', revision: 'unknown', time: 'unknown'
+System info: host: 'XCD_92WLKP2', ip: '192.168.1.103', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_191'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{mobileEmulationEnabled=false, timeouts={implicit=0.0, pageLoad=300000.0, script=30000.0}, hasTouchScreen=false, platform=XP, acceptSslCerts=false, goog:chromeOptions={debuggerAddress=localhost:54540}, acceptInsecureCerts=false, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, setWindowRect=true, unexpectedAlertBehaviour=ignore, applicationCacheEnabled=false, rotatable=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.46.628402 (536cd7adbad73a3783fdc2cab92ab2ba7ec361e1), userDataDir=C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\.provarCaches\.chromeProfiles\profile4}, takesHeapSnapshot=true, pageLoadStrategy=normal, strictFileInteractability=false, databaseEnabled=false, handlesAlerts=true, version=75.0.3770.100, browserConnectionEnabled=false, proxy=Proxy(direct), nativeEvents=true, locationContextEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 8f7dd06ffa9a7a1fcf392a994d73de27]]]></failure>
+	</testcase>
+	<testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI Weekly Tax year 2019_20\Optimized NI Wekkly testscripts\F_NIWeeklyCatMTestScript.testcase" name="F_NIWeeklyCatMTestScript.testcase" time="463.686">
+		<failure message="Execution failed"><![CDATA[The row locator did not match any rows.]]></failure>
+	</testcase>
+	<testcase classname="tests/Payroll HMRC NI Project Tax year 2019-20\Payroll NI Weekly Tax year 2019_20\Optimized NI Wekkly testscripts\G_NIWeeklyCatZTestScript.testcase" name="G_NIWeeklyCatZTestScript.testcase" time="492.403">
+		<failure message="Execution failed"><![CDATA[The row locator did not match any rows.]]></failure>
+	</testcase>
+</testsuite>

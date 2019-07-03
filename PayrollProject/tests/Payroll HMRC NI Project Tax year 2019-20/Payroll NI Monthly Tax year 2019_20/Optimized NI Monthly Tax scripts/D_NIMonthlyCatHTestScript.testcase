@@ -494,28 +494,17 @@
                 </apiParam>
               </generatedParameters>
             </apiCall>
-            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="470" title="If: {Payrun.fields.payRun.value = &quot;&quot;}{April - 2019}">
+            <apiCall apiId="com.provar.plugins.bundled.apis.If" name="If" testItemId="470" title="If: {Payrun.fields.payRun.value = &quot;\tApril-2019&quot;}">
               <arguments>
                 <argument id="condition">
-                  <value class="compound">
-                    <parts>
-                      <eq>
-                        <lhs class="variable">
-                          <path element="Payrun"/>
-                          <path element="fields"/>
-                          <path element="payRun"/>
-                          <path element="value"/>
-                        </lhs>
-                        <rhs class="value" valueClass="string"/>
-                      </eq>
-                      <sub>
-                        <lhs class="variable">
-                          <path element="April"/>
-                        </lhs>
-                        <rhs class="value" valueClass="decimal">2019</rhs>
-                      </sub>
-                      <value valueClass="string"/>
-                    </parts>
+                  <value class="eq">
+                    <lhs class="variable">
+                      <path element="Payrun"/>
+                      <path element="fields"/>
+                      <path element="payRun"/>
+                      <path element="value"/>
+                    </lhs>
+                    <rhs class="value" valueClass="string">\tApril-2019</rhs>
                   </value>
                 </argument>
               </arguments>

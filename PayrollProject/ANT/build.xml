@@ -20,7 +20,7 @@
 				resultsPath="${testproject.results}" 
 				resultsPathDisposition="Increment" 
 				testEnvironment="" 
-				webBrowser="Chrome" 
+				webBrowser="" 
 				webBrowserConfiguration="Full Screen"
 				webBrowserProviderName="Desktop"
 				webBrowserDeviceName="Full Screen" 
@@ -35,8 +35,10 @@
 				invokeTestRunMonitor="true"
 				>
 		
-			<fileset dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI 4 Weekly Tax year 2019_20/Optimized NI 4 Weekly scripts"></fileset>
+			<fileset dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI Weekly Tax year 2019_20/Optimized NI Wekkly testscripts"></fileset>
 
+			<emailProperties sendEmail="true" primaryRecipients="azizm@peoplexcd.com" ccRecipients="" bccRecipients="" emailSubject="Provar test run report" attachExecutionReport="true" attachZip="false"/>
+			<attachmentProperties includeAllFailuresInSummary="true" includeOnlyFailures="false" includeOnlyBdd="false" includeSkipped="false" includeTestCaseDescription="false" includeScreenshots="true" includeWarningMessages="false" includeInfoMessages="false" includeDebugMessages="false" includeTestStepTime="false" includeTestStepPathHierarchy="true" includeFullScreenShot="false"/>
 		</Run-Test-Case>
 
 	</target>
