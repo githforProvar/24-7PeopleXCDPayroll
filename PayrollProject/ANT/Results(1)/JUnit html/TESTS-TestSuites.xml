@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite failures="2" hostname="XCD_92WLKP2" id="0" name="PayrollProject/tests" package="" skipped="0" tests="2" time="680.268" timestamp="Wed Jul 03 17:35:02 IST 2019">
+	    <properties>
+		      <property name="excludeCallableTestCases" value="true" />
+
+		      <property name="testEnvironment" value="" />
+
+		      <property name="pluginOutputLevel" value="WARNING" />
+
+		      <property name="projectPath" value=".." />
+
+		      <property name="salesforceMetadataCache" value="Reuse" />
+
+		      <property name="resultsPathDisposition" value="Increment" />
+
+		      <property name="testOutputLevel" value="WARNING" />
+
+		      <property name="webBrowserType" value="Google Chrome" />
+
+		      <property name="resultsPath" value="../ANT/Results" />
+
+		      <property name="webBrowserConfiguration" value="Full Screen" />
+
+		      <property name="projectCachePath" value="C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\PayrollProject\ANT\..\..\.provarCaches" />
+
+	    </properties>
+
+	    <testcase classname="tests/Jamie spec Student Loan Project for all tax years\Optimised Student loans1 Priority 1 Other\A_StudentLoan1Priorty1Other_OctoberPayPeriod.testcase" name="A_StudentLoan1Priorty1Other_OctoberPayPeriod.testcase" time="326.1">
+		      <failure message="Execution failed"><![CDATA[The row locator did not match any rows.]]></failure>
+
+	    </testcase>
+
+	    <testcase classname="tests/Jamie spec Student Loan Project for all tax years\Optimised Student loans1 Priority 1 Other\B_StudentLoan1Priorty1Other_NovemberPayPeriod.testcase" name="B_StudentLoan1Priorty1Other_NovemberPayPeriod.testcase" time="345.706">
+		      <failure message="Execution failed"><![CDATA[The row locator did not match any rows.]]></failure>
+
+	    </testcase>
+
+  </testsuite>
+</testsuites>

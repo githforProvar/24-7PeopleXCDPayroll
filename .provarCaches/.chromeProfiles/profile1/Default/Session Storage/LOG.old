@@ -1,3 +1,6 @@
-2019/07/03-12:51:22.057 d28 Reusing MANIFEST Session Storage/MANIFEST-000001
-2019/07/03-12:51:22.058 d28 Recovering log #3
-2019/07/03-12:51:22.310 d28 Reusing old log Session Storage/000003.log 
+2019/07/04-12:00:30.051 f2c Reusing MANIFEST Session Storage/MANIFEST-000001
+2019/07/04-12:00:30.052 f2c Recovering log #3
+2019/07/04-12:00:30.253 f2c Reusing old log Session Storage/000003.log 
+2019/07/04-12:00:38.369 2850 Level-0 table #5: started
+2019/07/04-12:00:38.428 2850 Level-0 table #5: 10829 bytes OK
+2019/07/04-12:00:38.490 2850 Delete type=0 #3

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite failures="2" hostname="XCD_92WLKP2" id="0" name="PayrollProject/tests" package="" skipped="0" tests="6" time="1910.903" timestamp="Wed Jul 03 16:40:49 IST 2019">
+	    <properties>
+		      <property name="excludeCallableTestCases" value="true" />
+
+		      <property name="testEnvironment" value="" />
+
+		      <property name="pluginOutputLevel" value="WARNING" />
+
+		      <property name="projectPath" value=".." />
+
+		      <property name="salesforceMetadataCache" value="Reuse" />
+
+		      <property name="resultsPathDisposition" value="Increment" />
+
+		      <property name="testOutputLevel" value="WARNING" />
+
+		      <property name="webBrowserType" value="Google Chrome" />
+
+		      <property name="resultsPath" value="../ANT/Results" />
+
+		      <property name="webBrowserConfiguration" value="Full Screen" />
+
+		      <property name="projectCachePath" value="C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\PayrollProject\ANT\..\..\.provarCaches" />
+
+	    </properties>
+
+	    <testcase classname="tests/Jamie spec Student Loan Project for all tax years\Optimised Student loans1 Priority 1 Other\A_StudentLoan1Priorty1Other_OctoberPayPeriod.testcase" name="A_StudentLoan1Priorty1Other_OctoberPayPeriod.testcase" time="353.726">
+		      <failure message="Execution failed"><![CDATA[Failing Test Step because the Loop Limit has been reached.]]></failure>
+
+	    </testcase>
+
+	    <testcase classname="tests/Jamie spec Student Loan Project for all tax years\Optimised Student loans1 Priority 1 Other\B_StudentLoan1Priorty1Other_NovemberPayPeriod.testcase" name="B_StudentLoan1Priorty1Other_NovemberPayPeriod.testcase" time="316.536">
+		      <failure message="Execution failed"><![CDATA[The row locator did not match any rows.]]></failure>
+
+	    </testcase>
+
+	    <testcase classname="tests/Jamie spec Student Loan Project for all tax years\Optimized Student loans\A_StudentLoan_OctoberPayPeriod.testcase" name="A_StudentLoan_OctoberPayPeriod.testcase" time="286.352">
+	</testcase>
+
+	    <testcase classname="tests/Jamie spec Student Loan Project for all tax years\Optimized Student loans\B_StudentLoan_NovemberPayPeriod.testcase" name="B_StudentLoan_NovemberPayPeriod.testcase" time="317.862">
+	</testcase>
+
+	    <testcase classname="tests/Jamie spec Student Loan Project for all tax years\Optimized StudentLoansCTAEO\A_StudentLoanAndCTAEO_OctoberPayPeriod.testcase" name="A_StudentLoanAndCTAEO_OctoberPayPeriod.testcase" time="291.137">
+	</testcase>
+
+	    <testcase classname="tests/Jamie spec Student Loan Project for all tax years\Optimized StudentLoansCTAEO\B_StudentLoanAndCTAEO_NovemberPayPeriod.testcase" name="B_StudentLoanAndCTAEO_NovemberPayPeriod.testcase" time="321.217">
+	</testcase>
+
+  </testsuite>
+</testsuites>

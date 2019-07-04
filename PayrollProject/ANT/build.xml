@@ -35,10 +35,9 @@
 				invokeTestRunMonitor="true"
 				>
 		
-			<fileset dir="../tests/Payroll HMRC NI Project Tax year 2019-20/Payroll NI Weekly Tax year 2019_20/Optimized NI Wekkly testscripts"></fileset>
+			<fileset dir="../tests/Jamie spec Court Order Project for all Tax years/CO AEO 1971 Civil Debt/Optimized Testscript"></fileset><fileset dir="../tests/Jamie spec Court Order Project for all Tax years/CO CAEO 1971 civil debt/Optimized test scripts"></fileset>
 
-			<emailProperties sendEmail="true" primaryRecipients="azizm@peoplexcd.com" ccRecipients="" bccRecipients="" emailSubject="Provar test run report" attachExecutionReport="true" attachZip="false"/>
-			<attachmentProperties includeAllFailuresInSummary="true" includeOnlyFailures="false" includeOnlyBdd="false" includeSkipped="false" includeTestCaseDescription="false" includeScreenshots="true" includeWarningMessages="false" includeInfoMessages="false" includeDebugMessages="false" includeTestStepTime="false" includeTestStepPathHierarchy="true" includeFullScreenShot="false"/>
+			<emailProperties sendEmail="true" primaryRecipients="azizm@peoplexcd.com" ccRecipients="" bccRecipients="" emailSubject="Provar test run report" attachExecutionReport="false" attachZip="true"/>
 		</Run-Test-Case>
 
 	</target>

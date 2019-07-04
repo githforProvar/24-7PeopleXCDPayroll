@@ -1465,7 +1465,7 @@
                 <argument id="autoRetry"/>
               </arguments>
             </apiCall>
-            <apiCall apiId="com.provar.plugins.bundled.apis.control.WaitFor" name="WaitFor" testItemId="513" title="Wait For: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}=&gt;{10}">
+            <apiCall apiId="com.provar.plugins.bundled.apis.control.WaitFor" name="WaitFor" testItemId="513" title="Wait For: {DraftStatus.fields.draftStatus.value = &quot;Draft&quot;}=&gt;{30}">
               <arguments>
                 <argument id="condition">
                   <value class="eq">
@@ -1482,10 +1482,10 @@
                   <value class="value" valueClass="boolean">true</value>
                 </argument>
                 <argument id="maxIterations">
-                  <value class="value" valueClass="decimal">5</value>
+                  <value class="value" valueClass="decimal">6</value>
                 </argument>
                 <argument id="sleepSecs">
-                  <value class="value" valueClass="decimal">10</value>
+                  <value class="value" valueClass="decimal">30</value>
                 </argument>
                 <argument id="continueOnFailure">
                   <value class="value" valueClass="boolean">true</value>

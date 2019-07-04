@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite failures="1" hostname="XCD_92WLKP2" id="0" name="PayrollProject/tests" package="" skipped="0" tests="4" time="1284.948" timestamp="Thu Jul 04 11:56:28 IST 2019">
+	    <properties>
+		      <property name="excludeCallableTestCases" value="true" />
+
+		      <property name="testEnvironment" value="" />
+
+		      <property name="pluginOutputLevel" value="WARNING" />
+
+		      <property name="projectPath" value=".." />
+
+		      <property name="salesforceMetadataCache" value="Reuse" />
+
+		      <property name="resultsPathDisposition" value="Increment" />
+
+		      <property name="testOutputLevel" value="WARNING" />
+
+		      <property name="webBrowserType" value="" />
+
+		      <property name="resultsPath" value="../ANT/Results" />
+
+		      <property name="webBrowserConfiguration" value="Full Screen" />
+
+		      <property name="projectCachePath" value="C:\Users\AzizMugdal\git\24-7PeopleXCDPayroll\PayrollProject\ANT\..\..\.provarCaches" />
+
+	    </properties>
+
+	    <testcase classname="tests/Jamie spec Court Order Project for all Tax years\CO AEO 1971 Civil Debt\Optimized Testscript\A_COAEO1971CivilDebt_OctoberPayPeriod.testcase" name="A_COAEO1971CivilDebt_OctoberPayPeriod.testcase" time="334.385">
+	</testcase>
+
+	    <testcase classname="tests/Jamie spec Court Order Project for all Tax years\CO AEO 1971 Civil Debt\Optimized Testscript\B_COAEO1971CivilDebt_NovemberPayPeriod.testcase" name="B_COAEO1971CivilDebt_NovemberPayPeriod.testcase" time="303.446">
+	</testcase>
+
+	    <testcase classname="tests/Jamie spec Court Order Project for all Tax years\CO CAEO 1971 civil debt\Optimized test scripts\A_COCAEO1971CivilDebt_OctoberPayPeriod.testcase" name="A_COCAEO1971CivilDebt_OctoberPayPeriod.testcase" time="295.634">
+	</testcase>
+
+	    <testcase classname="tests/Jamie spec Court Order Project for all Tax years\CO CAEO 1971 civil debt\Optimized test scripts\B_COCAEO1971CivilDebt_NovemberPayPeriod.testcase" name="B_COCAEO1971CivilDebt_NovemberPayPeriod.testcase" time="338.507">
+		      <failure message="Execution failed"><![CDATA[Failing Test Step because the Loop Limit has been reached.]]></failure>
+
+	    </testcase>
+
+  </testsuite>
+</testsuites>
