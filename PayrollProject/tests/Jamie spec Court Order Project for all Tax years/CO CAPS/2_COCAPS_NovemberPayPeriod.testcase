@@ -44,9 +44,7 @@
       </arguments>
     </apiCall>
     <apiCall apiId="com.provar.plugins.bundled.apis.control.StepGroup" name="StepGroup" testItemId="270" title="Click On Payroll Link">
-      <tags>
-        <string>disabled</string>
-      </tags>
+      <tags/>
       <arguments>
         <argument id="description">
           <value class="value" valueClass="string">Click On Payroll Link</value>
@@ -525,9 +523,7 @@
       </clauses>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="541" title="On SF xcdhcm__PayrollDetailView page with pageobject Xcdhcm__ Payroll Detail View">
-      <tags>
-        <string>disabled</string>
-      </tags>
+      <tags/>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
@@ -651,9 +647,7 @@
       </clauses>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="587" title="On SF Payroll (UK Net Payroll) Pay Runs related list">
-      <tags>
-        <string>disabled</string>
-      </tags>
+      <tags/>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
@@ -797,9 +791,7 @@
       </generatedParameters>
     </apiCall>
     <apiCall apiId="com.provar.plugins.forcedotcom.core.ui.UiWithScreen" name="UiWithScreen" testItemId="275" title="On SF xcdhcm__PayrollPeriod page with pageobject Xcdhcm__ Payroll Period">
-      <tags>
-        <string>disabled</string>
-      </tags>
+      <tags/>
       <arguments>
         <argument id="uiConnectionName">
           <value class="value" valueClass="string">Admin</value>
